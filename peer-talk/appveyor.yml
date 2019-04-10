@@ -28,7 +28,7 @@ cache:
 
 environment:
   COVERALLS_REPO_TOKEN:
-    secure: 2/rbxuse7F3p04C3Lin9tH/fCwigpYAW2bB+4hv8nyCcHo+VMjbTCM2Tf/f4TXIQ
+    secure: j7JWZ2JMDCRkYzFtC5MqoCbEEoCE3gi/mUv2UMXkxr3dTbfnU6F9gs2tGbwK2j3g
   DOTNET_CLI_TELEMETRY_OPTOUT: 1
 
 # tools we need for bulding/testing/deploying
