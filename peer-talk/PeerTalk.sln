@@ -17,6 +17,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PeerTalk", "src\PeerTalk.cs
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PeerTalkTests", "test\PeerTalkTests.csproj", "{B0977D09-CBA2-4D4B-BE66-08CE6D63DE1E}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Documentation", "doc\Documentation.csproj", "{D1B4DC93-5655-4492-8478-7BF1C90D7A9A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -31,6 +33,8 @@ Global
 		{B0977D09-CBA2-4D4B-BE66-08CE6D63DE1E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B0977D09-CBA2-4D4B-BE66-08CE6D63DE1E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B0977D09-CBA2-4D4B-BE66-08CE6D63DE1E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D1B4DC93-5655-4492-8478-7BF1C90D7A9A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D1B4DC93-5655-4492-8478-7BF1C90D7A9A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
