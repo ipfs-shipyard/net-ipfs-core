@@ -42,7 +42,7 @@ pull_requests:
   do_not_increment_build_number: true
 
 before_build:
-  - nuget restore .nuget/packages.config
+  - nuget restore .nuget/packages.config -PackagesDirectory packages
   - ps: gitversion /output buildserver /updateAssemblyInfo >gitversion.log
 
 build_script:
