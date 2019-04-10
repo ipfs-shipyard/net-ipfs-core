@@ -1,0 +1,91 @@
+# gitversion will change the version number
+version: x-{build}
+
+for:
+-
+  branches:
+    only:
+      - master
+
+  environment:
+    git_token:
+      secure: NeX5NCOUXsCLc1UjTJjqB9F02FZ8Wq0VsxqTXC8kBdyK6zjxjebrf/9Da2sY1Kql
+
+configuration: Debug
+os: Visual Studio 2017
+
+init:
+  - git config --global core.autocrlf input
+  - git config --global credential.helper store
+  - ps: Add-Content "$env:USERPROFILE\.git-credentials" "https://$($env:git_token):x-oauth-basic@github.com`n"
+  - git config --global user.email "noreply@emanon.org"
+  - git config --global user.name "Appveyor CI"
+
+cache:
+  - packages -> **\packages.config      # preserve "packages" directory in the root of build folder but will reset it if packages.config is modified
+  - '%APPDATA%\npm-cache'               # npm cache
+  - '%USERPROFILE%\.nuget\packages'     # nuget cache
+
+environment:
+  COVERALLS_REPO_TOKEN:
+    secure: 2/rbxuse7F3p04C3Lin9tH/fCwigpYAW2bB+4hv8nyCcHo+VMjbTCM2Tf/f4TXIQ
+  DOTNET_CLI_TELEMETRY_OPTOUT: 1
+
+# tools we need for bulding/testing/deploying
+install:
+  - choco install gitversion.portable -y
+  - nuget update -self
+  - choco install docfx -y
+  - npm install gh-pages -g
+
+# gitversion will change the assembly info
+pull_requests:
+  do_not_increment_build_number: true
+
+before_build:
+  - nuget restore
+  - ps: gitversion /output buildserver /updateAssemblyInfo >gitversion.log
+
+build_script:
+  - dotnet build -c %CONFIGURATION% -p:Version=%GitVersion_MajorMinorPatch% -p:AssemblyVersion=%GitVersion_MajorMinorPatch%
+  - dotnet pack -c %CONFIGURATION% --no-build --no-restore -p:Version=%GitVersion_MajorMinorPatch% -p:AssemblyVersion=%GitVersion_MajorMinorPatch%
+
+after_build:
+  - cmd: appveyor PushArtifact "src\bin\%CONFIGURATION%\Ipfs.Engine.%GitVersion_MajorMinorPatch%.nupkg"
+  - cmd: appveyor PushArtifact "PeerTalk\src\bin\%CONFIGURATION%\PeerTalk.%GitVersion_MajorMinorPatch%.nupkg"
+
+test_script:
+  - dotnet test --logger "console;verbosity=normal" -c %CONFIGURATION% --no-build --no-restore ./PeerTalk/test
+  - dotnet test --logger "console;verbosity=normal" -c %CONFIGURATION% --no-build --no-restore test
+
+after_test: 
+# Generate coverage report
+    - packages\OpenCover.4.6.519\tools\OpenCover.Console.exe 
+        -register:user -filter:"+[Ipfs.Engine*]* -[*Tests]*" 
+        -target:"c:\Program Files\dotnet\dotnet.exe" 
+        -targetargs:"test -c Debug --no-build --no-restore --framework netcoreapp2.1 test" 
+        -output:coverage.xml  
+        -hideskipped:File 
+        -oldStyle 
+    - if defined COVERALLS_REPO_TOKEN 
+        packages\coveralls.net.0.6.0\tools\csmacnz.coveralls.exe 
+        --opencover -i ./coverage.xml --useRelativePaths --serviceName appveyor --jobId %APPVEYOR_BUILD_NUMBER%
+# Build documentation in doc\_site
+    - del src\obj\*.* /s /q
+    - del PeerTalk\src\obj\*.* /s /q
+    - docfx doc\docfx.json --logLevel Warning
+    - 7z a -tzip docs.zip doc\_site
+    - appveyor PushArtifact docs.zip
+    - if defined git_token gh-pages -d doc\_site -m "new docs %GitVersion_FullSemVer%"
+
+# publish NuGet package on tag build
+nuget:
+  account_feed: true
+  project_feed: true
+  disable_publish_on_pr: true
+deploy:
+- provider: NuGet
+  api_key:
+    secure: OdmGEj/l0K0ZPDmXAYx+fryCzV012eTrM29ALBuL0waxvwLvrufdDXiI+1iNhWEG
+  on:
+    appveyor_repo_tag: true
