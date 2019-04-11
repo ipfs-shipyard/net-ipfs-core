@@ -16,13 +16,14 @@
     <Authors>Richard Schneider</Authors>
     <Title>Peer to Peer communication</Title>
     <Description>An implementation of the IPFS libp2p</Description>
+    <PackageReleaseNotes>https://github.com/richardschneider/peer-talk/releases</PackageReleaseNotes>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <PackageReleaseNotes></PackageReleaseNotes>
     <Copyright>© 2018 Richard Schneider</Copyright>
     <PackageTags>ipfs peer-to-peer libp2p p2p distributed web</PackageTags>
     <IncludeSymbols>True</IncludeSymbols>
-    <PackageLicenseUrl>https://github.com/richardschneider/net-ipfs-engine/blob/master/LICENSE</PackageLicenseUrl>
-    <PackageProjectUrl>https://github.com/richardschneider/net-ipfs-engine</PackageProjectUrl>
+    <PackageLicenseUrl>https://github.com/richardschneider/peer-talk/blob/master/LICENSE</PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/richardschneider/peer-talk</PackageProjectUrl>
     <PackageIconUrl>https://github.com/ipfs/logo/blob/master/platform-icons/osx-menu-bar.png</PackageIconUrl>
   </PropertyGroup>
 
