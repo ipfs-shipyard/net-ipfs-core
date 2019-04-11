@@ -735,56 +735,64 @@ namespace PeerTalk
         ///   The remote peer's address.
         /// </param>
         /// <remarks>
-        ///   Establishes the protocols of the connection.
+        ///   Establishes the protocols of the connection.  Any exception is simply
+        ///   logged as warning.
         /// </remarks>
         async void OnRemoteConnect(Stream stream, MultiAddress local, MultiAddress remote)
         {
-            log.Debug("Got remote connection");
-            log.Debug("local " + local);
-            log.Debug("remote " + remote);
-
-            // TODO: Check the policies
-
-            var connection = new PeerConnection
+            try
             {
-                IsIncoming = true,
-                LocalPeer = LocalPeer,
-                LocalAddress = local,
-                LocalPeerKey = LocalPeerKey,
-                RemoteAddress = remote,
-                Stream = stream
-            };
+                log.Debug("Got remote connection");
+                log.Debug("local " + local);
+                log.Debug("remote " + remote);
 
-            // Mount the protocols.
-            MountProtocols(connection);
+                // TODO: Check the policies
 
-            // Start the handshake
-            // TODO: Isn't connection cancel token required.
-            connection.ReadMessages(default(CancellationToken));
+                var connection = new PeerConnection
+                {
+                    IsIncoming = true,
+                    LocalPeer = LocalPeer,
+                    LocalAddress = local,
+                    LocalPeerKey = LocalPeerKey,
+                    RemoteAddress = remote,
+                    Stream = stream
+                };
 
-            // Wait for security to be established.
-            await connection.SecurityEstablished.Task;
-            // TODO: Maybe connection.LocalPeerKey = null;
+                // Mount the protocols.
+                MountProtocols(connection);
 
-            // Wait for the handshake to complete.
-            var muxer = await connection.MuxerEstablished.Task;
+                // Start the handshake
+                // TODO: Isn't connection cancel token required.
+                connection.ReadMessages(default(CancellationToken));
 
-            // Need details on the remote peer.
-            Identify1 identify = null;
-            lock (protocols)
-            {
-                identify = protocols.OfType<Identify1>().First();
+                // Wait for security to be established.
+                await connection.SecurityEstablished.Task;
+                // TODO: Maybe connection.LocalPeerKey = null;
+
+                // Wait for the handshake to complete.
+                var muxer = await connection.MuxerEstablished.Task;
+
+                // Need details on the remote peer.
+                Identify1 identify = null;
+                lock (protocols)
+                {
+                    identify = protocols.OfType<Identify1>().First();
+                }
+                connection.RemotePeer = await identify.GetRemotePeer(connection, default(CancellationToken));
+
+                connection.RemotePeer = RegisterPeer(connection.RemotePeer);
+                connection.RemoteAddress = new MultiAddress($"{remote}/ipfs/{connection.RemotePeer.Id}");
+                connection.RemotePeer.ConnectedAddress = connection.RemoteAddress;
+
+                var actual = Manager.Add(connection);
+                if (actual == connection)
+                {
+                    ConnectionEstablished?.Invoke(this, connection);
+                }
             }
-            connection.RemotePeer = await identify.GetRemotePeer(connection, default(CancellationToken));
-
-            connection.RemotePeer = RegisterPeer(connection.RemotePeer);
-            connection.RemoteAddress = new MultiAddress($"{remote}/ipfs/{connection.RemotePeer.Id}");
-            connection.RemotePeer.ConnectedAddress = connection.RemoteAddress;
-
-            var actual = Manager.Add(connection);
-            if (actual == connection)
+            catch (Exception e)
             {
-                ConnectionEstablished?.Invoke(this, connection);
+                log.Warn("Remote connect failed", e);
             }
         }
 
