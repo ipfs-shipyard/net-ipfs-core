@@ -97,17 +97,7 @@ namespace PeerTalk.Protocols
                 if (info.ListenAddresses != null)
                 {
                     remote.Addresses = info.ListenAddresses
-                        .Select(b =>
-                        {
-                            try
-                            {
-                                return new MultiAddress(b);
-                            }
-                            catch
-                            {
-                                return null;
-                            }
-                        })
+                        .Select(b => MultiAddress.TryCreate(b))
                         .Where(a => a != null)
                         .ToList();
                 }
