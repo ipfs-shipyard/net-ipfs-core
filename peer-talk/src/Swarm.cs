@@ -114,6 +114,11 @@ namespace PeerTalk
         public IPeerRouting Router { get; set; }
 
         /// <summary>
+        ///   Provides access to a private network of peers.
+        /// </summary>
+        public INetworkProtector NetworkProtector { get; set; }
+
+        /// <summary>
         ///   Cancellation tokens for the listeners.
         /// </summary>
         ConcurrentDictionary<MultiAddress, CancellationTokenSource> listeners = new ConcurrentDictionary<MultiAddress, CancellationTokenSource>();
@@ -586,6 +591,13 @@ namespace PeerTalk
                 Stream = stream
             };
 
+            // Are we communicating to a private network?
+            if (NetworkProtector != null)
+            {
+                connection.Stream = await NetworkProtector.ProtectAsync(connection);
+            }
+
+
             return connection;
         }
 
@@ -757,6 +769,12 @@ namespace PeerTalk
                     RemoteAddress = remote,
                     Stream = stream
                 };
+
+                // Are we communicating to a private network?
+                if (NetworkProtector != null)
+                {
+                    connection.Stream = await NetworkProtector.ProtectAsync(connection);
+                }
 
                 // Mount the protocols.
                 MountProtocols(connection);

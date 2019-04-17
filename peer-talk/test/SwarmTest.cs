@@ -2,6 +2,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -790,6 +791,48 @@ namespace PeerTalk
             Assert.AreEqual(3, peerCount);
         }
 
+        [TestMethod]
+        public async Task Connect_PrivateNetwork()
+        {
+            var peerB = new Peer
+            {
+                AgentVersion = "peerB",
+                Id = "QmdpwjdB94eNm2Lcvp9JqoCxswo3AKQqjLuNZyLixmCM1h",
+                PublicKey = "CAASXjBcMA0GCSqGSIb3DQEBAQUAA0sAMEgCQQDlTSgVLprWaXfmxDr92DJE1FP0wOexhulPqXSTsNh5ot6j+UiuMgwb0shSPKzLx9AuTolCGhnwpTBYHVhFoBErAgMBAAE="
+            };
+            var swarmB = new Swarm { LocalPeer = peerB, NetworkProtector = new OpenNetwork() };
+            await swarmB.StartAsync();
+            var peerBAddress = await swarmB.StartListeningAsync("/ip4/127.0.0.1/tcp/0");
+            Assert.IsTrue(peerB.Addresses.Count() > 0);
+
+            var swarm = new Swarm { LocalPeer = self, NetworkProtector = new OpenNetwork() };
+            await swarm.StartAsync();
+            try
+            {
+                var remotePeer = await swarm.ConnectAsync(peerBAddress);
+                Assert.AreEqual(2, OpenNetwork.Count);
+
+            }
+            finally
+            {
+                await swarm.StopAsync();
+                await swarmB.StopAsync();
+            }
+        }
+    }
+
+    /// <summary>
+    ///   A noop private network.
+    /// </summary>
+    class OpenNetwork : INetworkProtector
+    {
+        public static int Count;
+
+        public Task<Stream> ProtectAsync(PeerConnection connection, CancellationToken cancel = default(CancellationToken))
+        {
+            Interlocked.Increment(ref Count);
+            return Task.FromResult(connection.Stream);
+        }
     }
 }
 
