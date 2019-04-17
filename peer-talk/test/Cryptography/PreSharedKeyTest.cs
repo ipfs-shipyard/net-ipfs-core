@@ -94,5 +94,24 @@ namespace PeerTalk.Cryptography
             var s = new StringReader("/key/swarm/psk/1.0.0/\n/base128/");
             new PreSharedKey().Import(s);
         }
+
+        /// <summary>
+        ///   A key generated with
+        ///     > npm install ipfs-swarm-key-gen -g
+        ///     > node-ipfs-swarm-key-gen
+        /// </summary>
+        [TestMethod]
+        public void Import_JS_Generated()
+        {
+            var key = "/key/swarm/psk/1.0.0/\n"
+                + "/base16/\n"
+                + "e8d6d31e8e02000010d7d31e8e020000f0d1fc609300000078f0d31e8e020000";
+            var psk2 = new PreSharedKey();
+            psk2.Import(new StringReader(key));
+
+            var expected = "e8d6d31e8e02000010d7d31e8e020000f0d1fc609300000078f0d31e8e020000".ToHexBuffer();
+            CollectionAssert.AreEqual(expected, psk2.Value);
+        }
+       
     }
 }
