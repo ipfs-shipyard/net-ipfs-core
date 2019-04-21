@@ -1,6 +1,6 @@
 ﻿using Common.Logging;
 using Ipfs;
-using PeerTalk;
+using Ipfs.CoreApi;
 using PeerTalk.Protocols;
 using ProtoBuf;
 using Semver;

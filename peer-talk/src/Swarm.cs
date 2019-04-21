@@ -16,6 +16,7 @@ using PeerTalk.Protocols;
 using PeerTalk.Cryptography;
 using PeerTalk.Discovery;
 using PeerTalk.Routing;
+using Ipfs.CoreApi;
 
 namespace PeerTalk
 {
