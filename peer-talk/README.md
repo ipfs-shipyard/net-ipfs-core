@@ -4,7 +4,7 @@
 [![travis build](https://travis-ci.org/richardschneider/peer-talk.svg?branch=master)](https://travis-ci.org/richardschneider/peer-talk)
 [![CircleCI](https://circleci.com/gh/richardschneider/peer-talk.svg?style=svg)](https://circleci.com/gh/richardschneider/peer-talk)
 [![Coverage Status](https://coveralls.io/repos/richardschneider/peer-talk/badge.svg?branch=master&service=github)](https://coveralls.io/github/richardschneider/peer-talk?branch=master)
-[![Version](https://img.shields.io/nuget/v/Ipfs.Engine.svg)](https://www.nuget.org/packages/PeerTalk)
+[![Version](https://img.shields.io/nuget/v/PeerTalk.svg)](https://www.nuget.org/packages/PeerTalk)
 [![docs](https://richardschneider.github.io/peer-talk/images/docs-latest-green.svg)](https://richardschneider.github.io/peer-talk/articles/intro.html)
 
 *Peer Talk* is a collection of peer-to-peer protocols in the spirit of [libp2p](https://github.com/libp2p/libp2p).
