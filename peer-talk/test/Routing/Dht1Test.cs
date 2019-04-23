@@ -194,5 +194,30 @@ namespace PeerTalk.Routing
                 await dht.StopAsync();
             }
         }
+
+        [TestMethod]
+        public async Task ProcessGetProvidersMessage_HasCloserPeers()
+        {
+            var swarm = new Swarm { LocalPeer = self };
+            var dht = new Dht1 { Swarm = swarm };
+            await dht.StartAsync();
+            try
+            {
+                dht.RoutingTable.Add(other);
+                Cid cid = "zBunRGrmCGokA1oMESGGTfrtcMFsVA8aEtcNzM54akPWXF97uXCqTjF3GZ9v8YzxHrG66J8QhtPFWwZebRZ2zeUEELu67";
+                var request = new DhtMessage
+                {
+                    Type = MessageType.GetProviders,
+                    Key = cid.Hash.ToArray()
+                };
+                var response = dht.ProcessFindNode(request, new DhtMessage());
+                Assert.AreNotEqual(0, response.CloserPeers.Length);
+            }
+            finally
+            {
+                await dht.StopAsync();
+            }
+        }
+
     }
 }

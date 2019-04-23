@@ -74,6 +74,9 @@ namespace PeerTalk.Routing
                     case MessageType.FindNode:
                         response = ProcessFindNode(request, response);
                         break;
+                    case MessageType.GetProviders:
+                        response = ProcessGetProviders(request, response);
+                        break;
                     default:
                         log.Debug($"unknown {request.Type} from {connection.RemotePeer}");
                         // TODO: Should we close the stream?
@@ -192,9 +195,6 @@ namespace PeerTalk.Routing
         /// <summary>
         ///   Process a find node request.
         /// </summary>
-        /// <remarks>
-        ///   If the node is known
-        /// </remarks>
         public DhtMessage ProcessFindNode(DhtMessage request, DhtMessage response)
         {
             var peerId = new MultiHash(request.Key);
@@ -233,5 +233,15 @@ namespace PeerTalk.Routing
             return response;
         }
 
+        /// <summary>
+        ///   Process a find node request.
+        /// </summary>
+        public DhtMessage ProcessGetProviders(DhtMessage request, DhtMessage response)
+        {
+            // TODO: Find a provider for the content.
+
+            // Also return the closest peers
+            return ProcessFindNode(request, response);
+        }
     }
 }
