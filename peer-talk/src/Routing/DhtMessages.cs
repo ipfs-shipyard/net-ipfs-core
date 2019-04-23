@@ -10,21 +10,40 @@ namespace PeerTalk.Routing
 {
     // From https://github.com/libp2p/js-libp2p-kad-dht/blob/master/src/message/dht.proto.js\
     // and https://github.com/libp2p/go-libp2p-kad-dht/blob/master/pb/dht.proto
+
+    /// <summary>
+    ///   TODO
+    /// </summary>
     [ProtoContract]
-    class DhtRecordMessage
+    public class DhtRecordMessage
     {
+        /// <summary>
+        ///   TODO
+        /// </summary>
         [ProtoMember(1)]
         public byte[] Key { get; set; }
 
+        /// <summary>
+        ///   TODO
+        /// </summary>
         [ProtoMember(2)]
         public byte[] Value { get; set; }
 
+        /// <summary>
+        ///   TODO
+        /// </summary>
         [ProtoMember(3)]
         public byte[] Author { get; set; }
 
+        /// <summary>
+        ///   TODO
+        /// </summary>
         [ProtoMember(4)]
         public byte[] Signature { get; set; }
 
+        /// <summary>
+        ///   TODO
+        /// </summary>
         [ProtoMember(5)]
         public string TimeReceived { get; set; }
     }
@@ -65,37 +84,68 @@ namespace PeerTalk.Routing
         Ping = 5
     }
 
-    enum ConnectionType
+    /// <summary>
+    ///   The connection status.
+    /// </summary>
+    public enum ConnectionType
     {
-        // sender does not have a connection to peer, and no extra information (default)
+        /// <summary>
+        /// Sender does not have a connection to peer, and no extra information (default)
+        /// </summary>
         NotConnected = 0,
 
-        // sender has a live connection to peer
+        /// <summary>
+        /// Sender has a live connection to peer
+        /// </summary>
         Connected = 1,
 
-        // sender recently connected to peer
+        /// <summary>
+        /// Sender recently connected to peer
+        /// </summary>
         CanConnect = 2,
 
-        // sender recently tried to connect to peer repeatedly but failed to connect
-        // ("try" here is loose, but this should signal "made strong effort, failed")
+        /// <summary>
+        /// Sender recently tried to connect to peer repeatedly but failed to connect
+        /// ("try" here is loose, but this should signal "made strong effort, failed")
+        /// </summary>
         CannotConnect = 3
     }
 
+    /// <summary>
+    ///   Information about a peer.
+    /// </summary>
     [ProtoContract]
-    class DhtPeerMessage
+    public class DhtPeerMessage
     {
-        // ID of a given peer.
+        /// <summary>
+        /// ID of a given peer. 
+        /// </summary>
+        /// <value>
+        ///   The <see cref="MultiHash"/> as a byte array,
+        /// </value>
         [ProtoMember(1)]
         public byte[] Id { get; set; }
 
-        // multiaddrs for a given peer
+        /// <summary>
+        /// Addresses for a given peer
+        /// </summary>
+        /// <value>
+        ///   A sequence of <see cref="MultiAddress"/> as a byte array.
+        /// </value>
         [ProtoMember(2)]
         public byte[][] Addresses { get; set; }
 
-        // used to signal the sender's connection capabilities to the peer
+        /// <summary>
+        /// used to signal the sender's connection capabilities to the peer
+        /// </summary>
         [ProtoMember(3)]
         ConnectionType Connection { get; set; }
 
+        /// <summary>
+        ///   Convert the message into a <see cref="Peer"/>.
+        /// </summary>
+        /// <param name="peer"></param>
+        /// <returns></returns>
         public bool TryToPeer(out Peer peer)
         {
             peer = null;
@@ -134,37 +184,45 @@ namespace PeerTalk.Routing
         }
     }
 
+    /// <summary>
+    ///   The DHT message exchanged between peers.
+    /// </summary>
     [ProtoContract]
-    class DhtMessage
+    public class DhtMessage
     {
-        // defines what type of message it is.
+        /// <summary>
+        /// What type of message it is.
+        /// </summary>
         [ProtoMember(1)]
         public MessageType Type { get; set; }
 
-        // defines what coral cluster level this query/response belongs to.
-        // in case we want to implement coral's cluster rings in the future.
+        /// <summary>
+        ///   Coral cluster level.
+        /// </summary>
         [ProtoMember(10)]
         public int ClusterLevelRaw { get; set; }
 
-        // Used to specify the key associated with this message.
-        // PUT_VALUE, GET_VALUE, ADD_PROVIDER, GET_PROVIDERS
-        // adjusted for javascript
+        /// <summary>
+        ///   TODO
+        /// </summary>
         [ProtoMember(2)]
         public byte[] Key { get; set; }
 
-        // Used to return a value
-        // PUT_VALUE, GET_VALUE
-        // adjusted Record to bytes for js
+        /// <summary>
+        ///   TODO
+        /// </summary>
         [ProtoMember(3)]
         public DhtRecordMessage Record { get; set; }
 
-        // Used to return peers closer to a key in a query
-        // GET_VALUE, GET_PROVIDERS, FIND_NODE
+        /// <summary>
+        ///   The closer peers for a query.
+        /// </summary>
         [ProtoMember(8)]
         public DhtPeerMessage[] CloserPeers { get; set; }
 
-        // Used to return Providers
-        // GET_VALUE, ADD_PROVIDER, GET_PROVIDERS
+        /// <summary>
+        ///  The providers for a query.
+        /// </summary>
         [ProtoMember(9)]
         public DhtPeerMessage[] ProviderPeers { get; set; }
     }
