@@ -39,6 +39,14 @@ namespace PeerTalk.Routing
         /// </summary>
         public RoutingTable RoutingTable;
 
+        /// <summary>
+        ///   The number of closer peers to return.
+        /// </summary>
+        /// <value>
+        ///   Defaults to 20.
+        /// </value>
+        public int CloserPeerCount { get; set; } = 20;
+
         /// <inheritdoc />
         public override string ToString()
         {
@@ -52,12 +60,30 @@ namespace PeerTalk.Routing
             {
                 var request = await ProtoBufHelper.ReadMessageAsync<DhtMessage>(stream, cancel);
 
-                log.Debug($"got message from {connection.RemotePeer}");
-                var response = new DhtMessage();
-                // TODO: process the request
-
-                ProtoBuf.Serializer.SerializeWithLengthPrefix(stream, response, PrefixStyle.Base128);
-                await stream.FlushAsync(cancel);
+                log.Debug($"got {request.Type} from {connection.RemotePeer}");
+                var response = new DhtMessage
+                {
+                    Type = request.Type,
+                    ClusterLevelRaw = request.ClusterLevelRaw
+                };
+                switch (request.Type)
+                {
+                    case MessageType.Ping:
+                        response = ProcessPing(request, response);
+                        break;
+                    case MessageType.FindNode:
+                        response = ProcessFindNode(request, response);
+                        break;
+                    default:
+                        log.Debug($"unknown {request.Type} from {connection.RemotePeer}");
+                        // TODO: Should we close the stream?
+                        continue;
+                }
+                if (response != null)
+                {
+                    ProtoBuf.Serializer.SerializeWithLengthPrefix(stream, response, PrefixStyle.Base128);
+                    await stream.FlushAsync(cancel);
+                }
             }
         }
 
@@ -132,8 +158,8 @@ namespace PeerTalk.Routing
 
         /// <inheritdoc />
         public async Task<IEnumerable<Peer>> FindProvidersAsync(
-            Cid id, 
-            int limit = 20, 
+            Cid id,
+            int limit = 20,
             Action<Peer> action = null,
             CancellationToken cancel = default(CancellationToken))
         {
@@ -150,6 +176,61 @@ namespace PeerTalk.Routing
             }
             await dquery.RunAsync(cancel);
             return dquery.Answers.Take(limit);
+        }
+
+        /// <summary>
+        ///   Process a ping request.
+        /// </summary>
+        /// <remarks>
+        ///   Simply return the <paramref name="request"/>.
+        /// </remarks>
+        DhtMessage ProcessPing(DhtMessage request, DhtMessage response)
+        {
+            return request;
+        }
+
+        /// <summary>
+        ///   Process a find node request.
+        /// </summary>
+        /// <remarks>
+        ///   If the node is known
+        /// </remarks>
+        public DhtMessage ProcessFindNode(DhtMessage request, DhtMessage response)
+        {
+            var peerId = new MultiHash(request.Key);
+
+            // Do we know the peer?.
+            Peer found = null;
+            if (Swarm.LocalPeer.Id == peerId)
+            {
+                found = Swarm.LocalPeer;
+            }
+            else
+            {
+                found = Swarm.KnownPeers.FirstOrDefault(p => p.Id == peerId);
+            }
+
+            // Find the closer peers.
+            var closerPeers = new List<Peer>();
+            if (found != null)
+            {
+                closerPeers.Add(found);
+            }
+            else
+            {
+                closerPeers.AddRange(RoutingTable.NearestPeers(peerId).Take(CloserPeerCount));
+            }
+
+            // Build the response.
+            response.CloserPeers = closerPeers
+                .Select(peer => new DhtPeerMessage
+                {
+                    Id = peer.Id.ToArray(),
+                    Addresses = peer.Addresses.Select(a => a.WithoutPeerId().ToArray()).ToArray()
+                })
+                .ToArray();
+
+            return response;
         }
 
     }
