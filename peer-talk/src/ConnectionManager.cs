@@ -169,7 +169,7 @@ namespace PeerTalk
         }
 
         /// <summary>
-        ///   Remove and close all connection tos the peer ID.
+        ///   Remove and close all connection to the peer ID.
         /// </summary>
         /// <param name="id">
         ///   The ID of a <see cref="Peer"/> to remove.
