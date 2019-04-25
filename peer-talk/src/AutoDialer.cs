@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace PeerTalk
@@ -25,6 +26,7 @@ namespace PeerTalk
         public const int DefaultMinConnections = 16;
 
         readonly Swarm swarm;
+        int pendingConnects;
 
         /// <summary>
         ///   Creates a new instance of the <see cref="AutoDialer"/> class.
@@ -36,6 +38,7 @@ namespace PeerTalk
         {
             this.swarm = swarm;
             swarm.PeerDiscovered += OnPeerDiscovered;
+            swarm.PeerDisconnected += OnPeerDisconnected;
         }
 
         /// <summary>
@@ -50,6 +53,7 @@ namespace PeerTalk
             if (disposing)
             {
                 swarm.PeerDiscovered -= OnPeerDiscovered;
+                swarm.PeerDisconnected -= OnPeerDisconnected;
             }
         }
 
@@ -77,10 +81,10 @@ namespace PeerTalk
         ///   Called when the swarm has a new peer.
         /// </summary>
         /// <param name="sender">
-        ///   The swarm that discovered a new peer.
+        ///   The swarm of peers.
         /// </param>
         /// <param name="peer">
-        ///   The peer that was discovered
+        ///   The peer that was discovered.
         /// </param>
         /// <remarks>
         ///   If the <see cref="MinConnections"/> is not reached, then the
@@ -88,11 +92,13 @@ namespace PeerTalk
         /// </remarks>
         void OnPeerDiscovered(object sender, Peer peer)
         {
-            if (swarm.IsRunning && swarm.Manager.Connections.Count() < MinConnections)
+            var n = swarm.Manager.Connections.Count() + pendingConnects;
+            if (swarm.IsRunning && n < MinConnections)
             {
+                Interlocked.Increment(ref pendingConnects);
                 Task.Run(async () =>
                 {
-                    log.Debug($"Dialing {peer}");
+                    log.Debug($"Dialing new {peer}");
                     try
                     {
                         await swarm.ConnectAsync(peer);
@@ -101,8 +107,59 @@ namespace PeerTalk
                     {
                         log.Warn($"Failed to dial {peer}", e);
                     }
+                    finally
+                    {
+                        Interlocked.Decrement(ref pendingConnects);
+                    }
                 });
             }
         }
+
+        /// <summary>
+        ///   Called when the swarm has lost a connection to a peer.
+        /// </summary>
+        /// <param name="sender">
+        ///   The swarm of peers.
+        /// </param>
+        /// <param name="disconnectedPeer">
+        ///   The peer that was disconnected.
+        /// </param>
+        /// <remarks>
+        ///   If the <see cref="MinConnections"/> is not reached, then another
+        ///   peer is dialed.
+        /// </remarks>
+        void OnPeerDisconnected(object sender, Peer disconnectedPeer)
+        {
+            var n = swarm.Manager.Connections.Count() + pendingConnects;
+            if (!swarm.IsRunning || n >= MinConnections)
+                return;
+
+            // Find a peer to connect to.
+            var peer = swarm.KnownPeers
+                .Where(p => p.ConnectedAddress == null)
+                .Where(p => p != disconnectedPeer)
+                .FirstOrDefault();
+            if (peer != null)
+            {
+                Interlocked.Increment(ref pendingConnects);
+                Task.Run(async () =>
+                {
+                    log.Debug($"Dialing {peer}");
+                    try
+                    {
+                        await swarm.ConnectAsync(peer);
+                    }
+                    catch (Exception e)
+                    {
+                        log.Warn($"Failed to dial {peer}", e);
+                    }
+                    finally
+                    {
+                        Interlocked.Decrement(ref pendingConnects);
+                    }
+                });
+            }
+        }
+
     }
 }
