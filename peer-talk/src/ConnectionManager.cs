@@ -32,6 +32,11 @@ namespace PeerTalk
         string Key(MultiHash id) => id.ToBase58();
 
         /// <summary>
+        ///   Raised when a peer's connection is closed.
+        /// </summary>
+        public event EventHandler<MultiHash> PeerDisconnected;
+
+        /// <summary>
         ///   Gets the current connections.
         /// </summary>
         public IEnumerable<PeerConnection> Connections => connections.Values
@@ -165,11 +170,15 @@ namespace PeerTalk
                 var last = newConns.Last();
                 last.RemotePeer.ConnectedAddress = last.RemoteAddress;
             }
+            else
+            {
+                PeerDisconnected?.Invoke(this, connection.RemotePeer.Id);
+            }
             return true;
         }
 
         /// <summary>
-        ///   Remove and close all connection tos the peer ID.
+        ///   Remove and close all connection to the peer ID.
         /// </summary>
         /// <param name="id">
         ///   The ID of a <see cref="Peer"/> to remove.
@@ -187,6 +196,8 @@ namespace PeerTalk
             {
                 conn.Dispose();
             }
+
+            PeerDisconnected?.Invoke(this, id);
             return true;
         }
 

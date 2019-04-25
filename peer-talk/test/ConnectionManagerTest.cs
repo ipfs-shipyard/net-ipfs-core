@@ -265,5 +265,46 @@ namespace PeerTalk
             Assert.IsNull(a.Stream);
             Assert.IsNull(b.Stream);
         }
+
+        [TestMethod]
+        public void PeerDisconnectedEvent_RemovingPeer()
+        {
+            bool gotEvent = false;
+            var manager = new ConnectionManager();
+            manager.PeerDisconnected += (s, e) => gotEvent = true;
+            var peerA = new Peer { Id = aId };
+            var a = new PeerConnection { RemotePeer = peerA, Stream = Stream.Null };
+            manager.Add(a);
+
+            manager.Remove(peerA.Id);
+            Assert.IsTrue(gotEvent);
+        }
+
+        [TestMethod]
+        public void PeerDisconnectedEvent_RemovingConnection()
+        {
+            int gotEvent = 0;
+            var manager = new ConnectionManager();
+            manager.PeerDisconnected += (s, e) => gotEvent += 1;
+            var peerA = new Peer { Id = aId };
+            var a = new PeerConnection { RemotePeer = peerA, Stream = Stream.Null };
+            manager.Add(a);
+
+            manager.Remove(a);
+            Assert.AreEqual(1, gotEvent);
+        }
+
+        [TestMethod]
+        public void PeerDisconnectedEvent_ConnectionClose()
+        {
+            int gotEvent = 0;
+            var manager = new ConnectionManager();
+            manager.PeerDisconnected += (s, e) => gotEvent += 1;
+            var peerA = new Peer { Id = aId };
+            var a = new PeerConnection { RemotePeer = peerA, Stream = Stream.Null };
+            manager.Add(a);
+            a.Dispose();
+            Assert.AreEqual(1, gotEvent);
+        }
     }
 }
