@@ -65,6 +65,11 @@ namespace PeerTalk
         public event EventHandler<Peer> PeerDiscovered;
 
         /// <summary>
+        ///   Raised when a peer's connection is closed.
+        /// </summary>
+        public event EventHandler<Peer> PeerDisconnected;
+
+        /// <summary>
         ///  The local peer.
         /// </summary>
         /// <value>
@@ -329,10 +334,20 @@ namespace PeerTalk
                 log.Warn("Peer key is missing, using unencrypted connections.");
             }
 
+            Manager.PeerDisconnected += OnPeerDisconnected;
             IsRunning = true;
             log.Debug("Started");
 
             return Task.CompletedTask;
+        }
+
+        void OnPeerDisconnected(object sender, MultiHash peerId)
+        {
+            if (!otherPeers.TryGetValue(peerId.ToBase58(), out Peer peer))
+            {
+                peer = new Peer { Id = peerId };
+            }
+            PeerDisconnected?.Invoke(this, peer);
         }
 
         /// <inheritdoc />
@@ -349,6 +364,7 @@ namespace PeerTalk
 
             // Disconnect from remote peers.
             Manager.Clear();
+            Manager.PeerDisconnected -= OnPeerDisconnected;
 
             otherPeers.Clear();
             listeners.Clear();

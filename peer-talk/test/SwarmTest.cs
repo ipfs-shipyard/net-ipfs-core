@@ -365,6 +365,45 @@ namespace PeerTalk
         }
 
         [TestMethod]
+        public async Task PeerDisconnected()
+        {
+            var peerB = new Peer
+            {
+                AgentVersion = "peerB",
+                Id = "QmdpwjdB94eNm2Lcvp9JqoCxswo3AKQqjLuNZyLixmCM1h",
+                PublicKey = "CAASXjBcMA0GCSqGSIb3DQEBAQUAA0sAMEgCQQDlTSgVLprWaXfmxDr92DJE1FP0wOexhulPqXSTsNh5ot6j+UiuMgwb0shSPKzLx9AuTolCGhnwpTBYHVhFoBErAgMBAAE="
+            };
+            var swarmB = new Swarm { LocalPeer = peerB };
+            await swarmB.StartAsync();
+            var peerBAddress = await swarmB.StartListeningAsync("/ip4/127.0.0.1/tcp/0");
+
+            var swarm = new Swarm { LocalPeer = self };
+            var swarmConnections = 0;
+            swarm.ConnectionEstablished += (s, e) =>
+            {
+                ++swarmConnections;
+            };
+            swarm.PeerDisconnected += (s, e) =>
+            {
+                --swarmConnections;
+            };
+            await swarm.StartAsync();
+            try
+            {
+                var remotePeer = await swarm.ConnectAsync(peerBAddress);
+                Assert.AreEqual(1, swarmConnections);
+
+                await swarm.StopAsync();
+                Assert.AreEqual(0, swarmConnections);
+            }
+            finally
+            {
+                await swarm.StopAsync();
+                await swarmB.StopAsync();
+            }
+        }
+
+        [TestMethod]
         public async Task Listening()
         {
             var peerA = new Peer
