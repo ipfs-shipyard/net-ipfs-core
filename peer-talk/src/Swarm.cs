@@ -11,11 +11,8 @@ using Common.Logging;
 using System.IO;
 using System.Net.NetworkInformation;
 using System.Net.Sockets;
-using System.Reflection;
 using PeerTalk.Protocols;
 using PeerTalk.Cryptography;
-using PeerTalk.Discovery;
-using PeerTalk.Routing;
 using Ipfs.CoreApi;
 
 namespace PeerTalk
@@ -118,6 +115,16 @@ namespace PeerTalk
         ///   Provides access to a private network of peers.
         /// </summary>
         public INetworkProtector NetworkProtector { get; set; }
+
+        /// <summary>
+        ///   Determines if the swarm has been started.
+        /// </summary>
+        /// <value>
+        ///   <b>true</b> if the swarm has started; otherwise, <b>false</b>.
+        /// </value>
+        /// <seealso cref="StartAsync"/>
+        /// <seealso cref="StopAsync"/>
+        public bool IsRunning { get; private set; }
 
         /// <summary>
         ///   Cancellation tokens for the listeners.
@@ -322,7 +329,8 @@ namespace PeerTalk
                 log.Warn("Peer key is missing, using unencrypted connections.");
             }
 
-            log.Debug("Starting");
+            IsRunning = true;
+            log.Debug("Started");
 
             return Task.CompletedTask;
         }
@@ -330,7 +338,8 @@ namespace PeerTalk
         /// <inheritdoc />
         public async Task StopAsync()
         {
-            log.Debug($"Stoping {LocalPeer}");
+            IsRunning = false;
+            log.Debug($"Stopping {LocalPeer}");
 
             // Stop the listeners.
             while (listeners.Count > 0)
@@ -346,7 +355,7 @@ namespace PeerTalk
             BlackList = new BlackList<MultiAddress>();
             WhiteList = new WhiteList<MultiAddress>();
 
-            log.Debug($"Stoped {LocalPeer}");
+            log.Debug($"Stopped {LocalPeer}");
         }
 
 

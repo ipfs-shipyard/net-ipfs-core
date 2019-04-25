@@ -68,6 +68,9 @@ namespace PeerTalk
         /// <value>
         ///   Defaults to <see cref="DefaultMinConnections"/>.
         /// </value>
+        /// <remarks>
+        ///   Setting this to zero will basically disable the auto dial features.
+        /// </remarks>
         public int MinConnections { get; set; } = DefaultMinConnections;
 
         /// <summary>
@@ -85,7 +88,7 @@ namespace PeerTalk
         /// </remarks>
         void OnPeerDiscovered(object sender, Peer peer)
         {
-            if (swarm.Manager.Connections.Count() < MinConnections)
+            if (swarm.IsRunning && swarm.Manager.Connections.Count() < MinConnections)
             {
                 Task.Run(async () =>
                 {

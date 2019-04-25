@@ -792,6 +792,18 @@ namespace PeerTalk
         }
 
         [TestMethod]
+        public async Task IsRunning()
+        {
+            var swarm = new Swarm { LocalPeer = self };
+            Assert.IsFalse(swarm.IsRunning);
+
+            await swarm.StartAsync();
+            Assert.IsTrue(swarm.IsRunning);
+
+            await swarm.StopAsync();
+            Assert.IsFalse(swarm.IsRunning);
+        }
+        [TestMethod]
         public async Task Connect_PrivateNetwork()
         {
             var peerB = new Peer
