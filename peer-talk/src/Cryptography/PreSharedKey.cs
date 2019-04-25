@@ -6,6 +6,9 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using Ipfs;
+using Ipfs.Registry;
+using Org.BouncyCastle.Crypto.Engines;
+using Org.BouncyCastle.Crypto.Parameters;
 
 namespace PeerTalk.Cryptography
 {
@@ -35,6 +38,34 @@ namespace PeerTalk.Cryptography
         ///   The length in bits.
         /// </value>
         public int Length { get { return Value?.Length * 8 ?? 0; } }
+
+        /// <summary>
+        ///   Gets an ID for the key.
+        /// </summary>
+        /// <returns>
+        ///   A byte array that can be used as an identifier for the key.
+        /// </returns>
+        /// <remarks>
+        ///   C# implementation of the GO code at 
+        ///   <see href="https://github.com/libp2p/go-libp2p-pnet/blob/bed5e6afdf9099121029f6fb675be12a50196114/fingerprint.go#L10"/>.
+        /// </remarks>
+        public byte[] Fingerprint()
+        {
+            // Encrypt data first so we don't feed PSK to hash function.
+            // Salsa20 function is not reversible thus increasing our security margin.
+            var encrypted = new byte[64];
+            var nonce = Encoding.ASCII.GetBytes("finprint");
+            var cipher = new Salsa20Engine();
+            cipher.Init(true, new ParametersWithIV(new KeyParameter(this.Value), nonce));
+            cipher.ProcessBytes(encrypted, 0, encrypted.Length, encrypted, 0);
+
+            // Then do Shake-128 hash to reduce its length.
+            // This way if for some reason Shake is broken and Salsa20 preimage is possible,
+            // attacker has only half of the bytes necessary to recreate psk.
+            return MultiHash
+                .GetHashAlgorithm("shake-128")
+                .ComputeHash(encrypted); 
+        }
 
         /// <summary>
         ///   Generate a new value of the specified length.

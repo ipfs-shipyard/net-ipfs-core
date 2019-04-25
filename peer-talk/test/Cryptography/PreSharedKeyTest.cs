@@ -112,6 +112,17 @@ namespace PeerTalk.Cryptography
             var expected = "e8d6d31e8e02000010d7d31e8e020000f0d1fc609300000078f0d31e8e020000".ToHexBuffer();
             CollectionAssert.AreEqual(expected, psk2.Value);
         }
-       
+
+        [TestMethod]
+        public void Fingerprint()
+        {
+            var key = new PreSharedKey
+            {
+                Value = "e8d6d31e8e02000010d7d31e8e020000f0d1fc609300000078f0d31e8e020000".ToHexBuffer()
+            };
+            var expected = "56a19299c05df1f2bb0e1d466002b6d9";
+            Assert.AreEqual(expected, key.Fingerprint().ToHexString());
+        }
+
     }
 }
