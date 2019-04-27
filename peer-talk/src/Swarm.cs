@@ -41,7 +41,7 @@ namespace PeerTalk
         /// <summary>
         ///   Added to connection protocols when needed.
         /// </summary>
-        Plaintext1 plaintext1 = new Plaintext1();
+        readonly Plaintext1 plaintext1 = new Plaintext1();
 
         Peer localPeer;
 
