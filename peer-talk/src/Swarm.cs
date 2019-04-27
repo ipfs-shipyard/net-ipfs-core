@@ -517,7 +517,7 @@ namespace PeerTalk
             // TODO: filter out self addresses and others.
             if (possibleAddresses.Length == 0)
             {
-                throw new Exception($"{remote} has no known addresses.");
+                throw new Exception($"{remote} has no known address.");
             }
 
             // Try the various addresses in parallel.  The first one to complete wins.

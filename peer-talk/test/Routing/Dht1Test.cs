@@ -29,6 +29,18 @@ namespace PeerTalk.Routing
         };
 
         [TestMethod]
+        public async Task StoppedEventRaised()
+        {
+            var swarm = new Swarm { LocalPeer = self };
+            var dht = new Dht1 { Swarm = swarm };
+            bool stopped = false;
+            dht.Stopped += (s, e) => { stopped = true;  };
+            await dht.StartAsync();
+            await dht.StopAsync();
+            Assert.IsTrue(stopped);
+        }
+
+        [TestMethod]
         public async Task SeedsRoutingTableFromSwarm()
         {
             var swarm = new Swarm { LocalPeer = self };

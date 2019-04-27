@@ -54,7 +54,7 @@ namespace PeerTalk.Routing
         ///   The number of answers needed.
         /// </summary>
         /// <remarks>
-        ///   When the numbers <see cref="Answers"/> recaches this limit
+        ///   When the numbers <see cref="Answers"/> reaches this limit
         ///   the <see cref="RunAsync">running query</see> will stop.
         /// </remarks>
         public int AnswersNeeded { get; set; } = 1;
