@@ -231,5 +231,19 @@ namespace PeerTalk.Routing
             }
         }
 
+        [TestMethod]
+        public async Task QueryIsCancelled_WhenDhtStops()
+        {
+            var unknownPeer = new MultiHash("QmdpwjdB94eNm2Lcvp9JqoCxswo3AKQqjLuNZyLixmCxxx");
+            var swarm = new Swarm { LocalPeer = self };
+            await swarm.RegisterPeerAsync("/ip4/178.62.158.247/tcp/4001/ipfs/QmSoLer265NRgSp2LA3dPaeykiS1J6DifTC88f5uVQKNAd");
+            await swarm.RegisterPeerAsync("/ip4/104.236.76.40/tcp/4001/ipfs/QmSoLV4Bbm51jM9C4gDYZQ9Cy3U6aXMJDAbzgu2fzaDs64");
+            var dht = new Dht1 { Swarm = swarm };
+            await dht.StartAsync();
+            var task = dht.FindPeerAsync(unknownPeer);
+            await Task.Delay(400);
+            await dht.StopAsync();
+        }
+
     }
 }

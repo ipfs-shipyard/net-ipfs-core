@@ -99,6 +99,7 @@ namespace PeerTalk.Routing
             log.Debug($"Q{Id} run {QueryType} {QueryKey}");
 
             runningQuery = CancellationTokenSource.CreateLinkedTokenSource(cancel);
+            Dht.Stopped += OnDhtStopped;
             queryMessage = new DhtMessage
             {
                 Type = QueryType,
@@ -116,7 +117,17 @@ namespace PeerTalk.Routing
             {
                 // eat it
             }
+            finally
+            {
+                Dht.Stopped -= OnDhtStopped;
+            }
             log.Debug($"Q{Id} found {Answers.Count} answers, visited {visited.Count} peers");
+        }
+
+        private void OnDhtStopped(object sender, EventArgs e)
+        {
+            log.Debug($"Q{Id} cancelled because DHT stopped.");
+            runningQuery.Cancel();
         }
 
         /// <summary>
