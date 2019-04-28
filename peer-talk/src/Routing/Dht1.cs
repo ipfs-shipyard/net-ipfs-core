@@ -237,6 +237,8 @@ namespace PeerTalk.Routing
                 })
                 .ToArray();
 
+            if (log.IsDebugEnabled)
+                log.Debug($"returning {response.CloserPeers.Length} closer peers");
             return response;
         }
 
