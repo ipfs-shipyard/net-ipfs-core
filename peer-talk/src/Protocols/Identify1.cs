@@ -101,6 +101,8 @@ namespace PeerTalk.Protocols
                         .Where(a => a != null)
                         .ToList();
                 }
+                if (remote.Addresses.Count() == 0)
+                    log.Warn($"No listen address for {remote}");
             }
 
             // TODO: Verify the Peer ID

@@ -47,6 +47,12 @@ namespace PeerTalk.Routing
         /// </value>
         public int CloserPeerCount { get; set; } = 20;
 
+        /// <summary>
+        ///   Raised when the DHT is stopped.
+        /// </summary>
+        /// <seealso cref="StopAsync"/>
+        public event EventHandler Stopped;
+
         /// <inheritdoc />
         public override string ToString()
         {
@@ -114,6 +120,7 @@ namespace PeerTalk.Routing
             Swarm.RemoveProtocol(this);
             Swarm.PeerDiscovered -= Swarm_PeerDiscovered;
 
+            Stopped?.Invoke(this, EventArgs.Empty);
             return Task.CompletedTask;
         }
 
@@ -230,6 +237,8 @@ namespace PeerTalk.Routing
                 })
                 .ToArray();
 
+            if (log.IsDebugEnabled)
+                log.Debug($"returning {response.CloserPeers.Length} closer peers");
             return response;
         }
 

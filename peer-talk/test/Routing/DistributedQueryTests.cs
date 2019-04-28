@@ -14,7 +14,10 @@ namespace PeerTalk.Routing
         [TestMethod]
         public async Task Cancelling()
         {
-            var dquery = new DistributedQuery<Peer>();
+            var dquery = new DistributedQuery<Peer>
+            {
+                Dht = new Dht1()
+            };
             var cts = new CancellationTokenSource();
             cts.Cancel();
             await dquery.RunAsync(cts.Token);
@@ -28,5 +31,6 @@ namespace PeerTalk.Routing
             var q2 = new DistributedQuery<Peer>();
             Assert.AreNotEqual(q1.Id, q2.Id);
         }
+
     }
 }

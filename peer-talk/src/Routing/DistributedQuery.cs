@@ -29,7 +29,7 @@ namespace PeerTalk.Routing
         /// <summary>
         ///   The maximum time spent on waiting for an answer from a peer.
         /// </summary>
-        static TimeSpan askTime = TimeSpan.FromSeconds(20);
+        static readonly TimeSpan askTime = TimeSpan.FromSeconds(20);
 
         CancellationTokenSource runningQuery;
         List<Peer> visited = new List<Peer>();
@@ -54,7 +54,7 @@ namespace PeerTalk.Routing
         ///   The number of answers needed.
         /// </summary>
         /// <remarks>
-        ///   When the numbers <see cref="Answers"/> recaches this limit
+        ///   When the numbers <see cref="Answers"/> reaches this limit
         ///   the <see cref="RunAsync">running query</see> will stop.
         /// </remarks>
         public int AnswersNeeded { get; set; } = 1;
@@ -99,6 +99,7 @@ namespace PeerTalk.Routing
             log.Debug($"Q{Id} run {QueryType} {QueryKey}");
 
             runningQuery = CancellationTokenSource.CreateLinkedTokenSource(cancel);
+            Dht.Stopped += OnDhtStopped;
             queryMessage = new DhtMessage
             {
                 Type = QueryType,
@@ -116,7 +117,17 @@ namespace PeerTalk.Routing
             {
                 // eat it
             }
+            finally
+            {
+                Dht.Stopped -= OnDhtStopped;
+            }
             log.Debug($"Q{Id} found {Answers.Count} answers, visited {visited.Count} peers");
+        }
+
+        private void OnDhtStopped(object sender, EventArgs e)
+        {
+            log.Debug($"Q{Id} cancelled because DHT stopped.");
+            runningQuery.Cancel();
         }
 
         /// <summary>

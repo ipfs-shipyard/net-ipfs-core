@@ -41,7 +41,7 @@ namespace PeerTalk
         /// <summary>
         ///   Added to connection protocols when needed.
         /// </summary>
-        Plaintext1 plaintext1 = new Plaintext1();
+        readonly Plaintext1 plaintext1 = new Plaintext1();
 
         Peer localPeer;
 
@@ -191,6 +191,7 @@ namespace PeerTalk
         ///   If the <paramref name="address"/> is not already known, then it is
         ///   added to the <see cref="KnownPeerAddresses"/>.
         /// </remarks>
+        /// <seealso cref="RegisterPeer(Peer)"/>
         public async Task<Peer> RegisterPeerAsync(MultiAddress address, CancellationToken cancel = default(CancellationToken))
         {
             var peerId = address.PeerId;
@@ -204,34 +205,13 @@ namespace PeerTalk
                 throw new Exception($"Communication with '{address}' is not allowed.");
             }
 
-            var isNew = false;
-            var p = otherPeers.AddOrUpdate(peerId.ToBase58(),
-                (id) => {
-                    log.Debug("new peer " + peerId);
-                    isNew = true;
-                    return new Peer
-                    {
-                        Id = id,
-                        Addresses = new List<MultiAddress> { address }
-                    };
-                },
-                (id, peer) =>
-                {
-                    peer.Addresses = peer.Addresses.ToList();
-                    var addrs = (List<MultiAddress>)peer.Addresses;
-                    if (!addrs.Contains(address))
-                    {
-                        addrs.Add(address);
-                    }
-                    return peer;
-                });
-
-            if (isNew)
+            var peer = new Peer
             {
-                PeerDiscovered?.Invoke(this, p);
-            }
+                Id = peerId,
+                Addresses = new List<MultiAddress> { address }
+            };
 
-            return p;
+            return RegisterPeer(peer);
         }
 
         /// <summary>
@@ -293,6 +273,14 @@ namespace PeerTalk
 
             if (isNew)
             {
+                if (log.IsDebugEnabled)
+                {
+                    log.Debug($"New peer registerd {p}");
+                    foreach (var a in p.Addresses)
+                    {
+                        log.Debug($"  at {a}");
+                    }
+                }
                 PeerDiscovered?.Invoke(this, p);
             }
 
@@ -517,7 +505,7 @@ namespace PeerTalk
             // TODO: filter out self addresses and others.
             if (possibleAddresses.Length == 0)
             {
-                throw new Exception($"{remote} has no known addresses.");
+                throw new Exception($"{remote} has no known address.");
             }
 
             // Try the various addresses in parallel.  The first one to complete wins.
@@ -780,7 +768,7 @@ namespace PeerTalk
         {
             try
             {
-                log.Debug("Got remote connection");
+                log.Debug($"{LocalPeer.Id} got remote connection");
                 log.Debug("local " + local);
                 log.Debug("remote " + remote);
 
