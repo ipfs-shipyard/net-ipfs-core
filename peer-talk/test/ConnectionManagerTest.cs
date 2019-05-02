@@ -113,34 +113,42 @@ namespace PeerTalk
         }
 
         [TestMethod]
-        public void Remove_Duplicate_PeerConnectedAddress()
+        public void Maintains_PeerConnectedAddress()
         {
-            var address = "/ip6/::1/tcp/4007";
+            var address1 = "/ip4/127.0.0.1/tcp/4007";
+            var address2 = "/ip4/127.0.0.2/tcp/4007";
 
             var manager = new ConnectionManager();
-            var peer = new Peer { Id = aId, ConnectedAddress = address };
-            var a = new PeerConnection { RemotePeer = peer, RemoteAddress = address, Stream = Stream.Null };
-            var b = new PeerConnection { RemotePeer = peer, RemoteAddress = address, Stream = Stream.Null };
+            var peer = new Peer { Id = aId };
+            var a = new PeerConnection { RemotePeer = peer, RemoteAddress = address1, Stream = Stream.Null };
+            var b = new PeerConnection { RemotePeer = peer, RemoteAddress = address2, Stream = Stream.Null };
 
             Assert.AreSame(a, manager.Add(a));
             Assert.IsTrue(manager.IsConnected(peer));
             Assert.AreEqual(1, manager.Connections.Count());
             Assert.IsNotNull(a.Stream);
-            Assert.AreEqual(address, peer.ConnectedAddress);
+            Assert.AreEqual(address1, peer.ConnectedAddress);
 
             Assert.AreSame(b, manager.Add(b));
             Assert.IsTrue(manager.IsConnected(peer));
             Assert.AreEqual(2, manager.Connections.Count());
             Assert.IsNotNull(a.Stream);
             Assert.IsNotNull(b.Stream);
-            Assert.AreEqual(address, peer.ConnectedAddress);
+            Assert.AreEqual(address1, peer.ConnectedAddress);
 
-            Assert.IsTrue(manager.Remove(b));
+            Assert.IsTrue(manager.Remove(a));
             Assert.IsTrue(manager.IsConnected(peer));
             Assert.AreEqual(1, manager.Connections.Count());
-            Assert.IsNotNull(a.Stream);
+            Assert.IsNull(a.Stream);
+            Assert.IsNotNull(b.Stream);
+            Assert.AreEqual(address2, peer.ConnectedAddress);
+
+            Assert.IsTrue(manager.Remove(b));
+            Assert.IsFalse(manager.IsConnected(peer));
+            Assert.AreEqual(0, manager.Connections.Count());
+            Assert.IsNull(a.Stream);
             Assert.IsNull(b.Stream);
-            Assert.AreEqual(address, peer.ConnectedAddress);
+            Assert.IsNull(peer.ConnectedAddress);
         }
 
         [TestMethod]

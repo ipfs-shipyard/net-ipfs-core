@@ -524,6 +524,8 @@ namespace PeerTalk
             }
             catch (Exception e)
             {
+                var attemped = string.Join(", ", possibleAddresses.Select(a => a.ToString()));
+                log.Warn($"Cannot dial {attemped}", e);
                 throw new Exception($"Cannot dial {remote}.", e);
             }
 
@@ -593,7 +595,6 @@ namespace PeerTalk
             }
 
             // Build the connection.
-            remote.ConnectedAddress = addr;
             var connection = new PeerConnection
             {
                 IsIncoming = false,
@@ -814,8 +815,6 @@ namespace PeerTalk
 
                 connection.RemotePeer = RegisterPeer(connection.RemotePeer);
                 connection.RemoteAddress = new MultiAddress($"{remote}/ipfs/{connection.RemotePeer.Id}");
-                connection.RemotePeer.ConnectedAddress = connection.RemoteAddress;
-
                 var actual = Manager.Add(connection);
                 if (actual == connection)
                 {

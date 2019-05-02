@@ -22,14 +22,17 @@ namespace PeerTalk
             {
                 ++closeCount;
             };
+            Assert.IsTrue(connection.IsActive);
             Assert.IsNotNull(connection.Stream);
 
             connection.Dispose();
+            Assert.IsFalse(connection.IsActive);
             Assert.IsNull(connection.Stream);
 
             // Can be disposed multiple times.
             connection.Dispose();
 
+            Assert.IsFalse(connection.IsActive);
             Assert.AreEqual(1, closeCount);
         }
 

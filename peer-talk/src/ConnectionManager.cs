@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Threading;
 
 namespace PeerTalk
 {
@@ -37,11 +38,11 @@ namespace PeerTalk
         public event EventHandler<MultiHash> PeerDisconnected;
 
         /// <summary>
-        ///   Gets the current connections.
+        ///   Gets the current active connections.
         /// </summary>
         public IEnumerable<PeerConnection> Connections => connections.Values
             .SelectMany(c => c)
-            .Where(c => c.Stream != null && c.Stream.CanRead && c.Stream.CanWrite);
+            .Where(c => c.IsActive);
 
         /// <summary>
         ///   Determines if a connection exists to the specified peer.
@@ -83,7 +84,7 @@ namespace PeerTalk
             }
 
             connection = conns
-                .Where(c => c.Stream != null && c.Stream.CanRead && c.Stream.CanWrite)
+                .Where(c => c.IsActive)
                 .FirstOrDefault();
 
             return connection != null;
@@ -125,6 +126,10 @@ namespace PeerTalk
                 }
             );
 
+            if (connection.RemotePeer.ConnectedAddress == null)
+            {
+                connection.RemotePeer.ConnectedAddress = connection.RemoteAddress;
+            }
             connection.Closed += (s, e) => Remove(e);
             return connection;
         }
@@ -172,6 +177,7 @@ namespace PeerTalk
             }
             else
             {
+                connection.RemotePeer.ConnectedAddress = null;
                 PeerDisconnected?.Invoke(this, connection.RemotePeer.Id);
             }
             return true;
@@ -194,6 +200,7 @@ namespace PeerTalk
             }
             foreach (var conn in conns)
             {
+                conn.RemotePeer.ConnectedAddress = null;
                 conn.Dispose();
             }
 

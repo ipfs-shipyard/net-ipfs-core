@@ -63,6 +63,17 @@ namespace PeerTalk
         public bool IsIncoming { get; set; }
 
         /// <summary>
+        ///   Determines if the connection to the remote can be used.
+        /// </summary>
+        /// <value>
+        ///   <b>true</b> if the connection is active.
+        /// </value>
+        public bool IsActive
+        {
+            get { return Stream != null && Stream.CanRead && Stream.CanWrite;  }
+        }
+
+        /// <summary>
         ///   The duplex stream between the two peers.
         /// </summary>
         public Stream Stream
@@ -354,10 +365,6 @@ namespace PeerTalk
                         Stream = null;
                         statsStream = null;
                     }
-                }
-                if (RemotePeer != null && RemotePeer.ConnectedAddress == RemoteAddress)
-                {
-                    RemotePeer.ConnectedAddress = null;
                 }
                 SecurityEstablished.TrySetCanceled();
                 IdentityEstablished.TrySetCanceled();
