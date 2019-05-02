@@ -347,7 +347,7 @@ namespace PeerTalk
             // Stop the listeners.
             while (listeners.Count > 0)
             {
-                await StopListeningAsync(listeners.Keys.First());
+                await StopListeningAsync(listeners.Keys.First()).ConfigureAwait(false);
             }
 
             // Disconnect from remote peers.
