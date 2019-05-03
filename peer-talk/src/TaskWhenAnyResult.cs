@@ -41,7 +41,7 @@ namespace PeerTalk
             while (running.Count > 0)
             {
                 cancel.ThrowIfCancellationRequested();
-                var winner = await Task.WhenAny(running);
+                var winner = await Task.WhenAny(running).ConfigureAwait(false);
                 if (!winner.IsCanceled && !winner.IsFaulted)
                 {
                     return winner.Result;

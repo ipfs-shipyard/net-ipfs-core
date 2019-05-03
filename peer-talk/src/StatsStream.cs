@@ -34,7 +34,7 @@ namespace PeerTalk
             {
                 while (true)
                 {
-                    await Task.Delay(1000);
+                    await Task.Delay(1000).ConfigureAwait(false);
                     lock (AllBandwidth)
                     {
                         AllBandwidth.RateIn = 0;
