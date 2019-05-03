@@ -889,10 +889,6 @@ namespace PeerTalk
                 if (!listener.IsCancellationRequested)
                 {
                     listener.Cancel(false);
-
-                    // Give some time away, so that cancel can run.
-                    // TODO: Would be nice to make this deterministic.
-                    await Task.Delay(TimeSpan.FromMilliseconds(100));
                 }
 
                 // Remove any local peer address that depend on the cancellation token.
@@ -910,6 +906,10 @@ namespace PeerTalk
                 {
                     listeners.TryRemove(other, out CancellationTokenSource _);
                 }
+
+                // Give some time away, so that cancel can run
+                // TODO: Would be nice to make this deterministic.
+                await Task.Delay(TimeSpan.FromMilliseconds(100)).ConfigureAwait(false);
             }
             catch (Exception e)
             {
