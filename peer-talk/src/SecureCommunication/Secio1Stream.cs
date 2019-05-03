@@ -121,7 +121,7 @@ namespace PeerTalk.SecureCommunication
         /// <inheritdoc />
         public override int Read(byte[] buffer, int offset, int count)
         {
-            return ReadAsync(buffer, offset, count).Result;
+            return ReadAsync(buffer, offset, count).GetAwaiter().GetResult();
         }
 
         /// <inheritdoc />
@@ -202,7 +202,7 @@ namespace PeerTalk.SecureCommunication
         /// <inheritdoc />
         public override void Flush()
         {
-            FlushAsync().Wait();
+            FlushAsync().GetAwaiter().GetResult();
         }
 
         /// <inheritdoc />
