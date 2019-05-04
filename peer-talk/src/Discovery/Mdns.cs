@@ -18,7 +18,7 @@ namespace PeerTalk.Discovery
         static ILog log = LogManager.GetLogger(typeof(Mdns));
 
         /// <inheritdoc />
-        public event EventHandler<PeerDiscoveredEventArgs> PeerDiscovered;
+        public event EventHandler<Peer> PeerDiscovered;
 
         /// <summary>
         ///  The local peer.
@@ -87,20 +87,27 @@ namespace PeerTalk.Discovery
 
         void OnServiceInstanceDiscovered(object sender, ServiceInstanceDiscoveryEventArgs e)
         {
-            var msg = e.Message;
-
-            // Is it our service?
-            var qsn = ServiceName + ".local";
-            if (!e.ServiceInstanceName.EndsWith(qsn))
-                return;
-
-            foreach (var address in GetAddresses(msg))
+            try
             {
-                if (LocalPeer.Id == address.PeerId)
+                var msg = e.Message;
+
+                // Is it our service?
+                var qsn = ServiceName + ".local";
+                if (!e.ServiceInstanceName.EndsWith(qsn))
+                    return;
+
+                var addresses = GetAddresses(msg)
+                    .Where(a => a.PeerId != LocalPeer.Id)
+                    .ToArray();
+                if (addresses.Length > 0)
                 {
-                    continue;
+                    PeerDiscovered?.Invoke(this, new Peer { Id = addresses[0].PeerId, Addresses = addresses });
                 }
-                PeerDiscovered?.Invoke(this, new PeerDiscoveredEventArgs { Address = address });
+            }
+            catch (Exception ex)
+            {
+                log.Error("OnServiceInstanceDiscovered error", ex);
+                // eat it
             }
         }
     

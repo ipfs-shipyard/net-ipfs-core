@@ -42,7 +42,7 @@ namespace PeerTalk.Discovery
             };
             mdns1.PeerDiscovered += (s, e) =>
             {
-                if (e.Address.PeerId == peer2.Id)
+                if (e.Id == peer2.Id)
                     done.Set();
             };
             await mdns1.StartAsync();
@@ -92,7 +92,7 @@ namespace PeerTalk.Discovery
             };
             mdns1.PeerDiscovered += (s, e) =>
             {
-                if (e.Address.PeerId == peer2.Id)
+                if (e.Id == peer2.Id)
                     done.Set();
             };
             await mdns1.StartAsync();

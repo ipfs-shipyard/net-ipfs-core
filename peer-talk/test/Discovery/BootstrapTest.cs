@@ -36,11 +36,34 @@ namespace PeerTalk.Discovery
                 }
             };
             int found = 0;
-            bootstrap.PeerDiscovered += (s, e) =>
+            bootstrap.PeerDiscovered += (s, peer) =>
             {
-                Assert.IsNotNull(e);
-                Assert.IsNotNull(e.Address);
-                CollectionAssert.Contains(bootstrap.Addresses.ToArray(), e.Address);
+                Assert.IsNotNull(peer);
+                Assert.AreEqual("QmaCpDMGvV2BGHeYERUEnRQAwe3N8SzbUtfsmvsqQLuvuJ", peer.Id.ToBase58());
+                CollectionAssert.AreEqual(bootstrap.Addresses.ToArray(), peer.Addresses.ToArray());
+                ++found;
+            };
+            await bootstrap.StartAsync();
+            Assert.AreEqual(1, found);
+        }
+
+        [TestMethod]
+        public async Task Discovered_Multiple_Peers()
+        {
+            var bootstrap = new Bootstrap
+            {
+                Addresses = new MultiAddress[]
+                {
+                    "/ip4/104.131.131.82/tcp/4001/ipfs/QmaCpDMGvV2BGHeYERUEnRQAwe3N8SzbUtfsmvsqQLuvuJ",
+                    "/ip4/127.0.0.1/tcp/4001/ipfs/QmdpwjdB94eNm2Lcvp9JqoCxswo3AKQqjLuNZyLixmCM1h",
+                    "/ip4/104.131.131.83/tcp/4001/p2p/QmaCpDMGvV2BGHeYERUEnRQAwe3N8SzbUtfsmvsqQLuvuJ",
+                    "/ip6/::/tcp/4001/p2p/QmdpwjdB94eNm2Lcvp9JqoCxswo3AKQqjLuNZyLixmCM1h"
+                }
+            };
+            int found = 0;
+            bootstrap.PeerDiscovered += (s, peer) =>
+            {
+                Assert.IsNotNull(peer);
                 ++found;
             };
             await bootstrap.StartAsync();
@@ -61,8 +84,6 @@ namespace PeerTalk.Discovery
             bootstrap.PeerDiscovered += (s, e) =>
             {
                 Assert.IsNotNull(e);
-                Assert.IsNotNull(e.Address);
-                Assert.AreEqual(bootstrap.Addresses.First(), e.Address);
                 ++found;
             };
             await bootstrap.StartAsync();
@@ -88,8 +109,8 @@ namespace PeerTalk.Discovery
             bootstrap.PeerDiscovered += (s, e) =>
             {
                 Assert.IsNotNull(e);
-                Assert.IsNotNull(e.Address);
-                Assert.AreEqual(bootstrap.Addresses.Last(), e.Address);
+                Assert.IsNotNull(e.Addresses);
+                Assert.AreEqual(bootstrap.Addresses.Last(), e.Addresses.First());
                 ++found;
             };
             await bootstrap.StartAsync();

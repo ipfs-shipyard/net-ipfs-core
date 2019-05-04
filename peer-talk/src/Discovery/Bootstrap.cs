@@ -16,7 +16,7 @@ namespace PeerTalk.Discovery
         static ILog log = LogManager.GetLogger(typeof(Bootstrap));
 
         /// <inheritdoc />
-        public event EventHandler<PeerDiscoveredEventArgs> PeerDiscovered;
+        public event EventHandler<Peer> PeerDiscovered;
 
         /// <summary>
         ///   The addresses of the pre-configured peers.
@@ -36,12 +36,17 @@ namespace PeerTalk.Discovery
                 log.Warn("No bootstrap addresses");
                 return Task.CompletedTask;
             }
-            foreach (var ma in Addresses)
+            var peers = Addresses
+                .Where(a => a.HasPeerId)
+                .GroupBy(
+                    a => a.PeerId,
+                    a => a,
+                    (key, g) => new Peer { Id = key, Addresses = g.ToList() });
+            foreach (var peer in peers)
             {
                 try
                 {
-                    var _ = ma.PeerId;
-                    OnPeerDiscovered(new PeerDiscoveredEventArgs { Address = ma });
+                    PeerDiscovered?.Invoke(this, peer);
                 }
                 catch (Exception e)
                 {
@@ -49,6 +54,7 @@ namespace PeerTalk.Discovery
                     continue; // silently ignore
                 }
             }
+
             return Task.CompletedTask;
         }
 
@@ -58,11 +64,6 @@ namespace PeerTalk.Discovery
             log.Debug("Stopping");
             PeerDiscovered = null;
             return Task.CompletedTask;
-        }
-
-        void OnPeerDiscovered(PeerDiscoveredEventArgs e)
-        {
-            PeerDiscovered?.Invoke(this, e);
         }
 
     }
