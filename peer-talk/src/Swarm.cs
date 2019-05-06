@@ -25,6 +25,14 @@ namespace PeerTalk
         static ILog log = LogManager.GetLogger(typeof(Swarm));
 
         /// <summary>
+        ///   The time to wait for a low level connection to be established.
+        /// </summary>
+        /// <value>
+        ///   Defaults to 30 seconds.
+        /// </value>
+        public TimeSpan TransportConnectionTimeout = TimeSpan.FromSeconds(30);
+
+        /// <summary>
         ///  The supported protocols.
         /// </summary>
         /// <remarks>
@@ -509,11 +517,10 @@ namespace PeerTalk
             }
 
             // Try the various addresses in parallel.  The first one to complete wins.
-            // Timeout on connection is 3 seconds.  TODO: not very interplanetary!
             PeerConnection connection = null;
             try
             {
-                using (var timeout = new CancellationTokenSource(3000))
+                using (var timeout = new CancellationTokenSource(TransportConnectionTimeout))
                 using (var cts = CancellationTokenSource.CreateLinkedTokenSource(timeout.Token, cancel))
                 {
                     var attempts = possibleAddresses
@@ -525,7 +532,7 @@ namespace PeerTalk
             catch (Exception e)
             {
                 var attemped = string.Join(", ", possibleAddresses.Select(a => a.ToString()));
-                log.Warn($"Cannot dial {attemped}", e);
+                log.Trace($"Cannot dial {attemped}", e);
                 throw new Exception($"Cannot dial {remote}.", e);
             }
 
