@@ -163,7 +163,7 @@ namespace PeerTalk
             await swarm.StartAsync();
             try
             {
-                var remotePeer = await swarm.ConnectAsync(peerBAddress);
+                var remotePeer = (await swarm.ConnectAsync(peerBAddress)).RemotePeer;
                 Assert.IsNotNull(remotePeer.ConnectedAddress);
                 Assert.AreEqual(peerB.PublicKey, remotePeer.PublicKey);
                 Assert.IsTrue(remotePeer.IsValid());
@@ -209,6 +209,39 @@ namespace PeerTalk
         }
 
         [TestMethod]
+        public async Task Concurent_Connect_SameTask()
+        {
+            var swarm = new Swarm { LocalPeer = self };
+            var venusA = new Peer
+            {
+                Id = "QmaCpDMGvV2BGHeYERUEnRQAwe3N8SzbUtfsmvsqQLuvuJ",
+                Addresses = new MultiAddress[]
+                {
+                    "/ip4/104.131.131.82/tcp/4001/ipfs/QmaCpDMGvV2BGHeYERUEnRQAwe3N8SzbUtfsmvsqQLuvuJ",            // mars.i.ipfs.io
+                }
+            };
+            var venusB = new Peer
+            {
+                Id = "QmaCpDMGvV2BGHeYERUEnRQAwe3N8SzbUtfsmvsqQLuvuJ",
+                Addresses = new MultiAddress[]
+                {
+                    "/ip4/104.131.131.82/tcp/4001/ipfs/QmaCpDMGvV2BGHeYERUEnRQAwe3N8SzbUtfsmvsqQLuvuJ",            // mars.i.ipfs.io
+                }
+            };
+            await swarm.StartAsync();
+            try
+            {
+                var a = swarm.ConnectAsync(venusA);
+                var b = swarm.ConnectAsync(venusB);
+                Assert.AreSame(a, b);
+            }
+            finally
+            {
+                await swarm.StopAsync();
+            }
+        }
+
+        [TestMethod]
         public async Task Connect_WithSomeUnreachableAddresses()
         {
             var bid = "QmdpwjdB94eNm2Lcvp9JqoCxswo3AKQqjLuNZyLixmCM1h";
@@ -232,7 +265,7 @@ namespace PeerTalk
             await swarm.StartAsync();
             try
             {
-                var remotePeer = await swarm.ConnectAsync(peerB);
+                var remotePeer = (await swarm.ConnectAsync(peerB)).RemotePeer;
                 Assert.IsNotNull(remotePeer.ConnectedAddress);
                 Assert.AreEqual(peerB.PublicKey, remotePeer.PublicKey);
                 Assert.IsTrue(remotePeer.IsValid());
