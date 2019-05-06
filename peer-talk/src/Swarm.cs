@@ -115,6 +115,11 @@ namespace PeerTalk
         ConcurrentDictionary<string, Peer> otherPeers = new ConcurrentDictionary<string, Peer>();
 
         /// <summary>
+        ///   Used to cancel any task when the swarm is stopped.
+        /// </summary>
+        CancellationTokenSource swarmCancellation;
+
+        /// <summary>
         ///  Outstanding connection tasks.
         /// </summary>
         ConcurrentDictionary<Peer, Task<PeerConnection>> pendingConnections = new ConcurrentDictionary<Peer, Task<PeerConnection>>();
@@ -337,6 +342,7 @@ namespace PeerTalk
 
             Manager.PeerDisconnected += OnPeerDisconnected;
             IsRunning = true;
+            swarmCancellation = new CancellationTokenSource();
             log.Debug("Started");
 
             return Task.CompletedTask;
@@ -355,6 +361,8 @@ namespace PeerTalk
         public async Task StopAsync()
         {
             IsRunning = false;
+            swarmCancellation?.Cancel(true);
+
             log.Debug($"Stopping {LocalPeer}");
 
             // Stop the listeners.
@@ -369,6 +377,7 @@ namespace PeerTalk
 
             otherPeers.Clear();
             listeners.Clear();
+            pendingConnections.Clear();
             BlackList = new BlackList<MultiAddress>();
             WhiteList = new WhiteList<MultiAddress>();
 
@@ -430,7 +439,13 @@ namespace PeerTalk
             // Use a current connection attempt to the peer or create a new one.
             return pendingConnections.AddOrUpdate(
                 peer,
-                (key) => Dial(peer, peer.Addresses, cancel),
+                (key) => 
+                {
+                    var cts = CancellationTokenSource.CreateLinkedTokenSource(swarmCancellation.Token, cancel);
+                    var task = Dial(peer, peer.Addresses, cts.Token);
+                    task.ContinueWith(x => pendingConnections.TryRemove(peer, out Task<PeerConnection> _));
+                    return task;
+                },
                 (key, task) => task);
         }
 
