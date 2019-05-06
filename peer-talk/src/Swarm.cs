@@ -115,6 +115,11 @@ namespace PeerTalk
         ConcurrentDictionary<string, Peer> otherPeers = new ConcurrentDictionary<string, Peer>();
 
         /// <summary>
+        ///  Outstanding connection tasks.
+        /// </summary>
+        ConcurrentDictionary<Peer, Task<PeerConnection>> pendingConnections = new ConcurrentDictionary<Peer, Task<PeerConnection>>();
+       
+        /// <summary>
         ///   Manages the swarm's peer connections.
         /// </summary>
         public ConnectionManager Manager = new ConnectionManager();
@@ -422,12 +427,11 @@ namespace PeerTalk
                 return Task.FromResult(conn);
             }
 
-            // TODO: If already trying to connect, return the same task.
-
-            // Establish a connection.
-            var connection = Dial(peer, peer.Addresses, cancel);
-
-            return connection;
+            // Use a current connection attempt to the peer or create a new one.
+            return pendingConnections.AddOrUpdate(
+                peer,
+                (key) => Dial(peer, peer.Addresses, cancel),
+                (key, task) => task);
         }
 
         /// <summary>
