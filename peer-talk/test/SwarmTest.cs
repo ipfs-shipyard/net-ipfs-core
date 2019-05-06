@@ -242,6 +242,35 @@ namespace PeerTalk
         }
 
         [TestMethod]
+        public async Task Connect_CancelsOnStop()
+        {
+            var swarm = new Swarm { LocalPeer = self };
+            var venus = new Peer
+            {
+                Id = "QmaCpDMGvV2BGHeYERUEnRQAwe3N8SzbUtfsmvsqQLuvuJ",
+                Addresses = new MultiAddress[]
+                {
+                    "/ip4/104.131.131.82/tcp/4001/ipfs/QmaCpDMGvV2BGHeYERUEnRQAwe3N8SzbUtfsmvsqQLuvuJ",            // mars.i.ipfs.io
+                }
+            };
+
+            await swarm.StartAsync();
+            var a = swarm.ConnectAsync(venus);
+            Assert.IsFalse(a.IsCanceled || a.IsFaulted);
+
+            await swarm.StopAsync();
+            var endTime = DateTime.Now.AddSeconds(3);
+            while (!a.IsCanceled && !a.IsFaulted)
+            {
+                if (DateTime.Now > endTime)
+                    Assert.Fail("swarm did not cancel pending connection.");
+                await Task.Delay(100);
+            }
+            Assert.IsTrue(a.IsCanceled || a.IsFaulted);
+
+        }
+
+        [TestMethod]
         public async Task Connect_WithSomeUnreachableAddresses()
         {
             var bid = "QmdpwjdB94eNm2Lcvp9JqoCxswo3AKQqjLuNZyLixmCM1h";

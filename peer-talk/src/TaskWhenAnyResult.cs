@@ -59,6 +59,7 @@ namespace PeerTalk
                 }
                 running.Remove(winner);
             }
+            cancel.ThrowIfCancellationRequested();
             throw new AggregateException("No task(s) returned a result.", exceptions);
         }
     }
