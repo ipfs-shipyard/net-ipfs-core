@@ -10,7 +10,7 @@ namespace PeerTalk.Discovery
 {
     /// <summary>
     ///   Discovers peers using Multicast DNS according to
-    ///   <see href="https://github.com/libp2p/specs/pull/80"/>
+    ///   <see href="https://github.com/libp2p/specs/blob/master/discovery/mdns.md"/>
     /// </summary>
     public class MdnsNext : Mdns
     {
