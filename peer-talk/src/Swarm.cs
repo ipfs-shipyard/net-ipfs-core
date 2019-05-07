@@ -306,6 +306,20 @@ namespace PeerTalk
         }
 
         /// <summary>
+        ///   Determines if a connection is being made to the peer.
+        /// </summary>
+        /// <param name="peer">
+        ///   A <see cref="Peer"/>.
+        /// </param>
+        /// <returns>
+        ///   <b>true</b> is the <paramref name="peer"/> has a pending connection.
+        /// </returns>
+        public bool HasPendingConnection(Peer peer)
+        {
+            return pendingConnections.TryGetValue(peer, out Task<PeerConnection> _);
+        }
+
+        /// <summary>
         ///   The addresses that cannot be used.
         /// </summary>
         public BlackList<MultiAddress> BlackList { get; set; } = new BlackList<MultiAddress>();

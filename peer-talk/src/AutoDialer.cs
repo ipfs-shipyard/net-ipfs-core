@@ -138,6 +138,7 @@ namespace PeerTalk
             var peer = swarm.KnownPeers
                 .Where(p => p.ConnectedAddress == null)
                 .Where(p => p != disconnectedPeer)
+                .Where(p => !swarm.HasPendingConnection(p))
                 .FirstOrDefault();
             if (peer != null)
             {
