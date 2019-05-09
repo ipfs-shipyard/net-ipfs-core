@@ -69,7 +69,8 @@ namespace PeerTalk.SecureCommunication
             // =============================================================================
             // step 1.1 Identify -- get identity from their key
             var remoteProposal = ProtoBuf.Serializer.DeserializeWithLengthPrefix<Secio1Propose>(stream, PrefixStyle.Fixed32BigEndian);
-            var remoteId = MultiHash.ComputeHash(remoteProposal.PublicKey, "sha2-256");
+            var ridAlg = (remoteProposal.PublicKey.Length <= 48) ? "identity" : "sha2-256";
+            var remoteId = MultiHash.ComputeHash(remoteProposal.PublicKey, ridAlg);
             if (remotePeer.Id == null)
             {
                 remotePeer.Id = remoteId;
