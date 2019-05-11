@@ -35,6 +35,8 @@ namespace PeerTalk.PubSub
             Assert.AreEqual(a.Sender, b.Sender);
             CollectionAssert.AreEqual(a.SequenceNumber, b.SequenceNumber);
             CollectionAssert.AreEqual(a.DataBytes, b.DataBytes);
+            Assert.AreEqual(a.DataBytes.Length, a.Size);
+            Assert.AreEqual(b.DataBytes.Length, b.Size);
         }
 
         [TestMethod]
@@ -56,6 +58,20 @@ namespace PeerTalk.PubSub
             };
 
             Assert.AreNotEqual(a.MessageId, b.MessageId);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(NotSupportedException))]
+        public void CidNotSupported()
+        {
+            var _ = new PublishedMessage().Id;
+        }
+
+        [TestMethod]
+        public void DataStream()
+        {
+            var msg = new PublishedMessage { DataBytes = new byte[] { 1 } };
+            Assert.AreEqual(1, msg.DataStream.ReadByte());
         }
     }
 }

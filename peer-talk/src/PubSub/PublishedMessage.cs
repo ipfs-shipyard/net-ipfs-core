@@ -61,7 +61,7 @@ namespace PeerTalk.PubSub
         /// <exception cref="NotSupportedException">
         ///   A published message does not have a content id.
         /// </exception>
-        public Cid Id => throw new NotImplementedException();
+        public Cid Id => throw new NotSupportedException();
 
         /// <summary>
         ///   A universally unique id for the message.
