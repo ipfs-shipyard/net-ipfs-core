@@ -31,7 +31,11 @@ namespace PeerTalk.PubSub
         
         long nextSequenceNumber;
         List<TopicHandler> topicHandlers;
+        MessageTracker tracker = new MessageTracker();
         
+        // TODO: A general purpose CancellationTokenSource that stops publishing of
+        // messages when this service is stopped.
+
         /// <summary>
         ///   The local peer.
         /// </summary>
@@ -55,6 +59,11 @@ namespace PeerTalk.PubSub
         /// </summary>
         public ulong MesssagesReceived;
 
+        /// <summary>
+        ///   The number of duplicate messages that have been received.
+        /// </summary>
+        public ulong DuplicateMesssagesReceived;
+
         /// <inheritdoc />
         public Task StartAsync()
         {
@@ -66,6 +75,7 @@ namespace PeerTalk.PubSub
             // Init the stats.
             MesssagesPublished = 0;
             MesssagesReceived = 0;
+            DuplicateMesssagesReceived = 0;
 
             // Listen to the routers.
             foreach (var router in Routers)
@@ -169,7 +179,7 @@ namespace PeerTalk.PubSub
             topicHandlers.Add(topicHandler);
             cancellationToken.Register(() => topicHandlers.Remove(topicHandler));
 
-            // TODO: More
+            // TODO: Tell routers
             return Task.CompletedTask;
         }
 
@@ -189,7 +199,12 @@ namespace PeerTalk.PubSub
         {
             ++MesssagesReceived;
 
-            // TODO: check for duplicate message.
+            // Check for duplicate message.
+            if (tracker.RecentlySeen(msg.MessageId))
+            {
+                ++DuplicateMesssagesReceived;
+                return;
+            }
 
             // Call local topic handlers.
             var handlers = topicHandlers

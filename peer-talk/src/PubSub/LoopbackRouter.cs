@@ -17,6 +17,8 @@ namespace PeerTalk.PubSub
     /// </remarks>
     public class LoopbackRouter : IMessageRouter
     {
+        MessageTracker tracker = new MessageTracker();
+
         /// <inheritdoc />
         public event EventHandler<PublishedMessage> MessageReceived;
 
@@ -24,7 +26,12 @@ namespace PeerTalk.PubSub
         public Task PublishAsync(PublishedMessage message, CancellationToken cancel)
         {
             cancel.ThrowIfCancellationRequested();
-            MessageReceived?.Invoke(this, message);
+
+            if (!tracker.RecentlySeen(message.MessageId))
+            {
+                MessageReceived?.Invoke(this, message);
+            }
+
             return Task.CompletedTask;
         }
     }

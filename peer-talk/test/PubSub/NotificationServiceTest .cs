@@ -134,5 +134,29 @@ namespace PeerTalk.PubSub
                 await ns.StopAsync();
             }
         }
+
+        [TestMethod]
+        public async Task DuplicateMessagesAreIgnored()
+        {
+            var ns = new NotificationService { LocalPeer = self };
+            ns.Routers.Add(new LoopbackRouter());
+            await ns.StartAsync();
+            try
+            {
+                var topic = Guid.NewGuid().ToString();
+                var cs = new CancellationTokenSource();
+                int messageCount = 0;
+                await ns.SubscribeAsync(topic, msg => { ++messageCount; }, cs.Token);
+
+                await ns.PublishAsync(topic, "");
+                Assert.AreEqual(1, messageCount);
+                Assert.AreEqual(2ul, ns.MesssagesReceived);
+                Assert.AreEqual(1ul, ns.DuplicateMesssagesReceived);
+            }
+            finally
+            {
+                await ns.StopAsync();
+            }
+        }
     }
 }
