@@ -26,7 +26,7 @@ namespace PeerTalk.PubSub
         ///   Sequence of topic messages.
         /// </summary>
         [ProtoMember(2)]
-        public PublishedMessage[] PublishedMessage;
+        public PublishedMessage[] PublishedMessages;
     }
 
     /// <summary>

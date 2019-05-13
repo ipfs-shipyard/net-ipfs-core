@@ -13,6 +13,10 @@ namespace PeerTalk.PubSub
     ///  A published messaged for a topic(s).
     /// </summary>
     /// <seealso ref="https://github.com/libp2p/specs/blob/master/pubsub/README.md"/>
+    /// <remarks>
+    ///   TODO: Sender should really be called Author.
+    ///   
+    /// </remarks>
     [ProtoContract]
     public class PublishedMessage : IPublishedMessage
     {
@@ -20,6 +24,11 @@ namespace PeerTalk.PubSub
 
         /// <inheritdoc />
         public Peer Sender { get; set; }
+
+        /// <summary>
+        ///   Who sent the the message.
+        /// </summary>
+        public Peer Forwarder {get; set; }
 
         [ProtoMember(1)]
         byte[] From

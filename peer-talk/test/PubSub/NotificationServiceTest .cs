@@ -19,6 +19,8 @@ namespace PeerTalk.PubSub
             Id = "QmXK9VBxaXFuuT29AaPUTgW3jBWZ9JgLVZYdMYTHC6LLAH",
             PublicKey = "CAASXjBcMA0GCSqGSIb3DQEBAQUAA0sAMEgCQQCC5r4nQBtnd9qgjnG8fBN5+gnqIeWEIcUFUdCG4su/vrbQ1py8XGKNUBuDjkyTv25Gd3hlrtNJV3eOKZVSL8ePAgMBAAE="
         };
+        Peer other1 = new Peer { Id = "QmaCpDMGvV2BGHeYERUEnRQAwe3N8SzbUtfsmvsqQLuvuJ" };
+        Peer other2 = new Peer { Id = "QmaCpDMGvV2BGHeYERUEnRQAwe3N8SzbUtfsmvsqQLuvUJ" };
 
         [TestMethod]
         public async Task MessageID_Increments()
@@ -152,6 +154,55 @@ namespace PeerTalk.PubSub
                 Assert.AreEqual(1, messageCount);
                 Assert.AreEqual(2ul, ns.MesssagesReceived);
                 Assert.AreEqual(1ul, ns.DuplicateMesssagesReceived);
+            }
+            finally
+            {
+                await ns.StopAsync();
+            }
+        }
+
+        [TestMethod]
+        public async Task SubscribedPeers_ForTopic()
+        {
+            var topic1 = Guid.NewGuid().ToString();
+            var topic2 = Guid.NewGuid().ToString();
+            var ns = new NotificationService { LocalPeer = self };
+            var router = new FloodRouter();
+            router.RemoteTopics.AddInterest(topic1, other1);
+            router.RemoteTopics.AddInterest(topic2, other2);
+            ns.Routers.Add(router);
+            await ns.StartAsync();
+            try
+            {
+                var peers = (await ns.PeersAsync(topic1)).ToArray();
+                Assert.AreEqual(1, peers.Length);
+                Assert.AreEqual(other1, peers[0]);
+
+                peers = (await ns.PeersAsync(topic2)).ToArray();
+                Assert.AreEqual(1, peers.Length);
+                Assert.AreEqual(other2, peers[0]);
+            }
+            finally
+            {
+                await ns.StopAsync();
+            }
+        }
+
+        [TestMethod]
+        public async Task SubscribedPeers_AllTopics()
+        {
+            var topic1 = Guid.NewGuid().ToString();
+            var topic2 = Guid.NewGuid().ToString();
+            var ns = new NotificationService { LocalPeer = self };
+            var router = new FloodRouter();
+            router.RemoteTopics.AddInterest(topic1, other1);
+            router.RemoteTopics.AddInterest(topic2, other2);
+            ns.Routers.Add(router);
+            await ns.StartAsync();
+            try
+            {
+                var peers = (await ns.PeersAsync(null)).ToArray();
+                Assert.AreEqual(2, peers.Length);
             }
             finally
             {

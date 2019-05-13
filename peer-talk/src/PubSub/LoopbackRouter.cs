@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Ipfs;
 
 namespace PeerTalk.PubSub
 {
@@ -21,6 +22,24 @@ namespace PeerTalk.PubSub
 
         /// <inheritdoc />
         public event EventHandler<PublishedMessage> MessageReceived;
+
+        /// <inheritdoc />
+        public IEnumerable<Peer> InterestedPeers(string topic)
+        {
+            return Enumerable.Empty<Peer>();
+        }
+
+        /// <inheritdoc />
+        public Task JoinTopicAsync(string topic, CancellationToken cancel)
+        {
+            return Task.CompletedTask;
+        }
+
+        /// <inheritdoc />
+        public Task LeaveTopicAsync(string topic, CancellationToken cancel)
+        {
+            return Task.CompletedTask;
+        }
 
         /// <inheritdoc />
         public Task PublishAsync(PublishedMessage message, CancellationToken cancel)

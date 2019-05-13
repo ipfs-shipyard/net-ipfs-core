@@ -144,7 +144,10 @@ namespace PeerTalk.PubSub
         /// <inheritdoc />
         public Task<IEnumerable<Peer>> PeersAsync(string topic = null, CancellationToken cancel = default(CancellationToken))
         {
-            throw new NotImplementedException();
+            var peers = Routers
+                .SelectMany(r => r.InterestedPeers(topic))
+                .Distinct();
+            return Task.FromResult(peers);
         }
 
         /// <inheritdoc />
@@ -173,14 +176,24 @@ namespace PeerTalk.PubSub
         }
 
         /// <inheritdoc />
-        public Task SubscribeAsync(string topic, Action<IPublishedMessage> handler, CancellationToken cancellationToken)
+        public async Task SubscribeAsync(string topic, Action<IPublishedMessage> handler, CancellationToken cancellationToken)
         {
             var topicHandler = new TopicHandler { Topic = topic, Handler = handler };
             topicHandlers.Add(topicHandler);
-            cancellationToken.Register(() => topicHandlers.Remove(topicHandler));
+            cancellationToken.Register(async () =>
+            {
+                topicHandlers.Remove(topicHandler);
+                if (topicHandlers.Count(t => t.Topic == topic) == 0)
+                {
+                    await Task.WhenAll(Routers.Select(r => r.LeaveTopicAsync(topic, CancellationToken.None)));
+                }
+            });
 
-            // TODO: Tell routers
-            return Task.CompletedTask;
+            // Tell routers if first time.
+            if (topicHandlers.Count(t => t.Topic == topic) == 1)
+            {
+                await Task.WhenAll(Routers.Select(r => r.JoinTopicAsync(topic, CancellationToken.None)));
+            }
         }
 
         /// <summary>
