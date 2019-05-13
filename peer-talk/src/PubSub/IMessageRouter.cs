@@ -11,7 +11,7 @@ namespace PeerTalk.PubSub
     /// <summary>
     ///   Routes pub/sub messages to other peers.
     /// </summary>
-    public interface IMessageRouter
+    public interface IMessageRouter : IService
     {
         /// <summary>
         ///   Sends the message to other peers.

@@ -16,7 +16,7 @@ namespace PeerTalk.PubSub
     /// <summary>
     ///   The original flood sub router.
     /// </summary>
-    public class FloodRouter : IService, IPeerProtocol, IMessageRouter
+    public class FloodRouter : IPeerProtocol, IMessageRouter
     {
         static ILog log = LogManager.GetLogger(typeof(FloodRouter));
 

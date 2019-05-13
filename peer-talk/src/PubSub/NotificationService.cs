@@ -65,7 +65,7 @@ namespace PeerTalk.PubSub
         public ulong DuplicateMesssagesReceived;
 
         /// <inheritdoc />
-        public Task StartAsync()
+        public async Task StartAsync()
         {
             topicHandlers = new List<TopicHandler>();
 
@@ -81,22 +81,20 @@ namespace PeerTalk.PubSub
             foreach (var router in Routers)
             {
                 router.MessageReceived += Router_MessageReceived;
+                await router.StartAsync();
             }
-
-            return Task.CompletedTask;
         }
 
         /// <inheritdoc />
-        public Task StopAsync()
+        public async Task StopAsync()
         {
             topicHandlers.Clear();
 
             foreach (var router in Routers)
             {
                 router.MessageReceived -= Router_MessageReceived;
+                await router.StopAsync();
             }
-
-            return Task.CompletedTask;
         }
 
         /// <summary>

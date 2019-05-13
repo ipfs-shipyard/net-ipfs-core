@@ -167,7 +167,7 @@ namespace PeerTalk.PubSub
             var topic1 = Guid.NewGuid().ToString();
             var topic2 = Guid.NewGuid().ToString();
             var ns = new NotificationService { LocalPeer = self };
-            var router = new FloodRouter();
+            var router = new FloodRouter() { Swarm = new Swarm() };
             router.RemoteTopics.AddInterest(topic1, other1);
             router.RemoteTopics.AddInterest(topic2, other2);
             ns.Routers.Add(router);
@@ -194,7 +194,7 @@ namespace PeerTalk.PubSub
             var topic1 = Guid.NewGuid().ToString();
             var topic2 = Guid.NewGuid().ToString();
             var ns = new NotificationService { LocalPeer = self };
-            var router = new FloodRouter();
+            var router = new FloodRouter { Swarm = new Swarm() };
             router.RemoteTopics.AddInterest(topic1, other1);
             router.RemoteTopics.AddInterest(topic2, other2);
             ns.Routers.Add(router);

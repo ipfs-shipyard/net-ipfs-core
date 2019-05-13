@@ -57,7 +57,6 @@ namespace PeerTalk.PubSub
             var ns1 = new NotificationService { LocalPeer = self };
             ns1.Routers.Add(router1);
             await swarm1.StartAsync();
-            await router1.StartAsync();
             await ns1.StartAsync();
 
             var swarm2 = new Swarm { LocalPeer = other };
@@ -65,7 +64,6 @@ namespace PeerTalk.PubSub
             var ns2 = new NotificationService { LocalPeer = other };
             ns2.Routers.Add(router2);
             await swarm2.StartAsync();
-            await router2.StartAsync();
             await ns2.StartAsync();
 
             try
@@ -91,11 +89,9 @@ namespace PeerTalk.PubSub
             finally
             {
                 await swarm1.StopAsync();
-                await router1.StopAsync();
                 await ns1.StopAsync();
 
                 await swarm2.StopAsync();
-                await router2.StopAsync();
                 await ns2.StopAsync();
             }
         }
@@ -110,7 +106,6 @@ namespace PeerTalk.PubSub
             var ns1 = new NotificationService { LocalPeer = self };
             ns1.Routers.Add(router1);
             await swarm1.StartAsync();
-            await router1.StartAsync();
             await ns1.StartAsync();
 
             var swarm2 = new Swarm { LocalPeer = other };
@@ -118,7 +113,6 @@ namespace PeerTalk.PubSub
             var ns2 = new NotificationService { LocalPeer = other };
             ns2.Routers.Add(router2);
             await swarm2.StartAsync();
-            await router2.StartAsync();
             await ns2.StartAsync();
 
             try
@@ -144,11 +138,9 @@ namespace PeerTalk.PubSub
             finally
             {
                 await swarm1.StopAsync();
-                await router1.StopAsync();
                 await ns1.StopAsync();
 
                 await swarm2.StopAsync();
-                await router2.StopAsync();
                 await ns2.StopAsync();
             }
         }
@@ -163,7 +155,6 @@ namespace PeerTalk.PubSub
             var ns1 = new NotificationService { LocalPeer = self };
             ns1.Routers.Add(router1);
             await swarm1.StartAsync();
-            await router1.StartAsync();
             await ns1.StartAsync();
 
             var swarm2 = new Swarm { LocalPeer = other };
@@ -171,7 +162,6 @@ namespace PeerTalk.PubSub
             var ns2 = new NotificationService { LocalPeer = other };
             ns2.Routers.Add(router2);
             await swarm2.StartAsync();
-            await router2.StartAsync();
             await ns2.StartAsync();
 
             try
@@ -208,11 +198,9 @@ namespace PeerTalk.PubSub
             finally
             {
                 await swarm1.StopAsync();
-                await router1.StopAsync();
                 await ns1.StopAsync();
 
                 await swarm2.StopAsync();
-                await router2.StopAsync();
                 await ns2.StopAsync();
             }
         }
@@ -227,7 +215,6 @@ namespace PeerTalk.PubSub
             var ns1 = new NotificationService { LocalPeer = self };
             ns1.Routers.Add(router1);
             await swarm1.StartAsync();
-            await router1.StartAsync();
             await ns1.StartAsync();
 
             var swarm2 = new Swarm { LocalPeer = other };
@@ -235,7 +222,6 @@ namespace PeerTalk.PubSub
             var ns2 = new NotificationService { LocalPeer = other };
             ns2.Routers.Add(router2);
             await swarm2.StartAsync();
-            await router2.StartAsync();
             await ns2.StartAsync();
 
             try
@@ -276,11 +262,9 @@ namespace PeerTalk.PubSub
             finally
             {
                 await swarm1.StopAsync();
-                await router1.StopAsync();
                 await ns1.StopAsync();
 
                 await swarm2.StopAsync();
-                await router2.StopAsync();
                 await ns2.StopAsync();
             }
         }

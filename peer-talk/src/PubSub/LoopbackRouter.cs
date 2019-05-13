@@ -53,5 +53,17 @@ namespace PeerTalk.PubSub
 
             return Task.CompletedTask;
         }
+
+        /// <inheritdoc />
+        public Task StartAsync()
+        {
+            return Task.CompletedTask;
+        }
+
+        /// <inheritdoc />
+        public Task StopAsync()
+        {
+            return Task.CompletedTask;
+        }
     }
 }
