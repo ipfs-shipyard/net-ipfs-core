@@ -112,5 +112,16 @@ namespace PeerTalk.Discovery
             }
         }
 
+        [TestMethod]
+        public void SafeDnsLabel()
+        {
+            Assert.AreEqual("a", MdnsNext.SafeLabel("a", 2));
+            Assert.AreEqual("ab", MdnsNext.SafeLabel("ab", 2));
+            Assert.AreEqual("ab.c", MdnsNext.SafeLabel("abc", 2));
+            Assert.AreEqual("ab.cd", MdnsNext.SafeLabel("abcd", 2));
+            Assert.AreEqual("ab.cd.e", MdnsNext.SafeLabel("abcde", 2));
+            Assert.AreEqual("ab.cd.ef", MdnsNext.SafeLabel("abcdef", 2));
+            Assert.AreEqual("ab.cd.ef.g", MdnsNext.SafeLabel("abcdefg", 2));
+        }
     }
 }

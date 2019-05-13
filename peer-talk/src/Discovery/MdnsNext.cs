@@ -4,6 +4,7 @@ using Makaretu.Dns;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace PeerTalk.Discovery
@@ -27,7 +28,7 @@ namespace PeerTalk.Discovery
         public override ServiceProfile BuildProfile()
         {
             var profile = new ServiceProfile(
-                instanceName: LocalPeer.Id.ToBase32(),
+                instanceName: SafeLabel(LocalPeer.Id.ToBase32()),
                 serviceName: ServiceName,
                 port: 0
             );
@@ -56,6 +57,28 @@ namespace PeerTalk.Discovery
                 .Select(s => s.Substring(8))
                 .Select(s => MultiAddress.TryCreate(s))
                 .Where(a => a != null);
+        }
+
+        /// <summary>
+        ///   Creates a safe DNS label.
+        /// </summary>
+        /// <param name="label"></param>
+        /// <param name="maxLength"></param>
+        /// <returns></returns>
+        public static string SafeLabel(string label, int maxLength = 63)
+        {
+            if (label.Length <= maxLength)
+                return label;
+
+            var sb = new StringBuilder();
+            while (label.Length > maxLength)
+            {
+                sb.Append(label.Substring(0, maxLength));
+                sb.Append('.');
+                label = label.Substring(maxLength);
+            }
+            sb.Append(label);
+            return sb.ToString();
         }
 
     }
