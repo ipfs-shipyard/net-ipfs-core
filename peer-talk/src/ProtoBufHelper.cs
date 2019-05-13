@@ -32,10 +32,10 @@ namespace PeerTalk
         /// </returns>
         public static async Task<T> ReadMessageAsync<T>(Stream stream, CancellationToken cancel = default(CancellationToken))
         {
-            var length = await stream.ReadVarint32Async(cancel);
+            var length = await stream.ReadVarint32Async(cancel).ConfigureAwait(false);
             var bytes = new byte[length];
             for (int offset = 0; offset < length;) {
-                offset += await stream.ReadAsync(bytes, offset, length - offset, cancel);
+                offset += await stream.ReadAsync(bytes, offset, length - offset, cancel).ConfigureAwait(false);
             }
 
             using (var ms = new MemoryStream(bytes, false))
