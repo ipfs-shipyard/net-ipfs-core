@@ -8,8 +8,8 @@
     <DebugType>full</DebugType>
     
     <!-- developer build is always 0.42 -->
-    <AssemblyVersion>0.42.609</AssemblyVersion>
-    <Version>0.42.609</Version>
+    <AssemblyVersion>0.42.0</AssemblyVersion>
+    <Version>0.42.0</Version>
     
     <!-- Nuget specs -->
     <PackageId>PeerTalk</PackageId>
