@@ -186,7 +186,7 @@ namespace PeerTalk
             IEnumerable<IEncryptionProtocol> securityProtocols,
             CancellationToken cancel = default(CancellationToken))
         {
-            await EstablishProtocolAsync("/multistream/", cancel);
+            await EstablishProtocolAsync("/multistream/", cancel).ConfigureAwait(false);
 
             // Find the first security protocol that is also supported by the remote.
             var exceptions = new List<Exception>();
@@ -194,7 +194,7 @@ namespace PeerTalk
             {
                 try
                 {
-                    await EstablishProtocolAsync(protocol.ToString(), cancel);
+                    await EstablishProtocolAsync(protocol.ToString(), cancel).ConfigureAwait(false);
                 }
                 catch (Exception e)
                 {
@@ -202,14 +202,14 @@ namespace PeerTalk
                     continue;
                 }
 
-                await protocol.EncryptAsync(this, cancel);
+                await protocol.EncryptAsync(this, cancel).ConfigureAwait(false);
                 break;
             }
             if (!SecurityEstablished.Task.IsCompleted)
                 throw new AggregateException("Could not establish a secure connection.", exceptions);
 
-            await EstablishProtocolAsync("/multistream/", cancel);
-            await EstablishProtocolAsync("/mplex/", cancel);
+            await EstablishProtocolAsync("/multistream/", cancel).ConfigureAwait(false);
+            await EstablishProtocolAsync("/mplex/", cancel).ConfigureAwait(false);
 
             var muxer = new Muxer
             {
@@ -250,8 +250,8 @@ namespace PeerTalk
                 .Select(vn => vn.ToString());
             foreach (var protocol in protocols)
             {
-                await Message.WriteAsync(protocol, stream, cancel);
-                var result = await Message.ReadStringAsync(stream, cancel);
+                await Message.WriteAsync(protocol, stream, cancel).ConfigureAwait(false);
+                var result = await Message.ReadStringAsync(stream, cancel).ConfigureAwait(false);
                 if (result == protocol)
                 {
                     return;
@@ -278,7 +278,7 @@ namespace PeerTalk
             {
                 while (!cancel.IsCancellationRequested && Stream != null)
                 {
-                    await protocol.ProcessMessageAsync(this, Stream, cancel);
+                    await protocol.ProcessMessageAsync(this, Stream, cancel).ConfigureAwait(false);
                 }
             }
             catch (IOException e)
@@ -308,7 +308,7 @@ namespace PeerTalk
             {
                 while (!cancel.IsCancellationRequested && stream != null && stream.CanRead)
                 {
-                    await protocol.ProcessMessageAsync(this, stream, cancel);
+                    await protocol.ProcessMessageAsync(this, stream, cancel).ConfigureAwait(false);
                 }
             }
             catch (EndOfStreamException)

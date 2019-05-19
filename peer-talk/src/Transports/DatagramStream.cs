@@ -75,7 +75,7 @@ namespace PeerTalk.Transports
             {
                 var bytes = new ArraySegment<byte>(sendBuffer.ToArray());
                 sendBuffer.Position = 0;
-                await socket.SendAsync(bytes, SocketFlags.None);
+                await socket.SendAsync(bytes, SocketFlags.None).ConfigureAwait(false);
             }
         }
 
@@ -89,7 +89,7 @@ namespace PeerTalk.Transports
             // If no data.
             if (receiveBuffer.Position == receiveBuffer.Length)
             {
-                await FlushAsync();
+                await FlushAsync().ConfigureAwait(false);
                 receiveBuffer.Position = 0;
                 receiveBuffer.SetLength(0);
                 var size = socket.Receive(datagram);

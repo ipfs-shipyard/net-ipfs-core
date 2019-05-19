@@ -21,7 +21,7 @@ namespace PeerTalk
         /// <inheritdoc />
         public async Task<bool> IsNotAllowedAsync(T target, CancellationToken cancel = default(CancellationToken))
         {
-            var q = await IsAllowedAsync(target, cancel);
+            var q = await IsAllowedAsync(target, cancel).ConfigureAwait(false);
             return !q;
         }
     }

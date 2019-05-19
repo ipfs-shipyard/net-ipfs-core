@@ -64,7 +64,7 @@ namespace PeerTalk.Routing
         {
             while (true)
             {
-                var request = await ProtoBufHelper.ReadMessageAsync<DhtMessage>(stream, cancel);
+                var request = await ProtoBufHelper.ReadMessageAsync<DhtMessage>(stream, cancel).ConfigureAwait(false);
 
                 log.Debug($"got {request.Type} from {connection.RemotePeer}");
                 var response = new DhtMessage
@@ -91,7 +91,7 @@ namespace PeerTalk.Routing
                 if (response != null)
                 {
                     ProtoBuf.Serializer.SerializeWithLengthPrefix(stream, response, PrefixStyle.Base128);
-                    await stream.FlushAsync(cancel);
+                    await stream.FlushAsync(cancel).ConfigureAwait(false);
                 }
             }
         }
@@ -152,7 +152,7 @@ namespace PeerTalk.Routing
                 Dht = this,
                 AnswersNeeded = 1
             };
-            await dquery.RunAsync(cancel);
+            await dquery.RunAsync(cancel).ConfigureAwait(false);
             if (dquery.Answers.Count == 0)
             {
                 throw new KeyNotFoundException($"Cannot locate peer '{id}'.");
@@ -184,7 +184,7 @@ namespace PeerTalk.Routing
             {
                 dquery.AnswerObtained += (s, e) => action.Invoke(e);
             }
-            await dquery.RunAsync(cancel);
+            await dquery.RunAsync(cancel).ConfigureAwait(false);
             return dquery.Answers.Take(limit);
         }
 

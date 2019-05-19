@@ -96,7 +96,7 @@ namespace PeerTalk.PubSub
                         log.Debug($"Message for '{String.Join(", ", msg.Topics)}' fowarded by {connection.RemotePeer}");
                         msg.Forwarder = connection.RemotePeer;
                         MessageReceived?.Invoke(this, msg);
-                        await PublishAsync(msg, cancel).ConfigureAwait(false); ;
+                        await PublishAsync(msg, cancel).ConfigureAwait(false);
                     }
                 }
             }
@@ -228,7 +228,7 @@ namespace PeerTalk.PubSub
             {
                 using (var stream = await Swarm.DialAsync(peer, this.ToString(), cancel).ConfigureAwait(false))
                 {
-                    await stream.WriteAsync(message, 0, message.Length, cancel);
+                    await stream.WriteAsync(message, 0, message.Length, cancel).ConfigureAwait(false);
                     await stream.FlushAsync(cancel).ConfigureAwait(false);
                 }
                 log.Debug($"sending message to {peer}");
@@ -266,7 +266,7 @@ namespace PeerTalk.PubSub
                         })
                         .ToArray()
                 };
-                await SendAsync(hello, new Peer[] { connection.RemotePeer }, CancellationToken.None);
+                await SendAsync(hello, new Peer[] { connection.RemotePeer }, CancellationToken.None).ConfigureAwait(false);
             }
             catch (Exception e)
             {

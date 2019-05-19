@@ -38,7 +38,7 @@ namespace PeerTalk.SecureCommunication
         /// <inheritdoc />
         public async Task ProcessMessageAsync(PeerConnection connection, Stream stream, CancellationToken cancel = default(CancellationToken))
         {
-            await EncryptAsync(connection, cancel);
+            await EncryptAsync(connection, cancel).ConfigureAwait(false);
         }
 
         /// <inheritdoc />
@@ -64,7 +64,7 @@ namespace PeerTalk.SecureCommunication
             };
 
             ProtoBuf.Serializer.SerializeWithLengthPrefix(stream, localProposal, PrefixStyle.Fixed32BigEndian);
-            await stream.FlushAsync();
+            await stream.FlushAsync().ConfigureAwait(false);
 
             // =============================================================================
             // step 1.1 Identify -- get identity from their key
@@ -141,7 +141,7 @@ namespace PeerTalk.SecureCommunication
             }
             localExchange.EPublicKey = localEphemeralPublicKey;
             ProtoBuf.Serializer.SerializeWithLengthPrefix(stream, localExchange, PrefixStyle.Fixed32BigEndian);
-            await stream.FlushAsync(cancel);
+            await stream.FlushAsync(cancel).ConfigureAwait(false);
 
             // Receive their Exchange packet.  If nothing, then most likely the
             // remote has closed the connection because it does not like us.
@@ -182,8 +182,8 @@ namespace PeerTalk.SecureCommunication
             // step 3. Finish -- send expected message to verify encryption works (send local nonce)
 
             // Send thier nonce,
-            await secureStream.WriteAsync(remoteProposal.Nonce, 0, remoteProposal.Nonce.Length, cancel);
-            await secureStream.FlushAsync(cancel);
+            await secureStream.WriteAsync(remoteProposal.Nonce, 0, remoteProposal.Nonce.Length, cancel).ConfigureAwait(false);
+            await secureStream.FlushAsync(cancel).ConfigureAwait(false);
 
             // Receive our nonce.
             var verification = new byte[localNonce.Length];

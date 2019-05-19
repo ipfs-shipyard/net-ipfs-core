@@ -102,7 +102,7 @@ namespace PeerTalk
                     log.Debug($"Dialing new {peer}");
                     try
                     {
-                        await swarm.ConnectAsync(peer);
+                        await swarm.ConnectAsync(peer).ConfigureAwait(false);
                     }
                     catch(Exception e)
                     {
@@ -151,7 +151,7 @@ namespace PeerTalk
                 log.Debug($"Dialing {peer}");
                 try
                 {
-                    await swarm.ConnectAsync(peer);
+                    await swarm.ConnectAsync(peer).ConfigureAwait(false);
                 }
                 catch (Exception e)
                 {

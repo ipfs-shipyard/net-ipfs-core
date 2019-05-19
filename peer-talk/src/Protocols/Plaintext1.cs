@@ -30,7 +30,7 @@ namespace PeerTalk.Protocols
         public async Task ProcessMessageAsync(PeerConnection connection, Stream stream, CancellationToken cancel = default(CancellationToken))
         {
             connection.SecurityEstablished.SetResult(true);
-            await connection.EstablishProtocolAsync("/multistream/", CancellationToken.None);
+            await connection.EstablishProtocolAsync("/multistream/", CancellationToken.None).ConfigureAwait(false);
         }
 
         /// <inheritdoc />

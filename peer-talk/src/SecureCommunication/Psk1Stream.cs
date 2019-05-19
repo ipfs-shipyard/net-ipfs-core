@@ -149,7 +149,7 @@ namespace PeerTalk.SecureCommunication
         public override async Task<int> ReadAsync(byte[] buffer, int offset, int count, CancellationToken cancellationToken)
         {
             var cipher = ReadCipher;
-            var n = await stream.ReadAsync(buffer, offset, count, cancellationToken);
+            var n = await stream.ReadAsync(buffer, offset, count, cancellationToken).ConfigureAwait(false);
             cipher.ProcessBytes(buffer, offset, n, buffer, offset);
             return n;
         }

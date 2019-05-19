@@ -67,7 +67,7 @@ namespace PeerTalk.Transports
                 // of the socket.  This will force ConnectAsync to return.
                 using (var _ = cancel.Register(() => { socket?.Dispose(); socket = null; }))
                 {
-                    await socket.ConnectAsync(ip.Value, port);
+                    await socket.ConnectAsync(ip.Value, port).ConfigureAwait(false);
                 };
 
                 latency = DateTime.Now - start;
