@@ -209,39 +209,6 @@ namespace PeerTalk
         }
 
         [TestMethod]
-        public async Task Concurent_Connect_SameTask()
-        {
-            var swarm = new Swarm { LocalPeer = self };
-            var venusA = new Peer
-            {
-                Id = "QmaCpDMGvV2BGHeYERUEnRQAwe3N8SzbUtfsmvsqQLuvuJ",
-                Addresses = new MultiAddress[]
-                {
-                    "/ip4/104.131.131.82/tcp/4001/ipfs/QmaCpDMGvV2BGHeYERUEnRQAwe3N8SzbUtfsmvsqQLuvuJ",            // mars.i.ipfs.io
-                }
-            };
-            var venusB = new Peer
-            {
-                Id = "QmaCpDMGvV2BGHeYERUEnRQAwe3N8SzbUtfsmvsqQLuvuJ",
-                Addresses = new MultiAddress[]
-                {
-                    "/ip4/104.131.131.82/tcp/4001/ipfs/QmaCpDMGvV2BGHeYERUEnRQAwe3N8SzbUtfsmvsqQLuvuJ",            // mars.i.ipfs.io
-                }
-            };
-            await swarm.StartAsync();
-            try
-            {
-                var a = swarm.ConnectAsync(venusA);
-                var b = swarm.ConnectAsync(venusB);
-                Assert.AreSame(a, b);
-            }
-            finally
-            {
-                await swarm.StopAsync();
-            }
-        }
-
-        [TestMethod]
         public async Task Connect_CancelsOnStop()
         {
             var swarm = new Swarm { LocalPeer = self };

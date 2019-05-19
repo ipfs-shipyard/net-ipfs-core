@@ -14,6 +14,7 @@ using System.Net.Sockets;
 using PeerTalk.Protocols;
 using PeerTalk.Cryptography;
 using Ipfs.CoreApi;
+using Nito.AsyncEx;
 
 namespace PeerTalk
 {
@@ -122,7 +123,7 @@ namespace PeerTalk
         /// <summary>
         ///  Outstanding connection tasks.
         /// </summary>
-        ConcurrentDictionary<Peer, Task<PeerConnection>> pendingConnections = new ConcurrentDictionary<Peer, Task<PeerConnection>>();
+        ConcurrentDictionary<Peer, AsyncLazy<PeerConnection>> pendingConnections = new ConcurrentDictionary<Peer, AsyncLazy<PeerConnection>>();
        
         /// <summary>
         ///   Manages the swarm's peer connections.
@@ -316,7 +317,7 @@ namespace PeerTalk
         /// </returns>
         public bool HasPendingConnection(Peer peer)
         {
-            return pendingConnections.TryGetValue(peer, out Task<PeerConnection> _);
+            return pendingConnections.TryGetValue(peer, out AsyncLazy<PeerConnection> _);
         }
 
         /// <summary>
@@ -419,8 +420,8 @@ namespace PeerTalk
         /// </remarks>
         public async Task<PeerConnection> ConnectAsync(MultiAddress address, CancellationToken cancel = default(CancellationToken))
         {
-            var peer = await RegisterPeerAsync(address, cancel);
-            return await ConnectAsync(peer, cancel);
+            var peer = await RegisterPeerAsync(address, cancel).ConfigureAwait(false);
+            return await ConnectAsync(peer, cancel).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -440,27 +441,30 @@ namespace PeerTalk
         ///   If already connected to the peer and is active on any address, then
         ///   the existing connection is returned.
         /// </remarks>
-        public Task<PeerConnection> ConnectAsync(Peer peer, CancellationToken cancel = default(CancellationToken))
+        public async Task<PeerConnection> ConnectAsync(Peer peer, CancellationToken cancel = default(CancellationToken))
         {
             peer = RegisterPeer(peer);
 
             // If connected and still open, then use the existing connection.
             if (Manager.TryGet(peer, out PeerConnection conn))
             {
-                return Task.FromResult(conn);
+                return conn;
             }
 
             // Use a current connection attempt to the peer or create a new one.
-            return pendingConnections.AddOrUpdate(
-                peer,
-                (key) => 
+            try
+            {
+                using (var cts = CancellationTokenSource.CreateLinkedTokenSource(swarmCancellation.Token, cancel))
                 {
-                    var cts = CancellationTokenSource.CreateLinkedTokenSource(swarmCancellation.Token, cancel);
-                    var task = Dial(peer, peer.Addresses, cts.Token);
-                    task.ContinueWith(x => pendingConnections.TryRemove(peer, out Task<PeerConnection> _));
-                    return task;
-                },
-                (key, task) => task);
+                    return await pendingConnections
+                        .GetOrAdd(peer, (key) => new AsyncLazy<PeerConnection>(() => Dial(peer, peer.Addresses, cts.Token)))
+                        .ConfigureAwait(false);
+                }
+            }
+            finally
+            {
+                pendingConnections.TryRemove(peer, out AsyncLazy<PeerConnection> _);
+            }
         }
 
         /// <summary>
@@ -524,6 +528,8 @@ namespace PeerTalk
         /// <returns></returns>
         async Task<PeerConnection> Dial(Peer remote, IEnumerable<MultiAddress> addrs, CancellationToken cancel)
         {
+            log.Debug($"Dialing {remote}");
+
             if (remote == LocalPeer)
             {
                 throw new Exception("Cannot dial self.");
