@@ -81,7 +81,7 @@ namespace PeerTalk.PubSub
             foreach (var router in Routers)
             {
                 router.MessageReceived += Router_MessageReceived;
-                await router.StartAsync();
+                await router.StartAsync().ConfigureAwait(false);
             }
         }
 
@@ -183,14 +183,14 @@ namespace PeerTalk.PubSub
                 topicHandlers.Remove(topicHandler);
                 if (topicHandlers.Count(t => t.Topic == topic) == 0)
                 {
-                    await Task.WhenAll(Routers.Select(r => r.LeaveTopicAsync(topic, CancellationToken.None)));
+                    await Task.WhenAll(Routers.Select(r => r.LeaveTopicAsync(topic, CancellationToken.None))).ConfigureAwait(false);
                 }
             });
 
             // Tell routers if first time.
             if (topicHandlers.Count(t => t.Topic == topic) == 1)
             {
-                await Task.WhenAll(Routers.Select(r => r.JoinTopicAsync(topic, CancellationToken.None)));
+                await Task.WhenAll(Routers.Select(r => r.JoinTopicAsync(topic, CancellationToken.None))).ConfigureAwait(false);
             }
         }
 

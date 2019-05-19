@@ -45,7 +45,7 @@ namespace PeerTalk.Transports
             try
             {
                 log.Debug("connecting to " + address);
-                await socket.ConnectAsync(ip.Value, port);
+                await socket.ConnectAsync(ip.Value, port).ConfigureAwait(false);
                 log.Debug("connected " + address);
             }
             catch (Exception) when (cancel.IsCancellationRequested)

@@ -54,7 +54,7 @@ namespace PeerTalk.Protocols
             }
 
             ProtoBuf.Serializer.SerializeWithLengthPrefix<Identify>(stream, res, PrefixStyle.Base128);
-            await stream.FlushAsync();
+            await stream.FlushAsync().ConfigureAwait(false);
         }
 
         /// <summary>
@@ -67,15 +67,15 @@ namespace PeerTalk.Protocols
         /// <returns></returns>
         public async Task<Peer> GetRemotePeer(PeerConnection connection, CancellationToken cancel)
         {
-            var muxer = await connection.MuxerEstablished.Task;
+            var muxer = await connection.MuxerEstablished.Task.ConfigureAwait(false);
             log.Debug("Get remote identity");
             Peer remote = connection.RemotePeer;
-            using (var stream = await muxer.CreateStreamAsync("id", cancel))
+            using (var stream = await muxer.CreateStreamAsync("id", cancel).ConfigureAwait(false))
             {
-                await connection.EstablishProtocolAsync("/multistream/", stream, cancel);
-                await connection.EstablishProtocolAsync("/ipfs/id/", stream, cancel);
+                await connection.EstablishProtocolAsync("/multistream/", stream, cancel).ConfigureAwait(false);
+                await connection.EstablishProtocolAsync("/ipfs/id/", stream, cancel).ConfigureAwait(false);
 
-                var info = await ProtoBufHelper.ReadMessageAsync<Identify>(stream, cancel);
+                var info = await ProtoBufHelper.ReadMessageAsync<Identify>(stream, cancel).ConfigureAwait(false);
                 if (remote == null)
                 {
                     remote = new Peer();

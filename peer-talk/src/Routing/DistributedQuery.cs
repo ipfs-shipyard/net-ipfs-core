@@ -111,7 +111,7 @@ namespace PeerTalk.Routing
                 .Select(i => { var id = i; return AskAsync(id); });
             try
             {
-                await Task.WhenAll(tasks);
+                await Task.WhenAll(tasks).ConfigureAwait(false);
             }
             catch (Exception)
             {
@@ -152,17 +152,17 @@ namespace PeerTalk.Routing
                 // Ask the nearest peer.
                 try
                 {
-                    await askCount.WaitAsync(runningQuery.Token);
+                    await askCount.WaitAsync(runningQuery.Token).ConfigureAwait(false);
 
                     log.Debug($"Q{Id}.{taskId}.{pass} ask {peer}");
                     using (var timeout = new CancellationTokenSource(askTime))
                     using (var cts = CancellationTokenSource.CreateLinkedTokenSource(timeout.Token, runningQuery.Token))
-                    using (var stream = await Dht.Swarm.DialAsync(peer, Dht.ToString(), cts.Token))
+                    using (var stream = await Dht.Swarm.DialAsync(peer, Dht.ToString(), cts.Token).ConfigureAwait(false))
                     {
                         // Send the KAD query and get a response.
                         ProtoBuf.Serializer.SerializeWithLengthPrefix(stream, queryMessage, PrefixStyle.Base128);
-                        await stream.FlushAsync(cts.Token);
-                        var response = await ProtoBufHelper.ReadMessageAsync<DhtMessage>(stream, cts.Token);
+                        await stream.FlushAsync(cts.Token).ConfigureAwait(false);
+                        var response = await ProtoBufHelper.ReadMessageAsync<DhtMessage>(stream, cts.Token).ConfigureAwait(false);
 
                         // Process answer
                         ProcessProviders(response.ProviderPeers);

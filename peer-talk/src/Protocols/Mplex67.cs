@@ -46,7 +46,7 @@ namespace PeerTalk.Protocols
 
             // Attach muxer to the connection.  It now becomes the message reader.
             connection.MuxerEstablished.SetResult(muxer);
-            await muxer.ProcessRequestsAsync();
+            await muxer.ProcessRequestsAsync().ConfigureAwait(false);
 
             log.Debug("stop processing from " + connection.RemoteAddress);
         }

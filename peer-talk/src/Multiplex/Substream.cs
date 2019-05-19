@@ -149,7 +149,7 @@ namespace PeerTalk.Multiplex
                 {
                     try
                     {
-                        inBlock = await inBlocks.ReceiveAsync(cancellationToken);
+                        inBlock = await inBlocks.ReceiveAsync(cancellationToken).ConfigureAwait(false);
                         inBlockOffset = 0;
                     }
                     catch (InvalidOperationException) // no more data!
@@ -174,7 +174,7 @@ namespace PeerTalk.Multiplex
                 return;
 
             // Send the response over the muxer channel
-            using (await Muxer.AcquireWriteAccessAsync())
+            using (await Muxer.AcquireWriteAccessAsync().ConfigureAwait(false))
             {
                 outStream.Position = 0;
                 var header = new Header
@@ -182,10 +182,10 @@ namespace PeerTalk.Multiplex
                     StreamId = Id,
                     PacketType = SentMessageType
                 };
-                await header.WriteAsync(Muxer.Channel, cancel);
-                await Varint.WriteVarintAsync(Muxer.Channel, outStream.Length, cancel);
-                await outStream.CopyToAsync(Muxer.Channel);
-                await Muxer.Channel.FlushAsync(cancel);
+                await header.WriteAsync(Muxer.Channel, cancel).ConfigureAwait(false);
+                await Varint.WriteVarintAsync(Muxer.Channel, outStream.Length, cancel).ConfigureAwait(false);
+                await outStream.CopyToAsync(Muxer.Channel).ConfigureAwait(false);
+                await Muxer.Channel.FlushAsync(cancel).ConfigureAwait(false);
 
                 outStream.SetLength(0);
             }

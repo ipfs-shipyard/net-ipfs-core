@@ -123,14 +123,14 @@ namespace PeerTalk.Multiplex
             Substreams.TryAdd(streamId, substream);
 
             // Tell the other side about the new stream.
-            using (await AcquireWriteAccessAsync())
+            using (await AcquireWriteAccessAsync().ConfigureAwait(false))
             {
                 var header = new Header { StreamId = streamId, PacketType = PacketType.NewStream };
                 var wireName = Encoding.UTF8.GetBytes(name);
-                await header.WriteAsync(Channel, cancel);
-                await Channel.WriteVarintAsync(wireName.Length, cancel);
-                await Channel.WriteAsync(wireName, 0, wireName.Length);
-                await Channel.FlushAsync();
+                await header.WriteAsync(Channel, cancel).ConfigureAwait(false);
+                await Channel.WriteVarintAsync(wireName.Length, cancel).ConfigureAwait(false);
+                await Channel.WriteAsync(wireName, 0, wireName.Length).ConfigureAwait(false);
+                await Channel.FlushAsync().ConfigureAwait(false);
             }
             return substream;
         }
@@ -146,16 +146,16 @@ namespace PeerTalk.Multiplex
             if (Substreams.TryRemove(stream.Id, out Substream _))
             {
                 // Tell the other side.
-                using (await AcquireWriteAccessAsync())
+                using (await AcquireWriteAccessAsync().ConfigureAwait(false))
                 {
                     var header = new Header
                     {
                         StreamId = stream.Id,
                         PacketType = PacketType.CloseInitiator
                     };
-                    await header.WriteAsync(Channel, cancel);
+                    await header.WriteAsync(Channel, cancel).ConfigureAwait(false);
                     Channel.WriteByte(0); // length
-                    await Channel.FlushAsync();
+                    await Channel.FlushAsync().ConfigureAwait(false);
                 }
             }
 
@@ -181,8 +181,8 @@ namespace PeerTalk.Multiplex
                 while (Channel.CanRead && !cancel.IsCancellationRequested)
                 {
                     // Read the packet prefix.
-                    var header = await Header.ReadAsync(Channel, cancel);
-                    var length = await Varint.ReadVarint32Async(Channel, cancel);
+                    var header = await Header.ReadAsync(Channel, cancel).ConfigureAwait(false);
+                    var length = await Varint.ReadVarint32Async(Channel, cancel).ConfigureAwait(false);
                     if (log.IsTraceEnabled)
                         log.TraceFormat("received '{0}', stream={1}, length={2}", header.PacketType, header.StreamId, length);
 
@@ -191,7 +191,7 @@ namespace PeerTalk.Multiplex
                     int offset = 0;
                     while (offset < length)
                     {
-                        offset += await Channel.ReadAsync(payload, offset, length - offset, cancel);
+                        offset += await Channel.ReadAsync(payload, offset, length - offset, cancel).ConfigureAwait(false);
                     }
 
                     // Process the packet
@@ -222,16 +222,16 @@ namespace PeerTalk.Multiplex
                             if (Receiver && (substream.Id & 1) == 1)
                             {
                                 log.Debug($"go-hack sending newstream {substream.Id}");
-                                using (await AcquireWriteAccessAsync())
+                                using (await AcquireWriteAccessAsync().ConfigureAwait(false))
                                 {
                                     var hdr = new Header
                                     {
                                         StreamId = substream.Id,
                                         PacketType = PacketType.NewStream
                                     };
-                                    await hdr.WriteAsync(Channel, cancel);
+                                    await hdr.WriteAsync(Channel, cancel).ConfigureAwait(false);
                                     Channel.WriteByte(0); // length
-                                    await Channel.FlushAsync();
+                                    await Channel.FlushAsync().ConfigureAwait(false);
                                 }
                             }
 #endif

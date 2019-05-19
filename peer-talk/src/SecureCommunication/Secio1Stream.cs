@@ -162,7 +162,7 @@ namespace PeerTalk.SecureCommunication
         /// </remarks>
         async Task<byte[]> ReadPacketAsync(CancellationToken cancel)
         {
-            var lengthBuffer = await ReadPacketBytesAsync(4, cancel);
+            var lengthBuffer = await ReadPacketBytesAsync(4, cancel).ConfigureAwait(false);
             var length =
                 (int)lengthBuffer[0] << 24 |
                 (int)lengthBuffer[1] << 16 |
@@ -171,8 +171,8 @@ namespace PeerTalk.SecureCommunication
             if (length <= outHmac.GetMacSize())
                 throw new InvalidDataException($"Invalid secio packet length of {length}.");
 
-            var encryptedData = await ReadPacketBytesAsync(length - outHmac.GetMacSize(), cancel);
-            var signature = await ReadPacketBytesAsync(outHmac.GetMacSize(), cancel);
+            var encryptedData = await ReadPacketBytesAsync(length - outHmac.GetMacSize(), cancel).ConfigureAwait(false);
+            var signature = await ReadPacketBytesAsync(outHmac.GetMacSize(), cancel).ConfigureAwait(false);
 
             var hmac = outHmac;
             var mac = new byte[hmac.GetMacSize()];
@@ -192,7 +192,7 @@ namespace PeerTalk.SecureCommunication
             byte[] buffer = new byte[count];
             for (int i = 0, n; i < count; i += n)
             {
-                n = await stream.ReadAsync(buffer, i, count - i, cancel);
+                n = await stream.ReadAsync(buffer, i, count - i, cancel).ConfigureAwait(false);
                 if (n < 1)
                     throw new EndOfStreamException();
             }
@@ -227,7 +227,7 @@ namespace PeerTalk.SecureCommunication
             stream.WriteByte((byte)(length));
             stream.Write(data, 0, data.Length);
             stream.Write(mac, 0, mac.Length);
-            await stream.FlushAsync(cancel);
+            await stream.FlushAsync(cancel).ConfigureAwait(false);
 
             outStream.SetLength(0);
         }

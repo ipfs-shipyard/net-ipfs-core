@@ -219,7 +219,7 @@ namespace PeerTalk
                 throw new Exception("Cannot register to self.");
             }
 
-            if (!await IsAllowedAsync(address, cancel))
+            if (!await IsAllowedAsync(address, cancel).ConfigureAwait(false))
             {
                 throw new Exception($"Communication with '{address}' is not allowed.");
             }
@@ -494,17 +494,17 @@ namespace PeerTalk
             peer = RegisterPeer(peer);
 
             // Get a connection and then a muxer to the peer.
-            var connection = await ConnectAsync(peer, cancel);
-            var muxer = await connection.MuxerEstablished.Task;
+            var connection = await ConnectAsync(peer, cancel).ConfigureAwait(false);
+            var muxer = await connection.MuxerEstablished.Task.ConfigureAwait(false);
 
             // Create a new stream for the peer protocol.
-            var stream = await muxer.CreateStreamAsync(protocol);
+            var stream = await muxer.CreateStreamAsync(protocol).ConfigureAwait(false);
             try
             {
-                await connection.EstablishProtocolAsync("/multistream/", stream);
+                await connection.EstablishProtocolAsync("/multistream/", stream).ConfigureAwait(false);
 
-                await Message.WriteAsync(protocol, stream, cancel);
-                var result = await Message.ReadStringAsync(stream, cancel);
+                await Message.WriteAsync(protocol, stream, cancel).ConfigureAwait(false);
+                var result = await Message.ReadStringAsync(stream, cancel).ConfigureAwait(false);
                 if (result != protocol)
                 {
                     throw new Exception($"Protocol '{protocol}' not supported by '{peer}'.");
@@ -538,13 +538,13 @@ namespace PeerTalk
             // If no addresses, then ask peer routing.
             if (Router != null && addrs.Count() == 0)
             {
-                var found = await Router.FindPeerAsync(remote.Id, cancel);
+                var found = await Router.FindPeerAsync(remote.Id, cancel).ConfigureAwait(false);
                 addrs = found.Addresses;
                 remote.Addresses = addrs;
             }
 
             // Get the addresses we can use to dial the remote.
-            var possibleAddresses = (await Task.WhenAll(addrs.Select(a => a.ResolveAsync(cancel))))
+            var possibleAddresses = (await Task.WhenAll(addrs.Select(a => a.ResolveAsync(cancel))).ConfigureAwait(false))
                 .SelectMany(a => a)
                 .Select(a => a.WithPeerId(remote.Id))
                 .Distinct()
@@ -564,7 +564,7 @@ namespace PeerTalk
                 {
                     var attempts = possibleAddresses
                         .Select(a => DialAsync(remote, a, cts.Token));
-                    connection = await TaskHelper.WhenAnyResult(attempts, cts.Token);
+                    connection = await TaskHelper.WhenAnyResult(attempts, cts.Token).ConfigureAwait(false);
                     cts.Cancel(); // stop other dialing tasks.
                 }
             }
@@ -584,14 +584,14 @@ namespace PeerTalk
                 {
                     security = protocols.OfType<IEncryptionProtocol>().ToArray();
                 }
-                await connection.InitiateAsync(security, cancel);
-                await connection.MuxerEstablished.Task;
+                await connection.InitiateAsync(security, cancel).ConfigureAwait(false);
+                await connection.MuxerEstablished.Task.ConfigureAwait(false);
                 Identify1 identify = null;
                 lock (protocols)
                 {
                     identify = protocols.OfType<Identify1>().First();
                 }
-                await identify.GetRemotePeer(connection, cancel);
+                await identify.GetRemotePeer(connection, cancel).ConfigureAwait(false);
             }
             catch (Exception)
             {
@@ -626,7 +626,7 @@ namespace PeerTalk
                 cancel.ThrowIfCancellationRequested();
                 if (TransportRegistry.Transports.TryGetValue(protocol.Name, out Func<IPeerTransport> transport))
                 {
-                    stream = await transport().ConnectAsync(addr, cancel);
+                    stream = await transport().ConnectAsync(addr, cancel).ConfigureAwait(false);
                     if (cancel.IsCancellationRequested)
                     {
                         stream?.Dispose();
@@ -655,7 +655,7 @@ namespace PeerTalk
             // Are we communicating to a private network?
             if (NetworkProtector != null)
             {
-                connection.Stream = await NetworkProtector.ProtectAsync(connection);
+                connection.Stream = await NetworkProtector.ProtectAsync(connection).ConfigureAwait(false);
             }
 
 
@@ -835,7 +835,7 @@ namespace PeerTalk
                 // Are we communicating to a private network?
                 if (NetworkProtector != null)
                 {
-                    connection.Stream = await NetworkProtector.ProtectAsync(connection);
+                    connection.Stream = await NetworkProtector.ProtectAsync(connection).ConfigureAwait(false);
                 }
 
                 // Mount the protocols.
@@ -846,7 +846,7 @@ namespace PeerTalk
                 connection.ReadMessages(default(CancellationToken));
 
                 // Wait for security to be established.
-                await connection.SecurityEstablished.Task;
+                await connection.SecurityEstablished.Task.ConfigureAwait(false);
                 // TODO: Maybe connection.LocalPeerKey = null;
 
                 // Wait for the handshake to complete.
@@ -858,7 +858,7 @@ namespace PeerTalk
                 {
                     identify = protocols.OfType<Identify1>().First();
                 }
-                connection.RemotePeer = await identify.GetRemotePeer(connection, default(CancellationToken));
+                connection.RemotePeer = await identify.GetRemotePeer(connection, default(CancellationToken)).ConfigureAwait(false);
 
                 connection.RemotePeer = RegisterPeer(connection.RemotePeer);
                 connection.RemoteAddress = new MultiAddress($"{remote}/ipfs/{connection.RemotePeer.Id}");
@@ -967,14 +967,14 @@ namespace PeerTalk
         /// <inheritdoc />
         public async Task<bool> IsAllowedAsync(MultiAddress target, CancellationToken cancel = default(CancellationToken))
         {
-            return await BlackList.IsAllowedAsync(target, cancel)
-                && await WhiteList.IsAllowedAsync(target, cancel);
+            return await BlackList.IsAllowedAsync(target, cancel).ConfigureAwait(false)
+                && await WhiteList.IsAllowedAsync(target, cancel).ConfigureAwait(false);
         }
 
         /// <inheritdoc />
         public async Task<bool> IsNotAllowedAsync(MultiAddress target, CancellationToken cancel = default(CancellationToken))
         {
-            var q = await IsAllowedAsync(target, cancel);
+            var q = await IsAllowedAsync(target, cancel).ConfigureAwait(false);
             return !q;
         }
     }

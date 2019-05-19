@@ -102,7 +102,7 @@ namespace PeerTalk
             // TODO: Don't use DNS, but use the IPFS Engine DNS resolver.
             // This will not then expose the domain name in plain text.
             // We also, then get to specify if A and/or AAAA records are needed.
-            var addresses = (await Dns.GetHostAddressesAsync(host))
+            var addresses = (await Dns.GetHostAddressesAsync(host).ConfigureAwait(false))
                 .Where(a => supportedDnsAddressFamilies.ContainsKey(a.AddressFamily))
                 .Where(a =>
                     protocolName == "dns" ||
