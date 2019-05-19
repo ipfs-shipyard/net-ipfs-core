@@ -784,6 +784,7 @@ namespace PeerTalk
             // Add actual addresses to listeners and local peer addresses.
             foreach (var a in addresses)
             {
+                log.Debug($"Listening on {a}");
                 listeners.TryAdd(a, cancel);
             }
             LocalPeer.Addresses = LocalPeer
