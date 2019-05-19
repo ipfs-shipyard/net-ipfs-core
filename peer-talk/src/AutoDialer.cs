@@ -27,6 +27,7 @@ namespace PeerTalk
 
         readonly Swarm swarm;
         int pendingConnects;
+        Random rng = new Random();
 
         /// <summary>
         ///   Creates a new instance of the <see cref="AutoDialer"/> class.
@@ -134,32 +135,33 @@ namespace PeerTalk
             if (!swarm.IsRunning || n >= MinConnections)
                 return;
 
-            // Find a peer to connect to.
-            var peer = swarm.KnownPeers
+            // Find a random peer to connect with.
+            var peers = swarm.KnownPeers
                 .Where(p => p.ConnectedAddress == null)
                 .Where(p => p != disconnectedPeer)
                 .Where(p => !swarm.HasPendingConnection(p))
-                .FirstOrDefault();
-            if (peer != null)
+                .ToArray();
+            if (peers.Length == 0)
+                return;
+            var peer = peers[rng.Next(peers.Count())];
+
+            Interlocked.Increment(ref pendingConnects);
+            Task.Run(async () =>
             {
-                Interlocked.Increment(ref pendingConnects);
-                Task.Run(async () =>
+                log.Debug($"Dialing {peer}");
+                try
                 {
-                    log.Debug($"Dialing {peer}");
-                    try
-                    {
-                        await swarm.ConnectAsync(peer);
-                    }
-                    catch (Exception e)
-                    {
-                        log.Warn($"Failed to dial {peer}", e);
-                    }
-                    finally
-                    {
-                        Interlocked.Decrement(ref pendingConnects);
-                    }
-                });
-            }
+                    await swarm.ConnectAsync(peer);
+                }
+                catch (Exception e)
+                {
+                    log.Warn($"Failed to dial {peer}", e);
+                }
+                finally
+                {
+                    Interlocked.Decrement(ref pendingConnects);
+                }
+            });
         }
 
     }
