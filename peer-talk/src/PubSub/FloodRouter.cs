@@ -93,6 +93,7 @@ namespace PeerTalk.PubSub
                 {
                     foreach (var msg in request.PublishedMessages)
                     {
+                        log.Debug($"Message for '{String.Join(", ", msg.Topics)}' fowarded by {connection.RemotePeer}");
                         msg.Forwarder = connection.RemotePeer;
                         MessageReceived?.Invoke(this, msg);
                         await PublishAsync(msg, cancel).ConfigureAwait(false); ;
@@ -118,10 +119,12 @@ namespace PeerTalk.PubSub
         {
             if (sub.Subscribe)
             {
+                log.Debug($"Subscribe '{sub.Topic}' by {remote}");
                 RemoteTopics.AddInterest(sub.Topic, remote);
             }
             else
             {
+                log.Debug($"Unsubscribe '{sub.Topic}' by {remote}");
                 RemoteTopics.RemoveInterest(sub.Topic, remote);
             }
         }
