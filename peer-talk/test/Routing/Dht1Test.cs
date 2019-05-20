@@ -245,5 +245,44 @@ namespace PeerTalk.Routing
             await dht.StopAsync();
         }
 
+        [TestMethod]
+        public async Task FindPeer_NoPeers()
+        {
+            var unknownPeer = new MultiHash("QmdpwjdB94eNm2Lcvp9JqoCxswo3AKQqjLuNZyLixmCxxx");
+            var swarm = new Swarm { LocalPeer = self };
+            var dht = new Dht1 { Swarm = swarm };
+            await dht.StartAsync();
+
+            try
+            {
+                var peer = await dht.FindPeerAsync(unknownPeer);
+                Assert.IsNull(peer);
+            }
+            finally
+            {
+                await dht.StopAsync();
+            }
+        }
+
+        [TestMethod]
+        public async Task FindPeer_Closest()
+        {
+            var unknownPeer = new MultiHash("QmdpwjdB94eNm2Lcvp9JqoCxswo3AKQqjLuNZyLixmCxxx");
+            var swarm = new Swarm { LocalPeer = self };
+            await swarm.StartAsync();
+            var dht = new Dht1 { Swarm = swarm };
+            await dht.StartAsync();
+            dht.RoutingTable.Add(other);
+            try
+            {
+                var peer = await dht.FindPeerAsync(unknownPeer);
+                Assert.AreEqual(other, peer);
+            }
+            finally
+            {
+                await swarm.StopAsync();
+                await dht.StopAsync();
+            }
+        }
     }
 }

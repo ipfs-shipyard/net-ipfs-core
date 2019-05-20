@@ -153,10 +153,13 @@ namespace PeerTalk.Routing
                 AnswersNeeded = 1
             };
             await dquery.RunAsync(cancel).ConfigureAwait(false);
+
+            // If not found, return the closest peer.
             if (dquery.Answers.Count == 0)
             {
-                throw new KeyNotFoundException($"Cannot locate peer '{id}'.");
+                return RoutingTable.NearestPeers(id).FirstOrDefault();
             }
+
             return dquery.Answers.First();
         }
 
