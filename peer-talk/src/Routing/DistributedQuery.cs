@@ -22,18 +22,19 @@ namespace PeerTalk.Routing
         static int nextQueryId = 1;
 
         /// <summary>
-        ///   The maximum number of peers that can be queried.
+        ///   The maximum number of peers that can be queried at one time.
         /// </summary>
-        static SemaphoreSlim askCount = new SemaphoreSlim(10);
+        static SemaphoreSlim askCount = new SemaphoreSlim(30);
 
         /// <summary>
         ///   The maximum time spent on waiting for an answer from a peer.
         /// </summary>
-        static readonly TimeSpan askTime = TimeSpan.FromSeconds(20);
+        static readonly TimeSpan askTime = TimeSpan.FromSeconds(10);
 
         CancellationTokenSource runningQuery;
         List<Peer> visited = new List<Peer>();
         DhtMessage queryMessage;
+        int failedConnects = 0;
 
         /// <summary>
         ///   Raised when an answer is obtained.
@@ -63,12 +64,12 @@ namespace PeerTalk.Routing
         ///   The maximum number of concurrent peer queries to perform.
         /// </summary>
         /// <value>
-        ///   The default is 3.
+        ///   The default is 6.
         /// </value>
         /// <remarks>
         ///   The number of peers that are asked for the answer.
         /// </remarks>
-        public int ConcurrencyLevel { get; set; } = 3;
+        public int ConcurrencyLevel { get; set; } = 6;
 
         /// <summary>
         ///   The distributed hash table.
@@ -121,7 +122,7 @@ namespace PeerTalk.Routing
             {
                 Dht.Stopped -= OnDhtStopped;
             }
-            log.Debug($"Q{Id} found {Answers.Count} answers, visited {visited.Count} peers");
+            log.Debug($"Q{Id} found {Answers.Count} answers, visited {visited.Count} peers, failed {failedConnects}");
         }
 
         private void OnDhtStopped(object sender, EventArgs e)
@@ -150,11 +151,11 @@ namespace PeerTalk.Routing
                 visited.Add(peer);
 
                 // Ask the nearest peer.
+                await askCount.WaitAsync(runningQuery.Token).ConfigureAwait(false);
+                var start = DateTime.Now;
+                log.Debug($"Q{Id}.{taskId}.{pass} ask {peer}");
                 try
                 {
-                    await askCount.WaitAsync(runningQuery.Token).ConfigureAwait(false);
-
-                    log.Debug($"Q{Id}.{taskId}.{pass} ask {peer}");
                     using (var timeout = new CancellationTokenSource(askTime))
                     using (var cts = CancellationTokenSource.CreateLinkedTokenSource(timeout.Token, runningQuery.Token))
                     using (var stream = await Dht.Swarm.DialAsync(peer, Dht.ToString(), cts.Token).ConfigureAwait(false))
@@ -168,10 +169,14 @@ namespace PeerTalk.Routing
                         ProcessProviders(response.ProviderPeers);
                         ProcessCloserPeers(response.CloserPeers);
                     }
+                    var time = DateTime.Now - start;
+                    log.Debug($"Q{Id}.{taskId}.{pass} ok ({time.TotalMilliseconds} ms)");
                 }
                 catch (Exception e)
                 {
-                    log.Warn($"Q{Id}.{taskId}.{pass} ask failed {e.Message}");
+                    Interlocked.Increment(ref failedConnects);
+                    var time = DateTime.Now - start;
+                    log.Warn($"Q{Id}.{taskId}.{pass} failed ({time.TotalMilliseconds} ms) - {e.Message}");
                     // eat it
                 }
                 finally
@@ -218,6 +223,7 @@ namespace PeerTalk.Routing
                     if (p == Dht.Swarm.LocalPeer)
                         continue;
 
+                    log.Debug($"Q{Id} closer peer {p} - {closer.Connection}");
                     p = Dht.Swarm.RegisterPeer(p);
                     if (QueryType == MessageType.FindNode && QueryKey == p.Id)
                     {

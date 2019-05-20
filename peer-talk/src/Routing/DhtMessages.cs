@@ -139,7 +139,7 @@ namespace PeerTalk.Routing
         /// used to signal the sender's connection capabilities to the peer
         /// </summary>
         [ProtoMember(3)]
-        ConnectionType Connection { get; set; }
+        public ConnectionType Connection { get; set; }
 
         /// <summary>
         ///   Convert the message into a <see cref="Peer"/>.
