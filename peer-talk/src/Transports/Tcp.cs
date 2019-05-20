@@ -58,16 +58,17 @@ namespace PeerTalk.Transports
                 ProtocolType.Tcp);
 
             TimeSpan latency = MinReadTimeout; // keep compiler happy
+            var start = DateTime.Now;
             try
             {
                 log.Trace("connecting to " + address);
-                var start = DateTime.Now;
 
                 // Handle cancellation of the connect attempt by disposing
                 // of the socket.  This will force ConnectAsync to return.
                 using (var _ = cancel.Register(() => { socket?.Dispose(); socket = null; }))
                 {
-                    await socket.ConnectAsync(ip.Value, port).ConfigureAwait(false);
+                    var ipaddr = IPAddress.Parse(ip.Value);
+                    await socket.ConnectAsync(ipaddr, port).ConfigureAwait(false);
                 };
 
                 latency = DateTime.Now - start;
@@ -79,6 +80,8 @@ namespace PeerTalk.Transports
             }
             catch (Exception)
             {
+                latency = DateTime.Now - start;
+                log.Trace($"failed to {address} in {latency.TotalMilliseconds} ms");
                 socket?.Dispose();
                 throw;
             }

@@ -571,7 +571,7 @@ namespace PeerTalk
             catch (Exception e)
             {
                 var attemped = string.Join(", ", possibleAddresses.Select(a => a.ToString()));
-                log.Trace($"Cannot dial {attemped}", e);
+                log.Trace($"Cannot dial {attemped}");
                 throw new Exception($"Cannot dial {remote}.", e);
             }
 
