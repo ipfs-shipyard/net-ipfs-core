@@ -104,9 +104,9 @@ namespace PeerTalk
                     {
                         await swarm.ConnectAsync(peer).ConfigureAwait(false);
                     }
-                    catch(Exception e)
+                    catch(Exception)
                     {
-                        log.Warn($"Failed to dial {peer}", e);
+                        log.Warn($"Failed to dial {peer}");
                     }
                     finally
                     {
@@ -153,9 +153,9 @@ namespace PeerTalk
                 {
                     await swarm.ConnectAsync(peer).ConfigureAwait(false);
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
-                    log.Warn($"Failed to dial {peer}", e);
+                    log.Warn($"Failed to dial {peer}");
                 }
                 finally
                 {
