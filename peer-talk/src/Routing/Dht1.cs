@@ -198,7 +198,22 @@ namespace PeerTalk.Routing
             {
                 dquery.AnswerObtained += (s, e) => action.Invoke(e);
             }
-            await dquery.RunAsync(cancel).ConfigureAwait(false);
+
+            // Add any providers that we already know about.
+            var providers = (await ContentRouter.GetAsync(id, cancel))
+                .Where(pid => pid != Swarm.LocalPeer.Id)
+                .Select(pid => Swarm.RegisterPeer(new Peer { Id = pid }));
+            foreach (var provider in providers)
+            {
+                dquery.AddAnswer(provider);
+            }
+
+            // Ask our peers for more providers.
+            if (limit > dquery.Answers.Count)
+            {
+                await dquery.RunAsync(cancel).ConfigureAwait(false);
+            }
+
             return dquery.Answers.Take(limit);
         }
 

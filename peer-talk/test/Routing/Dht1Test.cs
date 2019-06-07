@@ -284,5 +284,26 @@ namespace PeerTalk.Routing
                 await dht.StopAsync();
             }
         }
+
+        [TestMethod]
+        public async Task Add_FindProviders()
+        {
+            Cid cid = "zBunRGrmCGokA1oMESGGTfrtcMFsVA8aEtcNzM54akPWXF97uXCqTjF3GZ9v8YzxHrG66J8QhtPFWwZebRZ2zeUEELu67";
+            var swarm = new Swarm { LocalPeer = self };
+            var dht = new Dht1 { Swarm = swarm };
+            await dht.StartAsync();
+
+            try
+            {
+                await dht.ContentRouter.AddAsync(cid, other.Id);
+                var peers = (await dht.FindProvidersAsync(cid, limit: 1)).ToArray();
+                Assert.AreEqual(1, peers.Length);
+                Assert.AreEqual(other, peers[0]);
+            }
+            finally
+            {
+                await dht.StopAsync();
+            }
+        }
     }
 }
