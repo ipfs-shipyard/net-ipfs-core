@@ -248,13 +248,23 @@ namespace PeerTalk.Routing
             }
         }
 
-        void AddAnswer(T answer)
+        /// <summary>
+        ///   Add a answer to the query.
+        /// </summary>
+        /// <param name="answer">
+        ///   An answer.
+        /// </param>
+        /// <remarks>
+        /// </remarks>
+        public void AddAnswer(T answer)
         {
-            if (answer == null || runningQuery.IsCancellationRequested)
+            if (answer == null)
+                return;
+            if (runningQuery != null && runningQuery.IsCancellationRequested)
                 return;
 
             Answers.Add(answer);
-            if (Answers.Count >= AnswersNeeded && !runningQuery.IsCancellationRequested)
+            if (Answers.Count >= AnswersNeeded && runningQuery != null && !runningQuery.IsCancellationRequested)
             {
                 runningQuery.Cancel(false);
             }

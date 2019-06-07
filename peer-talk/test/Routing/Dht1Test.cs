@@ -222,8 +222,73 @@ namespace PeerTalk.Routing
                     Type = MessageType.GetProviders,
                     Key = cid.Hash.ToArray()
                 };
-                var response = dht.ProcessFindNode(request, new DhtMessage());
+                var response = dht.ProcessGetProviders(request, new DhtMessage());
                 Assert.AreNotEqual(0, response.CloserPeers.Length);
+            }
+            finally
+            {
+                await dht.StopAsync();
+            }
+        }
+
+        [TestMethod]
+        public async Task ProcessGetProvidersMessage_HasProvider()
+        {
+            var swarm = new Swarm { LocalPeer = self };
+            var dht = new Dht1 { Swarm = swarm };
+            await dht.StartAsync();
+            try
+            {
+                swarm.RegisterPeer(other);
+                Cid cid = "zBunRGrmCGokA1oMESGGTfrtcMFsVA8aEtcNzM54akPWXF97uXCqTjF3GZ9v8YzxHrG66J8QhtPFWwZebRZ2zeUEELu67";
+                dht.ContentRouter.Add(cid, other.Id);
+                var request = new DhtMessage
+                {
+                    Type = MessageType.GetProviders,
+                    Key = cid.Hash.ToArray()
+                };
+                var response = dht.ProcessGetProviders(request, new DhtMessage());
+                Assert.AreEqual(1, response.ProviderPeers.Length);
+                response.ProviderPeers[0].TryToPeer(out Peer found);
+                Assert.AreEqual(other, found);
+                Assert.AreNotEqual(0, found.Addresses.Count());
+            }
+            finally
+            {
+                await dht.StopAsync();
+            }
+        }
+
+        [TestMethod]
+        public async Task ProcessAddProviderMessage()
+        {
+            var swarm = new Swarm { LocalPeer = self };
+            var dht = new Dht1 { Swarm = swarm };
+            await dht.StartAsync();
+            try
+            {
+                Cid cid = "zBunRGrmCGokA1oMESGGTfrtcMFsVA8aEtcNzM54akPWXF97uXCqTjF3GZ9v8YzxHrG66J8QhtPFWwZebRZ2zeUEELu67";
+                var request = new DhtMessage
+                {
+                    Type = MessageType.AddProvider,
+                    Key = cid.Hash.ToArray(),
+                    ProviderPeers = new DhtPeerMessage[]
+                    {
+                        new DhtPeerMessage
+                        {
+                            Id = other.Id.ToArray(),
+                            Addresses = other.Addresses.Select(a => a.ToArray()).ToArray()
+                        }
+                    }
+                };
+                var response = dht.ProcessAddProvider(other, request, new DhtMessage());
+                Assert.IsNull(response);
+                var providers = dht.ContentRouter.Get(cid).ToArray();
+                Assert.AreEqual(1, providers.Length);
+                Assert.AreEqual(other.Id, providers[0]);
+
+                var provider = swarm.KnownPeers.Single(p => p == other);
+                Assert.AreNotEqual(0, provider.Addresses.Count());
             }
             finally
             {
@@ -281,6 +346,27 @@ namespace PeerTalk.Routing
             finally
             {
                 await swarm.StopAsync();
+                await dht.StopAsync();
+            }
+        }
+
+        [TestMethod]
+        public async Task Add_FindProviders()
+        {
+            Cid cid = "zBunRGrmCGokA1oMESGGTfrtcMFsVA8aEtcNzM54akPWXF97uXCqTjF3GZ9v8YzxHrG66J8QhtPFWwZebRZ2zeUEELu67";
+            var swarm = new Swarm { LocalPeer = self };
+            var dht = new Dht1 { Swarm = swarm };
+            await dht.StartAsync();
+
+            try
+            {
+                dht.ContentRouter.Add(cid, other.Id);
+                var peers = (await dht.FindProvidersAsync(cid, limit: 1)).ToArray();
+                Assert.AreEqual(1, peers.Length);
+                Assert.AreEqual(other, peers[0]);
+            }
+            finally
+            {
                 await dht.StopAsync();
             }
         }

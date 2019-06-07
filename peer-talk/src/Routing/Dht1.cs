@@ -40,6 +40,11 @@ namespace PeerTalk.Routing
         public RoutingTable RoutingTable;
 
         /// <summary>
+        ///   Peers that can provide some content.
+        /// </summary>
+        public ContentRouter ContentRouter;
+
+        /// <summary>
         ///   The number of closer peers to return.
         /// </summary>
         /// <value>
@@ -83,6 +88,9 @@ namespace PeerTalk.Routing
                     case MessageType.GetProviders:
                         response = ProcessGetProviders(request, response);
                         break;
+                    case MessageType.AddProvider:
+                        response = ProcessAddProvider(connection.RemotePeer, request, response);
+                        break;
                     default:
                         log.Debug($"unknown {request.Type} from {connection.RemotePeer}");
                         // TODO: Should we close the stream?
@@ -102,6 +110,7 @@ namespace PeerTalk.Routing
             log.Debug("Starting");
 
             RoutingTable = new RoutingTable(Swarm.LocalPeer);
+            ContentRouter = new ContentRouter();
             Swarm.AddProtocol(this);
             Swarm.PeerDiscovered += Swarm_PeerDiscovered;
             foreach (var peer in Swarm.KnownPeers)
@@ -121,6 +130,7 @@ namespace PeerTalk.Routing
             Swarm.PeerDiscovered -= Swarm_PeerDiscovered;
 
             Stopped?.Invoke(this, EventArgs.Empty);
+            ContentRouter?.Dispose();
             return Task.CompletedTask;
         }
 
@@ -166,7 +176,13 @@ namespace PeerTalk.Routing
         /// <inheritdoc />
         public Task ProvideAsync(Cid cid, bool advertise = true, CancellationToken cancel = default(CancellationToken))
         {
-            throw new NotImplementedException("DHT ProvideAsync");
+            ContentRouter.Add(cid, this.Swarm.LocalPeer.Id);
+            if (advertise)
+            {
+                throw new NotImplementedException("DHT ProvideAsync advertise");
+            }
+
+            return Task.CompletedTask;
         }
 
         /// <inheritdoc />
@@ -187,7 +203,23 @@ namespace PeerTalk.Routing
             {
                 dquery.AnswerObtained += (s, e) => action.Invoke(e);
             }
-            await dquery.RunAsync(cancel).ConfigureAwait(false);
+
+            // Add any providers that we already know about.
+            var providers = ContentRouter
+                .Get(id)
+                .Where(pid => pid != Swarm.LocalPeer.Id)
+                .Select(pid => Swarm.RegisterPeer(new Peer { Id = pid }));
+            foreach (var provider in providers)
+            {
+                dquery.AddAnswer(provider);
+            }
+
+            // Ask our peers for more providers.
+            if (limit > dquery.Answers.Count)
+            {
+                await dquery.RunAsync(cancel).ConfigureAwait(false);
+            }
+
             return dquery.Answers.Take(limit);
         }
 
@@ -246,14 +278,54 @@ namespace PeerTalk.Routing
         }
 
         /// <summary>
-        ///   Process a find node request.
+        ///   Process a get provider request.
         /// </summary>
         public DhtMessage ProcessGetProviders(DhtMessage request, DhtMessage response)
         {
-            // TODO: Find a provider for the content.
+            // Find providers for the content.
+            var cid = new Cid { Hash = new MultiHash(request.Key) };
+            response.ProviderPeers = ContentRouter
+                .Get(cid)
+                .Select(pid =>
+                {
+                    var peer = Swarm.RegisterPeer(new Peer { Id = pid });
+                    return new DhtPeerMessage
+                    {
+                        Id = peer.Id.ToArray(),
+                        Addresses = peer.Addresses.Select(a => a.ToArray()).ToArray()
+                    };
+                })
+                .Take(20)
+                .ToArray();
 
             // Also return the closest peers
             return ProcessFindNode(request, response);
         }
+
+        /// <summary>
+        ///   Process an add provider request.
+        /// </summary>
+        public DhtMessage ProcessAddProvider(Peer remotePeer, DhtMessage request, DhtMessage response)
+        {
+            if (request.ProviderPeers == null)
+            {
+                return null;
+            }
+            var cid = new Cid { Hash = new MultiHash(request.Key) };
+            var providers = request.ProviderPeers
+                .Select(p => p.TryToPeer(out Peer peer) ? peer : (Peer)null)
+                .Where(p => p != null)
+                .Where(p => p == remotePeer)
+                .Where(p => p.Addresses.Count() > 0);
+            foreach (var provider in providers)
+            {
+                Swarm.RegisterPeer(provider);
+                ContentRouter.Add(cid, provider.Id);
+            };
+
+            // There is no response for this request.
+            return null;
+        }
+
     }
 }
