@@ -33,38 +33,54 @@ namespace PeerTalk.Routing
         [TestMethod]
         public async Task Add()
         {
-            var contentProviders = new ContentProviders();
-            await contentProviders.AddAsync(cid1, self.Id);
+            using (var contentProviders = new ContentProviders())
+            {
+                await contentProviders.AddAsync(cid1, self.Id);
 
-            var providers = await contentProviders.GetAsync(cid1);
-            Assert.AreEqual(1, providers.Count());
-            Assert.AreEqual(self.Id, providers.First());
+                var providers = await contentProviders.GetAsync(cid1);
+                Assert.AreEqual(1, providers.Count());
+                Assert.AreEqual(self.Id, providers.First());
+            }
         }
 
         [TestMethod]
         public async Task Add_Duplicate()
         {
-            var contentProviders = new ContentProviders();
-            await contentProviders.AddAsync(cid1, self.Id);
-            await contentProviders.AddAsync(cid1, self.Id);
+            using (var contentProviders = new ContentProviders())
+            {
+                await contentProviders.AddAsync(cid1, self.Id);
+                await contentProviders.AddAsync(cid1, self.Id);
 
-            var providers = await contentProviders.GetAsync(cid1);
-            Assert.AreEqual(1, providers.Count());
-            Assert.AreEqual(self.Id, providers.First());
+                var providers = await contentProviders.GetAsync(cid1);
+                Assert.AreEqual(1, providers.Count());
+                Assert.AreEqual(self.Id, providers.First());
+            }
         }
 
         [TestMethod]
         public async Task Add_MultipleProviders()
         {
-            var contentProviders = new ContentProviders();
-            await contentProviders.AddAsync(cid1, self.Id);
-            await contentProviders.AddAsync(cid1, other.Id);
+            using (var contentProviders = new ContentProviders())
+            {
+                await contentProviders.AddAsync(cid1, self.Id);
+                await contentProviders.AddAsync(cid1, other.Id);
 
-            var providers = (await contentProviders.GetAsync(cid1)).ToArray();
-            Assert.AreEqual(2, providers.Length);
-            CollectionAssert.Contains(providers, self.Id);
-            CollectionAssert.Contains(providers, other.Id);
+                var providers = (await contentProviders.GetAsync(cid1)).ToArray();
+                Assert.AreEqual(2, providers.Length);
+                CollectionAssert.Contains(providers, self.Id);
+                CollectionAssert.Contains(providers, other.Id);
+            }
         }
 
+        [TestMethod]
+        public async Task Get_NonexistentCid()
+        {
+            using (var contentProviders = new ContentProviders())
+            {
+
+                var providers = await contentProviders.GetAsync(cid1);
+                Assert.AreEqual(0, providers.Count());
+            }
+        }
     }
 }

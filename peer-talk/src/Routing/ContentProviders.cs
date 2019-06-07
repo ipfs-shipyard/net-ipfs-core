@@ -68,7 +68,7 @@ namespace PeerTalk.Routing
                 return Task.FromResult(providers.AsEnumerable());
             }
 
-            return Task.FromResult(providers.AsEnumerable());
+            return Task.FromResult(Enumerable.Empty<MultiHash>());
         }
 
         /// <inheritdoc />
