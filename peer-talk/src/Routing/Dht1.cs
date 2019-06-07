@@ -42,7 +42,7 @@ namespace PeerTalk.Routing
         /// <summary>
         ///   Peers that can provide some content.
         /// </summary>
-        public ContentRouter ContentProviders;
+        public ContentRouter ContentRouter;
 
         /// <summary>
         ///   The number of closer peers to return.
@@ -107,7 +107,7 @@ namespace PeerTalk.Routing
             log.Debug("Starting");
 
             RoutingTable = new RoutingTable(Swarm.LocalPeer);
-            ContentProviders = new ContentRouter();
+            ContentRouter = new ContentRouter();
             Swarm.AddProtocol(this);
             Swarm.PeerDiscovered += Swarm_PeerDiscovered;
             foreach (var peer in Swarm.KnownPeers)
@@ -127,7 +127,7 @@ namespace PeerTalk.Routing
             Swarm.PeerDiscovered -= Swarm_PeerDiscovered;
 
             Stopped?.Invoke(this, EventArgs.Empty);
-            ContentProviders?.Dispose();
+            ContentRouter?.Dispose();
             return Task.CompletedTask;
         }
 
@@ -173,7 +173,7 @@ namespace PeerTalk.Routing
         /// <inheritdoc />
         public async Task ProvideAsync(Cid cid, bool advertise = true, CancellationToken cancel = default(CancellationToken))
         {
-            await ContentProviders.AddAsync(cid, this.Swarm.LocalPeer.Id, cancel);
+            await ContentRouter.AddAsync(cid, this.Swarm.LocalPeer.Id, cancel);
             if (advertise)
             {
                 throw new NotImplementedException("DHT ProvideAsync advertise");
