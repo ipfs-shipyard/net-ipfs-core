@@ -272,11 +272,25 @@ namespace PeerTalk.Routing
         }
 
         /// <summary>
-        ///   Process a find node request.
+        ///   Process a get provider request.
         /// </summary>
         public DhtMessage ProcessGetProviders(DhtMessage request, DhtMessage response)
         {
-            // TODO: Find a provider for the content.
+            // Find providers for the content.
+            var cid = new Cid { Hash = new MultiHash(request.Key) };
+            response.ProviderPeers = ContentRouter
+                .Get(cid)
+                .Select(pid =>
+                {
+                    var peer = Swarm.RegisterPeer(new Peer { Id = pid });
+                    return new DhtPeerMessage
+                    {
+                        Id = peer.Id.ToArray(),
+                        Addresses = peer.Addresses.Select(a => a.ToArray()).ToArray()
+                    };
+                })
+                .Take(20)
+                .ToArray();
 
             // Also return the closest peers
             return ProcessFindNode(request, response);

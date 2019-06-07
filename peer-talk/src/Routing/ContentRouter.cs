@@ -137,6 +137,27 @@ namespace PeerTalk.Routing
                 );
         }
 
+        /// <summary>
+        ///   Gets the providers for the <see cref="Cid"/>.
+        /// </summary>
+        /// <param name="cid">
+        ///   The ID of some content.
+        /// </param>
+        /// <returns>
+        ///   A sequence of peer IDs (providers) that contain the <paramref name="cid"/>.
+        /// </returns>
+        public IEnumerable<MultiHash> Get(Cid cid)
+        {
+            if (!content.TryGetValue(Key(cid), out List<ProviderInfo> providers))
+            {
+                return Enumerable.Empty<MultiHash>();
+            }
+
+            return providers
+                .Where(p => DateTime.Now < p.Expiry)
+                .Select(p => p.PeerId);
+        }
+
         /// <inheritdoc />
         public void Dispose()
         {

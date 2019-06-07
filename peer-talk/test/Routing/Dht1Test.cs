@@ -222,8 +222,36 @@ namespace PeerTalk.Routing
                     Type = MessageType.GetProviders,
                     Key = cid.Hash.ToArray()
                 };
-                var response = dht.ProcessFindNode(request, new DhtMessage());
+                var response = dht.ProcessGetProviders(request, new DhtMessage());
                 Assert.AreNotEqual(0, response.CloserPeers.Length);
+            }
+            finally
+            {
+                await dht.StopAsync();
+            }
+        }
+
+        [TestMethod]
+        public async Task ProcessGetProvidersMessage_HasProvider()
+        {
+            var swarm = new Swarm { LocalPeer = self };
+            var dht = new Dht1 { Swarm = swarm };
+            await dht.StartAsync();
+            try
+            {
+                swarm.RegisterPeer(other);
+                Cid cid = "zBunRGrmCGokA1oMESGGTfrtcMFsVA8aEtcNzM54akPWXF97uXCqTjF3GZ9v8YzxHrG66J8QhtPFWwZebRZ2zeUEELu67";
+                await dht.ContentRouter.AddAsync(cid, other.Id);
+                var request = new DhtMessage
+                {
+                    Type = MessageType.GetProviders,
+                    Key = cid.Hash.ToArray()
+                };
+                var response = dht.ProcessGetProviders(request, new DhtMessage());
+                Assert.AreEqual(1, response.ProviderPeers.Length);
+                response.ProviderPeers[0].TryToPeer(out Peer found);
+                Assert.AreEqual(other, found);
+                Assert.AreNotEqual(0, found.Addresses.Count());
             }
             finally
             {
