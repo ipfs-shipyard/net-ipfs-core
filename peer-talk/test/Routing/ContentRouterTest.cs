@@ -9,7 +9,7 @@ namespace PeerTalk.Routing
 {
     
     [TestClass]
-    public class ContentProvidersTest
+    public class ContentRouterTest
     {
         Peer self = new Peer
         {
@@ -33,7 +33,7 @@ namespace PeerTalk.Routing
         [TestMethod]
         public async Task Add()
         {
-            using (var contentProviders = new ContentProviders())
+            using (var contentProviders = new ContentRouter())
             {
                 await contentProviders.AddAsync(cid1, self.Id);
 
@@ -46,7 +46,7 @@ namespace PeerTalk.Routing
         [TestMethod]
         public async Task Add_Duplicate()
         {
-            using (var contentProviders = new ContentProviders())
+            using (var contentProviders = new ContentRouter())
             {
                 await contentProviders.AddAsync(cid1, self.Id);
                 await contentProviders.AddAsync(cid1, self.Id);
@@ -60,7 +60,7 @@ namespace PeerTalk.Routing
         [TestMethod]
         public async Task Add_MultipleProviders()
         {
-            using (var contentProviders = new ContentProviders())
+            using (var contentProviders = new ContentRouter())
             {
                 await contentProviders.AddAsync(cid1, self.Id);
                 await contentProviders.AddAsync(cid1, other.Id);
@@ -75,11 +75,37 @@ namespace PeerTalk.Routing
         [TestMethod]
         public async Task Get_NonexistentCid()
         {
-            using (var contentProviders = new ContentProviders())
+            using (var contentProviders = new ContentRouter())
             {
+                var providers = await contentProviders.GetAsync(cid1);
+                Assert.AreEqual(0, providers.Count());
+            }
+        }
+
+        [TestMethod]
+        public async Task Get_Expired()
+        {
+            using (var contentProviders = new ContentRouter())
+            {
+                await contentProviders.AddAsync(cid1, self.Id, DateTime.MinValue);
 
                 var providers = await contentProviders.GetAsync(cid1);
                 Assert.AreEqual(0, providers.Count());
+            }
+        }
+
+        [TestMethod]
+        public async Task Get_NotExpired()
+        {
+            using (var contentProviders = new ContentRouter())
+            {
+                await contentProviders.AddAsync(cid1, self.Id, DateTime.MinValue);
+                var providers = await contentProviders.GetAsync(cid1);
+                Assert.AreEqual(0, providers.Count());
+
+                await contentProviders.AddAsync(cid1, self.Id, DateTime.MaxValue - contentProviders.ProviderTTL);
+                providers = await contentProviders.GetAsync(cid1);
+                Assert.AreEqual(1, providers.Count());
             }
         }
     }
