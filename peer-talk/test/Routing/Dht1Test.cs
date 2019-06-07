@@ -260,6 +260,43 @@ namespace PeerTalk.Routing
         }
 
         [TestMethod]
+        public async Task ProcessAddProviderMessage()
+        {
+            var swarm = new Swarm { LocalPeer = self };
+            var dht = new Dht1 { Swarm = swarm };
+            await dht.StartAsync();
+            try
+            {
+                Cid cid = "zBunRGrmCGokA1oMESGGTfrtcMFsVA8aEtcNzM54akPWXF97uXCqTjF3GZ9v8YzxHrG66J8QhtPFWwZebRZ2zeUEELu67";
+                var request = new DhtMessage
+                {
+                    Type = MessageType.AddProvider,
+                    Key = cid.Hash.ToArray(),
+                    ProviderPeers = new DhtPeerMessage[]
+                    {
+                        new DhtPeerMessage
+                        {
+                            Id = other.Id.ToArray(),
+                            Addresses = other.Addresses.Select(a => a.ToArray()).ToArray()
+                        }
+                    }
+                };
+                var response = dht.ProcessAddProvider(other, request, new DhtMessage());
+                Assert.IsNull(response);
+                var providers = dht.ContentRouter.Get(cid).ToArray();
+                Assert.AreEqual(1, providers.Length);
+                Assert.AreEqual(other.Id, providers[0]);
+
+                var provider = swarm.KnownPeers.Single(p => p == other);
+                Assert.AreNotEqual(0, provider.Addresses.Count());
+            }
+            finally
+            {
+                await dht.StopAsync();
+            }
+        }
+
+        [TestMethod]
         public async Task QueryIsCancelled_WhenDhtStops()
         {
             var unknownPeer = new MultiHash("QmdpwjdB94eNm2Lcvp9JqoCxswo3AKQqjLuNZyLixmCxxx");

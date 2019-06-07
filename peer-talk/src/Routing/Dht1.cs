@@ -88,6 +88,9 @@ namespace PeerTalk.Routing
                     case MessageType.GetProviders:
                         response = ProcessGetProviders(request, response);
                         break;
+                    case MessageType.AddProvider:
+                        response = ProcessAddProvider(connection.RemotePeer, request, response);
+                        break;
                     default:
                         log.Debug($"unknown {request.Type} from {connection.RemotePeer}");
                         // TODO: Should we close the stream?
@@ -295,5 +298,31 @@ namespace PeerTalk.Routing
             // Also return the closest peers
             return ProcessFindNode(request, response);
         }
+
+        /// <summary>
+        ///   Process an add provider request.
+        /// </summary>
+        public DhtMessage ProcessAddProvider(Peer remotePeer, DhtMessage request, DhtMessage response)
+        {
+            if (request.ProviderPeers == null)
+            {
+                return null;
+            }
+            var cid = new Cid { Hash = new MultiHash(request.Key) };
+            var providers = request.ProviderPeers
+                .Select(p => p.TryToPeer(out Peer peer) ? peer : (Peer)null)
+                .Where(p => p != null)
+                .Where(p => p == remotePeer)
+                .Where(p => p.Addresses.Count() > 0);
+            foreach (var provider in providers)
+            {
+                Swarm.RegisterPeer(provider);
+                ContentRouter.AddAsync(cid, provider.Id);
+            };
+
+            // There is no response for this request.
+            return null;
+        }
+
     }
 }
