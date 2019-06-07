@@ -241,7 +241,7 @@ namespace PeerTalk.Routing
             {
                 swarm.RegisterPeer(other);
                 Cid cid = "zBunRGrmCGokA1oMESGGTfrtcMFsVA8aEtcNzM54akPWXF97uXCqTjF3GZ9v8YzxHrG66J8QhtPFWwZebRZ2zeUEELu67";
-                await dht.ContentRouter.AddAsync(cid, other.Id);
+                dht.ContentRouter.Add(cid, other.Id);
                 var request = new DhtMessage
                 {
                     Type = MessageType.GetProviders,
@@ -360,7 +360,7 @@ namespace PeerTalk.Routing
 
             try
             {
-                await dht.ContentRouter.AddAsync(cid, other.Id);
+                dht.ContentRouter.Add(cid, other.Id);
                 var peers = (await dht.FindProvidersAsync(cid, limit: 1)).ToArray();
                 Assert.AreEqual(1, peers.Length);
                 Assert.AreEqual(other, peers[0]);

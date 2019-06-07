@@ -31,41 +31,41 @@ namespace PeerTalk.Routing
         Cid cid1 = "zBunRGrmCGokA1oMESGGTfrtcMFsVA8aEtcNzM54akPWXF97uXCqTjF3GZ9v8YzxHrG66J8QhtPFWwZebRZ2zeUEELu67";
 
         [TestMethod]
-        public async Task Add()
+        public void Add()
         {
-            using (var contentProviders = new ContentRouter())
+            using (var router = new ContentRouter())
             {
-                await contentProviders.AddAsync(cid1, self.Id);
+                router.Add(cid1, self.Id);
 
-                var providers = await contentProviders.GetAsync(cid1);
+                var providers = router.Get(cid1);
                 Assert.AreEqual(1, providers.Count());
                 Assert.AreEqual(self.Id, providers.First());
             }
         }
 
         [TestMethod]
-        public async Task Add_Duplicate()
+        public void Add_Duplicate()
         {
-            using (var contentProviders = new ContentRouter())
+            using (var router = new ContentRouter())
             {
-                await contentProviders.AddAsync(cid1, self.Id);
-                await contentProviders.AddAsync(cid1, self.Id);
+                router.Add(cid1, self.Id);
+                router.Add(cid1, self.Id);
 
-                var providers = await contentProviders.GetAsync(cid1);
+                var providers = router.Get(cid1);
                 Assert.AreEqual(1, providers.Count());
                 Assert.AreEqual(self.Id, providers.First());
             }
         }
 
         [TestMethod]
-        public async Task Add_MultipleProviders()
+        public void Add_MultipleProviders()
         {
-            using (var contentProviders = new ContentRouter())
+            using (var router = new ContentRouter())
             {
-                await contentProviders.AddAsync(cid1, self.Id);
-                await contentProviders.AddAsync(cid1, other.Id);
+                router.Add(cid1, self.Id);
+                router.Add(cid1, other.Id);
 
-                var providers = (await contentProviders.GetAsync(cid1)).ToArray();
+                var providers = router.Get(cid1).ToArray();
                 Assert.AreEqual(2, providers.Length);
                 CollectionAssert.Contains(providers, self.Id);
                 CollectionAssert.Contains(providers, other.Id);
@@ -73,38 +73,38 @@ namespace PeerTalk.Routing
         }
 
         [TestMethod]
-        public async Task Get_NonexistentCid()
+        public void Get_NonexistentCid()
         {
-            using (var contentProviders = new ContentRouter())
+            using (var router = new ContentRouter())
             {
-                var providers = await contentProviders.GetAsync(cid1);
+                var providers = router.Get(cid1);
                 Assert.AreEqual(0, providers.Count());
             }
         }
 
         [TestMethod]
-        public async Task Get_Expired()
+        public void Get_Expired()
         {
-            using (var contentProviders = new ContentRouter())
+            using (var router = new ContentRouter())
             {
-                await contentProviders.AddAsync(cid1, self.Id, DateTime.MinValue);
+                router.Add(cid1, self.Id, DateTime.MinValue);
 
-                var providers = await contentProviders.GetAsync(cid1);
+                var providers = router.Get(cid1);
                 Assert.AreEqual(0, providers.Count());
             }
         }
 
         [TestMethod]
-        public async Task Get_NotExpired()
+        public void Get_NotExpired()
         {
-            using (var contentProviders = new ContentRouter())
+            using (var router = new ContentRouter())
             {
-                await contentProviders.AddAsync(cid1, self.Id, DateTime.MinValue);
-                var providers = await contentProviders.GetAsync(cid1);
+                router.Add(cid1, self.Id, DateTime.MinValue);
+                var providers = router.Get(cid1);
                 Assert.AreEqual(0, providers.Count());
 
-                await contentProviders.AddAsync(cid1, self.Id, DateTime.MaxValue - contentProviders.ProviderTTL);
-                providers = await contentProviders.GetAsync(cid1);
+                router.Add(cid1, self.Id, DateTime.MaxValue - router.ProviderTTL);
+                providers = router.Get(cid1);
                 Assert.AreEqual(1, providers.Count());
             }
         }

@@ -51,15 +51,9 @@ namespace PeerTalk.Routing
         /// <param name="provider">
         ///   The peer ID that contains the <paramref name="cid"/>.
         /// </param>
-        /// <param name="cancel">
-        ///   Is used to stop the task.  When cancelled, the <see cref="TaskCanceledException"/> is raised.
-        /// </param>
-        /// <returns>
-        ///   A task that represents the asynchronous operation.
-        /// </returns>
-        public Task AddAsync(Cid cid, MultiHash provider, CancellationToken cancel = default(CancellationToken))
+        public void Add(Cid cid, MultiHash provider)
         {
-            return AddAsync(cid, provider, DateTime.Now, cancel);
+            Add(cid, provider, DateTime.Now);
         }
 
         /// <summary>
@@ -76,13 +70,7 @@ namespace PeerTalk.Routing
         ///   The local time that the <paramref name="provider"/> started to provide
         ///   the <paramref name="cid"/>.
         /// </param>
-        /// <param name="cancel">
-        ///   Is used to stop the task.  When cancelled, the <see cref="TaskCanceledException"/> is raised.
-        /// </param>
-        /// <returns>
-        ///   A task that represents the asynchronous operation.
-        /// </returns>
-        public Task AddAsync(Cid cid, MultiHash provider, DateTime now, CancellationToken cancel = default(CancellationToken))
+        public void Add(Cid cid, MultiHash provider, DateTime now)
         {
             var pi = new ProviderInfo
             {
@@ -108,33 +96,6 @@ namespace PeerTalk.Routing
                     }
                     return providers;
                 });
-            return Task.CompletedTask;
-        }
-
-        /// <summary>
-        ///   Gets the providers for the <see cref="Cid"/>.
-        /// </summary>
-        /// <param name="cid">
-        ///   The ID of some content.
-        /// </param>
-        /// <param name="cancel">
-        ///   Is used to stop the task.  When cancelled, the <see cref="TaskCanceledException"/> is raised.
-        /// </param>
-        /// <returns>
-        ///   A task that represents the asynchronous operation that returns
-        ///   a sequence of peer IDs (providers) that contain the <paramref name="cid"/>.
-        /// </returns>
-        public Task<IEnumerable<MultiHash>> GetAsync(Cid cid, CancellationToken cancel = default(CancellationToken))
-        { 
-            if (!content.TryGetValue(Key(cid), out List<ProviderInfo> providers))
-            {
-                return Task.FromResult(Enumerable.Empty<MultiHash>());
-            }
-
-            return Task.FromResult (providers
-                .Where(p => DateTime.Now < p.Expiry)
-                .Select(p => p.PeerId)
-                );
         }
 
         /// <summary>

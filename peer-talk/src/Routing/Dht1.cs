@@ -174,13 +174,15 @@ namespace PeerTalk.Routing
         }
 
         /// <inheritdoc />
-        public async Task ProvideAsync(Cid cid, bool advertise = true, CancellationToken cancel = default(CancellationToken))
+        public Task ProvideAsync(Cid cid, bool advertise = true, CancellationToken cancel = default(CancellationToken))
         {
-            await ContentRouter.AddAsync(cid, this.Swarm.LocalPeer.Id, cancel);
+            ContentRouter.Add(cid, this.Swarm.LocalPeer.Id);
             if (advertise)
             {
                 throw new NotImplementedException("DHT ProvideAsync advertise");
             }
+
+            return Task.CompletedTask;
         }
 
         /// <inheritdoc />
@@ -203,7 +205,8 @@ namespace PeerTalk.Routing
             }
 
             // Add any providers that we already know about.
-            var providers = (await ContentRouter.GetAsync(id, cancel))
+            var providers = ContentRouter
+                .Get(id)
                 .Where(pid => pid != Swarm.LocalPeer.Id)
                 .Select(pid => Swarm.RegisterPeer(new Peer { Id = pid }));
             foreach (var provider in providers)
@@ -317,7 +320,7 @@ namespace PeerTalk.Routing
             foreach (var provider in providers)
             {
                 Swarm.RegisterPeer(provider);
-                ContentRouter.AddAsync(cid, provider.Id);
+                ContentRouter.Add(cid, provider.Id);
             };
 
             // There is no response for this request.
