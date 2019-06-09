@@ -121,10 +121,15 @@ namespace PeerTalk
         CancellationTokenSource swarmCancellation;
 
         /// <summary>
-        ///  Outstanding connection tasks.
+        ///  Outstanding connection tasks initiated by the local peer.
         /// </summary>
         ConcurrentDictionary<Peer, AsyncLazy<PeerConnection>> pendingConnections = new ConcurrentDictionary<Peer, AsyncLazy<PeerConnection>>();
-       
+
+        /// <summary>
+        ///  Outstanding connection tasks initiated by a remote peer.
+        /// </summary>
+        ConcurrentDictionary<MultiAddress, object> pendingRemoteConnections = new ConcurrentDictionary<MultiAddress, object>();
+
         /// <summary>
         ///   Manages the swarm's peer connections.
         /// </summary>
@@ -393,6 +398,7 @@ namespace PeerTalk
             otherPeers.Clear();
             listeners.Clear();
             pendingConnections.Clear();
+            pendingRemoteConnections.Clear();
             BlackList = new BlackList<MultiAddress>();
             WhiteList = new WhiteList<MultiAddress>();
 
@@ -814,6 +820,15 @@ namespace PeerTalk
         /// </remarks>
         async void OnRemoteConnect(Stream stream, MultiAddress local, MultiAddress remote)
         {
+            // If the remote is already trying to establish a connection, then we
+            // can just refuse this one.
+            if (!pendingRemoteConnections.TryAdd(remote, null))
+            {
+                log.Debug($"Duplicate remote connection from {remote}");
+                stream.Dispose();
+                return;
+            }
+
             try
             {
                 log.Debug($"{LocalPeer.Id} got remote connection");
@@ -871,6 +886,11 @@ namespace PeerTalk
             catch (Exception e)
             {
                 log.Warn("Remote connect failed", e);
+                stream.Dispose();
+            }
+            finally
+            {
+                pendingRemoteConnections.TryRemove(remote, out object _);
             }
         }
 
