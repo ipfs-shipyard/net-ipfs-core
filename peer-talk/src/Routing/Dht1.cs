@@ -207,8 +207,12 @@ namespace PeerTalk.Routing
             // Add any providers that we already know about.
             var providers = ContentRouter
                 .Get(id)
-                .Where(pid => pid != Swarm.LocalPeer.Id)
-                .Select(pid => Swarm.RegisterPeer(new Peer { Id = pid }));
+                .Select(pid =>
+                {
+                    return (pid == Swarm.LocalPeer.Id)
+                        ? Swarm.LocalPeer
+                        : Swarm.RegisterPeer(new Peer { Id = pid });
+                });
             foreach (var provider in providers)
             {
                 dquery.AddAnswer(provider);
