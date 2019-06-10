@@ -251,6 +251,7 @@ namespace PeerTalk.Routing
             }
             catch (Exception)
             {
+                log.Error($"Bad FindNode request key {request.Key.ToHexString()}");
                 peerId = MultiHash.ComputeHash(request.Key);
             }
 
@@ -301,7 +302,9 @@ namespace PeerTalk.Routing
                 .Get(cid)
                 .Select(pid =>
                 {
-                    var peer = Swarm.RegisterPeer(new Peer { Id = pid });
+                    var peer = (pid == Swarm.LocalPeer.Id)
+                         ? Swarm.LocalPeer
+                         : Swarm.RegisterPeer(new Peer { Id = pid });
                     return new DhtPeerMessage
                     {
                         Id = peer.Id.ToArray(),
@@ -324,7 +327,16 @@ namespace PeerTalk.Routing
             {
                 return null;
             }
-            var cid = new Cid { Hash = new MultiHash(request.Key) };
+            Cid cid;
+            try
+            {
+                cid = new Cid { Hash = new MultiHash(request.Key) };
+            }
+            catch (Exception)
+            {
+                log.Error($"Bad AddProvider request key {request.Key.ToHexString()}");
+                return null;
+            }
             var providers = request.ProviderPeers
                 .Select(p => p.TryToPeer(out Peer peer) ? peer : (Peer)null)
                 .Where(p => p != null)
