@@ -243,7 +243,16 @@ namespace PeerTalk.Routing
         /// </summary>
         public DhtMessage ProcessFindNode(DhtMessage request, DhtMessage response)
         {
-            var peerId = new MultiHash(request.Key);
+            // Some random walkers generate a random Key this is not hashed.
+            MultiHash peerId;
+            try
+            {
+                peerId = new MultiHash(request.Key);
+            }
+            catch (Exception)
+            {
+                peerId = MultiHash.ComputeHash(request.Key);
+            }
 
             // Do we know the peer?.
             Peer found = null;

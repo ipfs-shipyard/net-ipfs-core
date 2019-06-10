@@ -186,6 +186,34 @@ namespace PeerTalk.Routing
         }
 
         [TestMethod]
+        public async Task ProcessFindNodeMessage_BadNodeId()
+        {
+            var swarm = new Swarm { LocalPeer = self };
+            await swarm.RegisterPeerAsync("/ip4/127.0.0.1/tcp/4001/ipfs/QmdpwjdB94eNm2Lcvp9JqoCxswo3AKQqjLuNZyLixmCM1a");
+            await swarm.RegisterPeerAsync("/ip4/127.0.0.2/tcp/4001/ipfs/QmdpwjdB94eNm2Lcvp9JqoCxswo3AKQqjLuNZyLixmCM1b");
+            await swarm.RegisterPeerAsync("/ip4/127.0.0.3/tcp/4001/ipfs/QmdpwjdB94eNm2Lcvp9JqoCxswo3AKQqjLuNZyLixmCM1c");
+            await swarm.RegisterPeerAsync("/ip4/127.0.0.4/tcp/4001/ipfs/QmdpwjdB94eNm2Lcvp9JqoCxswo3AKQqjLuNZyLixmCM1d");
+            await swarm.RegisterPeerAsync("/ip4/127.0.0.5/tcp/4001/ipfs/QmdpwjdB94eNm2Lcvp9JqoCxswo3AKQqjLuNZyLixmCM1e");
+            var dht = new Dht1 { Swarm = swarm, CloserPeerCount = 3 };
+            await dht.StartAsync();
+            try
+            {
+                dht.RoutingTable.Add(other);
+                var request = new DhtMessage
+                {
+                    Type = MessageType.FindNode,
+                    Key = new byte[] {0xFF, 1, 2, 3 }
+                };
+                var response = dht.ProcessFindNode(request, new DhtMessage());
+                Assert.AreEqual(3, response.CloserPeers.Length);
+            }
+            finally
+            {
+                await dht.StopAsync();
+            }
+        }
+
+        [TestMethod]
         public async Task ProcessFindNodeMessage_NoOtherPeers()
         {
             var swarm = new Swarm { LocalPeer = self };
