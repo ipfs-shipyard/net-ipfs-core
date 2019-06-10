@@ -24,7 +24,7 @@ namespace PeerTalk.Routing
             Id = "QmdpwjdB94eNm2Lcvp9JqoCxswo3AKQqjLuNZyLixmCM1h",
             Addresses = new MultiAddress[]
             {
-                new MultiAddress("/ip4/127.0.0.1/tcp/4001")
+                new MultiAddress("/ip4/127.0.0.1/tcp/0")
             }
         };
 
@@ -398,5 +398,31 @@ namespace PeerTalk.Routing
                 await dht.StopAsync();
             }
         }
+
+        [TestMethod]
+        public async Task Provide()
+        {
+            Cid cid = "zBunRGrmCGokA1oMESGGTfrtcMFsVA8aEtcNzM54akPWXF97uXCqTjF3GZ9v8YzxHrG66J8QhtPFWwZebRZ2zeUEELu67";
+            var swarm = new Swarm { LocalPeer = self };
+            var dht = new Dht1 { Swarm = swarm };
+            await dht.StartAsync();
+
+            try
+            {
+                await swarm.StartAsync();
+                await swarm.StartListeningAsync("/ip4/127.0.0.1/tcp/0");
+
+                await dht.ProvideAsync(cid, advertise: true);
+                var peers = (await dht.FindProvidersAsync(cid, limit: 1)).ToArray();
+                Assert.AreEqual(1, peers.Length);
+                Assert.AreEqual(self, peers[0]);
+            }
+            finally
+            {
+                await dht.StopAsync();
+                await swarm.StopAsync();
+            }
+        }
+
     }
 }

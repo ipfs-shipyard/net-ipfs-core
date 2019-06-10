@@ -179,7 +179,7 @@ namespace PeerTalk.Routing
             ContentRouter.Add(cid, this.Swarm.LocalPeer.Id);
             if (advertise)
             {
-                throw new NotImplementedException("DHT ProvideAsync advertise");
+                Advertise(cid);
             }
 
             return Task.CompletedTask;
@@ -225,6 +225,60 @@ namespace PeerTalk.Routing
             }
 
             return dquery.Answers.Take(limit);
+        }
+
+        /// <summary>
+        ///   Advertise that we can provide the CID to the X closest peers
+        ///   of the CID.
+        /// </summary>
+        /// <param name="cid">
+        ///   The CID to advertise.
+        /// </param>
+        /// <remarks>
+        ///   This starts a background process to send the AddProvider message
+        ///   to the 4 closest peers to the <paramref name="cid"/>.
+        /// </remarks>
+        public void Advertise(Cid cid)
+        {
+            Task.Run(async () =>
+            {
+                int advertsNeeded = 4;
+                var message = new DhtMessage
+                {
+                    Type = MessageType.AddProvider,
+                    Key = cid.Hash.ToArray(),
+                    ProviderPeers = new DhtPeerMessage[]
+                    {
+                        new DhtPeerMessage
+                        {
+                            Id = Swarm.LocalPeer.Id.ToArray(),
+                            Addresses = Swarm.LocalPeer.Addresses
+                                .Select(a => a.WithoutPeerId().ToArray())
+                                .ToArray()
+                        }
+                    }
+                };
+                var peers = RoutingTable
+                    .NearestPeers(cid.Hash)
+                    .Where(p => p != Swarm.LocalPeer);   
+                foreach (var peer in peers)
+                {
+                    try
+                    {
+                        using (var stream = await Swarm.DialAsync(peer, this.ToString()))
+                        {
+                            ProtoBuf.Serializer.SerializeWithLengthPrefix(stream, message, PrefixStyle.Base128);
+                            stream.Flush();
+                        }
+                        if (--advertsNeeded == 0)
+                            break;
+                    }
+                    catch (Exception)
+                    {
+                        // eat it.  This is fire and forget.
+                    }
+                }
+            });
         }
 
         /// <summary>
