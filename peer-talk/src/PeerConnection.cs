@@ -294,7 +294,16 @@ namespace PeerTalk
                 }
             }
 
-            Stream?.Dispose();
+            // Ignore any disposal exceptions.
+            try
+            {
+                Stream?.Dispose();
+            }
+            catch (Exception)
+            {
+                // eat it.
+            }
+
             log.Debug($"stop reading messsages from {RemoteAddress}");
         }
 
