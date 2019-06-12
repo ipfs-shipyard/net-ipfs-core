@@ -22,7 +22,6 @@ init:
   - git config --global user.name "Appveyor CI"
 
 cache:
-  - packages -> **\packages.config      # preserve "packages" directory in the root of build folder but will reset it if packages.config is modified
   - '%APPDATA%\npm-cache'               # npm cache
   - '%USERPROFILE%\.nuget\packages'     # nuget cache
 
@@ -55,7 +54,7 @@ after_test:
     - dotnet test -c %CONFIGURATION% -f netcoreapp2.1 --no-build --no-restore test /p:CollectCoverage=true
     - choco install codecov -y
     - codecov -f "test/coverage.opencover.xml"
-    - dotnet tool install --global coveralls.net
+    - dotnet tool install --global coveralls.net --version 1.0.0
     - if defined COVERALLS_REPO_TOKEN
         csmacnz.coveralls.exe 
         --opencover -i test/coverage.opencover.xml --useRelativePaths --serviceName appveyor --jobId %APPVEYOR_BUILD_NUMBER%
