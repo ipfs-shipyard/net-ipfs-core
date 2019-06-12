@@ -201,3 +201,5 @@ FakesAssemblies/
 # VS 2017 creates this
 src/Ipfs.Engine.xml
 
+# codecov
+coverage.opencover.xml
