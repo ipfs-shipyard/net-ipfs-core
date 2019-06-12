@@ -825,7 +825,14 @@ namespace PeerTalk
             if (!pendingRemoteConnections.TryAdd(remote, null))
             {
                 log.Debug($"Duplicate remote connection from {remote}");
-                stream.Dispose();
+                try
+                {
+                    stream.Dispose();
+                }
+                catch (Exception)
+                {
+                    // eat it.
+                }
                 return;
             }
 
