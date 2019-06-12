@@ -42,7 +42,6 @@ pull_requests:
   do_not_increment_build_number: true
 
 before_build:
-  - nuget restore .nuget/packages.config -PackagesDirectory packages
   - ps: gitversion /output buildserver /updateAssemblyInfo >gitversion.log
 
 build_script:
@@ -56,8 +55,9 @@ after_test:
     - dotnet test -c %CONFIGURATION% -f netcoreapp2.1 --no-build --no-restore test /p:CollectCoverage=true
     - choco install codecov -y
     - codecov -f "test/coverage.opencover.xml"
-    - if defined COVERALLS_REPO_TOKEN 
-        packages\coveralls.net.0.6.0\tools\csmacnz.coveralls.exe 
+    - dotnet tool install --global coveralls.net
+    - if defined COVERALLS_REPO_TOKEN
+        csmacnz.coveralls.exe 
         --opencover -i test/coverage.opencover.xml --useRelativePaths --serviceName appveyor --jobId %APPVEYOR_BUILD_NUMBER%
 # Build documentation in doc\_site
     - docfx doc\docfx.json --logLevel Warning
