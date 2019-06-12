@@ -886,7 +886,14 @@ namespace PeerTalk
             catch (Exception e)
             {
                 log.Warn("Remote connect failed", e);
-                stream.Dispose();
+                try
+                {
+                    stream.Dispose();
+                }
+                catch (Exception)
+                {
+                    // eat it.
+                }
             }
             finally
             {
