@@ -63,7 +63,7 @@ after_test:
     - 7z a -tzip docs.zip doc\_site
     - appveyor PushArtifact docs.zip
     - if defined git_token npm install gh-pages -g
-    - if defined git_token gh-pages -d doc\_site -m "new docs %GitVersion_FullSemVer%"
+    - if defined git_token gh-pages -d doc\_site -m "[ci skip] new docs %GitVersion_FullSemVer%"
 
 artifacts:
   - path: 'src/**/*.nupkg'
