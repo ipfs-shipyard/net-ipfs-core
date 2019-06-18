@@ -300,10 +300,6 @@ namespace PeerTalk
                 if (log.IsDebugEnabled)
                 {
                     log.Debug($"New peer registerd {p}");
-                    foreach (var a in p.Addresses)
-                    {
-                        log.Debug($"  at {a}");
-                    }
                 }
                 PeerDiscovered?.Invoke(this, p);
             }
@@ -838,9 +834,10 @@ namespace PeerTalk
 
             try
             {
-                log.Debug($"{LocalPeer.Id} got remote connection");
-                log.Debug("local " + local);
-                log.Debug("remote " + remote);
+                if (log.IsDebugEnabled)
+                {
+                    log.Debug($"remote connect from {remote}");
+                }
 
                 // TODO: Check the policies
 
@@ -892,7 +889,10 @@ namespace PeerTalk
             }
             catch (Exception e)
             {
-                log.Warn("Remote connect failed", e);
+                if (log.IsDebugEnabled)
+                {
+                    log.Debug($"remote connect from {remote} failed: {e.Message}");
+                }
                 try
                 {
                     stream.Dispose();

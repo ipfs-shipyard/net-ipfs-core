@@ -19,7 +19,7 @@
     <PackageReleaseNotes>https://github.com/richardschneider/peer-talk/releases</PackageReleaseNotes>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <PackageReleaseNotes></PackageReleaseNotes>
-    <Copyright>© 2018 Richard Schneider</Copyright>
+    <Copyright>© 2018-2019 Richard Schneider</Copyright>
     <PackageTags>ipfs peer-to-peer libp2p p2p distributed web</PackageTags>
     <IncludeSymbols>True</IncludeSymbols>
     <PackageLicenseUrl>https://github.com/richardschneider/peer-talk/blob/master/LICENSE</PackageLicenseUrl>
