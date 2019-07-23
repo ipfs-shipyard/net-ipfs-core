@@ -60,7 +60,7 @@ namespace PeerTalk.Discovery
             );
             profile.Resources.RemoveAll(r => r.Type == DnsType.TXT);
             var txt = new TXTRecord { Name = profile.FullyQualifiedName };
-            txt.Strings.Add(profile.InstanceName);
+            txt.Strings.Add(profile.InstanceName.ToString());
             profile.Resources.Add(txt);
 
             return profile;
@@ -72,24 +72,24 @@ namespace PeerTalk.Discovery
             var qsn = ServiceName + ".local";
             var peerNames = message.Answers
                 .OfType<PTRRecord>()
-                .Where(a => DnsObject.NamesEquals(a.Name, qsn))
+                .Where(a => a.Name == qsn)
                 .Select(a => a.DomainName);
             foreach (var name in peerNames)
             {
-                var id = name.Split('.')[0];
+                var id = name.Labels[0];
                 var srv = message.Answers
                     .OfType<SRVRecord>()
-                    .First(r => DnsObject.NamesEquals(r.Name, name));
+                    .First(r => r.Name == name);
                 var aRecords = message.Answers
                     .OfType<ARecord>()
-                    .Where(a => DnsObject.NamesEquals(a.Name, name) || DnsObject.NamesEquals(a.Name, srv.Target));
+                    .Where(a => a.Name == name || a.Name == srv.Target);
                 foreach (var a in aRecords)
                 {
                     yield return new MultiAddress($"/ip4/{a.Address}/tcp/{srv.Port}/ipfs/{id}");
                 }
                 var aaaaRecords = message.Answers
                     .OfType<AAAARecord>()
-                    .Where(a => DnsObject.NamesEquals(a.Name, name) || DnsObject.NamesEquals(a.Name, srv.Target));
+                    .Where(a => a.Name == name || a.Name == srv.Target);
                 foreach (var a in aaaaRecords)
                 {
                     yield return new MultiAddress($"/ip6/{a.Address}/tcp/{srv.Port}/ipfs/{id}");

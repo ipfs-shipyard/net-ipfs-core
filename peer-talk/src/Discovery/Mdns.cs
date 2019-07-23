@@ -92,8 +92,8 @@ namespace PeerTalk.Discovery
                 var msg = e.Message;
 
                 // Is it our service?
-                var qsn = ServiceName + ".local";
-                if (!e.ServiceInstanceName.EndsWith(qsn))
+                var qsn = new DomainName(ServiceName + ".local");
+                if (!e.ServiceInstanceName.BelongsTo(qsn))
                     return;
 
                 var addresses = GetAddresses(msg)
