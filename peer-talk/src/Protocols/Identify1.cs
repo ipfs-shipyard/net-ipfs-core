@@ -42,7 +42,7 @@ namespace PeerTalk.Protocols
             {
                 ProtocolVersion = peer.ProtocolVersion,
                 AgentVersion = peer.AgentVersion,
-                ListenAddresses = peer?.Addresses
+                ListenAddresses = peer.Addresses
                      .Select(a => a.WithoutPeerId().ToArray())
                      .ToArray(),
                 ObservedAddress = connection.RemoteAddress?.ToArray(),

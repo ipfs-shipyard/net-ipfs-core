@@ -209,6 +209,76 @@ namespace PeerTalk
         }
 
         [TestMethod]
+        public async Task Connect_Disconnect_Reconnect()
+        {
+            var peerB = new Peer
+            {
+                AgentVersion = "peerB",
+                Id = "QmdpwjdB94eNm2Lcvp9JqoCxswo3AKQqjLuNZyLixmCM1h",
+                PublicKey = "CAASXjBcMA0GCSqGSIb3DQEBAQUAA0sAMEgCQQDlTSgVLprWaXfmxDr92DJE1FP0wOexhulPqXSTsNh5ot6j+UiuMgwb0shSPKzLx9AuTolCGhnwpTBYHVhFoBErAgMBAAE="
+            };
+            var swarmB = new Swarm { LocalPeer = peerB };
+            await swarmB.StartAsync();
+            var peerBAddress = await swarmB.StartListeningAsync("/ip4/127.0.0.1/tcp/0");
+            Assert.IsTrue(peerB.Addresses.Count() > 0);
+
+            var swarm = new Swarm { LocalPeer = self };
+            await swarm.StartAsync();
+            try
+            {
+                var remotePeer = (await swarm.ConnectAsync(peerBAddress)).RemotePeer;
+                Assert.IsNotNull(remotePeer.ConnectedAddress);
+                Assert.AreEqual(peerB.PublicKey, remotePeer.PublicKey);
+                Assert.IsTrue(remotePeer.IsValid());
+                Assert.IsTrue(swarm.KnownPeers.Contains(peerB));
+
+                // wait for swarmB to settle
+                var endTime = DateTime.Now.AddSeconds(3);
+                while (true)
+                {
+                    if (DateTime.Now > endTime)
+                        Assert.Fail("swarmB does not know about self");
+                    if (swarmB.KnownPeers.Contains(self))
+                        break;
+                    await Task.Delay(100);
+                }
+                var me = swarmB.KnownPeers.First(p => p == self);
+                Assert.AreEqual(self.Id, me.Id);
+                Assert.AreEqual(self.PublicKey, me.PublicKey);
+                Assert.IsNotNull(me.ConnectedAddress);
+
+                // Check disconnect
+                await swarm.DisconnectAsync(peerBAddress);
+                Assert.IsNull(remotePeer.ConnectedAddress);
+                Assert.IsTrue(swarm.KnownPeers.Contains(peerB));
+                Assert.IsTrue(swarmB.KnownPeers.Contains(self));
+
+                // wait for swarmB to settle
+                endTime = DateTime.Now.AddSeconds(3);
+                while (true)
+                {
+                    if (DateTime.Now > endTime)
+                        Assert.Fail("swarmB did not close connection.");
+                    if (me.ConnectedAddress == null)
+                        break;
+                    await Task.Delay(100);
+                }
+
+                // Reconnect
+                remotePeer = (await swarm.ConnectAsync(peerBAddress)).RemotePeer;
+                Assert.IsNotNull(remotePeer.ConnectedAddress);
+                Assert.AreEqual(peerB.PublicKey, remotePeer.PublicKey);
+                Assert.IsTrue(remotePeer.IsValid());
+                Assert.IsTrue(swarm.KnownPeers.Contains(peerB));
+            }
+            finally
+            {
+                await swarm.StopAsync();
+                await swarmB.StopAsync();
+            }
+        }
+
+        [TestMethod]
         public async Task Connect_CancelsOnStop()
         {
             var swarm = new Swarm { LocalPeer = self };
