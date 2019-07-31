@@ -224,6 +224,7 @@ namespace PeerTalk
 
             var swarm = new Swarm { LocalPeer = self };
             await swarm.StartAsync();
+            await swarm.StartListeningAsync("/ip4/127.0.0.1/tcp/0");
             try
             {
                 var remotePeer = (await swarm.ConnectAsync(peerBAddress)).RemotePeer;

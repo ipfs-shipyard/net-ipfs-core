@@ -70,47 +70,62 @@ namespace PeerTalk.Protocols
             var muxer = await connection.MuxerEstablished.Task.ConfigureAwait(false);
             log.Debug("Get remote identity");
             Peer remote = connection.RemotePeer;
+            if (remote == null)
+            {
+                remote = new Peer();
+                connection.RemotePeer = remote;
+            }
             using (var stream = await muxer.CreateStreamAsync("id", cancel).ConfigureAwait(false))
             {
                 await connection.EstablishProtocolAsync("/multistream/", stream, cancel).ConfigureAwait(false);
                 await connection.EstablishProtocolAsync("/ipfs/id/", stream, cancel).ConfigureAwait(false);
-
-                var info = await ProtoBufHelper.ReadMessageAsync<Identify>(stream, cancel).ConfigureAwait(false);
-                if (remote == null)
-                {
-                    remote = new Peer();
-                    connection.RemotePeer = remote;
-                }
-
-                remote.AgentVersion = info.AgentVersion;
-                remote.ProtocolVersion = info.ProtocolVersion;
-                if (info.PublicKey == null || info.PublicKey.Length == 0)
-                {
-                    throw new InvalidDataException("Public key is missing.");
-                }
-                remote.PublicKey = Convert.ToBase64String(info.PublicKey);
-                if (remote.Id == null)
-                {
-                    remote.Id = MultiHash.ComputeHash(info.PublicKey);
-                }
- 
-                if (info.ListenAddresses != null)
-                {
-                    remote.Addresses = info.ListenAddresses
-                        .Select(b => MultiAddress.TryCreate(b))
-                        .Where(a => a != null)
-                        .ToList();
-                }
-                if (remote.Addresses.Count() == 0)
-                    log.Warn($"No listen address for {remote}");
+                await UpdateRemotePeerAsync(remote, stream, cancel).ConfigureAwait(false);
             }
-
-            // TODO: Verify the Peer ID
 
             connection.IdentityEstablished.TrySetResult(remote);
 
             log.Debug($"Peer id '{remote}' of {connection.RemoteAddress}");
             return remote;
+        }
+
+        /// <summary>
+        ///   Read the identify message and update the peer information.
+        /// </summary>
+        /// <param name="remote"></param>
+        /// <param name="stream"></param>
+        /// <param name="cancel"></param>
+        /// <returns></returns>
+        public async Task UpdateRemotePeerAsync(Peer remote, Stream stream, CancellationToken cancel)
+        {
+            var info = await ProtoBufHelper.ReadMessageAsync<Identify>(stream, cancel).ConfigureAwait(false);
+
+            remote.AgentVersion = info.AgentVersion;
+            remote.ProtocolVersion = info.ProtocolVersion;
+            if (info.PublicKey == null || info.PublicKey.Length == 0)
+            {
+                throw new InvalidDataException("Public key is missing.");
+            }
+            remote.PublicKey = Convert.ToBase64String(info.PublicKey);
+            if (remote.Id == null)
+            {
+                remote.Id = MultiHash.ComputeHash(info.PublicKey);
+            }
+
+            if (info.ListenAddresses != null)
+            {
+                remote.Addresses = info.ListenAddresses
+                    .Select(b => MultiAddress.TryCreate(b))
+                    .Where(a => a != null)
+                    .Select(a => a.WithPeerId(remote.Id))
+                    .ToList();
+            }
+            if (remote.Addresses.Count() == 0)
+                log.Warn($"No listen address for {remote}");
+
+            if (!remote.IsValid())
+            {
+                throw new InvalidDataException($"Invalid peer {remote}.");
+            }
         }
 
         [ProtoContract]
