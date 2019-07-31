@@ -75,11 +75,22 @@ namespace PeerTalk.Protocols
                 remote = new Peer();
                 connection.RemotePeer = remote;
             }
+
+            // Read the remote peer identify info.
             using (var stream = await muxer.CreateStreamAsync("id", cancel).ConfigureAwait(false))
             {
                 await connection.EstablishProtocolAsync("/multistream/", stream, cancel).ConfigureAwait(false);
                 await connection.EstablishProtocolAsync("/ipfs/id/", stream, cancel).ConfigureAwait(false);
                 await UpdateRemotePeerAsync(remote, stream, cancel).ConfigureAwait(false);
+            }
+
+            // It should always contain the address we used for connections, so
+            // that NAT translations are maintained.
+            if (connection.RemoteAddress != null && !remote.Addresses.Contains(connection.RemoteAddress))
+            {
+                var addrs = remote.Addresses.ToList();
+                addrs.Add(connection.RemoteAddress);
+                remote.Addresses = addrs;
             }
 
             connection.IdentityEstablished.TrySetResult(remote);

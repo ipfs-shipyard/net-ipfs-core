@@ -280,6 +280,67 @@ namespace PeerTalk
         }
 
         [TestMethod]
+        public async Task RemotePeer_Contains_ConnectedAddress1()
+        {
+            var peerB = new Peer
+            {
+                AgentVersion = "peerB",
+                Id = "QmdpwjdB94eNm2Lcvp9JqoCxswo3AKQqjLuNZyLixmCM1h",
+                PublicKey = "CAASXjBcMA0GCSqGSIb3DQEBAQUAA0sAMEgCQQDlTSgVLprWaXfmxDr92DJE1FP0wOexhulPqXSTsNh5ot6j+UiuMgwb0shSPKzLx9AuTolCGhnwpTBYHVhFoBErAgMBAAE="
+            };
+            var swarmB = new Swarm { LocalPeer = peerB };
+            await swarmB.StartAsync();
+            var peerBAddress = await swarmB.StartListeningAsync("/ip4/0.0.0.0/tcp/0");
+
+            var swarm = new Swarm { LocalPeer = self };
+            await swarm.StartAsync();
+            try
+            {
+                var connection = await swarm.ConnectAsync(peerBAddress);
+                var remote = connection.RemotePeer;
+                Assert.AreEqual(remote.ConnectedAddress, peerBAddress);
+                CollectionAssert.Contains(remote.Addresses.ToArray(), peerBAddress);
+            }
+            finally
+            {
+                await swarm.StopAsync();
+                await swarmB.StopAsync();
+            }
+        }
+
+        [TestMethod]
+        public async Task RemotePeer_Contains_ConnectedAddress2()
+        {
+            var peerB = new Peer
+            {
+                AgentVersion = "peerB",
+                Id = "QmdpwjdB94eNm2Lcvp9JqoCxswo3AKQqjLuNZyLixmCM1h",
+                PublicKey = "CAASXjBcMA0GCSqGSIb3DQEBAQUAA0sAMEgCQQDlTSgVLprWaXfmxDr92DJE1FP0wOexhulPqXSTsNh5ot6j+UiuMgwb0shSPKzLx9AuTolCGhnwpTBYHVhFoBErAgMBAAE="
+            };
+            var swarmB = new Swarm { LocalPeer = peerB };
+            await swarmB.StartAsync();
+            var peerBAddress = await swarmB.StartListeningAsync("/ip4/0.0.0.0/tcp/0");
+            var peerBPort = peerBAddress.Protocols[1].Value;
+            Assert.IsTrue(peerB.Addresses.Count() > 0);
+
+            var swarm = new Swarm { LocalPeer = self };
+            await swarm.StartAsync();
+            try
+            {
+                MultiAddress ma = $"/ip4/127.0.0.100/tcp/{peerBPort}/ipfs/{peerB.Id}";
+                var connection = await swarm.ConnectAsync(ma);
+                var remote = connection.RemotePeer;
+                Assert.AreEqual(remote.ConnectedAddress, ma);
+                CollectionAssert.Contains(remote.Addresses.ToArray(), ma);
+            }
+            finally
+            {
+                await swarm.StopAsync();
+                await swarmB.StopAsync();
+            }
+        }
+
+        [TestMethod]
         public async Task Connect_CancelsOnStop()
         {
             var swarm = new Swarm { LocalPeer = self };
