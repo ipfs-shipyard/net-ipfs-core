@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -311,6 +312,13 @@ namespace PeerTalk
         [TestMethod]
         public async Task RemotePeer_Contains_ConnectedAddress2()
         {
+            // Only works on Windows because connecting to 127.0.0.100 is allowed
+            // when listening on 0.0.0.0
+            if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            {
+                return;
+            }
+
             var peerB = new Peer
             {
                 AgentVersion = "peerB",
@@ -550,6 +558,27 @@ namespace PeerTalk
             {
                 swarm.ConnectAsync(earth).Wait();
             });
+        }
+
+        [TestMethod]
+        public async Task Connecting_To_Self_Indirect()
+        {
+            var swarm = new Swarm { LocalPeer = self };
+            await swarm.StartAsync();
+            try
+            {
+                var listen = await swarm.StartListeningAsync("/ip4/127.0.0.1/tcp/0");
+                var bad = listen.Clone();
+                bad.Protocols[2].Value = "QmXFX2P5ammdmXQgfqGkfswtEVFsZUJ5KeHRXQYCTdiTAb";
+                ExceptionAssert.Throws<Exception>(() =>
+                {
+                    swarm.ConnectAsync(bad).Wait();
+                });
+            }
+            finally
+            {
+                await swarm.StopAsync();
+            }
         }
 
         [TestMethod]
