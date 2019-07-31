@@ -545,16 +545,20 @@ namespace PeerTalk
                 remote.Addresses = addrs;
             }
 
-            // Get the addresses we can use to dial the remote.
+            // Get the addresses we can use to dial the remote.  Filter
+            // out any addresses (ip and port) we are listening on.
+            var blackList = listeners.Keys
+                .Select(a => a.WithoutPeerId())
+                .ToArray();
             var possibleAddresses = (await Task.WhenAll(addrs.Select(a => a.ResolveAsync(cancel))).ConfigureAwait(false))
                 .SelectMany(a => a)
+                .Where(a => !blackList.Contains(a.WithoutPeerId()))
                 .Select(a => a.WithPeerId(remote.Id))
                 .Distinct()
                 .ToArray();
-            // TODO: filter out self addresses and others.
             if (possibleAddresses.Length == 0)
             {
-                throw new Exception($"{remote} has no known address.");
+                throw new Exception($"{remote} has no known or reachable address.");
             }
 
             // Try the various addresses in parallel.  The first one to complete wins.

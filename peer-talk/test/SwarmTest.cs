@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -224,6 +225,7 @@ namespace PeerTalk
 
             var swarm = new Swarm { LocalPeer = self };
             await swarm.StartAsync();
+            await swarm.StartListeningAsync("/ip4/127.0.0.1/tcp/0");
             try
             {
                 var remotePeer = (await swarm.ConnectAsync(peerBAddress)).RemotePeer;
@@ -270,6 +272,74 @@ namespace PeerTalk
                 Assert.AreEqual(peerB.PublicKey, remotePeer.PublicKey);
                 Assert.IsTrue(remotePeer.IsValid());
                 Assert.IsTrue(swarm.KnownPeers.Contains(peerB));
+            }
+            finally
+            {
+                await swarm.StopAsync();
+                await swarmB.StopAsync();
+            }
+        }
+
+        [TestMethod]
+        public async Task RemotePeer_Contains_ConnectedAddress1()
+        {
+            var peerB = new Peer
+            {
+                AgentVersion = "peerB",
+                Id = "QmdpwjdB94eNm2Lcvp9JqoCxswo3AKQqjLuNZyLixmCM1h",
+                PublicKey = "CAASXjBcMA0GCSqGSIb3DQEBAQUAA0sAMEgCQQDlTSgVLprWaXfmxDr92DJE1FP0wOexhulPqXSTsNh5ot6j+UiuMgwb0shSPKzLx9AuTolCGhnwpTBYHVhFoBErAgMBAAE="
+            };
+            var swarmB = new Swarm { LocalPeer = peerB };
+            await swarmB.StartAsync();
+            var peerBAddress = await swarmB.StartListeningAsync("/ip4/0.0.0.0/tcp/0");
+
+            var swarm = new Swarm { LocalPeer = self };
+            await swarm.StartAsync();
+            try
+            {
+                var connection = await swarm.ConnectAsync(peerBAddress);
+                var remote = connection.RemotePeer;
+                Assert.AreEqual(remote.ConnectedAddress, peerBAddress);
+                CollectionAssert.Contains(remote.Addresses.ToArray(), peerBAddress);
+            }
+            finally
+            {
+                await swarm.StopAsync();
+                await swarmB.StopAsync();
+            }
+        }
+
+        [TestMethod]
+        public async Task RemotePeer_Contains_ConnectedAddress2()
+        {
+            // Only works on Windows because connecting to 127.0.0.100 is allowed
+            // when listening on 0.0.0.0
+            if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            {
+                return;
+            }
+
+            var peerB = new Peer
+            {
+                AgentVersion = "peerB",
+                Id = "QmdpwjdB94eNm2Lcvp9JqoCxswo3AKQqjLuNZyLixmCM1h",
+                PublicKey = "CAASXjBcMA0GCSqGSIb3DQEBAQUAA0sAMEgCQQDlTSgVLprWaXfmxDr92DJE1FP0wOexhulPqXSTsNh5ot6j+UiuMgwb0shSPKzLx9AuTolCGhnwpTBYHVhFoBErAgMBAAE="
+            };
+            var swarmB = new Swarm { LocalPeer = peerB };
+            await swarmB.StartAsync();
+            var peerBAddress = await swarmB.StartListeningAsync("/ip4/0.0.0.0/tcp/0");
+            var peerBPort = peerBAddress.Protocols[1].Value;
+            Assert.IsTrue(peerB.Addresses.Count() > 0);
+
+            var swarm = new Swarm { LocalPeer = self };
+            await swarm.StartAsync();
+            try
+            {
+                MultiAddress ma = $"/ip4/127.0.0.100/tcp/{peerBPort}/ipfs/{peerB.Id}";
+                var connection = await swarm.ConnectAsync(ma);
+                var remote = connection.RemotePeer;
+                Assert.AreEqual(remote.ConnectedAddress, ma);
+                CollectionAssert.Contains(remote.Addresses.ToArray(), ma);
             }
             finally
             {
@@ -488,6 +558,27 @@ namespace PeerTalk
             {
                 swarm.ConnectAsync(earth).Wait();
             });
+        }
+
+        [TestMethod]
+        public async Task Connecting_To_Self_Indirect()
+        {
+            var swarm = new Swarm { LocalPeer = self };
+            await swarm.StartAsync();
+            try
+            {
+                var listen = await swarm.StartListeningAsync("/ip4/127.0.0.1/tcp/0");
+                var bad = listen.Clone();
+                bad.Protocols[2].Value = "QmXFX2P5ammdmXQgfqGkfswtEVFsZUJ5KeHRXQYCTdiTAb";
+                ExceptionAssert.Throws<Exception>(() =>
+                {
+                    swarm.ConnectAsync(bad).Wait();
+                });
+            }
+            finally
+            {
+                await swarm.StopAsync();
+            }
         }
 
         [TestMethod]
