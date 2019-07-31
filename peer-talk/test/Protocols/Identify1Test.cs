@@ -87,5 +87,43 @@ namespace PeerTalk.Protocols
                 identify.UpdateRemotePeerAsync(peerB, ms, CancellationToken.None).Wait();
             });
         }
+
+        [TestMethod]
+        public async Task MustHavePublicKey()
+        {
+            var peerA = new Peer
+            {
+                Addresses = new MultiAddress[]
+                {
+                    "/ip4/127.0.0.1/tcp/4002/ipfs/QmXFX2P5ammdmXQgfqGkfswtEVFsZUJ5KeHRXQYCTdiTAb"
+                },
+                AgentVersion = "agent/1",
+                Id = "QmXFX2P5ammdmXQgfqGkfswtEVFsZUJ5KeHRXQYCTdiTAb",
+                ProtocolVersion = "protocol/1",
+                PublicKey = ""
+            };
+            var peerB = new Peer
+            {
+                Id = peerA.Id
+            };
+            var ms = new MemoryStream();
+            var connection = new PeerConnection
+            {
+                LocalPeer = peerA,
+                RemotePeer = peerB,
+                Stream = ms
+            };
+
+            // Generate identify msg.
+            var identify = new Identify1();
+            await identify.ProcessMessageAsync(connection, ms);
+
+            // Process identify msg.
+            ms.Position = 0;
+            ExceptionAssert.Throws<InvalidDataException>(() =>
+            {
+                identify.UpdateRemotePeerAsync(peerB, ms, CancellationToken.None).Wait();
+            });
+        }
     }
 }
