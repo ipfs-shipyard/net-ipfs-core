@@ -1059,6 +1059,7 @@ namespace PeerTalk
             await swarm.StopAsync();
             Assert.IsFalse(swarm.IsRunning);
         }
+
         [TestMethod]
         public async Task Connect_PrivateNetwork()
         {
@@ -1086,6 +1087,20 @@ namespace PeerTalk
                 await swarm.StopAsync();
                 await swarmB.StopAsync();
             }
+        }
+
+        [TestMethod]
+        public void DeregisterPeer()
+        {
+            var swarm = new Swarm { LocalPeer = self };
+            swarm.RegisterPeer(other);
+            Assert.IsTrue(swarm.KnownPeers.Contains(other));
+
+            Peer removedPeer = null;
+            swarm.PeerRemoved += (s, e) => removedPeer = e;
+            swarm.DeregisterPeer(other);
+            Assert.IsFalse(swarm.KnownPeers.Contains(other));
+            Assert.AreEqual(other, removedPeer);
         }
     }
 

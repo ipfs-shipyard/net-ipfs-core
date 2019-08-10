@@ -79,6 +79,16 @@ namespace PeerTalk
         public event EventHandler<Peer> PeerDisconnected;
 
         /// <summary>
+        ///   Raised when a peer should no longer be used.
+        /// </summary>
+        /// <remarks>
+        ///   This event indicates that the peer has been removed
+        ///   from the <see cref="KnownPeers"/> and should no longer
+        ///   be used.
+        /// </remarks>
+        public event EventHandler<Peer> PeerRemoved;
+
+        /// <summary>
         ///  The local peer.
         /// </summary>
         /// <value>
@@ -305,6 +315,30 @@ namespace PeerTalk
             }
 
             return p;
+        }
+
+        /// <summary>
+        ///   Deregister a peer.
+        /// </summary>
+        /// <param name="peer">
+        ///   The peer to remove..
+        /// </param>
+        /// <remarks>
+        ///   Remove all knowledge of the peer. The <see cref="PeerRemoved"/> event
+        ///   is raised.
+        /// </remarks>
+        public void DeregisterPeer(Peer peer)
+        {
+            if (peer.Id == null)
+            {
+                throw new ArgumentNullException("peer.ID");
+            }
+
+            if (otherPeers.TryRemove(peer.Id.ToBase58(), out Peer found))
+            {
+                peer = found;
+            }
+            PeerRemoved?.Invoke(this, peer);
         }
 
         /// <summary>
