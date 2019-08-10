@@ -89,6 +89,11 @@ namespace PeerTalk
         public event EventHandler<Peer> PeerRemoved;
 
         /// <summary>
+        ///   Raised when a peer cannot be connected to.
+        /// </summary>
+        public event EventHandler<Peer> PeerNotReachable;
+
+        /// <summary>
         ///  The local peer.
         /// </summary>
         /// <value>
@@ -496,6 +501,11 @@ namespace PeerTalk
                         .GetOrAdd(peer, (key) => new AsyncLazy<PeerConnection>(() => Dial(peer, peer.Addresses, cts.Token)))
                         .ConfigureAwait(false);
                 }
+            }
+            catch (Exception)
+            {
+                PeerNotReachable?.Invoke(this, peer);
+                throw;
             }
             finally
             {

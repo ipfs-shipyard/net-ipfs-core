@@ -514,6 +514,25 @@ namespace PeerTalk
         }
 
         [TestMethod]
+        public void Connect_Failure_Event()
+        {
+            var remoteId = "QmXFX2P5ammdmXQgfqGkfswtEVFsZUJ5KeHRXQYCTdiTAb";
+            MultiAddress remoteAddress = $"/ip4/127.0.0.1/tcp/4040/ipfs/{remoteId}";
+            var swarm = new Swarm { LocalPeer = self };
+            Peer unreachable = null;
+            swarm.PeerNotReachable += (s, e) =>
+            {
+                unreachable = e;
+            };
+            ExceptionAssert.Throws<Exception>(() =>
+            {
+                var _ = swarm.ConnectAsync(remoteAddress).Result;
+            });
+            Assert.IsNotNull(unreachable);
+            Assert.AreEqual(remoteId, unreachable.Id.ToBase58());
+        }
+
+        [TestMethod]
         public void Connect_Not_Peer()
         {
             var remoteId = "QmXFX2P5ammdmXQgfqGkfswtEVFsZUJ5KeHRXQYCTdiTAb";
