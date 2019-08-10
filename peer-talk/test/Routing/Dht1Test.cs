@@ -75,6 +75,26 @@ namespace PeerTalk.Routing
         }
 
         [TestMethod]
+        public async Task RemovesPeerFromRoutingTable()
+        {
+            var swarm = new Swarm { LocalPeer = self };
+            var dht = new Dht1 { Swarm = swarm };
+            await dht.StartAsync();
+            try
+            {
+                var peer = await swarm.RegisterPeerAsync("/ip4/127.0.0.1/tcp/4001/ipfs/QmdpwjdB94eNm2Lcvp9JqoCxswo3AKQqjLuNZyLixmCM1h");
+                Assert.IsTrue(dht.RoutingTable.Contains(peer));
+
+                swarm.DeregisterPeer(peer);
+                Assert.IsFalse(dht.RoutingTable.Contains(peer));
+            }
+            finally
+            {
+                await dht.StopAsync();
+            }
+        }
+
+        [TestMethod]
         public async Task ProcessFindNodeMessage_Self()
         {
             var swarm = new Swarm { LocalPeer = self };

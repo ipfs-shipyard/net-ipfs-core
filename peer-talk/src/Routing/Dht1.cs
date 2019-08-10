@@ -113,6 +113,7 @@ namespace PeerTalk.Routing
             ContentRouter = new ContentRouter();
             Swarm.AddProtocol(this);
             Swarm.PeerDiscovered += Swarm_PeerDiscovered;
+            Swarm.PeerRemoved += Swarm_PeerRemoved;
             foreach (var peer in Swarm.KnownPeers)
             {
                 RoutingTable.Add(peer);
@@ -140,6 +141,14 @@ namespace PeerTalk.Routing
         void Swarm_PeerDiscovered(object sender, Peer e)
         {
             RoutingTable.Add(e);
+        }
+
+        /// <summary>
+        ///   The swarm has removed a peer, update the routing table.
+        /// </summary>
+        private void Swarm_PeerRemoved(object sender, Peer e)
+        {
+            RoutingTable.Remove(e);
         }
 
         /// <inheritdoc />
