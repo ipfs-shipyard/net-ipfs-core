@@ -363,12 +363,12 @@ namespace PeerTalk
         /// <summary>
         ///   The addresses that cannot be used.
         /// </summary>
-        public BlackList<MultiAddress> BlackList { get; set; } = new BlackList<MultiAddress>();
+        public MultiAddressBlackList BlackList { get; set; } = new MultiAddressBlackList();
 
         /// <summary>
         ///   The addresses that can be used.
         /// </summary>
-        public WhiteList<MultiAddress> WhiteList { get; set; } = new WhiteList<MultiAddress>();
+        public MultiAddressWhiteList WhiteList { get; set; } = new MultiAddressWhiteList();
 
         /// <inheritdoc />
         public Task StartAsync()
@@ -434,8 +434,8 @@ namespace PeerTalk
             listeners.Clear();
             pendingConnections.Clear();
             pendingRemoteConnections.Clear();
-            BlackList = new BlackList<MultiAddress>();
-            WhiteList = new WhiteList<MultiAddress>();
+            BlackList = new MultiAddressBlackList();
+            WhiteList = new MultiAddressWhiteList();
 
             log.Debug($"Stopped {LocalPeer}");
         }
