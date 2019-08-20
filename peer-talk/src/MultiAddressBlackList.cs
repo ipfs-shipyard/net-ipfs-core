@@ -15,7 +15,7 @@ namespace PeerTalk
     /// <remarks>
     ///   Only targets that do match a filter will pass.
     /// </remarks>
-    public class MultiAddressBlackList : ConcurrentBag<MultiAddress>, IPolicy<MultiAddress>
+    public class MultiAddressBlackList : List<MultiAddress>, IPolicy<MultiAddress>
     {
         /// <inheritdoc />
         public Task<bool> IsAllowedAsync(MultiAddress target, CancellationToken cancel = default(CancellationToken))
