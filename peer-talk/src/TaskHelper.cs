@@ -65,13 +65,20 @@ namespace PeerTalk
         }
 
         /// <summary>
-        /// 
+        ///   Run async tasks in parallel,
         /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="source"></param>
-        /// <param name="funcBody"></param>
-        /// <param name="maxDoP"></param>
-        /// <returns></returns>
+        /// <param name="source">
+        ///   A sequence of some data.
+        /// </param>
+        /// <param name="funcBody">
+        ///   The async code to perform.
+        /// </param>
+        /// <param name="maxDoP">
+        ///   The number of partitions to create.
+        /// </param>
+        /// <returns>
+        ///   A Task to await.
+        /// </returns>
         /// <remarks>
         ///   Copied from https://houseofcat.io/tutorials/csharp/async/parallelforeachasync
         /// </remarks>
