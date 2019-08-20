@@ -10,19 +10,17 @@ namespace PeerTalk
     public class PolicyTest
     {
         [TestMethod]
-        public async Task Always()
+        public void Always()
         {
             var policy = new PolicyAlways<string>();
-            Assert.IsTrue(await policy.IsAllowedAsync("foo"));
-            Assert.IsFalse(await policy.IsNotAllowedAsync("foo"));
+            Assert.IsTrue(policy.IsAllowed("foo"));
         }
 
         [TestMethod]
-        public async Task Never()
+        public void Never()
         {
             var policy = new PolicyNever<string>();
-            Assert.IsFalse(await policy.IsAllowedAsync("foo"));
-            Assert.IsTrue(await policy.IsNotAllowedAsync("foo"));
+            Assert.IsFalse(policy.IsAllowed("foo"));
         }
     }
 }

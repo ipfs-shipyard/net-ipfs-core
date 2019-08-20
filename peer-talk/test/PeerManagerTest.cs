@@ -40,17 +40,17 @@ namespace PeerTalk
         }
 
         [TestMethod]
-        public async Task BlackListsThePeer()
+        public void BlackListsThePeer()
         {
             var peer = new Peer { Id = "QmXFX2P5ammdmXQgfqGkfswtEVFsZUJ5KeHRXQYCTdiTAb" };
             var manager = new PeerManager { Swarm = new Swarm() };
             Assert.AreEqual(0, manager.DeadPeers.Count);
 
             manager.SetNotReachable(peer);
-            Assert.IsFalse(await manager.Swarm.IsAllowedAsync("/p2p/QmXFX2P5ammdmXQgfqGkfswtEVFsZUJ5KeHRXQYCTdiTAb"));
+            Assert.IsFalse(manager.Swarm.IsAllowed("/p2p/QmXFX2P5ammdmXQgfqGkfswtEVFsZUJ5KeHRXQYCTdiTAb"));
 
             manager.SetReachable(peer);
-            Assert.IsTrue(await manager.Swarm.IsAllowedAsync("/p2p/QmXFX2P5ammdmXQgfqGkfswtEVFsZUJ5KeHRXQYCTdiTAb"));
+            Assert.IsTrue(manager.Swarm.IsAllowed("/p2p/QmXFX2P5ammdmXQgfqGkfswtEVFsZUJ5KeHRXQYCTdiTAb"));
         }
 
         [TestMethod]

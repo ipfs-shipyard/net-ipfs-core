@@ -17,49 +17,35 @@ namespace PeerTalk
         MultiAddress d = "/p2p/QmSoLV4Bbm51jM9C4gDYZQ9Cy3U6aXMJDAbzgu2fzaDs64";
 
         [TestMethod]
-        public async Task Allowed()
+        public void Allowed()
         {
             var policy = new MultiAddressWhiteList();
             policy.Add(a);
             policy.Add(b);
-            Assert.IsTrue(await policy.IsAllowedAsync(a));
-            Assert.IsTrue(await policy.IsAllowedAsync(a1));
-            Assert.IsTrue(await policy.IsAllowedAsync(b));
-            Assert.IsFalse(await policy.IsAllowedAsync(c));
-            Assert.IsFalse(await policy.IsAllowedAsync(d));
+            Assert.IsTrue(policy.IsAllowed(a));
+            Assert.IsTrue(policy.IsAllowed(a1));
+            Assert.IsTrue(policy.IsAllowed(b));
+            Assert.IsFalse(policy.IsAllowed(c));
+            Assert.IsFalse(policy.IsAllowed(d));
         }
 
         [TestMethod]
-        public async Task Allowed_Alias()
+        public void Allowed_Alias()
         {
             var policy = new MultiAddressWhiteList();
             policy.Add(a);
-            Assert.IsTrue(await policy.IsAllowedAsync(a));
-            Assert.IsTrue(await policy.IsAllowedAsync(a1));
-            Assert.IsTrue(await policy.IsAllowedAsync(b));
-            Assert.IsFalse(await policy.IsAllowedAsync(c));
-            Assert.IsFalse(await policy.IsAllowedAsync(d));
+            Assert.IsTrue(policy.IsAllowed(a));
+            Assert.IsTrue(policy.IsAllowed(a1));
+            Assert.IsTrue(policy.IsAllowed(b));
+            Assert.IsFalse(policy.IsAllowed(c));
+            Assert.IsFalse(policy.IsAllowed(d));
         }
 
         [TestMethod]
-        public async Task NotAllowed()
+        public void Empty()
         {
             var policy = new MultiAddressWhiteList();
-            policy.Add(a);
-            policy.Add(b);
-            Assert.IsFalse(await policy.IsNotAllowedAsync(a));
-            Assert.IsFalse(await policy.IsNotAllowedAsync(a1));
-            Assert.IsFalse(await policy.IsNotAllowedAsync(b));
-            Assert.IsTrue(await policy.IsNotAllowedAsync(c));
-            Assert.IsTrue(await policy.IsNotAllowedAsync(d));
-        }
-
-        [TestMethod]
-        public async Task Empty()
-        {
-            var policy = new MultiAddressWhiteList();
-            Assert.IsTrue(await policy.IsAllowedAsync(a));
-            Assert.IsFalse(await policy.IsNotAllowedAsync(a));
+            Assert.IsTrue(policy.IsAllowed(a));
         }
     }
 }

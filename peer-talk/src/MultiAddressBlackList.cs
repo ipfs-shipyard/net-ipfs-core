@@ -18,9 +18,9 @@ namespace PeerTalk
     public class MultiAddressBlackList : List<MultiAddress>, IPolicy<MultiAddress>
     {
         /// <inheritdoc />
-        public Task<bool> IsAllowedAsync(MultiAddress target, CancellationToken cancel = default(CancellationToken))
+        public bool IsAllowed(MultiAddress target)
         {
-            return Task.FromResult(!this.Any(filter => Matches(filter, target)));
+            return !this.Any(filter => Matches(filter, target));
         }
 
         bool Matches(MultiAddress filter, MultiAddress target)
@@ -30,10 +30,5 @@ namespace PeerTalk
                 .All(fp => target.Protocols.Any(tp => tp.Code == fp.Code && tp.Value == fp.Value));
         }
 
-        /// <inheritdoc />
-        public async Task<bool> IsNotAllowedAsync(MultiAddress target, CancellationToken cancel = default(CancellationToken))
-        {
-            return !await IsAllowedAsync(target, cancel).ConfigureAwait(false);
-        }
     }
 }

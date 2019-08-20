@@ -21,28 +21,10 @@ namespace PeerTalk
         /// <param name="target">
         ///   An object to test against the rule.
         /// </param>
-        /// <param name="cancel">
-        ///   Is used to stop the task.  When cancelled, the <see cref="TaskCanceledException"/> is raised.
-        /// </param>
         /// <returns>
-        ///   A task that represents the asynchronous operation. The task's result is
-        ///   <b>true</b> if the <paramref name="target"/> passes the rule.
+        ///   <b>true</b> if the <paramref name="target"/> passes the rule;
+        ///   otherwise <b>false</b>.
         /// </returns>
-        Task<bool> IsAllowedAsync(T target, CancellationToken cancel = default(CancellationToken));
-
-        /// <summary>
-        ///   Determines if the target fails the rule.
-        /// </summary>
-        /// <param name="target">
-        ///   An object to test against the rule.
-        /// </param>
-        /// <param name="cancel">
-        ///   Is used to stop the task.  When cancelled, the <see cref="TaskCanceledException"/> is raised.
-        /// </param>
-        /// <returns>
-        ///   A task that represents the asynchronous operation. The task's result is
-        ///   <b>true</b> if the <paramref name="target"/> fails the rule.
-        /// </returns>
-        Task<bool> IsNotAllowedAsync(T target, CancellationToken cancel = default(CancellationToken));
+        bool IsAllowed(T target);
     }
 }

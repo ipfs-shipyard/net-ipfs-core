@@ -231,7 +231,7 @@ namespace PeerTalk
         ///   added to the <see cref="KnownPeerAddresses"/>.
         /// </remarks>
         /// <seealso cref="RegisterPeer(Peer)"/>
-        public async Task<Peer> RegisterPeerAsync(MultiAddress address, CancellationToken cancel = default(CancellationToken))
+        public Task<Peer> RegisterPeerAsync(MultiAddress address, CancellationToken cancel = default(CancellationToken))
         {
             var peerId = address.PeerId;
             if (peerId == LocalPeer.Id)
@@ -239,7 +239,7 @@ namespace PeerTalk
                 throw new Exception("Cannot register to self.");
             }
 
-            if (!await IsAllowedAsync(address, cancel).ConfigureAwait(false))
+            if (!IsAllowed(address))
             {
                 throw new Exception($"Communication with '{address}' is not allowed.");
             }
@@ -250,7 +250,7 @@ namespace PeerTalk
                 Addresses = new List<MultiAddress> { address }
             };
 
-            return RegisterPeer(peer);
+            return Task.FromResult(RegisterPeer(peer));
         }
 
         /// <summary>
@@ -1047,17 +1047,11 @@ namespace PeerTalk
         }
 
         /// <inheritdoc />
-        public async Task<bool> IsAllowedAsync(MultiAddress target, CancellationToken cancel = default(CancellationToken))
+        public bool IsAllowed(MultiAddress target)
         {
-            return await BlackList.IsAllowedAsync(target, cancel).ConfigureAwait(false)
-                && await WhiteList.IsAllowedAsync(target, cancel).ConfigureAwait(false);
+            return BlackList.IsAllowed(target)
+                && WhiteList.IsAllowed(target);
         }
 
-        /// <inheritdoc />
-        public async Task<bool> IsNotAllowedAsync(MultiAddress target, CancellationToken cancel = default(CancellationToken))
-        {
-            var q = await IsAllowedAsync(target, cancel).ConfigureAwait(false);
-            return !q;
-        }
     }
 }
