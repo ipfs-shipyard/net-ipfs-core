@@ -20,7 +20,6 @@ namespace PeerTalk
     public class PeerManager : IService
     {
         static ILog log = LogManager.GetLogger(typeof(PeerManager));
-        Thread thread;
         CancellationTokenSource cancel;
 
         /// <summary>
@@ -104,7 +103,7 @@ namespace PeerTalk
                 });
 
             Swarm.BlackList.Add($"/p2p/{peer.Id}");
-            if (dead.NextAttempt == DateTime.MaxValue)
+            if (dead.NextAttempt != DateTime.MaxValue)
             {
                 log.DebugFormat("Dead '{0}' for {1} minutes.", dead.Peer, dead.Backoff.TotalMinutes);
             }
