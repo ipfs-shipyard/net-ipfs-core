@@ -1121,6 +1121,46 @@ namespace PeerTalk
             Assert.IsFalse(swarm.KnownPeers.Contains(other));
             Assert.AreEqual(other, removedPeer);
         }
+
+        [TestMethod]
+        public void IsAllowed_Peer()
+        {
+            var swarm = new Swarm();
+            var peer = new Peer
+            {
+                Id = "QmdpwjdB94eNm2Lcvp9JqoCxswo3AKQqjLuNZyLixmCM1h",
+                Addresses = new MultiAddress[]
+                {
+                    "/ip4/127.0.0.1/ipfs/QmdpwjdB94eNm2Lcvp9JqoCxswo3AKQqjLuNZyLixmCM1h"
+                }
+            };
+
+            Assert.IsTrue(swarm.IsAllowed(peer));
+
+            swarm.BlackList.Add(peer.Addresses.First());
+            Assert.IsFalse(swarm.IsAllowed(peer));
+
+            swarm.BlackList.Clear();
+            swarm.BlackList.Add("/p2p/QmdpwjdB94eNm2Lcvp9JqoCxswo3AKQqjLuNZyLixmCM1h");
+            Assert.IsFalse(swarm.IsAllowed(peer));
+        }
+
+        [TestMethod]
+        public void RegisterPeer_BlackListed()
+        {
+            var swarm = new Swarm { LocalPeer = self };
+            var peer = new Peer
+            {
+                Id = "QmdpwjdB94eNm2Lcvp9JqoCxswo3AKQqjLuNZyLixmCM1h",
+                Addresses = new MultiAddress[]
+                {
+                    "/ip4/127.0.0.1/ipfs/QmdpwjdB94eNm2Lcvp9JqoCxswo3AKQqjLuNZyLixmCM1h"
+                }
+            };
+
+            swarm.BlackList.Add(peer.Addresses.First());
+            ExceptionAssert.Throws<Exception>(() => swarm.RegisterPeer(peer));
+        }
     }
 
     /// <summary>

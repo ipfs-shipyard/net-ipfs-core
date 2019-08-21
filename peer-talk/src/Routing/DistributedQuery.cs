@@ -211,7 +211,7 @@ namespace PeerTalk.Routing
             {
                 if (provider.TryToPeer(out Peer p))
                 {
-                    if (p == Dht.Swarm.LocalPeer)
+                    if (p == Dht.Swarm.LocalPeer || !Dht.Swarm.IsAllowed(p))
                         continue;
 
                     p = Dht.Swarm.RegisterPeer(p);
@@ -236,7 +236,7 @@ namespace PeerTalk.Routing
             {
                 if (closer.TryToPeer(out Peer p))
                 {
-                    if (p == Dht.Swarm.LocalPeer)
+                    if (p == Dht.Swarm.LocalPeer || !Dht.Swarm.IsAllowed(p))
                         continue;
 
                     p = Dht.Swarm.RegisterPeer(p);

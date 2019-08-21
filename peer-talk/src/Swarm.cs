@@ -21,7 +21,7 @@ namespace PeerTalk
     /// <summary>
     ///   Manages communication with other peers.
     /// </summary>
-    public class Swarm : IService, IPolicy<MultiAddress>
+    public class Swarm : IService, IPolicy<MultiAddress>, IPolicy<Peer>
     {
         static ILog log = LogManager.GetLogger(typeof(Swarm));
 
@@ -276,6 +276,9 @@ namespace PeerTalk
         ///   is raised.
         ///   </para>
         /// </remarks>
+        /// <exception cref="Exception">
+        ///   The <see cref="BlackList"/> or <see cref="WhiteList"/> policies forbid it.
+        /// </exception>
         public Peer RegisterPeer(Peer peer)
         {
             if (peer.Id == null)
@@ -285,6 +288,10 @@ namespace PeerTalk
             if (peer.Id == LocalPeer.Id)
             {
                 throw new ArgumentException("Cannot register self.");
+            }
+            if (!IsAllowed(peer))
+            {
+                throw new Exception($"Communication with '{peer}' is not allowed.");
             }
 
             var isNew = false;
@@ -1051,6 +1058,12 @@ namespace PeerTalk
         {
             return BlackList.IsAllowed(target)
                 && WhiteList.IsAllowed(target);
+        }
+
+        /// <inheritdoc />
+        public bool IsAllowed(Peer peer)
+        {
+            return peer.Addresses.All(a => IsAllowed(a));
         }
 
     }

@@ -404,7 +404,8 @@ namespace PeerTalk.Routing
                 .Select(p => p.TryToPeer(out Peer peer) ? peer : (Peer)null)
                 .Where(p => p != null)
                 .Where(p => p == remotePeer)
-                .Where(p => p.Addresses.Count() > 0);
+                .Where(p => p.Addresses.Count() > 0)
+                .Where(p => Swarm.IsAllowed(p));
             foreach (var provider in providers)
             {
                 Swarm.RegisterPeer(provider);
