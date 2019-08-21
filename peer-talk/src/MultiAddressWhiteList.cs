@@ -16,12 +16,12 @@ namespace PeerTalk
     ///   Only targets that are a subset of any filters will pass.  If no filters are defined, then anything
     ///   passes.
     /// </remarks>
-    public class MultiAddressWhiteList : ConcurrentBag<MultiAddress>, IPolicy<MultiAddress>
+    public class MultiAddressWhiteList : List<MultiAddress>, IPolicy<MultiAddress>
     {
         /// <inheritdoc />
         public bool IsAllowed(MultiAddress target)
         {
-            if (IsEmpty)
+            if (Count == 0)
                 return true;
 
             return this.Any(filter => Matches(filter, target));
