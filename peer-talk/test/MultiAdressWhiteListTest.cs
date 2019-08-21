@@ -47,5 +47,52 @@ namespace PeerTalk
             var policy = new MultiAddressWhiteList();
             Assert.IsTrue(policy.IsAllowed(a));
         }
+
+        [TestMethod]
+        public void Collection()
+        {
+            MultiAddress a = "/ip4/127.0.0.1";
+            MultiAddress b = "/ip4/127.0.0.2";
+
+            var policy = new MultiAddressWhiteList();
+            Assert.IsFalse(policy.IsReadOnly);
+            Assert.AreEqual(0, policy.Count);
+            Assert.IsFalse(policy.Contains(a));
+            Assert.IsFalse(policy.Contains(b));
+
+            policy.Add(a);
+            Assert.AreEqual(1, policy.Count);
+            Assert.IsTrue(policy.Contains(a));
+            Assert.IsFalse(policy.Contains(b));
+
+            policy.Add(a);
+            Assert.AreEqual(1, policy.Count);
+            Assert.IsTrue(policy.Contains(a));
+            Assert.IsFalse(policy.Contains(b));
+
+            policy.Add(b);
+            Assert.AreEqual(2, policy.Count);
+            Assert.IsTrue(policy.Contains(a));
+            Assert.IsTrue(policy.Contains(b));
+
+            policy.Remove(b);
+            Assert.AreEqual(1, policy.Count);
+            Assert.IsTrue(policy.Contains(a));
+            Assert.IsFalse(policy.Contains(b));
+
+            var array = new MultiAddress[1];
+            policy.CopyTo(array, 0);
+            Assert.AreSame(a, array[0]);
+
+            foreach (var filter in policy)
+            {
+                Assert.AreSame(a, filter);
+            }
+
+            policy.Clear();
+            Assert.AreEqual(0, policy.Count);
+            Assert.IsFalse(policy.Contains(a));
+            Assert.IsFalse(policy.Contains(b));
+        }
     }
 }
