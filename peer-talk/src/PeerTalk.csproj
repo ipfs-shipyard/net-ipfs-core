@@ -8,8 +8,8 @@
     <DebugType>portable</DebugType>
 
     <!-- developer build is always 0.42 -->
-    <AssemblyVersion>0.42.0</AssemblyVersion>
-    <Version>0.42.0</Version>
+    <AssemblyVersion>0.42</AssemblyVersion>
+    <Version>0.42</Version>
 
     <!-- Nuget specs -->
     <PackageId>PeerTalk</PackageId>
@@ -51,7 +51,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Ipfs.Core" Version="0.53.1" />
+    <PackageReference Include="Ipfs.Core" Version="0.54.0" />
     <PackageReference Include="Makaretu.Dns.Multicast" Version="0.24.0" />
     <PackageReference Include="Makaretu.KBucket" Version="0.5.0" />
     <PackageReference Include="Nito.AsyncEx" Version="5.0.0" />
