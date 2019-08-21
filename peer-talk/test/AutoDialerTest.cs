@@ -56,7 +56,7 @@ namespace PeerTalk
             {
                 using (var dialer = new AutoDialer(swarmA))
                 {
-                    var other = await swarmA.RegisterPeerAsync(peerBAddress);
+                    var other = swarmA.RegisterPeerAddress(peerBAddress);
 
                     // wait for the connection.
                     var endTime = DateTime.Now.AddSeconds(3);
@@ -90,7 +90,7 @@ namespace PeerTalk
             {
                 using (var dialer = new AutoDialer(swarmA) { MinConnections = 0 })
                 {
-                    var other = await swarmA.RegisterPeerAsync(peerBAddress);
+                    var other = swarmA.RegisterPeerAddress(peerBAddress);
 
                     // wait for the connection.
                     var endTime = DateTime.Now.AddSeconds(3);
@@ -136,8 +136,8 @@ namespace PeerTalk
             {
                 using (var dialer = new AutoDialer(swarmA) { MinConnections = 1 })
                 {
-                    var b = await swarmA.RegisterPeerAsync(peerBAddress);
-                    var c = await swarmA.RegisterPeerAsync(peerCAddress);
+                    var b = swarmA.RegisterPeerAddress(peerBAddress);
+                    var c = swarmA.RegisterPeerAddress(peerCAddress);
 
                     // wait for the peer B connection.
                     var endTime = DateTime.Now.AddSeconds(3);

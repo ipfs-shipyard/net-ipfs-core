@@ -180,9 +180,9 @@ namespace PeerTalk
         /// </summary>
         /// <value>
         ///   Contains any peer address that has been
-        ///   <see cref="RegisterPeerAsync">discovered</see>.
+        ///   <see cref="RegisterPeerAddress">discovered</see>.
         /// </value>
-        /// <seealso cref="RegisterPeerAsync"/>
+        /// <seealso cref="RegisterPeerAddress"/>
         public IEnumerable<MultiAddress> KnownPeerAddresses
         {
             get
@@ -198,9 +198,9 @@ namespace PeerTalk
         /// </summary>
         /// <value>
         ///   Contains any peer that has been
-        ///   <see cref="RegisterPeerAsync">discovered</see>.
+        ///   <see cref="RegisterPeerAddress">discovered</see>.
         /// </value>
-        /// <seealso cref="RegisterPeerAsync"/>
+        /// <seealso cref="RegisterPeerAddress"/>
         public IEnumerable<Peer> KnownPeers
         {
             get
@@ -215,12 +215,8 @@ namespace PeerTalk
         /// <param name="address">
         ///   An address to the peer. It must end with the peer ID.
         /// </param>
-        /// <param name="cancel">
-        ///   Is used to stop the task.  When cancelled, the <see cref="TaskCanceledException"/> is raised.
-        /// </param>
         /// <returns>
-        ///   A task that represents the asynchronous operation. The task's result
-        ///   is the <see cref="Peer"/> that is registered.
+        ///   The <see cref="Peer"/> that is registered.
         /// </returns>
         /// <exception cref="Exception">
         ///   The <see cref="BlackList"/> or <see cref="WhiteList"/> policies forbid it.
@@ -231,26 +227,15 @@ namespace PeerTalk
         ///   added to the <see cref="KnownPeerAddresses"/>.
         /// </remarks>
         /// <seealso cref="RegisterPeer(Peer)"/>
-        public Task<Peer> RegisterPeerAsync(MultiAddress address, CancellationToken cancel = default(CancellationToken))
+        public Peer RegisterPeerAddress(MultiAddress address)
         {
-            var peerId = address.PeerId;
-            if (peerId == LocalPeer.Id)
-            {
-                throw new Exception("Cannot register to self.");
-            }
-
-            if (!IsAllowed(address))
-            {
-                throw new Exception($"Communication with '{address}' is not allowed.");
-            }
-
             var peer = new Peer
             {
-                Id = peerId,
+                Id = address.PeerId,
                 Addresses = new List<MultiAddress> { address }
             };
 
-            return Task.FromResult(RegisterPeer(peer));
+            return RegisterPeer(peer);
         }
 
         /// <summary>
@@ -468,7 +453,7 @@ namespace PeerTalk
         /// </remarks>
         public async Task<PeerConnection> ConnectAsync(MultiAddress address, CancellationToken cancel = default(CancellationToken))
         {
-            var peer = await RegisterPeerAsync(address, cancel).ConfigureAwait(false);
+            var peer = RegisterPeerAddress(address);
             return await ConnectAsync(peer, cancel).ConfigureAwait(false);
         }
 

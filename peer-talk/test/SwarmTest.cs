@@ -48,10 +48,10 @@ namespace PeerTalk
         }
 
         [TestMethod]
-        public async Task NewPeerAddress()
+        public void NewPeerAddress()
         {
             var swarm = new Swarm { LocalPeer = self };
-            await swarm.RegisterPeerAsync(mars);
+            swarm.RegisterPeerAddress(mars);
             Assert.IsTrue(swarm.KnownPeerAddresses.Contains(mars));
         }
 
@@ -62,13 +62,13 @@ namespace PeerTalk
             var selfAddress = "/ip4/178.62.158.247/tcp/4001/ipfs/" + self.Id;
             ExceptionAssert.Throws<Exception>(() =>
             {
-                var _ = swarm.RegisterPeerAsync(selfAddress).Result;
+                var _ = swarm.RegisterPeerAddress(selfAddress);
             });
 
             selfAddress = "/ip4/178.62.158.247/tcp/4001/p2p/" + self.Id;
             ExceptionAssert.Throws<Exception>(() =>
             {
-                var _ = swarm.RegisterPeerAsync(selfAddress).Result;
+                var _ = swarm.RegisterPeerAddress(selfAddress);
             });
         }
 
@@ -80,11 +80,11 @@ namespace PeerTalk
 
             ExceptionAssert.Throws<Exception>(() =>
             {
-                var _ = swarm.RegisterPeerAsync(mars).Result;
+                var _ = swarm.RegisterPeerAddress(mars);
             });
             Assert.IsFalse(swarm.KnownPeerAddresses.Contains(mars));
 
-            Assert.IsNotNull(swarm.RegisterPeerAsync(venus).Result);
+            Assert.IsNotNull(swarm.RegisterPeerAddress(venus));
             Assert.IsTrue(swarm.KnownPeerAddresses.Contains(venus));
         }
 
@@ -96,11 +96,11 @@ namespace PeerTalk
 
             ExceptionAssert.Throws<Exception>(() =>
             {
-                var _ = swarm.RegisterPeerAsync(mars).Result;
+                var _ = swarm.RegisterPeerAddress(mars);
             });
             Assert.IsFalse(swarm.KnownPeerAddresses.Contains(mars));
 
-            Assert.IsNotNull(swarm.RegisterPeerAsync(venus).Result);
+            Assert.IsNotNull(swarm.RegisterPeerAddress(venus));
             Assert.IsTrue(swarm.KnownPeerAddresses.Contains(venus));
         }
 
@@ -110,38 +110,38 @@ namespace PeerTalk
             var swarm = new Swarm { LocalPeer = self };
             ExceptionAssert.Throws<Exception>(() =>
             {
-                var _ = swarm.RegisterPeerAsync("/ip4/10.1.10.10/tcp/29087").Result;
+                var _ = swarm.RegisterPeerAddress("/ip4/10.1.10.10/tcp/29087");
             });
             Assert.AreEqual(0, swarm.KnownPeerAddresses.Count());
         }
 
         [TestMethod]
-        public async Task NewPeerAddress_Duplicate()
+        public void NewPeerAddress_Duplicate()
         {
             var swarm = new Swarm { LocalPeer = self };
-            await swarm.RegisterPeerAsync(mars);
+            swarm.RegisterPeerAddress(mars);
             Assert.AreEqual(1, swarm.KnownPeerAddresses.Count());
 
-            await swarm.RegisterPeerAsync(mars);
+            swarm.RegisterPeerAddress(mars);
             Assert.AreEqual(1, swarm.KnownPeerAddresses.Count());
         }
 
         [TestMethod]
-        public async Task KnownPeers()
+        public void KnownPeers()
         {
             var swarm = new Swarm { LocalPeer = self };
             Assert.AreEqual(0, swarm.KnownPeers.Count());
             Assert.AreEqual(0, swarm.KnownPeerAddresses.Count());
 
-            await swarm.RegisterPeerAsync("/ip4/10.1.10.10/tcp/29087/ipfs/QmSoLMeWqB7YGVLJN3pNLQpmmEk35v6wYtsMGLzSr5QBU3");
+            swarm.RegisterPeerAddress("/ip4/10.1.10.10/tcp/29087/ipfs/QmSoLMeWqB7YGVLJN3pNLQpmmEk35v6wYtsMGLzSr5QBU3");
             Assert.AreEqual(1, swarm.KnownPeers.Count());
             Assert.AreEqual(1, swarm.KnownPeerAddresses.Count());
 
-            await swarm.RegisterPeerAsync("/ip4/10.1.10.11/tcp/29087/p2p/QmSoLMeWqB7YGVLJN3pNLQpmmEk35v6wYtsMGLzSr5QBU3");
+            swarm.RegisterPeerAddress("/ip4/10.1.10.11/tcp/29087/p2p/QmSoLMeWqB7YGVLJN3pNLQpmmEk35v6wYtsMGLzSr5QBU3");
             Assert.AreEqual(1, swarm.KnownPeers.Count());
             Assert.AreEqual(2, swarm.KnownPeerAddresses.Count());
 
-            await swarm.RegisterPeerAsync(venus);
+            swarm.RegisterPeerAddress(venus);
             Assert.AreEqual(2, swarm.KnownPeers.Count());
             Assert.AreEqual(3, swarm.KnownPeerAddresses.Count());
         }
@@ -1046,7 +1046,7 @@ namespace PeerTalk
         }
 
         [TestMethod]
-        public async Task PeerDiscovered()
+        public void PeerDiscovered()
         {
             var swarm = new Swarm { LocalPeer = self };
             var peerCount = 0;
@@ -1054,12 +1054,12 @@ namespace PeerTalk
             {
                 ++peerCount;
             };
-            await swarm.RegisterPeerAsync("/ip4/127.0.0.1/tcp/4001/ipfs/QmdpwjdB94eNm2Lcvp9JqoCxswo3AKQqjLuNZyLixmCM1h");
-            await swarm.RegisterPeerAsync("/ip4/127.0.0.2/tcp/4001/ipfs/QmdpwjdB94eNm2Lcvp9JqoCxswo3AKQqjLuNZyLixmCM1h");
-            await swarm.RegisterPeerAsync("/ip4/127.0.0.3/tcp/4001/ipfs/QmdpwjdB94eNm2Lcvp9JqoCxswo3AKQqjLuNZyLixmCM1h");
-            await swarm.RegisterPeerAsync("/ip4/127.0.0.1/tcp/4001/ipfs/QmdpwjdB94eNm2Lcvp9JqoCxswo3AKQqjLuNZyLixmCM1i");
-            await swarm.RegisterPeerAsync("/ip4/127.0.0.2/tcp/4001/ipfs/QmdpwjdB94eNm2Lcvp9JqoCxswo3AKQqjLuNZyLixmCM1i");
-            await swarm.RegisterPeerAsync("/ip4/127.0.0.3/tcp/4001/ipfs/QmdpwjdB94eNm2Lcvp9JqoCxswo3AKQqjLuNZyLixmCM1i");
+            swarm.RegisterPeerAddress("/ip4/127.0.0.1/tcp/4001/ipfs/QmdpwjdB94eNm2Lcvp9JqoCxswo3AKQqjLuNZyLixmCM1h");
+            swarm.RegisterPeerAddress("/ip4/127.0.0.2/tcp/4001/ipfs/QmdpwjdB94eNm2Lcvp9JqoCxswo3AKQqjLuNZyLixmCM1h");
+            swarm.RegisterPeerAddress("/ip4/127.0.0.3/tcp/4001/ipfs/QmdpwjdB94eNm2Lcvp9JqoCxswo3AKQqjLuNZyLixmCM1h");
+            swarm.RegisterPeerAddress("/ip4/127.0.0.1/tcp/4001/ipfs/QmdpwjdB94eNm2Lcvp9JqoCxswo3AKQqjLuNZyLixmCM1i");
+            swarm.RegisterPeerAddress("/ip4/127.0.0.2/tcp/4001/ipfs/QmdpwjdB94eNm2Lcvp9JqoCxswo3AKQqjLuNZyLixmCM1i");
+            swarm.RegisterPeerAddress("/ip4/127.0.0.3/tcp/4001/ipfs/QmdpwjdB94eNm2Lcvp9JqoCxswo3AKQqjLuNZyLixmCM1i");
             swarm.RegisterPeer(new Peer { Id = "QmdpwjdB94eNm2Lcvp9JqoCxswo3AKQqjLuNZyLixmCM1j" });
             swarm.RegisterPeer(new Peer { Id = "QmdpwjdB94eNm2Lcvp9JqoCxswo3AKQqjLuNZyLixmCM1j" });
 
