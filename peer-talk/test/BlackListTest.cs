@@ -10,35 +10,22 @@ namespace PeerTalk
     public class BlackListTest
     {
         [TestMethod]
-        public async Task Allowed()
+        public void Allowed()
         {
             var policy = new BlackList<string>();
             policy.Add("c");
             policy.Add("d");
-            Assert.IsTrue(await policy.IsAllowedAsync("a"));
-            Assert.IsTrue(await policy.IsAllowedAsync("b"));
-            Assert.IsFalse(await policy.IsAllowedAsync("c"));
-            Assert.IsFalse(await policy.IsAllowedAsync("d"));
+            Assert.IsTrue(policy.IsAllowed("a"));
+            Assert.IsTrue(policy.IsAllowed("b"));
+            Assert.IsFalse(policy.IsAllowed("c"));
+            Assert.IsFalse(policy.IsAllowed("d"));
         }
 
         [TestMethod]
-        public async Task NotAllowed()
+        public void Empty()
         {
             var policy = new BlackList<string>();
-            policy.Add("c");
-            policy.Add("d");
-            Assert.IsFalse(await policy.IsNotAllowedAsync("a"));
-            Assert.IsFalse(await policy.IsNotAllowedAsync("b"));
-            Assert.IsTrue(await policy.IsNotAllowedAsync("c"));
-            Assert.IsTrue(await policy.IsNotAllowedAsync("d"));
-        }
-
-        [TestMethod]
-        public async Task Empty()
-        {
-            var policy = new BlackList<string>();
-            Assert.IsTrue(await policy.IsAllowedAsync("a"));
-            Assert.IsFalse(await policy.IsNotAllowedAsync("a"));
+            Assert.IsTrue(policy.IsAllowed("a"));
         }
     }
 }

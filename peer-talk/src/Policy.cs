@@ -16,13 +16,12 @@ namespace PeerTalk
     public abstract class Policy<T> : IPolicy<T>
     {
         /// <inheritdoc />
-        public abstract Task<bool> IsAllowedAsync(T target, CancellationToken cancel = default(CancellationToken));
+        public abstract bool IsAllowed(T target);
 
         /// <inheritdoc />
-        public async Task<bool> IsNotAllowedAsync(T target, CancellationToken cancel = default(CancellationToken))
+        public bool IsNotAllowed(T target)
         {
-            var q = await IsAllowedAsync(target, cancel).ConfigureAwait(false);
-            return !q;
+            return !IsAllowed(target);
         }
     }
 
@@ -35,9 +34,9 @@ namespace PeerTalk
     public class PolicyAlways<T> : Policy<T>
     {
         /// <inheritdoc />
-        public override Task<bool> IsAllowedAsync(T target, CancellationToken cancel = default(CancellationToken))
+        public override bool IsAllowed(T target)
         {
-            return Task.FromResult(true);
+            return true;
         }
     }
 
@@ -50,9 +49,9 @@ namespace PeerTalk
     public class PolicyNever<T> : Policy<T>
     {
         /// <inheritdoc />
-        public override Task<bool> IsAllowedAsync(T target, CancellationToken cancel = default(CancellationToken))
+        public override bool IsAllowed(T target)
         {
-            return Task.FromResult(false);
+            return false;
         }
     }
 }

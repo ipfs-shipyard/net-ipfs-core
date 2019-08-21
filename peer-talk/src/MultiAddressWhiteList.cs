@@ -1,5 +1,6 @@
 ﻿using Ipfs;
 using System;
+using System.Collections;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,15 +17,17 @@ namespace PeerTalk
     ///   Only targets that are a subset of any filters will pass.  If no filters are defined, then anything
     ///   passes.
     /// </remarks>
-    public class MultiAddressWhiteList : ConcurrentBag<MultiAddress>, IPolicy<MultiAddress>
+    public class MultiAddressWhiteList : ICollection<MultiAddress>, IPolicy<MultiAddress>
     {
-        /// <inheritdoc />
-        public Task<bool> IsAllowedAsync(MultiAddress target, CancellationToken cancel = default(CancellationToken))
-        {
-            if (IsEmpty)
-                return Task.FromResult(true);
+        ConcurrentDictionary<MultiAddress, MultiAddress> filters = new ConcurrentDictionary<MultiAddress, MultiAddress>();
 
-            return Task.FromResult(this.Any(filter => Matches(filter, target)));
+        /// <inheritdoc />
+        public bool IsAllowed(MultiAddress target)
+        {
+            if (filters.IsEmpty)
+                return true;
+
+            return filters.Any(kvp => Matches(kvp.Key, target));
         }
 
         bool Matches(MultiAddress filter, MultiAddress target)
@@ -35,9 +38,30 @@ namespace PeerTalk
         }
 
         /// <inheritdoc />
-        public async Task<bool> IsNotAllowedAsync(MultiAddress target, CancellationToken cancel = default(CancellationToken))
-        {
-            return !await IsAllowedAsync(target, cancel).ConfigureAwait(false);
-        }
+        public bool Remove(MultiAddress item) => filters.TryRemove(item, out _);
+
+        /// <inheritdoc />
+        public int Count => filters.Count;
+
+        /// <inheritdoc />
+        public bool IsReadOnly => false;
+
+        /// <inheritdoc />
+        public void Add(MultiAddress item) => filters.TryAdd(item, item);
+
+        /// <inheritdoc />
+        public void Clear() => filters.Clear();
+
+        /// <inheritdoc />
+        public bool Contains(MultiAddress item) => filters.Keys.Contains(item);
+
+        /// <inheritdoc />
+        public void CopyTo(MultiAddress[] array, int arrayIndex) => filters.Keys.CopyTo(array, arrayIndex);
+
+        /// <inheritdoc />
+        public IEnumerator<MultiAddress> GetEnumerator() => filters.Keys.GetEnumerator();
+
+        /// <inheritdoc />
+        IEnumerator IEnumerable.GetEnumerator() => filters.Keys.GetEnumerator();
     }
 }

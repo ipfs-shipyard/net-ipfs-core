@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,7 +11,7 @@ namespace PeerTalk
     /// <summary>
     ///   Some helpers for tasks.
     /// </summary>
-    public class TaskHelper
+    public static class TaskHelper
     {
         /// <summary>
         ///   Gets the first result from a set of tasks.
@@ -61,6 +62,43 @@ namespace PeerTalk
             }
             cancel.ThrowIfCancellationRequested();
             throw new AggregateException("No task(s) returned a result.", exceptions);
+        }
+
+        /// <summary>
+        ///   Run async tasks in parallel,
+        /// </summary>
+        /// <param name="source">
+        ///   A sequence of some data.
+        /// </param>
+        /// <param name="funcBody">
+        ///   The async code to perform.
+        /// </param>
+        /// <param name="maxDoP">
+        ///   The number of partitions to create.
+        /// </param>
+        /// <returns>
+        ///   A Task to await.
+        /// </returns>
+        /// <remarks>
+        ///   Copied from https://houseofcat.io/tutorials/csharp/async/parallelforeachasync
+        /// </remarks>
+        public static Task ParallelForEachAsync<T>(this IEnumerable<T> source, Func<T, Task> funcBody, int maxDoP = 4)
+        {
+            async Task AwaitPartition(IEnumerator<T> partition)
+            {
+                using (partition)
+                {
+                    while (partition.MoveNext())
+                    { await funcBody(partition.Current); }
+                }
+            }
+
+            return Task.WhenAll(
+                Partitioner
+                    .Create(source)
+                    .GetPartitions(maxDoP)
+                    .AsParallel()
+                    .Select(p => AwaitPartition(p)));
         }
     }
 }

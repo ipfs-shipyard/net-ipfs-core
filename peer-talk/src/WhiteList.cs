@@ -22,16 +22,9 @@ namespace PeerTalk
         where T : IEquatable<T>
     {
         /// <inheritdoc />
-        public Task<bool> IsAllowedAsync(T target, CancellationToken cancel = default(CancellationToken))
+        public bool IsAllowed(T target)
         {
-            return Task.FromResult(this.IsEmpty || this.Contains(target));
-        }
-
-        /// <inheritdoc />
-        public async Task<bool> IsNotAllowedAsync(T target, CancellationToken cancel = default(CancellationToken))
-        {
-            var q = await IsAllowedAsync(target, cancel).ConfigureAwait(false);
-            return !q;
+            return this.IsEmpty || this.Contains(target);
         }
     }
 }
