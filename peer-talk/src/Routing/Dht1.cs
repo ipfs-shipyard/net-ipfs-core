@@ -129,6 +129,7 @@ namespace PeerTalk.Routing
 
             Swarm.RemoveProtocol(this);
             Swarm.PeerDiscovered -= Swarm_PeerDiscovered;
+            Swarm.PeerRemoved -= Swarm_PeerRemoved;
 
             Stopped?.Invoke(this, EventArgs.Empty);
             ContentRouter?.Dispose();
