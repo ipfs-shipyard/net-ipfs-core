@@ -33,7 +33,7 @@ namespace PeerTalk
         ///   Returns the result of the first task that is not
         ///   faulted or canceled.
         /// </remarks>
-        public static async Task<T> WhenAnyResult<T>(
+        public static async Task<T> WhenAnyResultAsync<T>(
             IEnumerable<Task<T>> tasks,
             CancellationToken cancel)
         {
@@ -45,7 +45,7 @@ namespace PeerTalk
                 var winner = await Task.WhenAny(running).ConfigureAwait(false);
                 if (!winner.IsCanceled && !winner.IsFaulted)
                 {
-                    return winner.Result;
+                    return await winner;
                 }
                 if (winner.IsFaulted)
                 {

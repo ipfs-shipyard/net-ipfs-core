@@ -78,6 +78,7 @@ namespace PeerTalk
         /// </remarks>
         public int MinConnections { get; set; } = DefaultMinConnections;
 
+#pragma warning disable VSTHRD100 // Avoid async void methods
         /// <summary>
         ///   Called when the swarm has a new peer.
         /// </summary>
@@ -91,31 +92,30 @@ namespace PeerTalk
         ///   If the <see cref="MinConnections"/> is not reached, then the
         ///   <paramref name="peer"/> is dialed.
         /// </remarks>
-        void OnPeerDiscovered(object sender, Peer peer)
+        async void OnPeerDiscovered(object sender, Peer peer)
+#pragma warning restore VSTHRD100 // Avoid async void methods
         {
             var n = swarm.Manager.Connections.Count() + pendingConnects;
             if (swarm.IsRunning && n < MinConnections)
             {
                 Interlocked.Increment(ref pendingConnects);
-                Task.Run(async () =>
+                log.Debug($"Dialing new {peer}");
+                try
                 {
-                    log.Debug($"Dialing new {peer}");
-                    try
-                    {
-                        await swarm.ConnectAsync(peer).ConfigureAwait(false);
-                    }
-                    catch(Exception)
-                    {
-                        log.Warn($"Failed to dial {peer}");
-                    }
-                    finally
-                    {
-                        Interlocked.Decrement(ref pendingConnects);
-                    }
-                });
+                    await swarm.ConnectAsync(peer).ConfigureAwait(false);
+                }
+                catch(Exception)
+                {
+                    log.Warn($"Failed to dial {peer}");
+                }
+                finally
+                {
+                    Interlocked.Decrement(ref pendingConnects);
+                }
             }
         }
 
+#pragma warning disable VSTHRD100 // Avoid async void methods
         /// <summary>
         ///   Called when the swarm has lost a connection to a peer.
         /// </summary>
@@ -129,7 +129,8 @@ namespace PeerTalk
         ///   If the <see cref="MinConnections"/> is not reached, then another
         ///   peer is dialed.
         /// </remarks>
-        void OnPeerDisconnected(object sender, Peer disconnectedPeer)
+        async void OnPeerDisconnected(object sender, Peer disconnectedPeer)
+#pragma warning restore VSTHRD100 // Avoid async void methods
         {
             var n = swarm.Manager.Connections.Count() + pendingConnects;
             if (!swarm.IsRunning || n >= MinConnections)
@@ -146,22 +147,19 @@ namespace PeerTalk
             var peer = peers[rng.Next(peers.Count())];
 
             Interlocked.Increment(ref pendingConnects);
-            Task.Run(async () =>
+            log.Debug($"Dialing {peer}");
+            try
             {
-                log.Debug($"Dialing {peer}");
-                try
-                {
-                    await swarm.ConnectAsync(peer).ConfigureAwait(false);
-                }
-                catch (Exception)
-                {
-                    log.Warn($"Failed to dial {peer}");
-                }
-                finally
-                {
-                    Interlocked.Decrement(ref pendingConnects);
-                }
-            });
+                await swarm.ConnectAsync(peer).ConfigureAwait(false);
+            }
+            catch (Exception)
+            {
+                log.Warn($"Failed to dial {peer}");
+            }
+            finally
+            {
+                Interlocked.Decrement(ref pendingConnects);
+            }
         }
 
     }

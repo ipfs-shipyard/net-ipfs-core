@@ -121,7 +121,9 @@ namespace PeerTalk.SecureCommunication
         /// <inheritdoc />
         public override int Read(byte[] buffer, int offset, int count)
         {
+#pragma warning disable VSTHRD002 
             return ReadAsync(buffer, offset, count).GetAwaiter().GetResult();
+#pragma warning restore VSTHRD002 
         }
 
         /// <inheritdoc />
@@ -202,7 +204,9 @@ namespace PeerTalk.SecureCommunication
         /// <inheritdoc />
         public override void Flush()
         {
+#pragma warning disable VSTHRD002 
             FlushAsync().GetAwaiter().GetResult();
+#pragma warning restore VSTHRD002 
         }
 
         /// <inheritdoc />
@@ -225,8 +229,8 @@ namespace PeerTalk.SecureCommunication
             stream.WriteByte((byte)(length >> 16));
             stream.WriteByte((byte)(length >> 8));
             stream.WriteByte((byte)(length));
-            stream.Write(data, 0, data.Length);
-            stream.Write(mac, 0, mac.Length);
+            await stream.WriteAsync(data, 0, data.Length);
+            await stream.WriteAsync(mac, 0, mac.Length);
             await stream.FlushAsync(cancel).ConfigureAwait(false);
 
             outStream.SetLength(0);

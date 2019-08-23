@@ -41,6 +41,7 @@ namespace PeerTalk.SecureCommunication
             await EncryptAsync(connection, cancel).ConfigureAwait(false);
         }
 
+#pragma warning disable VSTHRD103 
         /// <inheritdoc />
         public async Task<Stream> EncryptAsync(PeerConnection connection, CancellationToken cancel = default(CancellationToken))
         {

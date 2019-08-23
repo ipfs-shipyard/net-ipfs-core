@@ -66,7 +66,9 @@ namespace PeerTalk.Transports
 
         public override void Flush()
         {
+#pragma warning disable VSTHRD002 
             FlushAsync().GetAwaiter().GetResult();
+#pragma warning restore VSTHRD002 
         }
 
         public override async Task FlushAsync(CancellationToken cancellationToken)
@@ -81,7 +83,9 @@ namespace PeerTalk.Transports
 
         public override int Read(byte[] buffer, int offset, int count)
         {
+#pragma warning disable VSTHRD002 
             return ReadAsync(buffer, offset, count).GetAwaiter().GetResult();
+#pragma warning restore VSTHRD002 
         }
 
         public override async Task<int> ReadAsync(byte[] buffer, int offset, int count, CancellationToken cancellationToken)
@@ -93,7 +97,7 @@ namespace PeerTalk.Transports
                 receiveBuffer.Position = 0;
                 receiveBuffer.SetLength(0);
                 var size = socket.Receive(datagram);
-                receiveBuffer.Write(datagram, 0, size);
+                await receiveBuffer.WriteAsync(datagram, 0, size);
                 receiveBuffer.Position = 0;
             }
             return receiveBuffer.Read(buffer, offset, count);
