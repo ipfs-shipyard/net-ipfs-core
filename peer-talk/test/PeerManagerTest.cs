@@ -58,10 +58,10 @@ namespace PeerTalk
         {
             var peer = new Peer
             {
-                Id = "QmXFX2P5ammdmXQgfqGkfswtEVFsZUJ5KeHRXQYCTdiTAb",
+                Id = "QmXFX2P5ammdmXQgfqGkfswtEVFsZUJ5KeHRXQYCTdiTxx",
                 Addresses = new MultiAddress[]
                 {
-                    "/ip4/127.0.0.1/tcp/4040/ipfs/QmXFX2P5ammdmXQgfqGkfswtEVFsZUJ5KeHRXQYCTdiTAb"
+                    "/ip4/127.0.0.1/tcp/4040/ipfs/QmXFX2P5ammdmXQgfqGkfswtEVFsZUJ5KeHRXQYCTdiTxx"
                 }
             };
             var swarm = new Swarm { LocalPeer = self };
@@ -74,6 +74,7 @@ namespace PeerTalk
 
             try
             {
+                await swarm.StartAsync();
                 await manager.StartAsync();
                 try
                 {
@@ -82,7 +83,7 @@ namespace PeerTalk
                 catch { }
                 Assert.AreEqual(1, manager.DeadPeers.Count);
                 
-                var end = DateTime.Now + TimeSpan.FromSeconds(2);
+                var end = DateTime.Now + TimeSpan.FromSeconds(4);
                 while (DateTime.Now <= end)
                 {
                     if (manager.DeadPeers[peer].Backoff > manager.InitialBackoff)
@@ -92,6 +93,7 @@ namespace PeerTalk
             }
             finally
             {
+                await swarm.StopAsync();
                 await manager.StopAsync();
             }
         }
@@ -118,6 +120,7 @@ namespace PeerTalk
 
             try
             {
+                await swarm.StartAsync();
                 await manager.StartAsync();
                 try
                 {
@@ -126,7 +129,7 @@ namespace PeerTalk
                 catch { }
                 Assert.AreEqual(1, manager.DeadPeers.Count);
 
-                var end = DateTime.Now + TimeSpan.FromSeconds(2);
+                var end = DateTime.Now + TimeSpan.FromSeconds(6);
                 while (DateTime.Now <= end)
                 {
                     if (manager.DeadPeers[peer].NextAttempt == DateTime.MaxValue)
@@ -136,6 +139,7 @@ namespace PeerTalk
             }
             finally
             {
+                await swarm.StopAsync();
                 await manager.StopAsync();
             }
         }

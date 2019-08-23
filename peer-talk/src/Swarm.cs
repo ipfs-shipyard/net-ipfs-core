@@ -476,6 +476,11 @@ namespace PeerTalk
         /// </remarks>
         public async Task<PeerConnection> ConnectAsync(Peer peer, CancellationToken cancel = default(CancellationToken))
         {
+            if (!IsRunning)
+            {
+                throw new Exception("The swarm is not running.");
+            }
+
             peer = RegisterPeer(peer);
 
             // If connected and still open, then use the existing connection.
@@ -856,6 +861,19 @@ namespace PeerTalk
         /// </remarks>
         async void OnRemoteConnect(Stream stream, MultiAddress local, MultiAddress remote)
         {
+            if (!IsRunning)
+            {
+                try
+                {
+                    stream.Dispose();
+                }
+                catch (Exception)
+                {
+                    // eat it.
+                }
+                return;
+            }
+
             // If the remote is already trying to establish a connection, then we
             // can just refuse this one.
             if (!pendingRemoteConnections.TryAdd(remote, null))

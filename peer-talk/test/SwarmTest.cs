@@ -495,10 +495,18 @@ namespace PeerTalk
             var remoteId = "QmXFX2P5ammdmXQgfqGkfswtEVFsZUJ5KeHRXQYCTdiTAb";
             MultiAddress remoteAddress = $"/ip4/127.0.0.1/ipfs/{remoteId}";
             var swarm = new Swarm { LocalPeer = self };
-            ExceptionAssert.Throws<Exception>(() =>
+            swarm.StartAsync().Wait();
+            try
             {
-                var _ = swarm.ConnectAsync(remoteAddress).Result;
-            });
+                ExceptionAssert.Throws<Exception>(() =>
+                {
+                    var _ = swarm.ConnectAsync(remoteAddress).Result;
+                });
+            }
+            finally
+            {
+                swarm.StopAsync().Wait();
+            }
         }
 
         [TestMethod]
@@ -507,10 +515,18 @@ namespace PeerTalk
             var remoteId = "QmXFX2P5ammdmXQgfqGkfswtEVFsZUJ5KeHRXQYCTdiTAb";
             MultiAddress remoteAddress = $"/ip4/127.0.0.1/tcp/4040/ipfs/{remoteId}";
             var swarm = new Swarm { LocalPeer = self };
-            ExceptionAssert.Throws<Exception>(() =>
+            swarm.StartAsync().Wait();
+            try
             {
-                var _ = swarm.ConnectAsync(remoteAddress).Result;
-            });
+                ExceptionAssert.Throws<Exception>(() =>
+                {
+                    var _ = swarm.ConnectAsync(remoteAddress).Result;
+                });
+            }
+            finally
+            {
+                swarm.StopAsync().Wait();
+            }
         }
 
         [TestMethod]
@@ -524,10 +540,18 @@ namespace PeerTalk
             {
                 unreachable = e;
             };
-            ExceptionAssert.Throws<Exception>(() =>
+            swarm.StartAsync().Wait();
+            try
             {
-                var _ = swarm.ConnectAsync(remoteAddress).Result;
-            });
+                ExceptionAssert.Throws<Exception>(() =>
+                {
+                    var _ = swarm.ConnectAsync(remoteAddress).Result;
+                });
+            }
+            finally
+            {
+                swarm.StopAsync().Wait();
+            }
             Assert.IsNotNull(unreachable);
             Assert.AreEqual(remoteId, unreachable.Id.ToBase58());
         }
@@ -538,10 +562,18 @@ namespace PeerTalk
             var remoteId = "QmXFX2P5ammdmXQgfqGkfswtEVFsZUJ5KeHRXQYCTdiTAb";
             MultiAddress remoteAddress = $"/dns/npmjs.com/tcp/80/ipfs/{remoteId}";
             var swarm = new Swarm { LocalPeer = self };
-            ExceptionAssert.Throws<Exception>(() =>
+            swarm.StartAsync().Wait();
+            try
             {
-                var _ = swarm.ConnectAsync(remoteAddress).Result;
-            });
+                ExceptionAssert.Throws<Exception>(() =>
+                {
+                    var _ = swarm.ConnectAsync(remoteAddress).Result;
+                });
+            }
+            finally
+            {
+                swarm.StopAsync().Wait();
+            }
         }
 
         [TestMethod]
@@ -552,10 +584,18 @@ namespace PeerTalk
             var remoteId = "QmXFX2P5ammdmXQgfqGkfswtEVFsZUJ5KeHRXQYCTdiTAb";
             MultiAddress remoteAddress = $"/ip4/127.0.0.1/tcp/4002/ipfs/{remoteId}";
             var swarm = new Swarm { LocalPeer = self };
-            ExceptionAssert.Throws<Exception>(() =>
+            swarm.StartAsync().Wait();
+            try
             {
-                var _ = swarm.ConnectAsync(remoteAddress, cs.Token).Result;
-            });
+                ExceptionAssert.Throws<Exception>(() =>
+                {
+                    var _ = swarm.ConnectAsync(remoteAddress, cs.Token).Result;
+                });
+            }
+            finally
+            {
+                swarm.StopAsync().Wait();
+            }
         }
 
         [TestMethod]
@@ -563,20 +603,36 @@ namespace PeerTalk
         {
             var swarm = new Swarm { LocalPeer = self };
             swarm.BlackList.Add(mars);
-            ExceptionAssert.Throws<Exception>(() =>
+            swarm.StartAsync().Wait();
+            try
             {
-                swarm.ConnectAsync(mars).Wait();
-            });
+                ExceptionAssert.Throws<Exception>(() =>
+                {
+                    var _ = swarm.ConnectAsync(mars).Result;
+                });
+            }
+            finally
+            {
+                swarm.StopAsync().Wait();
+            }
         }
 
         [TestMethod]
         public void Connecting_To_Self()
         {
             var swarm = new Swarm { LocalPeer = self };
-            ExceptionAssert.Throws<Exception>(() =>
+            swarm.StartAsync().Wait();
+            try
             {
-                swarm.ConnectAsync(earth).Wait();
-            });
+                ExceptionAssert.Throws<Exception>(() =>
+                {
+                    var _ = swarm.ConnectAsync(earth).Result;
+                });
+            }
+            finally
+            {
+                swarm.StopAsync().Wait();
+            }
         }
 
         [TestMethod]
