@@ -611,7 +611,7 @@ namespace PeerTalk
                 {
                     var attempts = possibleAddresses
                         .Select(a => DialAsync(remote, a, cts.Token));
-                    connection = await TaskHelper.WhenAnyResult(attempts, cts.Token).ConfigureAwait(false);
+                    connection = await TaskHelper.WhenAnyResultAsync(attempts, cts.Token).ConfigureAwait(false);
                     cts.Cancel(); // stop other dialing tasks.
                 }
             }

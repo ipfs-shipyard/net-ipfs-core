@@ -159,7 +159,9 @@ namespace PeerTalk.PubSub
         {
             using (var ms = new MemoryStream())
             {
+#pragma warning disable VSTHRD103
                 message.CopyTo(ms);
+#pragma warning disable VSTHRD103 
                 return PublishAsync(topic, ms.ToArray(), cancel);
             }
         }
@@ -178,6 +180,9 @@ namespace PeerTalk.PubSub
         {
             var topicHandler = new TopicHandler { Topic = topic, Handler = handler };
             topicHandlers.Add(topicHandler);
+
+            // TODO: need a better way.
+#pragma warning disable VSTHRD101 
             cancellationToken.Register(async () =>
             {
                 topicHandlers.Remove(topicHandler);
@@ -186,6 +191,7 @@ namespace PeerTalk.PubSub
                     await Task.WhenAll(Routers.Select(r => r.LeaveTopicAsync(topic, CancellationToken.None))).ConfigureAwait(false);
                 }
             });
+#pragma warning restore VSTHRD101 
 
             // Tell routers if first time.
             if (topicHandlers.Count(t => t.Topic == topic) == 1)
