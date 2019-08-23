@@ -42,7 +42,7 @@ namespace PeerTalk.Protocols
                 Connection = connection,
                 Receiver = true
             };
-            muxer.SubstreamCreated += (s, e) => connection.ReadMessages(e, CancellationToken.None);
+            muxer.SubstreamCreated += (s, e) => _ = connection.ReadMessagesAsync(e, CancellationToken.None);
 
             // Attach muxer to the connection.  It now becomes the message reader.
             connection.MuxerEstablished.SetResult(muxer);

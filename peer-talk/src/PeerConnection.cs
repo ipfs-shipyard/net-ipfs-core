@@ -217,10 +217,10 @@ namespace PeerTalk
                 Initiator = true,
                 Connection = this
             };
-            muxer.SubstreamCreated += (s, e) => ReadMessages(e, CancellationToken.None);
+            muxer.SubstreamCreated += (s, e) => _ = ReadMessagesAsync(e, CancellationToken.None);
             this.MuxerEstablished.SetResult(muxer);
 
-            var _ = muxer.ProcessRequestsAsync();
+            _ = muxer.ProcessRequestsAsync();
         }
 
         /// <summary>
@@ -267,7 +267,7 @@ namespace PeerTalk
         /// <summary>
         ///   Starts reading messages from the remote peer.
         /// </summary>
-        public async void ReadMessages(CancellationToken cancel)
+        public async Task ReadMessagesAsync(CancellationToken cancel)
         {
             log.Debug($"start reading messsages from {RemoteAddress}");
 
@@ -310,7 +310,7 @@ namespace PeerTalk
         /// <summary>
         ///   Starts reading messages from the remote peer on the specified stream.
         /// </summary>
-        public async void ReadMessages(Stream stream, CancellationToken cancel)
+        public async Task ReadMessagesAsync(Stream stream, CancellationToken cancel)
         {
             IPeerProtocol protocol = new Multistream1();
             try

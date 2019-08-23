@@ -55,12 +55,8 @@ namespace PeerTalk
             Swarm.ConnectionEstablished += Swarm_ConnectionEstablished;
             Swarm.PeerNotReachable += Swarm_PeerNotReachable;
 
-            var thread = new Thread(Phoenix)
-            {
-                IsBackground = true
-            };
             cancel = new CancellationTokenSource();
-            thread.Start();
+            var _ = PhoenixAsync(cancel.Token);
 
             log.Debug("started");
             return Task.CompletedTask;
@@ -145,9 +141,9 @@ namespace PeerTalk
         /// <summary>
         ///   Background process to try reconnecting to a dead peer.
         /// </summary>
-        async void Phoenix()
+        async Task PhoenixAsync(CancellationToken cancellation)
         {
-            while (!cancel.IsCancellationRequested)
+            while (!cancellation.IsCancellationRequested)
             {
                 try
                 {

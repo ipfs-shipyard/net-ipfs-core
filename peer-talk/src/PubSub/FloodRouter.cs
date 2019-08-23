@@ -240,6 +240,7 @@ namespace PeerTalk.PubSub
             }
         }
 
+#pragma warning disable VSTHRD100 // Avoid async void methods
         /// <summary>
         ///   Raised when a connection is established to a remote peer.
         /// </summary>
@@ -250,6 +251,7 @@ namespace PeerTalk.PubSub
         ///   all topics that are of interest to the local peer.
         /// </remarks>
         async void Swarm_ConnectionEstablished(object sender, PeerConnection connection)
+#pragma warning restore VSTHRD100 // Avoid async void methods
         {
             if (localTopics.Count == 0)
                 return;

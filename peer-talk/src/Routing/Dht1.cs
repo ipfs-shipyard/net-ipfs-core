@@ -250,7 +250,7 @@ namespace PeerTalk.Routing
         /// </remarks>
         public void Advertise(Cid cid)
         {
-            Task.Run(async () =>
+            _ = Task.Run(async () =>
             {
                 int advertsNeeded = 4;
                 var message = new DhtMessage
@@ -278,7 +278,7 @@ namespace PeerTalk.Routing
                         using (var stream = await Swarm.DialAsync(peer, this.ToString()))
                         {
                             ProtoBuf.Serializer.SerializeWithLengthPrefix(stream, message, PrefixStyle.Base128);
-                            stream.Flush();
+                            await stream.FlushAsync();
                         }
                         if (--advertsNeeded == 0)
                             break;

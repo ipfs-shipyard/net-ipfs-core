@@ -30,7 +30,7 @@ namespace PeerTalk
 
         static StatsStream()
         {
-            Task.Run(async () =>
+            _ = Task.Run(async () =>
             {
                 while (true)
                 {

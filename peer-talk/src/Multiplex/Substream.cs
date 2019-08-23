@@ -125,7 +125,9 @@ namespace PeerTalk.Multiplex
         /// <inheritdoc />
         public override int Read(byte[] buffer, int offset, int count)
         {
+#pragma warning disable VSTHRD002 
             return ReadAsync(buffer, offset, count).GetAwaiter().GetResult();
+#pragma warning restore VSTHRD002 
         }
 
         /// <inheritdoc />
@@ -164,7 +166,9 @@ namespace PeerTalk.Multiplex
         /// <inheritdoc />
         public override void Flush()
         {
+#pragma warning disable VSTHRD002 
             FlushAsync().GetAwaiter().GetResult();
+#pragma warning restore VSTHRD002 
         }
 
         /// <inheritdoc />

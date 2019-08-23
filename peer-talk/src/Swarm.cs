@@ -495,7 +495,7 @@ namespace PeerTalk
                 using (var cts = CancellationTokenSource.CreateLinkedTokenSource(swarmCancellation.Token, cancel))
                 {
                     return await pendingConnections
-                        .GetOrAdd(peer, (key) => new AsyncLazy<PeerConnection>(() => Dial(peer, peer.Addresses, cts.Token)))
+                        .GetOrAdd(peer, (key) => new AsyncLazy<PeerConnection>(() => DialAsync(peer, peer.Addresses, cts.Token)))
                         .ConfigureAwait(false);
                 }
             }
@@ -569,7 +569,7 @@ namespace PeerTalk
         /// <param name="addrs"></param>
         /// <param name="cancel"></param>
         /// <returns></returns>
-        async Task<PeerConnection> Dial(Peer remote, IEnumerable<MultiAddress> addrs, CancellationToken cancel)
+        async Task<PeerConnection> DialAsync(Peer remote, IEnumerable<MultiAddress> addrs, CancellationToken cancel)
         {
             log.Debug($"Dialing {remote}");
 
@@ -638,7 +638,7 @@ namespace PeerTalk
                 {
                     identify = protocols.OfType<Identify1>().First();
                 }
-                await identify.GetRemotePeer(connection, cancel).ConfigureAwait(false);
+                await identify.GetRemotePeerAsync(connection, cancel).ConfigureAwait(false);
             }
             catch (Exception)
             {
@@ -843,6 +843,7 @@ namespace PeerTalk
             return Task.FromResult(addresses.First());
         }
 
+#pragma warning disable VSTHRD100 // Avoid async void methods
         /// <summary>
         ///   Called when a remote peer is connecting to the local peer.
         /// </summary>
@@ -860,6 +861,7 @@ namespace PeerTalk
         ///   logged as warning.
         /// </remarks>
         async void OnRemoteConnect(Stream stream, MultiAddress local, MultiAddress remote)
+#pragma warning restore VSTHRD100 // Avoid async void methods
         {
             if (!IsRunning)
             {
@@ -920,7 +922,7 @@ namespace PeerTalk
 
                 // Start the handshake
                 // TODO: Isn't connection cancel token required.
-                connection.ReadMessages(default(CancellationToken));
+                _ = connection.ReadMessagesAsync(default(CancellationToken));
 
                 // Wait for security to be established.
                 await connection.SecurityEstablished.Task.ConfigureAwait(false);
@@ -935,7 +937,7 @@ namespace PeerTalk
                 {
                     identify = protocols.OfType<Identify1>().First();
                 }
-                connection.RemotePeer = await identify.GetRemotePeer(connection, default(CancellationToken)).ConfigureAwait(false);
+                connection.RemotePeer = await identify.GetRemotePeerAsync(connection, default(CancellationToken)).ConfigureAwait(false);
 
                 connection.RemotePeer = RegisterPeer(connection.RemotePeer);
                 connection.RemoteAddress = new MultiAddress($"{remote}/ipfs/{connection.RemotePeer.Id}");

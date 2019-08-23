@@ -65,7 +65,7 @@ namespace PeerTalk.Protocols
         /// </param>
         /// <param name="cancel"></param>
         /// <returns></returns>
-        public async Task<Peer> GetRemotePeer(PeerConnection connection, CancellationToken cancel)
+        public async Task<Peer> GetRemotePeerAsync(PeerConnection connection, CancellationToken cancel)
         {
             var muxer = await connection.MuxerEstablished.Task.ConfigureAwait(false);
             log.Debug("Get remote identity");

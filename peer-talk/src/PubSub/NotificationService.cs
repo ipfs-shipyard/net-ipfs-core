@@ -233,7 +233,7 @@ namespace PeerTalk.PubSub
             }
 
             // Tell other message routers.
-            Task.WhenAll(Routers
+            _ = Task.WhenAll(Routers
                 .Where(r => r != sender)
                 .Select(r => r.PublishAsync(msg, CancellationToken.None))
             );
