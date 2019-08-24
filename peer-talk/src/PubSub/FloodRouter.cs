@@ -5,6 +5,7 @@ using ProtoBuf;
 using Semver;
 using System;
 using System.Collections.Generic;
+using System.Collections.Concurrent;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -21,7 +22,7 @@ namespace PeerTalk.PubSub
         static ILog log = LogManager.GetLogger(typeof(FloodRouter));
 
         MessageTracker tracker = new MessageTracker();
-        List<string> localTopics = new List<string>();
+        ConcurrentDictionary<string, string> localTopics = new ConcurrentDictionary<string, string>();
 
         /// <summary>
         ///   The topics of interest of other peers.
@@ -138,7 +139,7 @@ namespace PeerTalk.PubSub
         /// <inheritdoc />
         public async Task JoinTopicAsync(string topic, CancellationToken cancel)
         {
-            localTopics.Add(topic);
+            localTopics.TryAdd(topic, topic);
             var msg = new PubSubMessage
             {
                 Subscriptions = new Subscription[]
@@ -164,7 +165,7 @@ namespace PeerTalk.PubSub
         /// <inheritdoc />
         public async Task LeaveTopicAsync(string topic, CancellationToken cancel)
         {
-            localTopics.Remove(topic);
+            localTopics.TryRemove(topic, out _);
             var msg = new PubSubMessage
             {
                 Subscriptions = new Subscription[]
@@ -260,7 +261,7 @@ namespace PeerTalk.PubSub
             {
                 var hello = new PubSubMessage
                 {
-                    Subscriptions = localTopics
+                    Subscriptions = localTopics.Values
                         .Select(topic => new Subscription
                         {
                             Subscribe = true,
