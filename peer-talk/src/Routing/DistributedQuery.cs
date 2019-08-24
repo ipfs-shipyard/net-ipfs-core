@@ -2,6 +2,7 @@
 using Ipfs;
 using ProtoBuf;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -42,7 +43,8 @@ namespace PeerTalk.Routing
         /// </remarks>
         CancellationTokenSource runningQuery;
 
-        List<Peer> visited = new List<Peer>();
+        ConcurrentDictionary<Peer, Peer> visited = new ConcurrentDictionary<Peer, Peer>();
+        ConcurrentDictionary<T, T> answers = new ConcurrentDictionary<T, T>();
         DhtMessage queryMessage;
         int failedConnects = 0;
 
@@ -59,7 +61,13 @@ namespace PeerTalk.Routing
         /// <summary>
         ///   The received answers for the query.
         /// </summary>
-        public List<T> Answers { get; } = new List<T>();
+        public IEnumerable<T> Answers
+        {
+            get
+            {
+                return answers.Values;
+            }
+        }
 
         /// <summary>
         ///   The number of answers needed.
@@ -133,7 +141,7 @@ namespace PeerTalk.Routing
             {
                 Dht.Stopped -= OnDhtStopped;
             }
-            log.Debug($"Q{Id} found {Answers.Count} answers, visited {visited.Count} peers, failed {failedConnects}");
+            log.Debug($"Q{Id} found {answers.Count} answers, visited {visited.Count} peers, failed {failedConnects}");
         }
 
         private void OnDhtStopped(object sender, EventArgs e)
@@ -154,7 +162,7 @@ namespace PeerTalk.Routing
                 // Get the nearest peer that has not been visited.
                 var peer = Dht.RoutingTable
                     .NearestPeers(QueryKey)
-                    .Where(p => !visited.Contains(p))
+                    .Where(p => !visited.Keys.Contains(p))
                     .FirstOrDefault();
                 if (peer == null)
                 {
@@ -164,7 +172,7 @@ namespace PeerTalk.Routing
                 }
 
                 ++pass;
-                visited.Add(peer);
+                visited.TryAdd(peer, peer);
 
                 // Ask the nearest peer.
                 await askCount.WaitAsync(runningQuery.Token).ConfigureAwait(false);
@@ -219,7 +227,7 @@ namespace PeerTalk.Routing
                     {
                         // Only unique answers
                         var answer = p as T;
-                        if (!Answers.Contains(answer))
+                        if (!answers.Keys.Contains(answer))
                         {
                             AddAnswer(answer);
                         }
@@ -263,8 +271,8 @@ namespace PeerTalk.Routing
             if (runningQuery != null && runningQuery.IsCancellationRequested)
                 return;
 
-            Answers.Add(answer);
-            if (Answers.Count >= AnswersNeeded && runningQuery != null && !runningQuery.IsCancellationRequested)
+            answers.TryAdd(answer, answer);
+            if (answers.Values.Count >= AnswersNeeded && runningQuery != null && !runningQuery.IsCancellationRequested)
             {
                 runningQuery.Cancel(false);
             }

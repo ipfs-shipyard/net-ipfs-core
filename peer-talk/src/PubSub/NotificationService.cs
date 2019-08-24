@@ -3,6 +3,7 @@ using Ipfs;
 using Ipfs.CoreApi;
 using System;
 using System.Collections.Generic;
+using System.Collections.Concurrent;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -30,7 +31,7 @@ namespace PeerTalk.PubSub
         }
         
         long nextSequenceNumber;
-        List<TopicHandler> topicHandlers;
+        ConcurrentDictionary<TopicHandler, TopicHandler> topicHandlers;
         MessageTracker tracker = new MessageTracker();
         
         // TODO: A general purpose CancellationTokenSource that stops publishing of
@@ -67,7 +68,7 @@ namespace PeerTalk.PubSub
         /// <inheritdoc />
         public async Task StartAsync()
         {
-            topicHandlers = new List<TopicHandler>();
+            topicHandlers = new ConcurrentDictionary<TopicHandler, TopicHandler>();
 
             // Resolution of 100 nanoseconds.
             nextSequenceNumber = DateTime.UtcNow.Ticks;
@@ -133,7 +134,7 @@ namespace PeerTalk.PubSub
         /// <inheritdoc />
         public Task<IEnumerable<string>> SubscribedTopicsAsync(CancellationToken cancel = default(CancellationToken))
         {
-            var topics = topicHandlers
+            var topics = topicHandlers.Values
                 .Select(t => t.Topic)
                 .Distinct();
             return Task.FromResult(topics);
@@ -179,14 +180,14 @@ namespace PeerTalk.PubSub
         public async Task SubscribeAsync(string topic, Action<IPublishedMessage> handler, CancellationToken cancellationToken)
         {
             var topicHandler = new TopicHandler { Topic = topic, Handler = handler };
-            topicHandlers.Add(topicHandler);
+            topicHandlers.TryAdd(topicHandler, topicHandler);
 
             // TODO: need a better way.
 #pragma warning disable VSTHRD101 
             cancellationToken.Register(async () =>
             {
-                topicHandlers.Remove(topicHandler);
-                if (topicHandlers.Count(t => t.Topic == topic) == 0)
+                topicHandlers.TryRemove(topicHandler, out _);
+                if (topicHandlers.Values.Count(t => t.Topic == topic) == 0)
                 {
                     await Task.WhenAll(Routers.Select(r => r.LeaveTopicAsync(topic, CancellationToken.None))).ConfigureAwait(false);
                 }
@@ -194,7 +195,7 @@ namespace PeerTalk.PubSub
 #pragma warning restore VSTHRD101 
 
             // Tell routers if first time.
-            if (topicHandlers.Count(t => t.Topic == topic) == 1)
+            if (topicHandlers.Values.Count(t => t.Topic == topic) == 1)
             {
                 await Task.WhenAll(Routers.Select(r => r.JoinTopicAsync(topic, CancellationToken.None))).ConfigureAwait(false);
             }
@@ -224,7 +225,7 @@ namespace PeerTalk.PubSub
             }
 
             // Call local topic handlers.
-            var handlers = topicHandlers
+            var handlers = topicHandlers.Values
                 .Where(th => msg.Topics.Contains(th.Topic));
             foreach (var handler in handlers)
             {
