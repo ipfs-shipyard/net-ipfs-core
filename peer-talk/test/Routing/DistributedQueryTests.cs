@@ -21,7 +21,7 @@ namespace PeerTalk.Routing
             var cts = new CancellationTokenSource();
             cts.Cancel();
             await dquery.RunAsync(cts.Token);
-            Assert.AreEqual(0, dquery.Answers.Count);
+            Assert.AreEqual(0, dquery.Answers.Count());
         }
 
         [TestMethod]

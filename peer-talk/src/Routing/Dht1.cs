@@ -175,7 +175,7 @@ namespace PeerTalk.Routing
             await dquery.RunAsync(cancel).ConfigureAwait(false);
 
             // If not found, return the closest peer.
-            if (dquery.Answers.Count == 0)
+            if (dquery.Answers.Count() == 0)
             {
                 return RoutingTable.NearestPeers(id).FirstOrDefault();
             }
@@ -229,7 +229,7 @@ namespace PeerTalk.Routing
             }
 
             // Ask our peers for more providers.
-            if (limit > dquery.Answers.Count)
+            if (limit > dquery.Answers.Count())
             {
                 await dquery.RunAsync(cancel).ConfigureAwait(false);
             }
