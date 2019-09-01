@@ -47,8 +47,8 @@ namespace PeerTalk.Protocols
             var eol = new byte[1];
             var length = await stream.ReadVarint32Async(cancel).ConfigureAwait(false);
             var buffer = new byte[length - 1];
-            await stream.ReadAsync(buffer, 0, length - 1, cancel).ConfigureAwait(false);
-            await stream.ReadAsync(eol, 0, 1, cancel).ConfigureAwait(false);
+            await stream.ReadExactAsync(buffer, 0, length - 1, cancel).ConfigureAwait(false);
+            await stream.ReadExactAsync(eol, 0, 1, cancel).ConfigureAwait(false);
             if (eol[0] != newline[0])
             {
                 log.Error($"length: {length}, bytes: {buffer.ToHexString()}");
