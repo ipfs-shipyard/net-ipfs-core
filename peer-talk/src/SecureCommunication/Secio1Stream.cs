@@ -192,12 +192,7 @@ namespace PeerTalk.SecureCommunication
         async Task<byte[]> ReadPacketBytesAsync(int count, CancellationToken cancel)
         {
             byte[] buffer = new byte[count];
-            for (int i = 0, n; i < count; i += n)
-            {
-                n = await stream.ReadAsync(buffer, i, count - i, cancel).ConfigureAwait(false);
-                if (n < 1)
-                    throw new EndOfStreamException();
-            }
+            await stream.ReadExactAsync(buffer, 0, count, cancel).ConfigureAwait(false);
             return buffer;
         }
 

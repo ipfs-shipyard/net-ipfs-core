@@ -188,7 +188,7 @@ namespace PeerTalk.SecureCommunication
 
             // Receive our nonce.
             var verification = new byte[localNonce.Length];
-            await secureStream.ReadAsync(verification, 0, verification.Length, cancel);
+            await secureStream.ReadExactAsync(verification, 0, verification.Length, cancel);
             if (!localNonce.SequenceEqual(verification))
             {
                 throw new Exception($"SECIO verification message failure.");

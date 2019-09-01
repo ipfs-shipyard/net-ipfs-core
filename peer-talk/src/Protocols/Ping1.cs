@@ -48,10 +48,7 @@ namespace PeerTalk.Protocols
             {
                 // Read the message.
                 var request = new byte[PingSize];
-                for (int offset = 0; offset < PingSize;)
-                {
-                    offset += await stream.ReadAsync(request, offset, PingSize - offset, cancel).ConfigureAwait(false);
-                }
+                await stream.ReadExactAsync(request, 0, PingSize, cancel).ConfigureAwait(false);
                 log.Debug($"got ping from {connection.RemotePeer}");
 
                 // Echo the message
@@ -147,10 +144,7 @@ namespace PeerTalk.Protocols
                         await stream.FlushAsync(cancel).ConfigureAwait(false);
 
                         var response = new byte[PingSize];
-                        for (int offset = 0; offset < PingSize;)
-                        {
-                            offset += await stream.ReadAsync(response, offset, PingSize - offset, cancel).ConfigureAwait(false);
-                        }
+                        await stream.ReadExactAsync(response, 0, PingSize, cancel).ConfigureAwait(false);
 
                         var result = new PingResult
                         {

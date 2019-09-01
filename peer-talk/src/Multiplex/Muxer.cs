@@ -188,11 +188,7 @@ namespace PeerTalk.Multiplex
 
                     // Read the payload.
                     var payload = new byte[length];
-                    int offset = 0;
-                    while (offset < length)
-                    {
-                        offset += await Channel.ReadAsync(payload, offset, length - offset, cancel).ConfigureAwait(false);
-                    }
+                    await Channel.ReadExactAsync(payload, 0, length, cancel).ConfigureAwait(false);
 
                     // Process the packet
                     Substreams.TryGetValue(header.StreamId, out Substream substream);
