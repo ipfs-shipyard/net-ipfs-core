@@ -162,7 +162,7 @@ namespace PeerTalk.Routing
                 // Get the nearest peer that has not been visited.
                 var peer = Dht.RoutingTable
                     .NearestPeers(QueryKey)
-                    .Where(p => !visited.Keys.Contains(p))
+                    .Where(p => !visited.ContainsKey(p))
                     .FirstOrDefault();
                 if (peer == null)
                 {
@@ -230,7 +230,7 @@ namespace PeerTalk.Routing
                     {
                         // Only unique answers
                         var answer = p as T;
-                        if (!answers.Keys.Contains(answer))
+                        if (!answers.ContainsKey(answer))
                         {
                             AddAnswer(answer);
                         }
@@ -274,10 +274,12 @@ namespace PeerTalk.Routing
             if (runningQuery != null && runningQuery.IsCancellationRequested)
                 return;
 
-            answers.TryAdd(answer, answer);
-            if (answers.Values.Count >= AnswersNeeded && runningQuery != null && !runningQuery.IsCancellationRequested)
+            if (answers.TryAdd(answer, answer))
             {
-                runningQuery.Cancel(false);
+                if (answers.Count >= AnswersNeeded && runningQuery != null && !runningQuery.IsCancellationRequested)
+                {
+                    runningQuery.Cancel(false);
+                }
             }
 
             AnswerObtained?.Invoke(this, answer);
