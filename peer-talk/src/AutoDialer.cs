@@ -27,7 +27,6 @@ namespace PeerTalk
 
         readonly Swarm swarm;
         int pendingConnects;
-        Random rng = new Random();
 
         /// <summary>
         ///   Creates a new instance of the <see cref="AutoDialer"/> class.
@@ -144,6 +143,7 @@ namespace PeerTalk
                 .ToArray();
             if (peers.Length == 0)
                 return;
+            var rng = new Random();
             var peer = peers[rng.Next(peers.Count())];
 
             Interlocked.Increment(ref pendingConnects);
