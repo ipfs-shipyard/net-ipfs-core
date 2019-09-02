@@ -171,8 +171,11 @@ namespace PeerTalk.Routing
                     continue;
                 }
 
+                if (!visited.TryAdd(peer, peer))
+                {
+                    continue;
+                }
                 ++pass;
-                visited.TryAdd(peer, peer);
 
                 // Ask the nearest peer.
                 await askCount.WaitAsync(runningQuery.Token).ConfigureAwait(false);
