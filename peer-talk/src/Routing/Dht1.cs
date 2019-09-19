@@ -372,7 +372,7 @@ namespace PeerTalk.Routing
                     return new DhtPeerMessage
                     {
                         Id = peer.Id.ToArray(),
-                        Addresses = peer.Addresses.Select(a => a.ToArray()).ToArray()
+                        Addresses = peer.Addresses.Select(a => a.WithoutPeerId().ToArray()).ToArray()
                     };
                 })
                 .Take(20)
