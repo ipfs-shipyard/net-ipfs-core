@@ -2,9 +2,6 @@
 // This is a copy of https://bitbucket.org/jdluzen/sha3/raw/d1fd55dc225d18a7fb61515b62d3c8f164d2e788/SHA3Managed/SHA3Managed.cs
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace Ipfs.Cryptography
 {
@@ -15,11 +12,7 @@ namespace Ipfs.Cryptography
         {
         }
 
-        protected
-#if !PORTABLE
-        override
-#endif
-        void HashCore(byte[] array, int ibStart, int cbSize)
+        protected override void HashCore(byte[] array, int ibStart, int cbSize)
         {
             base.HashCore(array, ibStart, cbSize);
             if (cbSize == 0)
@@ -50,11 +43,7 @@ namespace Ipfs.Cryptography
             }
         }
 
-        protected
-#if !PORTABLE
-        override
-#endif
-        byte[] HashFinal()
+        protected override byte[] HashFinal()
         {
             int sizeInBytes = SizeInBytes;
             byte[] outb = new byte[HashByteLength];

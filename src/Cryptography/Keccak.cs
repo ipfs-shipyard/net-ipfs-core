@@ -13,12 +13,7 @@ using System.Text;
 
 namespace Ipfs.Cryptography
 {
-    internal abstract class Keccak :
-#if PORTABLE
-    IHashAlgorithm
-#else
-    System.Security.Cryptography.HashAlgorithm
-#endif
+    internal abstract class Keccak : System.Security.Cryptography.HashAlgorithm
     {
 
         #region Implementation
@@ -31,10 +26,6 @@ namespace Ipfs.Cryptography
         protected ulong[] state;
         protected byte[] buffer;
         protected int buffLength;
-#if PORTABLE || NETSTANDARD14
-        protected byte[] HashValue;
-        protected int HashSizeValue;
-#endif
         protected int keccakR;
 
         public int KeccakR
@@ -65,11 +56,7 @@ namespace Ipfs.Cryptography
             }
         }
 
-        public
-#if (!PORTABLE && !NETSTANDARD14)
-        override
-#endif
-        bool CanReuseTransform
+        public override bool CanReuseTransform
         {
             get
             {
@@ -141,11 +128,7 @@ namespace Ipfs.Cryptography
             count -= amount;
         }
 
-        public
-#if !PORTABLE && !NETSTANDARD14
-        override
-#endif
-        byte[] Hash
+        public override byte[] Hash
         {
             get
             {
@@ -153,11 +136,7 @@ namespace Ipfs.Cryptography
             }
         }
 
-        public
-#if !PORTABLE
-        override
-#endif
-        int HashSize
+        public override int HashSize
         {
             get
             {
@@ -167,22 +146,14 @@ namespace Ipfs.Cryptography
 
         #endregion
 
-        public
-#if !PORTABLE
-        override
-#endif
-        void Initialize()
+        public override void Initialize()
         {
             buffLength = 0;
             state = new ulong[5 * 5];//1600 bits
             HashValue = null;
         }
 
-        protected
-#if !PORTABLE
-        override
-#endif
-        void HashCore(byte[] array, int ibStart, int cbSize)
+        protected override void HashCore(byte[] array, int ibStart, int cbSize)
         {
             if (array == null)
                 throw new ArgumentNullException("array");
@@ -193,10 +164,5 @@ namespace Ipfs.Cryptography
             if (ibStart + cbSize > array.Length)
                 throw new ArgumentOutOfRangeException("ibStart or cbSize");
         }
-
-#if PORTABLE
-        public abstract int TransformBlock(byte[] inputBuffer, int inputOffset, int inputCount, byte[] outputBuffer, int outputOffset);
-        public abstract byte[] TransformFinalBlock(byte[] inputBuffer, int inputOffset, int inputCount);
-#endif
     }
 }
