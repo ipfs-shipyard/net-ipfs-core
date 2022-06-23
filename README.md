@@ -1,35 +1,20 @@
 # net-ipfs-core 
 
-[![build status](https://ci.appveyor.com/api/projects/status/github/richardschneider/net-ipfs-core?branch=master&svg=true)](https://ci.appveyor.com/project/richardschneider/net-ipfs-core) 
-[![travis build](https://travis-ci.org/richardschneider/net-ipfs-core.svg?branch=master)](https://travis-ci.org/richardschneider/net-ipfs-core)
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/a911c5ae1f044e92bfc006bbc945e135)](https://www.codacy.com/app/makaretu/net-ipfs-core?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=richardschneider/net-ipfs-core&amp;utm_campaign=Badge_Grade)
-[![Coverage Status](https://coveralls.io/repos/richardschneider/net-ipfs-core/badge.svg?branch=master&service=github)](https://coveralls.io/github/richardschneider/net-ipfs-core?branch=master)
-[![Version](https://img.shields.io/nuget/v/Ipfs.Core.svg)](https://www.nuget.org/packages/Ipfs.Core)
-[![docs](https://cdn.rawgit.com/richardschneider/net-ipfs-core/master/doc/images/docs-latest-green.svg)](https://richardschneider.github.io/net-ipfs-core/articles/intro.html)
+![build status](https://ci.appveyor.com/api/projects/status/github/richardschneider/net-ipfs-core?branch=master&svg=true)
+![travis build](https://travis-ci.org/richardschneider/net-ipfs-core.svg?branch=master)
+![Version](https://img.shields.io/nuget/v/Ipfs.Core.svg)
+![docs](https://cdn.rawgit.com/richardschneider/net-ipfs-core/master/doc/images/docs-latest-green.svg)
 
 The core objects and interfaces of the [IPFS](https://github.com/ipfs/ipfs) (Inter Planetary File System) for .Net (C#, VB, F# etc.)
 
 The interplanetary file system is the permanent web. It is a new hypermedia distribution protocol, addressed by content and identities. IPFS enables the creation of completely distributed applications. It aims to make the web faster, safer, and more open.
 
-It supports the following runtimes
-- .NET Framework 4.5
-- .NET Standard 1.4
-- .NET Standard 2.0
+It supports .NET Standard 2.0.
 
-More information is on the [Documentation](https://richardschneider.github.io/net-ipfs-core/) web site.
+### 🚧 NOTICE 🚧
+We've only [just](https://github.com/richardschneider/net-ipfs-http-client/issues/72 ) moved into the shipyard, reviving a project that has been abandoned since 2019.
 
-## Getting started
-
-Published releases of IPFS Core are available on [NuGet](https://www.nuget.org/packages/ipfs.core/).  To install, run the following command in the [Package Manager Console](https://docs.nuget.org/docs/start-here/using-the-package-manager-console).
-
-    PM> Install-Package Ipfs.Core
-
-Or using [dotnet](https://docs.microsoft.com/en-us/dotnet/core/tools/dotnet?tabs=netcore21)
-
-    > dotnet add package Ipfs.Core
-
-    
-For the latest build or older non-released builds see [Continuous Integration](https://github.com/richardschneider/net-ipfs-core/wiki/Continuous-Integration).
+**We're actively working to make it usable again.**
 
 ## Major objects
 
@@ -67,14 +52,11 @@ Most binary data (objects) in IPFS is represented as a [Base-58](https://en.wiki
 ## Related Projects
 
 - [IPFS DSL](https://github.com/cloveekprojeqt/ipfs-dsl) - A declarative embedded language for building compositional programs and protocols over the InterPlanetary File System.
-- [IPFS HTTP Client](https://github.com/richardschneider/net-ipfs-http-client) - A .Net client library for the IPFS HTTP API.
+- [IPFS HTTP Client](https://github.com/ipfs-shipyard/net-ipfs-http-client) - A .Net client library for the IPFS HTTP API.
 - [IPFS HTTP Gateway](https://github.com/richardschneider/net-ipfs-http-gateway) - Serves IPFS files/directories via HTTP.
 - [IPFS Engine](https://github.com/richardschneider/net-ipfs-engine) - Implements the Core API.
 - [Peer Talk](https://github.com/richardschneider/peer-talk) - Peer to peer communication.
 
 ## License
-Copyright © 2015-2019 Richard Schneider (makaretu@gmail.com)
-
 The IPFS Core library is licensed under the [MIT](http://www.opensource.org/licenses/mit-license.php "Read more about the MIT license form") license. Refer to the [LICENSE](https://github.com/richardschneider/net-ipfs-core/blob/master/LICENSE) file for more information.
 
-<a href="https://www.buymeacoffee.com/kmXOxKJ4E" target="_blank"><img src="https://www.buymeacoffee.com/assets/img/custom_images/yellow_img.png" alt="Buy Me A Coffee" style="height: auto !important;width: auto !important;" ></a>
