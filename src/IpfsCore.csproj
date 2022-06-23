@@ -1,9 +1,10 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netstandard14;netstandard2;net45;netcoreapp3.0</TargetFrameworks>
+    <TargetFrameworks>netstandard2;</TargetFrameworks>
     <AssemblyName>Ipfs.Core</AssemblyName>
     <RootNamespace>Ipfs</RootNamespace>
+    <langversion>10.0</langversion>
     <DebugType>portable</DebugType>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
 
@@ -21,12 +22,10 @@
       The InterPlanetary File System is the permanent web. It is a new hypermedia distribution protocol, addressed by content and identities. IPFS enables the creation of completely distributed applications. It aims to make the web faster, safer, and more open.
     </Description>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
-    <PackageReleaseNotes>https://github.com/richardschneider/net-ipfs-core/releases</PackageReleaseNotes>
-    <Copyright>© 2015-2019 Richard Schneider</Copyright>
     <PackageTags>ipfs peer-to-peer distributed file-system</PackageTags>
     <IncludeSymbols>True</IncludeSymbols>
-    <PackageProjectUrl>https://github.com/richardschneider/net-ipfs-core</PackageProjectUrl>
-    <PackageIconUrl>https://raw.githubusercontent.com/richardschneider/net-ipfs-core/master/doc/images/ipfs-cs-logo-64x64.png</PackageIconUrl>
+    <PackageProjectUrl>https://github.com/ipfs-shipyard/net-ipfs-core</PackageProjectUrl>
+    <PackageIconUrl>https://raw.githubusercontent.com/ipfs-shipyard/net-ipfs-core/master/doc/images/ipfs-cs-logo-64x64.png</PackageIconUrl>
 
     <GeneratePackageOnBuild Condition=" '$(Configuration)' == 'Release' ">true</GeneratePackageOnBuild>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
@@ -46,26 +45,18 @@
   <ItemGroup>
     <PackageReference Include="Common.Logging" Version="3.4.1" />
     <PackageReference Include="Common.Logging.Core" Version="3.4.1" />
-    <PackageReference Include="Google.Protobuf" Version="3.8.0" />
-    <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
+    <PackageReference Include="Google.Protobuf" Version="3.21.1" />
+    <PackageReference Include="Microsoft.Bcl.AsyncInterfaces" Version="6.0.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
     <PackageReference Include="Portable.BouncyCastle" Version="1.8.5" />
     <PackageReference Include="SimpleBase" Version="1.3.1" />
-    <PackageReference Include="Grpc.Tools" Version="1.21.0" PrivateAssets="All" />
-    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0-beta2-19270-01" PrivateAssets="All" />
-    <PackageReference Include="Microsoft.VisualStudio.Threading.Analyzers" Version="16.0.102" PrivateAssets="All" />
+    <PackageReference Include="Grpc.Tools" Version="2.46.3" PrivateAssets="All" />
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1" PrivateAssets="All" />
   </ItemGroup>
 
   <ItemGroup>
     <Protobuf Include="**/*.proto" />
     <EmbeddedResource Include="**/*.proto" />
   </ItemGroup>
-
-  <PropertyGroup Condition=" '$(TargetFramework)' == 'netstandard14'">
-    <DefineConstants>NETSTANDARD14</DefineConstants>
-  </PropertyGroup>
-
-  <PropertyGroup Condition=" '$(TargetFramework)' == 'netcoreapp3.0'">
-    <DefineConstants>ASYNCSTREAM</DefineConstants>
-  </PropertyGroup>
 
 </Project>

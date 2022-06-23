@@ -116,7 +116,6 @@ namespace Ipfs.CoreApi
             CancellationToken cancel = default(CancellationToken)
             );
 
-#if ASYNCSTREAM
         /// <summary>
         ///   Send echo requests to a peer.
         /// </summary>
@@ -158,6 +157,5 @@ namespace Ipfs.CoreApi
             int count = 10,
             CancellationToken cancel = default
             );
-#endif
     }
 }
