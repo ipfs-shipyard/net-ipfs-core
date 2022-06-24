@@ -20,7 +20,7 @@ namespace Ipfs
             CollectionAssert.AreEqual(x, Varint.Encode(0));
             Assert.AreEqual(0, Varint.DecodeInt32(x));
         }
-        
+
         [TestMethod]
         public void ThreeHundred()
         {
