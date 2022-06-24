@@ -13,12 +13,6 @@ namespace Ipfs
     public class VarintTest
     {
         [TestMethod]
-        public void FailMe()
-        {
-            Assert.Fail();
-        }
-
-        [TestMethod]
         public void Zero()
         {
             var x = new byte[] { 0 };
