@@ -13,6 +13,12 @@ namespace Ipfs
     public class VarintTest
     {
         [TestMethod]
+        public void FailMe()
+        {
+            Assert.Fail();
+        }
+
+        [TestMethod]
         public void Zero()
         {
             var x = new byte[] { 0 };
@@ -20,7 +26,7 @@ namespace Ipfs
             CollectionAssert.AreEqual(x, Varint.Encode(0));
             Assert.AreEqual(0, Varint.DecodeInt32(x));
         }
-        
+
         [TestMethod]
         public void ThreeHundred()
         {
