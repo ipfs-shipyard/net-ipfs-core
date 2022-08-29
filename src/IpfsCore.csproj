@@ -13,11 +13,12 @@
     <AssemblyVersion>$(Version)</AssemblyVersion>
 
     <!-- Nuget specs -->
-    <PackageId>Ipfs.Core</PackageId>
+    <PackageId>IpfsShipyard.Ipfs.Core</PackageId>
     <Authors>IPFS Shipyard, Arlo Godfrey, Richard Schneider</Authors>
     <Title>IPFS Core Objects</Title>
     <Description>
-      Core objects and interfaces for IPFS. Backed by the IPFS Shipyard and developer community. Picking up where Richard Schneider / makaretu left off.
+      Backed by the IPFS Shipyard and developer community. Picking up where Richard Schneider / makaretu left off.
+      Core objects and interfaces for IPFS.
 
       The InterPlanetary File System is the permanent web. IPFS enables the creation of completely distributed applications. It is a new hypermedia distribution protocol, addressed by content and identities. It aims to make the web faster, safer, and more open.
     </Description>
