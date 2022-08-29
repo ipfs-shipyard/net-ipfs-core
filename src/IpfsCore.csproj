@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFrameworks>netstandard2.0;</TargetFrameworks>
-    <AssemblyName>Ipfs.Core</AssemblyName>
+    <AssemblyName>IpfsShipyard.Ipfs.Core</AssemblyName>
     <RootNamespace>Ipfs</RootNamespace>
     <langversion>10.0</langversion>
     <DebugType>portable</DebugType>
