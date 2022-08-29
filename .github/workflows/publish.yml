@@ -1,0 +1,30 @@
+name: Publish Nuget
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v2
+      with:
+        dotnet-version: 6.0.x
+    - name: Restore dependencies
+      run: dotnet restore
+    - name: Build
+      run: dotnet build --no-restore
+    - name: Test
+      run: dotnet test --no-build --verbosity normal
+    - name: Publish NuGet
+      uses: brandedoutcast/publish-nuget@v2.5.5
+      with:
+        VERSION_REGEX: ^\s*<Version>(.*)<\/Version>\s*$
+        PROJECT_FILE_PATH: src/IpfsCore.csproj
+        BUILD_CONFIGURATION: Release
+        INCLUDE_SYMBOLS: true
+        TAG_FORMAT: v*
+        NUGET_KEY: ${{secrets.NUGET_API_KEY}}
