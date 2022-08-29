@@ -25,7 +25,7 @@
     <PackageTags>ipfs peer-to-peer distributed file-system</PackageTags>
     <IncludeSymbols>True</IncludeSymbols>
     <PackageProjectUrl>https://github.com/ipfs-shipyard/net-ipfs-core</PackageProjectUrl>
-    <PackageIconUrl>https://raw.githubusercontent.com/ipfs-shipyard/net-ipfs-core/master/doc/images/ipfs-cs-logo-64x64.png</PackageIconUrl>
+    <PackageIcon>icon.png</PackageIcon>
 
     <GeneratePackageOnBuild Condition=" '$(Configuration)' == 'Release' ">true</GeneratePackageOnBuild>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
@@ -57,6 +57,7 @@
   <ItemGroup>
     <Protobuf Include="**/*.proto" />
     <EmbeddedResource Include="**/*.proto" />
+    <None Include="icon.png" Pack="true" PackagePath="\" />
   </ItemGroup>
 
 </Project>
