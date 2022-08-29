@@ -1,9 +1,6 @@
 # net-ipfs-core 
 
-![build status](https://ci.appveyor.com/api/projects/status/github/richardschneider/net-ipfs-core?branch=master&svg=true)
-![travis build](https://travis-ci.org/richardschneider/net-ipfs-core.svg?branch=master)
-![Version](https://img.shields.io/nuget/v/Ipfs.Core.svg)
-![docs](https://cdn.rawgit.com/richardschneider/net-ipfs-core/master/doc/images/docs-latest-green.svg)
+![Version](https://img.shields.io/nuget/v/IpfsShipyard.Ipfs.Core.svg)
 
 The core objects and interfaces of the [IPFS](https://github.com/ipfs/ipfs) (Inter Planetary File System) for .Net (C#, VB, F# etc.)
 
@@ -12,7 +9,7 @@ The interplanetary file system is the permanent web. It is a new hypermedia dist
 It supports .NET Standard 2.0.
 
 ### 🚧 NOTICE 🚧
-We've only [just](https://github.com/richardschneider/net-ipfs-http-client/issues/72 ) moved into the shipyard, reviving a project that has been abandoned since 2019.
+We've only [just](https://github.com/richardschneider/net-ipfs-http-client/issues/72) moved into the shipyard, reviving a project that has been abandoned since 2019.
 
 **We're actively working to make it usable again.**
 
