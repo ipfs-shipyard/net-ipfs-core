@@ -18,7 +18,7 @@ jobs:
     - name: Build
       run: dotnet build --no-restore -p:Configuration=Release
     - name: Test
-      run: dotnet test --no-build --verbosity normal
+      run: dotnet test --no-build --verbosity normal -p:Configuration=Release
     - name: Publish to NuGet
       run: dotnet nuget push "/home/runner/work/net-ipfs-core/net-ipfs-core/src/bin/Release/IpfsShipyard.Ipfs.Core.*.*.*.nupkg" --skip-duplicate --api-key ${{secrets.NUGET_KEY}} --source https://api.nuget.org/v3/index.json
       
