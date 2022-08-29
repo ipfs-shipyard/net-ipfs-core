@@ -19,12 +19,6 @@ jobs:
       run: dotnet build --no-restore
     - name: Test
       run: dotnet test --no-build --verbosity normal
-    - name: Publish NuGet
-      uses: brandedoutcast/publish-nuget@v2.5.5
-      with:
-        VERSION_REGEX: ^\s*<Version>(.*)<\/Version>\s*$
-        PROJECT_FILE_PATH: src/IpfsCore.csproj
-        BUILD_CONFIGURATION: Release
-        INCLUDE_SYMBOLS: true
-        TAG_FORMAT: v*
-        NUGET_KEY: ${{secrets.NUGET_API_KEY}}
+    - name: Publish to NuGet
+      run: dotnet nuget push "**/*.nupkg" --skip-duplicate --api-key ${{secrets.NUGET_KEY}} --source https://api.nuget.org/v3/index.json
+      

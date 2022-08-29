@@ -1,25 +1,25 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netstandard2;</TargetFrameworks>
+    <TargetFrameworks>netstandard2.0;</TargetFrameworks>
     <AssemblyName>Ipfs.Core</AssemblyName>
     <RootNamespace>Ipfs</RootNamespace>
     <langversion>10.0</langversion>
     <DebugType>portable</DebugType>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
 
-    <!-- developer build is always 0.42 -->
-    <AssemblyVersion>0.42</AssemblyVersion>
-    <Version>0.42</Version>
+    <!-- https://semver.org/spec/v2.0.0.html -->
+    <Version>0.0.0</Version>
+    <AssemblyVersion>$(Version)</AssemblyVersion>
 
     <!-- Nuget specs -->
     <PackageId>Ipfs.Core</PackageId>
-    <Authors>Richard Schneider</Authors>
+    <Authors>IPFS Shipyard, Arlo Godfrey, Richard Schneider</Authors>
     <Title>IPFS Core Objects</Title>
     <Description>
-      Core objects and interfaces for IPFS.
+      Core objects and interfaces for IPFS. Backed by the IPFS Shipyard and developer community. Picking up where Richard Schneider / makaretu left off.
 
-      The InterPlanetary File System is the permanent web. It is a new hypermedia distribution protocol, addressed by content and identities. IPFS enables the creation of completely distributed applications. It aims to make the web faster, safer, and more open.
+      The InterPlanetary File System is the permanent web. IPFS enables the creation of completely distributed applications. It is a new hypermedia distribution protocol, addressed by content and identities. It aims to make the web faster, safer, and more open.
     </Description>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <PackageTags>ipfs peer-to-peer distributed file-system</PackageTags>
