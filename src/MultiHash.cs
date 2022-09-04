@@ -1,10 +1,10 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.IO;
 using System.Security.Cryptography;
-using Common.Logging;
 using Google.Protobuf;
 using Ipfs.Registry;
 using Newtonsoft.Json;
@@ -22,8 +22,6 @@ namespace Ipfs
     [JsonConverter(typeof(MultiHash.Json))]
     public class MultiHash : IEquatable<MultiHash>
     {
-        static readonly ILog log = LogManager.GetLogger<MultiHash>();
-
         /// <summary>
         ///   The cached base-58 encoding of the multihash.
         /// </summary>
@@ -494,9 +492,6 @@ namespace Ipfs
 
         void RaiseUnknownHashingAlgorithm(HashingAlgorithm algorithm)
         {
-            if (log.IsWarnEnabled)
-                log.WarnFormat("Unknown hashing algorithm number 0x{0:x2}.", algorithm.Code);
- 
             var handler = UnknownHashingAlgorithm;
             if (handler != null)
             {

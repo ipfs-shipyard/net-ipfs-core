@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.IO;
-using Common.Logging;
 using Google.Protobuf;
 using Newtonsoft.Json;
 using System.Net;
@@ -20,11 +19,11 @@ namespace Ipfs
     ///    which avoids making assumptions about the address representation (e.g. length).
     ///   <para>
     ///   A multi address is represented as a series of protocol codes and values pairs.  For example,
-    ///   an IPFS file at a sepcific address over ipv4 and tcp is 
+    ///   an IPFS file at a specific address over ipv4 and tcp is 
     ///   "/ip4/10.1.10.10/tcp/29087/ipfs/QmVcSqVEsvm5RR9mBLjwpb2XjFVn5bPdPL69mL8PH45pPC".
     ///   </para>
     ///   <para>
-    ///   A multi address is considered immutablle and value type equality is implemented.
+    ///   A multi address is considered immutable and value type equality is implemented.
     ///   </para>
     /// </remarks>
     /// <seealso href="https://github.com/multiformats/multiaddr"/>
