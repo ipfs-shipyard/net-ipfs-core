@@ -37,7 +37,7 @@
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
     <PackageReference Include="Nito.AsyncEx.Coordination" Version="5.0.0" />
     <PackageReference Include="PeerTalk" Version="0.20.2" />
-    <PackageReference Include="PeterO.Cbor" Version="4.0.0" />
+    <PackageReference Include="PeterO.Cbor" Version="4.5.1" />
     <PackageReference Include="Portable.BouncyCastle" Version="1.9.0" />
     <PackageReference Include="protobuf-net" Version="2.4.0" />
     <PackageReference Include="SharpZipLib" Version="1.2.0" />
