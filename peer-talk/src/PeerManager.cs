@@ -1,12 +1,12 @@
-﻿using Common.Logging;
-using Ipfs;
-using System;
+﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Common.Logging;
+using Ipfs;
 
 namespace PeerTalk
 {
@@ -19,8 +19,8 @@ namespace PeerTalk
     /// </remarks>
     public class PeerManager : IService
     {
-        static ILog log = LogManager.GetLogger(typeof(PeerManager));
-        CancellationTokenSource cancel;
+        private static ILog log = LogManager.GetLogger(typeof(PeerManager));
+        private CancellationTokenSource cancel;
 
         /// <summary>
         ///   Initial time to wait before attempting a reconnection
@@ -125,7 +125,7 @@ namespace PeerTalk
         /// <summary>
         ///   Is invoked by the <see cref="Swarm"/> when a peer can not be connected to.
         /// </summary>
-        void Swarm_PeerNotReachable(object sender, Peer peer)
+        private void Swarm_PeerNotReachable(object sender, Peer peer)
         {
             SetNotReachable(peer);
         }
@@ -133,7 +133,7 @@ namespace PeerTalk
         /// <summary>
         ///   Is invoked by the <see cref="Swarm"/> when a peer is connected to.
         /// </summary>
-        void Swarm_ConnectionEstablished(object sender, PeerConnection connection)
+        private void Swarm_ConnectionEstablished(object sender, PeerConnection connection)
         {
             SetReachable(connection.RemotePeer);
         }
@@ -141,7 +141,7 @@ namespace PeerTalk
         /// <summary>
         ///   Background process to try reconnecting to a dead peer.
         /// </summary>
-        async Task PhoenixAsync(CancellationToken cancellation)
+        private async Task PhoenixAsync(CancellationToken cancellation)
         {
             while (!cancellation.IsCancellationRequested)
             {

@@ -21,11 +21,11 @@ namespace PeerTalk.Transports
         static ILog log = LogManager.GetLogger(typeof(Udp));
 
         /// <inheritdoc />
-        public async Task<Stream> ConnectAsync(MultiAddress address, CancellationToken cancel = default(CancellationToken))
+        public async Task<Stream> ConnectAsync(MultiAddress address, CancellationToken cancel = default)
         {
             var port = address.Protocols
                 .Where(p => p.Name == "udp")
-                .Select(p => Int32.Parse(p.Value))
+                .Select(p => int.Parse(p.Value))
                 .First();
             var ip = address.Protocols
                 .Where(p => p.Name == "ip4" || p.Name == "ip6")
@@ -71,7 +71,7 @@ namespace PeerTalk.Transports
         {
             var port = address.Protocols
                 .Where(p => p.Name == "udp")
-                .Select(p => Int32.Parse(p.Value))
+                .Select(p => int.Parse(p.Value))
                 .FirstOrDefault();
             var ip = address.Protocols
                 .Where(p => p.Name == "ip4" || p.Name == "ip6")
@@ -109,6 +109,5 @@ namespace PeerTalk.Transports
             return address;
 #endif
         }
-
     }
 }

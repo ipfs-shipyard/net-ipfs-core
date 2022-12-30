@@ -80,6 +80,5 @@ namespace PeerTalk.Discovery
             sb.Append(label);
             return sb.ToString();
         }
-
     }
 }

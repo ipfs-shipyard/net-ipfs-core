@@ -59,6 +59,5 @@ namespace PeerTalk
 
         /// <inheritdoc />
         IEnumerator IEnumerable.GetEnumerator() => filters.Keys.GetEnumerator();
-
     }
 }

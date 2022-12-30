@@ -1,14 +1,14 @@
-﻿using Common.Logging;
-using Ipfs;
-using PeerTalk.Cryptography;
-using PeerTalk.Multiplex;
-using PeerTalk.Protocols;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Common.Logging;
+using Ipfs;
+using PeerTalk.Cryptography;
+using PeerTalk.Multiplex;
+using PeerTalk.Protocols;
 
 namespace PeerTalk
 {
@@ -20,10 +20,10 @@ namespace PeerTalk
     /// </remarks>
     public class PeerConnection : IDisposable
     {
-        static ILog log = LogManager.GetLogger(typeof(PeerConnection));
+        private static ILog log = LogManager.GetLogger(typeof(PeerConnection));
 
-        Stream stream;
-        StatsStream statsStream;
+        private Stream stream;
+        private StatsStream statsStream;
 
         /// <summary>
         ///   The local peer.
@@ -70,7 +70,7 @@ namespace PeerTalk
         /// </value>
         public bool IsActive
         {
-            get { return Stream != null && Stream.CanRead && Stream.CanWrite;  }
+            get { return Stream != null && Stream.CanRead && Stream.CanWrite; }
         }
 
         /// <summary>
@@ -184,7 +184,7 @@ namespace PeerTalk
         /// </remarks>
         public async Task InitiateAsync(
             IEnumerable<IEncryptionProtocol> securityProtocols,
-            CancellationToken cancel = default(CancellationToken))
+            CancellationToken cancel = default)
         {
             await EstablishProtocolAsync("/multistream/", cancel).ConfigureAwait(false);
 
@@ -241,7 +241,7 @@ namespace PeerTalk
         /// <param name="stream"></param>
         /// <param name="cancel"></param>
         /// <returns></returns>
-        public async Task EstablishProtocolAsync(string name, Stream stream, CancellationToken cancel = default(CancellationToken))
+        public async Task EstablishProtocolAsync(string name, Stream stream, CancellationToken cancel = default)
         {
             var protocols = ProtocolRegistry.Protocols.Keys
                 .Where(k => k == name || k.StartsWith(name))
@@ -297,7 +297,7 @@ namespace PeerTalk
             // Ignore any disposal exceptions.
             try
             {
-                Stream?.Dispose();
+                Stream?.DisposeAsync();
             }
             catch (Exception)
             {
@@ -334,6 +334,7 @@ namespace PeerTalk
         }
 
         #region IDisposable Support
+
         private bool disposedValue = false; // To detect redundant calls
 
         /// <summary>
@@ -383,7 +384,6 @@ namespace PeerTalk
 
             // free unmanaged resources (unmanaged objects) and override a finalizer below.
             // set large fields to null.
-
         }
 
         // TODO: override a finalizer only if Dispose(bool disposing) above has code to free unmanaged resources.
@@ -392,9 +392,9 @@ namespace PeerTalk
         //   Dispose(false);
         // }
 
-       /// <summary>
-       /// 
-       /// </summary>
+        /// <summary>
+        ///
+        /// </summary>
         public void Dispose()
         {
             // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
@@ -402,6 +402,7 @@ namespace PeerTalk
             // TODO: uncomment the following line if the finalizer is overridden above.
             // GC.SuppressFinalize(this);
         }
-        #endregion
+
+        #endregion IDisposable Support
     }
 }

@@ -1,12 +1,12 @@
-﻿using Ipfs;
-using Common.Logging;
-using System;
+﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Threading;
+using System.Threading.Tasks;
+using Common.Logging;
+using Ipfs;
 
 namespace PeerTalk
 {
@@ -22,15 +22,16 @@ namespace PeerTalk
     /// </remarks>
     public class ConnectionManager
     {
-        static ILog log = LogManager.GetLogger(typeof(ConnectionManager));
+        private static ILog log = LogManager.GetLogger(typeof(ConnectionManager));
 
         /// <summary>
         ///   The connections to other peers. Key is the base58 hash of the peer ID.
         /// </summary>
-        ConcurrentDictionary<string, List<PeerConnection>> connections = new ConcurrentDictionary<string, List<PeerConnection>>();
+        private ConcurrentDictionary<string, List<PeerConnection>> connections = new ConcurrentDictionary<string, List<PeerConnection>>();
 
-        string Key(Peer peer) => peer.Id.ToBase58();
-        string Key(MultiHash id) => id.ToBase58();
+        private string Key(Peer peer) => peer.Id.ToBase58();
+
+        private string Key(MultiHash id) => id.ToBase58();
 
         /// <summary>
         ///   Raised when a peer's connection is closed.
@@ -124,7 +125,7 @@ namespace PeerTalk
                     }
                     return conns;
                 }
-            );
+                                   );
 
             if (connection.RemotePeer.ConnectedAddress == null)
             {

@@ -27,7 +27,6 @@ namespace PeerTalk.Cryptography
 
         private Key()
         {
-
         }
 
         /// <summary>
@@ -101,7 +100,7 @@ namespace PeerTalk.Cryptography
                 default:
                     throw new InvalidDataException($"Unknown key type of {ipfsKey.Type}.");
             }
-            
+
             return key;
         }
 

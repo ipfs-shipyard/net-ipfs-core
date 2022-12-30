@@ -42,7 +42,7 @@ namespace PeerTalk.Protocols
         /// <exception cref="InvalidDataException">
         ///   When the message is invalid.
         /// </exception>
-        public static async Task<byte[]> ReadBytesAsync(Stream stream, CancellationToken cancel = default(CancellationToken))
+        public static async Task<byte[]> ReadBytesAsync(Stream stream, CancellationToken cancel = default)
         {
             var eol = new byte[1];
             var length = await stream.ReadVarint32Async(cancel).ConfigureAwait(false);
@@ -76,7 +76,7 @@ namespace PeerTalk.Protocols
         /// <remarks>
         ///   The return value has the length prefix and terminating newline removed.
         /// </remarks>
-        public static async Task<string> ReadStringAsync(Stream stream, CancellationToken cancel = default(CancellationToken))
+        public static async Task<string> ReadStringAsync(Stream stream, CancellationToken cancel = default)
         {
             var payload = Encoding.UTF8.GetString(await ReadBytesAsync(stream, cancel).ConfigureAwait(false));
 
@@ -99,7 +99,7 @@ namespace PeerTalk.Protocols
         /// <returns>
         ///   A task that represents the asynchronous operation.
         /// </returns>
-        public static async Task WriteAsync(string message, Stream stream, CancellationToken cancel = default(CancellationToken))
+        public static async Task WriteAsync(string message, Stream stream, CancellationToken cancel = default)
         {
             log.Trace("sending " + message);
 

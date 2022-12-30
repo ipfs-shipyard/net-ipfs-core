@@ -50,6 +50,5 @@ namespace PeerTalk.Protocols
         {
             Protocols.Remove(protocolName);
         }
-
     }
 }

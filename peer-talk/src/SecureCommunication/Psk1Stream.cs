@@ -36,7 +36,7 @@ namespace PeerTalk.SecureCommunication
         IStreamCipher writeCipher;
 
         /// <summary>
-        ///   Creates a new instance of the <see cref="Psk1Stream"/> class. 
+        ///   Creates a new instance of the <see cref="Psk1Stream"/> class.
         /// </summary>
         /// <param name="stream">
         ///   The source/destination of the unprotected stream.
@@ -45,7 +45,7 @@ namespace PeerTalk.SecureCommunication
         ///   The pre-shared 256-bit key for the private network of peers.
         /// </param>
         public Psk1Stream(
-            Stream stream, 
+            Stream stream,
             PreSharedKey key)
         {
             if (key.Length != KeyBitLength)
@@ -197,8 +197,5 @@ namespace PeerTalk.SecureCommunication
             }
             base.Dispose(disposing);
         }
-
     }
-
 }
-

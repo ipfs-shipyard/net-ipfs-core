@@ -26,6 +26,6 @@ namespace PeerTalk.Protocols
         ///   A task that represents the asynchronous operation. The task's result
         ///   is the encrypted stream.
         /// </returns>
-        Task<Stream> EncryptAsync(PeerConnection connection, CancellationToken cancel = default(CancellationToken));
+        Task<Stream> EncryptAsync(PeerConnection connection, CancellationToken cancel = default);
     }
 }

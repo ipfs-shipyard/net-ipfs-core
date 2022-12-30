@@ -28,6 +28,5 @@ namespace PeerTalk.Discovery
         {
             ServiceName = "_ipfs-discovery._udp";
         }
-
     }
 }

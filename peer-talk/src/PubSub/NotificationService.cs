@@ -22,18 +22,18 @@ namespace PeerTalk.PubSub
     /// </remarks>
     public class NotificationService : IService, IPubSubApi
     {
-        static ILog log = LogManager.GetLogger(typeof(NotificationService));
+        private static ILog log = LogManager.GetLogger(typeof(NotificationService));
 
-        class TopicHandler
+        private class TopicHandler
         {
             public string Topic;
             public Action<IPublishedMessage> Handler;
         }
-        
-        long nextSequenceNumber;
-        ConcurrentDictionary<TopicHandler, TopicHandler> topicHandlers;
-        MessageTracker tracker = new MessageTracker();
-        
+
+        private long nextSequenceNumber;
+        private ConcurrentDictionary<TopicHandler, TopicHandler> topicHandlers;
+        private MessageTracker tracker = new MessageTracker();
+
         // TODO: A general purpose CancellationTokenSource that stops publishing of
         // messages when this service is stopped.
 
@@ -111,7 +111,7 @@ namespace PeerTalk.PubSub
         ///   A unique published message.
         /// </returns>
         /// <remarks>
-        ///   The <see cref="PublishedMessage.SequenceNumber"/> is a monitonically 
+        ///   The <see cref="PublishedMessage.SequenceNumber"/> is a monitonically
         ///   increasing unsigned long.
         /// </remarks>
         public PublishedMessage CreateMessage(string topic, byte[] data)
@@ -132,7 +132,7 @@ namespace PeerTalk.PubSub
         }
 
         /// <inheritdoc />
-        public Task<IEnumerable<string>> SubscribedTopicsAsync(CancellationToken cancel = default(CancellationToken))
+        public Task<IEnumerable<string>> SubscribedTopicsAsync(CancellationToken cancel = default)
         {
             var topics = topicHandlers.Values
                 .Select(t => t.Topic)
@@ -141,7 +141,7 @@ namespace PeerTalk.PubSub
         }
 
         /// <inheritdoc />
-        public Task<IEnumerable<Peer>> PeersAsync(string topic = null, CancellationToken cancel = default(CancellationToken))
+        public Task<IEnumerable<Peer>> PeersAsync(string topic = null, CancellationToken cancel = default)
         {
             var peers = Routers
                 .SelectMany(r => r.InterestedPeers(topic))
@@ -150,25 +150,25 @@ namespace PeerTalk.PubSub
         }
 
         /// <inheritdoc />
-        public Task PublishAsync(string topic, string message, CancellationToken cancel = default(CancellationToken))
+        public Task PublishAsync(string topic, string message, CancellationToken cancel = default)
         {
             return PublishAsync(topic, Encoding.UTF8.GetBytes(message), cancel);
         }
 
         /// <inheritdoc />
-        public Task PublishAsync(string topic, Stream message, CancellationToken cancel = default(CancellationToken))
+        public Task PublishAsync(string topic, Stream message, CancellationToken cancel = default)
         {
             using (var ms = new MemoryStream())
             {
 #pragma warning disable VSTHRD103
                 message.CopyTo(ms);
-#pragma warning disable VSTHRD103 
+#pragma warning disable VSTHRD103
                 return PublishAsync(topic, ms.ToArray(), cancel);
             }
         }
 
         /// <inheritdoc />
-        public Task PublishAsync(string topic, byte[] message, CancellationToken cancel = default(CancellationToken))
+        public Task PublishAsync(string topic, byte[] message, CancellationToken cancel = default)
         {
             var msg = CreateMessage(topic, message);
             ++MesssagesPublished;
@@ -183,16 +183,16 @@ namespace PeerTalk.PubSub
             topicHandlers.TryAdd(topicHandler, topicHandler);
 
             // TODO: need a better way.
-#pragma warning disable VSTHRD101 
+#pragma warning disable VSTHRD101
             cancellationToken.Register(async () =>
             {
                 topicHandlers.TryRemove(topicHandler, out _);
-                if (topicHandlers.Values.Count(t => t.Topic == topic) == 0)
+                if (!topicHandlers.Values.Any(t => t.Topic == topic))
                 {
                     await Task.WhenAll(Routers.Select(r => r.LeaveTopicAsync(topic, CancellationToken.None))).ConfigureAwait(false);
                 }
             });
-#pragma warning restore VSTHRD101 
+#pragma warning restore VSTHRD101
 
             // Tell routers if first time.
             if (topicHandlers.Values.Count(t => t.Topic == topic) == 1)
@@ -213,7 +213,7 @@ namespace PeerTalk.PubSub
         /// <remarks>
         ///   Invokes any topic handlers and publishes the messages on the other routers.
         /// </remarks>
-        void Router_MessageReceived(object sender, PublishedMessage msg)
+        private void Router_MessageReceived(object sender, PublishedMessage msg)
         {
             ++MesssagesReceived;
 
@@ -245,6 +245,5 @@ namespace PeerTalk.PubSub
                 .Select(r => r.PublishAsync(msg, CancellationToken.None))
             );
         }
-
     }
 }

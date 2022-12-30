@@ -32,9 +32,8 @@ namespace PeerTalk.Protocols
         }
 
         /// <inheritdoc />
-        public async Task ProcessMessageAsync(PeerConnection connection, Stream stream, CancellationToken cancel = default(CancellationToken))
+        public async Task ProcessMessageAsync(PeerConnection connection, Stream stream, CancellationToken cancel = default)
         {
-
             // Send our identity.
             log.Debug("Sending identity to " + connection.RemoteAddress);
             var peer = connection.LocalPeer;
@@ -155,6 +154,5 @@ namespace PeerTalk.Protocols
             [ProtoMember(3)]
             public string[] Protocols;
         }
-
     }
 }

@@ -106,7 +106,7 @@ namespace PeerTalk.PubSub
         }
 
         /// <summary>
-        ///   Indicates that the peer is not interested in anything. 
+        ///   Indicates that the peer is not interested in anything.
         /// </summary>
         /// <param name="peer">
         ///   The <see cref="Peer"/>.s

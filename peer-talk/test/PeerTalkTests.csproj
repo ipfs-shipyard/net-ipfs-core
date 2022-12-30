@@ -1,8 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net461;netcoreapp2.1</TargetFrameworks>
-
+	  <TargetFramework>net6.0</TargetFramework>
     <IsPackable>false</IsPackable>
     <DebugType>portable</DebugType>
     <RootNamespace>PeerTalk</RootNamespace>
@@ -17,12 +16,27 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.1.1" PrivateAssets="all" />
-    <PackageReference Include="MSTest.TestAdapter" Version="1.4.0" PrivateAssets="all" />
-    <PackageReference Include="MSTest.TestFramework" Version="1.4.0" PrivateAssets="all" />
-    <PackageReference Include="coverlet.msbuild" Version="2.6.2" PrivateAssets="all" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.3.0" PrivateAssets="all" />
+    <PackageReference Include="MSTest.TestAdapter" Version="2.2.10" PrivateAssets="all" />
+    <PackageReference Include="MSTest.TestFramework" Version="2.2.10" PrivateAssets="all" />
+    <PackageReference Include="coverlet.msbuild" Version="3.1.2" PrivateAssets="all" />
   </ItemGroup>
-
+	
+	<ItemGroup>
+		<Reference Include="Ipfs.Core">
+			<HintPath>..\..\net-ipfs-core\src\bin\Release\net6.0\Ipfs.Core.dll</HintPath>
+		</Reference>
+		<Reference Include="Makaretu.Dns">
+			<HintPath>..\..\net-dns\src\bin\Release\net6.0\Makaretu.Dns.dll</HintPath>
+		</Reference>
+		<Reference Include="Makaretu.Dns.Multicast">
+			<HintPath>..\..\net-mdns\src\bin\Release\net6.0\Makaretu.Dns.Multicast.dll</HintPath>
+		</Reference>
+		<Reference Include="Makaretu.KBucket">
+			<HintPath>..\..\k-bucket\src\bin\Release\net6.0\Makaretu.KBucket.dll</HintPath>
+		</Reference>
+	</ItemGroup>
+	
   <ItemGroup>
     <ProjectReference Include="..\src\PeerTalk.csproj" />
   </ItemGroup>

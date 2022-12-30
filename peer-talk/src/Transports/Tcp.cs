@@ -2,20 +2,19 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net;
+using System.Net.Sockets;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using Ipfs;
-using System.Net.Sockets;
 using Common.Logging;
-using System.Net;
+using Ipfs;
 
 #if !NETSTANDARD14
-using JuiceStream;
-#endif
 
-#if !NET461
-using System.Runtime.InteropServices;
+using JuiceStream;
+
 #endif
 
 namespace PeerTalk.Transports
@@ -30,7 +29,7 @@ namespace PeerTalk.Transports
     /// </remarks>
     public class Tcp : IPeerTransport
     {
-        static ILog log = LogManager.GetLogger(typeof(Tcp));
+        private static ILog log = LogManager.GetLogger(typeof(Tcp));
 
         /// <summary>
         ///  The minimum read timeout.
@@ -41,11 +40,11 @@ namespace PeerTalk.Transports
         public static TimeSpan MinReadTimeout = TimeSpan.FromSeconds(3);
 
         /// <inheritdoc />
-        public async Task<Stream> ConnectAsync(MultiAddress address, CancellationToken cancel = default(CancellationToken))
+        public async Task<Stream> ConnectAsync(MultiAddress address, CancellationToken cancel = default)
         {
             var port = address.Protocols
                 .Where(p => p.Name == "tcp")
-                .Select(p => Int32.Parse(p.Value))
+                .Select(p => int.Parse(p.Value))
                 .First();
             var ip = address.Protocols
                 .Where(p => p.Name == "ip4" || p.Name == "ip6")
@@ -92,11 +91,11 @@ namespace PeerTalk.Transports
                 cancel.ThrowIfCancellationRequested();
             }
 
-            var timeout = (int) Math.Max(MinReadTimeout.TotalMilliseconds, latency.TotalMilliseconds * 3);
+            var timeout = (int)Math.Max(MinReadTimeout.TotalMilliseconds, latency.TotalMilliseconds * 3);
             socket.LingerState = new LingerOption(false, 0);
             socket.ReceiveTimeout = timeout;
             socket.SendTimeout = timeout;
-            Stream stream =  new NetworkStream(socket, ownsSocket: true);
+            Stream stream = new NetworkStream(socket, ownsSocket: true);
             stream.ReadTimeout = timeout;
             stream.WriteTimeout = timeout;
 
@@ -108,7 +107,7 @@ namespace PeerTalk.Transports
             if (cancel.IsCancellationRequested)
             {
                 log.Trace("cancel " + address);
-                stream.Dispose();
+                await stream.DisposeAsync();
                 cancel.ThrowIfCancellationRequested();
             }
 
@@ -120,7 +119,7 @@ namespace PeerTalk.Transports
         {
             var port = address.Protocols
                 .Where(p => p.Name == "tcp")
-                .Select(p => Int32.Parse(p.Value))
+                .Select(p => int.Parse(p.Value))
                 .FirstOrDefault();
             var ip = address.Protocols
                 .Where(p => p.Name == "ip4" || p.Name == "ip6")
@@ -165,7 +164,7 @@ namespace PeerTalk.Transports
             return address;
         }
 
-        void ProcessConnection(Socket socket, MultiAddress address, Action<Stream, MultiAddress, MultiAddress> handler, CancellationToken cancel)
+        private void ProcessConnection(Socket socket, MultiAddress address, Action<Stream, MultiAddress, MultiAddress> handler, CancellationToken cancel)
         {
             log.Debug("listening on " + address);
 
@@ -210,7 +209,7 @@ namespace PeerTalk.Transports
                 while (!cancel.IsCancellationRequested)
                 {
                     Socket conn = socket.Accept();
-                    if (conn == null) 
+                    if (conn == null)
                     {
                         log.Warn("Null socket from Accept");
                         continue;

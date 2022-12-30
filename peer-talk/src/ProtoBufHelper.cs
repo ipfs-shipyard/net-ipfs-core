@@ -30,7 +30,7 @@ namespace PeerTalk
         ///   A task that represents the asynchronous operation. The task's result is
         ///   the <typeparamref name="T"/> message.
         /// </returns>
-        public static async Task<T> ReadMessageAsync<T>(Stream stream, CancellationToken cancel = default(CancellationToken))
+        public static async Task<T> ReadMessageAsync<T>(Stream stream, CancellationToken cancel = default)
         {
             var length = await stream.ReadVarint32Async(cancel).ConfigureAwait(false);
             var bytes = new byte[length];

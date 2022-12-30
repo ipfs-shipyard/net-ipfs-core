@@ -33,7 +33,7 @@ namespace PeerTalk.Protocols
         }
 
         /// <inheritdoc />
-        public async Task ProcessMessageAsync(PeerConnection connection, Stream stream, CancellationToken cancel = default(CancellationToken))
+        public async Task ProcessMessageAsync(PeerConnection connection, Stream stream, CancellationToken cancel = default)
         {
             log.Debug("start processing requests from " + connection.RemoteAddress);
             var muxer = new Muxer
@@ -52,7 +52,7 @@ namespace PeerTalk.Protocols
         }
 
         /// <inheritdoc />
-        public Task ProcessResponseAsync(PeerConnection connection, CancellationToken cancel = default(CancellationToken))
+        public Task ProcessResponseAsync(PeerConnection connection, CancellationToken cancel = default)
         {
             return Task.CompletedTask;
         }

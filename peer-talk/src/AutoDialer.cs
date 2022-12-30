@@ -1,11 +1,11 @@
-﻿using Common.Logging;
-using Ipfs;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Common.Logging;
+using Ipfs;
 
 namespace PeerTalk
 {
@@ -18,15 +18,15 @@ namespace PeerTalk
     /// </remarks>
     public class AutoDialer : IDisposable
     {
-        static readonly ILog log = LogManager.GetLogger(typeof(AutoDialer));
+        private static readonly ILog log = LogManager.GetLogger(typeof(AutoDialer));
 
         /// <summary>
         ///   The default minimum number of connections to maintain (16).
         /// </summary>
         public const int DefaultMinConnections = 16;
 
-        readonly Swarm swarm;
-        int pendingConnects;
+        private readonly Swarm swarm;
+        private int pendingConnects;
 
         /// <summary>
         ///   Creates a new instance of the <see cref="AutoDialer"/> class.
@@ -45,7 +45,7 @@ namespace PeerTalk
         ///  Releases the unmanaged and optionally managed resources.
         /// </summary>
         /// <param name="disposing">
-        ///   <b>true</b> to release both managed and unmanaged resources; <b>false</b> 
+        ///   <b>true</b> to release both managed and unmanaged resources; <b>false</b>
         ///   to release only unmanaged resources.
         /// </param>
         protected virtual void Dispose(bool disposing)
@@ -58,14 +58,14 @@ namespace PeerTalk
         }
 
         /// <summary>
-        ///   Performs application-defined tasks associated with freeing, 
+        ///   Performs application-defined tasks associated with freeing,
         ///   releasing, or resetting unmanaged resources.
         /// </summary>
         public void Dispose()
         {
             Dispose(true);
         }
-        
+
         /// <summary>
         ///   The low water mark for peer connections.
         /// </summary>
@@ -78,6 +78,7 @@ namespace PeerTalk
         public int MinConnections { get; set; } = DefaultMinConnections;
 
 #pragma warning disable VSTHRD100 // Avoid async void methods
+
         /// <summary>
         ///   Called when the swarm has a new peer.
         /// </summary>
@@ -91,7 +92,7 @@ namespace PeerTalk
         ///   If the <see cref="MinConnections"/> is not reached, then the
         ///   <paramref name="peer"/> is dialed.
         /// </remarks>
-        async void OnPeerDiscovered(object sender, Peer peer)
+        private async void OnPeerDiscovered(object sender, Peer peer)
 #pragma warning restore VSTHRD100 // Avoid async void methods
         {
             var n = swarm.Manager.Connections.Count() + pendingConnects;
@@ -103,7 +104,7 @@ namespace PeerTalk
                 {
                     await swarm.ConnectAsync(peer).ConfigureAwait(false);
                 }
-                catch(Exception)
+                catch (Exception)
                 {
                     log.Warn($"Failed to dial {peer}");
                 }
@@ -115,6 +116,7 @@ namespace PeerTalk
         }
 
 #pragma warning disable VSTHRD100 // Avoid async void methods
+
         /// <summary>
         ///   Called when the swarm has lost a connection to a peer.
         /// </summary>
@@ -128,7 +130,7 @@ namespace PeerTalk
         ///   If the <see cref="MinConnections"/> is not reached, then another
         ///   peer is dialed.
         /// </remarks>
-        async void OnPeerDisconnected(object sender, Peer disconnectedPeer)
+        private async void OnPeerDisconnected(object sender, Peer disconnectedPeer)
 #pragma warning restore VSTHRD100 // Avoid async void methods
         {
             var n = swarm.Manager.Connections.Count() + pendingConnects;
@@ -162,6 +164,5 @@ namespace PeerTalk
                 Interlocked.Decrement(ref pendingConnects);
             }
         }
-
     }
 }

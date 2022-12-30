@@ -3,16 +3,16 @@
 // See the LICENSE file in the project root for more information.
 
 // SocketTaskExtensions is not available in .Net Framework 4.6.1
-// This was copied and pasted from 
+// This was copied and pasted from
 // https://searchcode.com/file/115739853/mcs/class/Facades/System.Net.Sockets/SocketTaskExtensions.cs
-#if NET461IGNORE
+//#if NET461IGNORE
 
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace System.Net.Sockets
 {
-    static class SocketTaskExtensions
+    internal static class SocketTaskExtensions
     {
         public static Task<Socket> AcceptAsync(this Socket socket)
         {
@@ -202,6 +202,7 @@ namespace System.Net.Sockets
                 state: packedArguments);
         }
 #endif
+
         public static Task<int> SendAsync(this Socket socket, ArraySegment<byte> buffer, SocketFlags socketFlags)
         {
             return Task<int>.Factory.FromAsync(
@@ -254,4 +255,5 @@ namespace System.Net.Sockets
         }
     }
 }
-#endif
+
+//#endif

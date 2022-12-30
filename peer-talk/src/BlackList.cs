@@ -25,6 +25,5 @@ namespace PeerTalk
         {
             return !this.Contains(target);
         }
-
     }
 }

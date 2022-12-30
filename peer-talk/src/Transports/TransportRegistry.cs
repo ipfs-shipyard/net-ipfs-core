@@ -26,6 +26,5 @@ namespace PeerTalk.Transports
         {
             Transports.Remove(protocolName);
         }
-
     }
 }

@@ -29,7 +29,7 @@ namespace PeerTalk.SecureCommunication
         public PreSharedKey Key { private get; set;}
 
         /// <inheritdoc />
-        public Task<Stream> ProtectAsync(PeerConnection connection, CancellationToken cancel = default(CancellationToken))
+        public Task<Stream> ProtectAsync(PeerConnection connection, CancellationToken cancel = default)
         {
             return Task.FromResult<Stream>(new Psk1Stream(connection.Stream, Key));
         }

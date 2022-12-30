@@ -38,7 +38,7 @@ namespace PeerTalk.SecureCommunication
         IStreamCipher encrypt;
 
         /// <summary>
-        ///   Creates a new instance of the <see cref="Secio1Stream"/> class. 
+        ///   Creates a new instance of the <see cref="Secio1Stream"/> class.
         /// </summary>
         /// <param name="stream">
         ///   The source/destination of SECIO packets.
@@ -56,8 +56,8 @@ namespace PeerTalk.SecureCommunication
         ///   The keys used by the remote endpoint.
         /// </param>
         public Secio1Stream(
-            Stream stream, 
-            string cipherName, string hashName, 
+            Stream stream,
+            string cipherName, string hashName,
             StretchedKey localKey, StretchedKey remoteKey)
         {
             this.stream = stream;
@@ -258,8 +258,5 @@ namespace PeerTalk.SecureCommunication
             }
             base.Dispose(disposing);
         }
-
     }
-
 }
-

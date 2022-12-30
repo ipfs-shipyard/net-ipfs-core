@@ -1,20 +1,20 @@
-﻿using Ipfs;
-using PeerTalk.Transports;
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using System.Linq;
-using System.Text;
+﻿using System;
 using System.Collections.Concurrent;
-using System.Threading;
-using Common.Logging;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Net.NetworkInformation;
 using System.Net.Sockets;
-using PeerTalk.Protocols;
-using PeerTalk.Cryptography;
+using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
+using Common.Logging;
+using Ipfs;
 using Ipfs.CoreApi;
 using Nito.AsyncEx;
+using PeerTalk.Cryptography;
+using PeerTalk.Protocols;
+using PeerTalk.Transports;
 
 namespace PeerTalk
 {
@@ -23,7 +23,7 @@ namespace PeerTalk
     /// </summary>
     public class Swarm : IService, IPolicy<MultiAddress>, IPolicy<Peer>
     {
-        static ILog log = LogManager.GetLogger(typeof(Swarm));
+        private static ILog log = LogManager.GetLogger(typeof(Swarm));
 
         /// <summary>
         ///   The time to wait for a low level connection to be established.
@@ -39,7 +39,7 @@ namespace PeerTalk
         /// <remarks>
         ///   Use sychronized access, e.g. <code>lock (protocols) { ... }</code>.
         /// </remarks>
-        List<IPeerProtocol> protocols = new List<IPeerProtocol>
+        private List<IPeerProtocol> protocols = new List<IPeerProtocol>
         {
             new Multistream1(),
             new SecureCommunication.Secio1(),
@@ -50,9 +50,9 @@ namespace PeerTalk
         /// <summary>
         ///   Added to connection protocols when needed.
         /// </summary>
-        readonly Plaintext1 plaintext1 = new Plaintext1();
+        private readonly Plaintext1 plaintext1 = new Plaintext1();
 
-        Peer localPeer;
+        private Peer localPeer;
 
         /// <summary>
         ///   Raised when a listener is establihed.
@@ -128,22 +128,22 @@ namespace PeerTalk
         /// <summary>
         ///   Other nodes. Key is the bae58 hash of the peer ID.
         /// </summary>
-        ConcurrentDictionary<string, Peer> otherPeers = new ConcurrentDictionary<string, Peer>();
+        private ConcurrentDictionary<string, Peer> otherPeers = new ConcurrentDictionary<string, Peer>();
 
         /// <summary>
         ///   Used to cancel any task when the swarm is stopped.
         /// </summary>
-        CancellationTokenSource swarmCancellation;
+        private CancellationTokenSource swarmCancellation;
 
         /// <summary>
         ///  Outstanding connection tasks initiated by the local peer.
         /// </summary>
-        ConcurrentDictionary<Peer, AsyncLazy<PeerConnection>> pendingConnections = new ConcurrentDictionary<Peer, AsyncLazy<PeerConnection>>();
+        private ConcurrentDictionary<Peer, AsyncLazy<PeerConnection>> pendingConnections = new ConcurrentDictionary<Peer, AsyncLazy<PeerConnection>>();
 
         /// <summary>
         ///  Outstanding connection tasks initiated by a remote peer.
         /// </summary>
-        ConcurrentDictionary<MultiAddress, object> pendingRemoteConnections = new ConcurrentDictionary<MultiAddress, object>();
+        private ConcurrentDictionary<MultiAddress, object> pendingRemoteConnections = new ConcurrentDictionary<MultiAddress, object>();
 
         /// <summary>
         ///   Manages the swarm's peer connections.
@@ -173,7 +173,7 @@ namespace PeerTalk
         /// <summary>
         ///   Cancellation tokens for the listeners.
         /// </summary>
-        ConcurrentDictionary<MultiAddress, CancellationTokenSource> listeners = new ConcurrentDictionary<MultiAddress, CancellationTokenSource>();
+        private ConcurrentDictionary<MultiAddress, CancellationTokenSource> listeners = new ConcurrentDictionary<MultiAddress, CancellationTokenSource>();
 
         /// <summary>
         ///   Get the sequence of all known peer addresses.
@@ -395,7 +395,7 @@ namespace PeerTalk
             return Task.CompletedTask;
         }
 
-        void OnPeerDisconnected(object sender, MultiHash peerId)
+        private void OnPeerDisconnected(object sender, MultiHash peerId)
         {
             if (!otherPeers.TryGetValue(peerId.ToBase58(), out Peer peer))
             {
@@ -432,7 +432,6 @@ namespace PeerTalk
             log.Debug($"Stopped {LocalPeer}");
         }
 
-
         /// <summary>
         ///   Connect to a peer using the specified <see cref="MultiAddress"/>.
         /// </summary>
@@ -451,7 +450,7 @@ namespace PeerTalk
         ///   If already connected to the peer and is active on any address, then
         ///   the existing connection is returned.
         /// </remarks>
-        public async Task<PeerConnection> ConnectAsync(MultiAddress address, CancellationToken cancel = default(CancellationToken))
+        public async Task<PeerConnection> ConnectAsync(MultiAddress address, CancellationToken cancel = default)
         {
             var peer = RegisterPeerAddress(address);
             return await ConnectAsync(peer, cancel).ConfigureAwait(false);
@@ -474,7 +473,7 @@ namespace PeerTalk
         ///   If already connected to the peer and is active on any address, then
         ///   the existing connection is returned.
         /// </remarks>
-        public async Task<PeerConnection> ConnectAsync(Peer peer, CancellationToken cancel = default(CancellationToken))
+        public async Task<PeerConnection> ConnectAsync(Peer peer, CancellationToken cancel = default)
         {
             if (!IsRunning)
             {
@@ -532,7 +531,7 @@ namespace PeerTalk
         ///   new stream.
         ///   </para>
         /// </remarks>
-        public async Task<Stream> DialAsync(Peer peer, string protocol, CancellationToken cancel = default(CancellationToken))
+        public async Task<Stream> DialAsync(Peer peer, string protocol, CancellationToken cancel = default)
         {
             peer = RegisterPeer(peer);
 
@@ -557,7 +556,7 @@ namespace PeerTalk
             }
             catch (Exception)
             {
-                stream.Dispose();
+                _ = stream.DisposeAsync();
                 throw;
             }
         }
@@ -569,7 +568,7 @@ namespace PeerTalk
         /// <param name="addrs"></param>
         /// <param name="cancel"></param>
         /// <returns></returns>
-        async Task<PeerConnection> DialAsync(Peer remote, IEnumerable<MultiAddress> addrs, CancellationToken cancel)
+        private async Task<PeerConnection> DialAsync(Peer remote, IEnumerable<MultiAddress> addrs, CancellationToken cancel)
         {
             log.Debug($"Dialing {remote}");
 
@@ -653,15 +652,13 @@ namespace PeerTalk
             }
 
             return actual;
-
         }
 
-        async Task<PeerConnection> DialAsync(Peer remote, MultiAddress addr, CancellationToken cancel)
+        private async Task<PeerConnection> DialAsync(Peer remote, MultiAddress addr, CancellationToken cancel)
         {
             // TODO: HACK: Currenty only the ipfs/p2p is supported.
             // short circuit to make life faster.
-            if (addr.Protocols.Count != 3
-                || !(addr.Protocols[2].Name == "ipfs" || addr.Protocols[2].Name == "p2p"))
+            if (addr.Protocols.Count != 3 || !(addr.Protocols[2].Name == "ipfs" || addr.Protocols[2].Name == "p2p"))
             {
                 throw new Exception($"Cannnot dial; unknown protocol in '{addr}'.");
             }
@@ -676,7 +673,7 @@ namespace PeerTalk
                     stream = await transport().ConnectAsync(addr, cancel).ConfigureAwait(false);
                     if (cancel.IsCancellationRequested)
                     {
-                        stream?.Dispose();
+                        stream?.DisposeAsync();
                         continue;
                     }
                     break;
@@ -692,7 +689,7 @@ namespace PeerTalk
             {
                 IsIncoming = false,
                 LocalPeer = LocalPeer,
-                // TODO: LocalAddress
+                LocalAddress = LocalPeer?.ConnectedAddress,
                 LocalPeerKey = LocalPeerKey,
                 RemotePeer = remote,
                 RemoteAddress = addr,
@@ -704,7 +701,6 @@ namespace PeerTalk
             {
                 connection.Stream = await NetworkProtector.ProtectAsync(connection).ConfigureAwait(false);
             }
-
 
             return connection;
         }
@@ -725,7 +721,7 @@ namespace PeerTalk
         /// <remarks>
         ///   If the peer is not conected, then nothing happens.
         /// </remarks>
-        public Task DisconnectAsync(MultiAddress address, CancellationToken cancel = default(CancellationToken))
+        public Task DisconnectAsync(MultiAddress address, CancellationToken cancel = default)
         {
             Manager.Remove(address.PeerId);
             return Task.CompletedTask;
@@ -844,6 +840,7 @@ namespace PeerTalk
         }
 
 #pragma warning disable VSTHRD100 // Avoid async void methods
+
         /// <summary>
         ///   Called when a remote peer is connecting to the local peer.
         /// </summary>
@@ -860,7 +857,7 @@ namespace PeerTalk
         ///   Establishes the protocols of the connection.  Any exception is simply
         ///   logged as warning.
         /// </remarks>
-        async void OnRemoteConnect(Stream stream, MultiAddress local, MultiAddress remote)
+        private async void OnRemoteConnect(Stream stream, MultiAddress local, MultiAddress remote)
 #pragma warning restore VSTHRD100 // Avoid async void methods
         {
             if (!IsRunning)
@@ -869,7 +866,7 @@ namespace PeerTalk
                 {
                     stream.Dispose();
                 }
-                catch (Exception)
+                catch
                 {
                     // eat it.
                 }
@@ -885,7 +882,7 @@ namespace PeerTalk
                 {
                     stream.Dispose();
                 }
-                catch (Exception)
+                catch
                 {
                     // eat it.
                 }
@@ -922,7 +919,7 @@ namespace PeerTalk
 
                 // Start the handshake
                 // TODO: Isn't connection cancel token required.
-                _ = connection.ReadMessagesAsync(default(CancellationToken));
+                _ = connection.ReadMessagesAsync(default);
 
                 // Wait for security to be established.
                 await connection.SecurityEstablished.Task.ConfigureAwait(false);
@@ -937,7 +934,7 @@ namespace PeerTalk
                 {
                     identify = protocols.OfType<Identify1>().First();
                 }
-                connection.RemotePeer = await identify.GetRemotePeerAsync(connection, default(CancellationToken)).ConfigureAwait(false);
+                connection.RemotePeer = await identify.GetRemotePeerAsync(connection, default).ConfigureAwait(false);
 
                 connection.RemotePeer = RegisterPeer(connection.RemotePeer);
                 connection.RemoteAddress = new MultiAddress($"{remote}/ipfs/{connection.RemotePeer.Id}");
@@ -957,7 +954,7 @@ namespace PeerTalk
                 {
                     stream.Dispose();
                 }
-                catch (Exception)
+                catch
                 {
                     // eat it.
                 }
@@ -996,7 +993,7 @@ namespace PeerTalk
             }
         }
 
-        void MountProtocols(PeerConnection connection)
+        private void MountProtocols(PeerConnection connection)
         {
             lock (protocols)
             {
@@ -1068,8 +1065,7 @@ namespace PeerTalk
         /// <inheritdoc />
         public bool IsAllowed(Peer peer)
         {
-            return peer.Addresses.All(a => IsAllowed(a));
+            return peer.Addresses.All(IsAllowed);
         }
-
     }
 }

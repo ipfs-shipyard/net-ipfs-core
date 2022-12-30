@@ -28,7 +28,7 @@ namespace PeerTalk.Transports
         ///   A task that represents the asynchronous operation. The task's result
         ///   is a duplex <see cref="Stream"/> or <b>null</b>.
         /// </returns>
-        Task<Stream> ConnectAsync(MultiAddress address, CancellationToken cancel = default(CancellationToken));
+        Task<Stream> ConnectAsync(MultiAddress address, CancellationToken cancel = default);
 
         /// <summary>
         ///   Listen to any peer connections on the specified address.
@@ -52,12 +52,12 @@ namespace PeerTalk.Transports
         ///   active.  It is passed a duplex stream, the local address and the remote
         ///   address.
         ///   <para>
-        ///   To stop listening, the <paramref name="cancel"/> parameter 
+        ///   To stop listening, the <paramref name="cancel"/> parameter
         ///   must be supplied and then use the <see cref="CancellationTokenSource.Cancel()"/>
         ///   method.
         ///   </para>
         ///   <para>
-        ///   For socket based transports (tcp or upd), if the port is not defined 
+        ///   For socket based transports (tcp or upd), if the port is not defined
         ///   or is zero an ephermal port is assigned.
         ///   </para>
         /// </remarks>

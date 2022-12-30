@@ -71,6 +71,5 @@ namespace PeerTalk.PubSub
         ///   A task that represents the asynchronous operation.
         /// </returns>
         Task LeaveTopicAsync(string topic, CancellationToken cancel);
-
     }
 }

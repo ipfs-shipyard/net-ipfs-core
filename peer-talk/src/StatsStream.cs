@@ -1,11 +1,11 @@
-﻿using Ipfs.CoreApi;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Ipfs.CoreApi;
 
 namespace PeerTalk
 {
@@ -23,10 +23,10 @@ namespace PeerTalk
             RateOut = 1024
         };
 
-        Stream stream;
-        long bytesRead;
-        long bytesWritten;
-        DateTime lastUsed;
+        private Stream stream;
+        private long bytesRead;
+        private long bytesWritten;
+        private DateTime lastUsed;
 
         static StatsStream()
         {
@@ -176,7 +176,7 @@ namespace PeerTalk
                 }
                 return n;
             }
-            catch (Exception) when (cancellationToken != null && cancellationToken.IsCancellationRequested)
+            catch (Exception) when (cancellationToken.IsCancellationRequested)
             {
                 // eat it.
                 return 0;
@@ -199,9 +199,8 @@ namespace PeerTalk
                         AllBandwidth.RateOut += count;
                     }
                 }
-
             }
-            catch (Exception) when (cancellationToken != null && cancellationToken.IsCancellationRequested)
+            catch (Exception) when (cancellationToken.IsCancellationRequested)
             {
                 // eat it.
             }

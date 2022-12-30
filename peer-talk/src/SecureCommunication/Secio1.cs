@@ -36,14 +36,14 @@ namespace PeerTalk.SecureCommunication
         }
 
         /// <inheritdoc />
-        public async Task ProcessMessageAsync(PeerConnection connection, Stream stream, CancellationToken cancel = default(CancellationToken))
+        public async Task ProcessMessageAsync(PeerConnection connection, Stream stream, CancellationToken cancel = default)
         {
             await EncryptAsync(connection, cancel).ConfigureAwait(false);
         }
 
 #pragma warning disable VSTHRD103 
         /// <inheritdoc />
-        public async Task<Stream> EncryptAsync(PeerConnection connection, CancellationToken cancel = default(CancellationToken))
+        public async Task<Stream> EncryptAsync(PeerConnection connection, CancellationToken cancel = default)
         {
             var stream = connection.Stream;
             var localPeer = connection.LocalPeer;

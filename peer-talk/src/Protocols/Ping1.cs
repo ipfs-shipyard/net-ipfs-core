@@ -42,7 +42,7 @@ namespace PeerTalk.Protocols
         }
 
         /// <inheritdoc />
-        public async Task ProcessMessageAsync(PeerConnection connection, Stream stream, CancellationToken cancel = default(CancellationToken))
+        public async Task ProcessMessageAsync(PeerConnection connection, Stream stream, CancellationToken cancel = default)
         {
             while (true)
             {
@@ -93,7 +93,7 @@ namespace PeerTalk.Protocols
         ///   A task that represents the asynchronous operation. The task's value is
         ///   the sequence of <see cref="PingResult"/>.
         /// </returns>
-        public async Task<IEnumerable<PingResult>> PingAsync(MultiHash peerId, int count = 10, CancellationToken cancel = default(CancellationToken))
+        public async Task<IEnumerable<PingResult>> PingAsync(MultiHash peerId, int count = 10, CancellationToken cancel = default)
         {
             var peer = new Peer { Id = peerId };
             return await PingAsync(peer, count, cancel).ConfigureAwait(false);
@@ -115,7 +115,7 @@ namespace PeerTalk.Protocols
         ///   A task that represents the asynchronous operation. The task's value is
         ///   the sequence of <see cref="PingResult"/>.
         /// </returns>
-        public async Task<IEnumerable<PingResult>> PingAsync(MultiAddress address, int count = 10, CancellationToken cancel = default(CancellationToken))
+        public async Task<IEnumerable<PingResult>> PingAsync(MultiAddress address, int count = 10, CancellationToken cancel = default)
         {
             var peer = Swarm.RegisterPeerAddress(address);
             return await PingAsync(peer, count, cancel).ConfigureAwait(false);
@@ -185,11 +185,9 @@ namespace PeerTalk.Protocols
 
             return results;
         }
-
     }
 
     class PingMessage
     {
-
     }
 }

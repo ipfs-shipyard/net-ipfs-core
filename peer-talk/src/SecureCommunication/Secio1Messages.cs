@@ -51,6 +51,5 @@ namespace PeerTalk.SecureCommunication
 
         [ProtoMember(2)]
         public byte[] Signature;
-
     }
 }

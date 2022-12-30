@@ -14,7 +14,7 @@ namespace PeerTalk.Protocols
     ///   Defines the messages that can be exchanged between two peers.
     /// </summary>
     /// <remarks>
-    ///   <see cref="Object.ToString"/> must return a string in the form
+    ///   <see cref="object.ToString"/> must return a string in the form
     ///   "/name/version".
     /// </remarks>
     public interface IPeerProtocol
@@ -44,7 +44,6 @@ namespace PeerTalk.Protocols
         /// <returns>
         ///   A task that represents the asynchronous operation.
         /// </returns>
-        Task ProcessMessageAsync(PeerConnection connection, Stream stream, CancellationToken cancel = default(CancellationToken));
-
+        Task ProcessMessageAsync(PeerConnection connection, Stream stream, CancellationToken cancel = default);
     }
 }

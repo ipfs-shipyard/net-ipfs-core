@@ -9,7 +9,7 @@ namespace PeerTalk.Cryptography
     ///   The CTR cipher as a stream.
     /// </summary>
     /// <remarks>
-    ///   A copy of <see href="https://github.com/onovotny/bc-csharp/blob/netstandard/crypto/src/crypto/modes/SicBlockCipher.cs">SicBlockCipher</see> 
+    ///   A copy of <see href="https://github.com/onovotny/bc-csharp/blob/netstandard/crypto/src/crypto/modes/SicBlockCipher.cs">SicBlockCipher</see>
     ///   that implements <see cref="IStreamCipher"/>.
     /// </remarks>
     public class CtrStreamCipher : IStreamCipher
@@ -111,7 +111,6 @@ namespace PeerTalk.Cryptography
             {
                 output[outStart++] = ReturnByte(input[inStart++]);
             }
-
         }
 
         /// <inheritdoc />
@@ -134,6 +133,5 @@ namespace PeerTalk.Cryptography
             }
             return rv;
         }
-
     }
 }

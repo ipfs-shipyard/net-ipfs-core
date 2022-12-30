@@ -1,9 +1,9 @@
-﻿using Semver;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Semver;
 
 namespace PeerTalk.Protocols
 {
@@ -36,13 +36,13 @@ namespace PeerTalk.Protocols
         /// </summary>
         /// <param name="s"></param>
         /// <returns></returns>
-        public static VersionedName Parse (string s)
+        public static VersionedName Parse(string s)
         {
             var parts = s.Split('/').Where(p => p.Length > 0).ToArray();
             return new VersionedName
             {
                 Name = string.Join("/", parts, 0, parts.Length - 1),
-                Version = SemVersion.Parse(parts[parts.Length - 1])
+                Version = SemVersion.Parse(parts[parts.Length - 1], SemVersionStyles.Strict)
             };
         }
 
@@ -95,7 +95,7 @@ namespace PeerTalk.Protocols
         public int CompareTo(VersionedName that)
         {
             if (that == null) return 1;
-            if (this.Name == that.Name) return this.Version.CompareTo(that.Version);
+            if (this.Name == that.Name) return this.Version.ComparePrecedenceTo(that.Version);
             return this.Name.CompareTo(that.Name);
         }
     }

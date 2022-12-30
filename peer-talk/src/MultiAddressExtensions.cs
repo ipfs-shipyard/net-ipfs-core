@@ -69,7 +69,7 @@ namespace PeerTalk
         ///   a "tcp/80" or "tcp/443" is respectively added.
         ///   </para>
         /// </remarks>
-        public static async Task<List<MultiAddress>> ResolveAsync(this MultiAddress multiaddress, CancellationToken cancel = default(CancellationToken))
+        public static async Task<List<MultiAddress>> ResolveAsync(this MultiAddress multiaddress, CancellationToken cancel = default)
         {
             var list = new List<MultiAddress>();
 

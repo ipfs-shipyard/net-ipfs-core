@@ -1,5 +1,4 @@
-﻿using Ipfs;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -7,6 +6,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Threading.Tasks.Dataflow;
+using Ipfs;
 
 namespace PeerTalk.Multiplex
 {
@@ -23,12 +23,12 @@ namespace PeerTalk.Multiplex
     /// </remarks>
     public class Substream : Stream
     {
-        BufferBlock<byte[]> inBlocks = new BufferBlock<byte[]>();
-        byte[] inBlock;
-        int inBlockOffset;
-        bool eos;
+        private BufferBlock<byte[]> inBlocks = new BufferBlock<byte[]>();
+        private byte[] inBlock;
+        private int inBlockOffset;
+        private bool eos;
 
-        Stream outStream = new MemoryStream();
+        private Stream outStream = new MemoryStream();
 
         /// <summary>
         ///   The type of message of sent to the other side.
@@ -46,7 +46,7 @@ namespace PeerTalk.Multiplex
         ///   The session initiator allocates odd IDs and the session receiver allocates even IDs.
         /// </value>
         public long Id;
-        
+
         /// <summary>
         ///   A name for the stream.
         /// </summary>
@@ -125,9 +125,9 @@ namespace PeerTalk.Multiplex
         /// <inheritdoc />
         public override int Read(byte[] buffer, int offset, int count)
         {
-#pragma warning disable VSTHRD002 
+#pragma warning disable VSTHRD002
             return ReadAsync(buffer, offset, count).GetAwaiter().GetResult();
-#pragma warning restore VSTHRD002 
+#pragma warning restore VSTHRD002
         }
 
         /// <inheritdoc />
@@ -162,13 +162,13 @@ namespace PeerTalk.Multiplex
             }
             return total;
         }
-        
+
         /// <inheritdoc />
         public override void Flush()
         {
-#pragma warning disable VSTHRD002 
+#pragma warning disable VSTHRD002
             FlushAsync().GetAwaiter().GetResult();
-#pragma warning restore VSTHRD002 
+#pragma warning restore VSTHRD002
         }
 
         /// <inheritdoc />
@@ -218,7 +218,8 @@ namespace PeerTalk.Multiplex
         {
             if (disposing)
             {
-                Muxer?.RemoveStreamAsync(this);
+                // TODO: find a better method
+                _ = Task.Run(async () => await Muxer?.RemoveStreamAsync(this));
 
                 eos = true;
                 if (outStream != null)
@@ -230,6 +231,4 @@ namespace PeerTalk.Multiplex
             base.Dispose(disposing);
         }
     }
-
 }
-

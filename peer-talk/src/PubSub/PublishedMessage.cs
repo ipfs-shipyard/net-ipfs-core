@@ -15,7 +15,7 @@ namespace PeerTalk.PubSub
     /// <seealso ref="https://github.com/libp2p/specs/blob/master/pubsub/README.md"/>
     /// <remarks>
     ///   TODO: Sender should really be called Author.
-    ///   
+    ///
     /// </remarks>
     [ProtoContract]
     public class PublishedMessage : IPublishedMessage

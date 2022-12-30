@@ -82,7 +82,6 @@ namespace PeerTalk.Cryptography
             };
         }
 
-
         /// <summary>
         ///   Create a new ephermal key on the curve.
         /// </summary>
@@ -108,6 +107,5 @@ namespace PeerTalk.Cryptography
                 publicKey = (ECPublicKeyParameters)keyPair.Public
             };
         }
-
     }
 }

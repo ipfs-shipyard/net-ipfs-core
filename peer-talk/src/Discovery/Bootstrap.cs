@@ -1,10 +1,10 @@
-﻿using Common.Logging;
-using Ipfs;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Common.Logging;
+using Ipfs;
 
 namespace PeerTalk.Discovery
 {
@@ -13,7 +13,7 @@ namespace PeerTalk.Discovery
     /// </summary>
     public class Bootstrap : IPeerDiscovery
     {
-        static ILog log = LogManager.GetLogger(typeof(Bootstrap));
+        private static ILog log = LogManager.GetLogger(typeof(Bootstrap));
 
         /// <inheritdoc />
         public event EventHandler<Peer> PeerDiscovered;
@@ -65,6 +65,5 @@ namespace PeerTalk.Discovery
             PeerDiscovered = null;
             return Task.CompletedTask;
         }
-
     }
 }

@@ -9,12 +9,12 @@ using System.Threading.Tasks;
 namespace PeerTalk
 {
     /// <summary>
-    /// 
+    ///
     /// </summary>
     public static class StreamExtensions
     {
         /// <summary>
-        ///   Asynchronously reads a sequence of bytes from the stream and advances 
+        ///   Asynchronously reads a sequence of bytes from the stream and advances
         ///   the position within the stream by the number of bytes read.
         /// </summary>
         /// <param name="stream">
@@ -24,17 +24,17 @@ namespace PeerTalk
         ///   The buffer to write the data into.
         /// </param>
         /// <param name="offset">
-        ///   The byte offset in <paramref name="buffer"/> at which to begin 
+        ///   The byte offset in <paramref name="buffer"/> at which to begin
         ///   writing data from the <paramref name="stream"/>.
         /// </param>
         /// <param name="length">
         ///  The number of bytes to read.
         /// </param>
         /// <returns>
-        ///   A task that represents the asynchronous operation. 
+        ///   A task that represents the asynchronous operation.
         /// </returns>
         /// <exception cref="EndOfStreamException">
-        ///   When the <paramref name="stream"/> does not have 
+        ///   When the <paramref name="stream"/> does not have
         ///   <paramref name="length"/> bytes.
         /// </exception>
         public static async Task ReadExactAsync(this Stream stream, byte[] buffer, int offset, int length)
@@ -52,7 +52,7 @@ namespace PeerTalk
         }
 
         /// <summary>
-        ///   Asynchronously reads a sequence of bytes from the stream and advances 
+        ///   Asynchronously reads a sequence of bytes from the stream and advances
         ///   the position within the stream by the number of bytes read.
         /// </summary>
         /// <param name="stream">
@@ -62,7 +62,7 @@ namespace PeerTalk
         ///   The buffer to write the data into.
         /// </param>
         /// <param name="offset">
-        ///   The byte offset in <paramref name="buffer"/> at which to begin 
+        ///   The byte offset in <paramref name="buffer"/> at which to begin
         ///   writing data from the <paramref name="stream"/>.
         /// </param>
         /// <param name="length">
@@ -72,10 +72,10 @@ namespace PeerTalk
         ///   Is used to stop the task.
         /// </param>
         /// <returns>
-        ///   A task that represents the asynchronous operation. 
+        ///   A task that represents the asynchronous operation.
         /// </returns>
         /// <exception cref="EndOfStreamException">
-        ///   When the <paramref name="stream"/> does not have 
+        ///   When the <paramref name="stream"/> does not have
         ///   <paramref name="length"/> bytes.
         /// </exception>
         public static async Task ReadExactAsync(this Stream stream, byte[] buffer, int offset, int length, CancellationToken cancel)

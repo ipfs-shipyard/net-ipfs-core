@@ -1,7 +1,4 @@
-﻿using Common.Logging;
-using Ipfs;
-using Nito.AsyncEx;
-using System;
+﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
@@ -10,6 +7,9 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Common.Logging;
+using Ipfs;
+using Nito.AsyncEx;
 
 namespace PeerTalk.Multiplex
 {
@@ -21,7 +21,7 @@ namespace PeerTalk.Multiplex
     /// </remarks>
     public class Muxer
     {
-        static ILog log = LogManager.GetLogger(typeof(Muxer));
+        private static ILog log = LogManager.GetLogger(typeof(Muxer));
 
         /// <summary>
         ///   The next stream ID to create.
@@ -57,8 +57,8 @@ namespace PeerTalk.Multiplex
         /// </summary>
         public event EventHandler<Substream> SubstreamClosed;
 
-        readonly AsyncLock ChannelWriteLock = new AsyncLock();
-        
+        private readonly AsyncLock ChannelWriteLock = new AsyncLock();
+
         /// <summary>
         ///   The substreams that are open.
         /// </summary>
@@ -109,7 +109,7 @@ namespace PeerTalk.Multiplex
         /// <returns>
         ///   A duplex stream.
         /// </returns>
-        public async Task<Substream> CreateStreamAsync(string name = "", CancellationToken cancel = default(CancellationToken))
+        public async Task<Substream> CreateStreamAsync(string name = "", CancellationToken cancel = default)
         {
             var streamId = NextStreamId;
             NextStreamId += 2;
@@ -141,7 +141,7 @@ namespace PeerTalk.Multiplex
         /// <remarks>
         ///   Internal method called by Substream.Dispose().
         /// </remarks>
-        public async Task<Substream> RemoveStreamAsync(Substream stream, CancellationToken cancel = default(CancellationToken))
+        public async Task<Substream> RemoveStreamAsync(Substream stream, CancellationToken cancel = default)
         {
             if (Substreams.TryRemove(stream.Id, out Substream _))
             {
@@ -174,7 +174,7 @@ namespace PeerTalk.Multiplex
         ///   Any encountered errors will close the <see cref="Channel"/>.
         ///   </para>
         /// </remarks>
-        public async Task ProcessRequestsAsync(CancellationToken cancel = default(CancellationToken))
+        public async Task ProcessRequestsAsync(CancellationToken cancel = default)
         {
             try
             {
@@ -299,14 +299,14 @@ namespace PeerTalk.Multiplex
             if (Connection != null)
                 Connection.Dispose();
             else if (Channel != null)
-                Channel.Dispose();
+                await Channel.DisposeAsync();
 
             // Dispose of all the substreams.
             var streams = Substreams.Values.ToArray();
             Substreams.Clear();
             foreach (var stream in streams)
             {
-                stream.Dispose();
+                await stream.DisposeAsync();
             }
         }
 

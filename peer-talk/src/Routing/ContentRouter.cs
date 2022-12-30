@@ -57,7 +57,7 @@ namespace PeerTalk.Routing
         }
 
         /// <summary>
-        ///   Adds the <see cref="Cid"/> and <see cref="Peer"/> to the content 
+        ///   Adds the <see cref="Cid"/> and <see cref="Peer"/> to the content
         ///   routing system at the specified <see cref="DateTime"/>.
         /// </summary>
         /// <param name="cid">
@@ -123,7 +123,6 @@ namespace PeerTalk.Routing
         public void Dispose()
         {
         }
-
 
     }
 }

@@ -1,12 +1,12 @@
-﻿using Common.Logging;
+﻿using System;
+using System.Collections.Concurrent;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net;
+using System.Threading.Tasks;
+using Common.Logging;
 using Ipfs;
 using Makaretu.Dns;
-using System;
-using System.Collections.Generic;
-using System.Collections.Concurrent;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Net;
 
 namespace PeerTalk.Discovery
 {
@@ -15,7 +15,7 @@ namespace PeerTalk.Discovery
     /// </summary>
     public abstract class Mdns : IPeerDiscovery
     {
-        static ILog log = LogManager.GetLogger(typeof(Mdns));
+        private static ILog log = LogManager.GetLogger(typeof(Mdns));
 
         /// <inheritdoc />
         public event EventHandler<Peer> PeerDiscovered;
@@ -77,7 +77,6 @@ namespace PeerTalk.Discovery
             return Task.CompletedTask;
         }
 
-
         /// <inheritdoc />
         public Task StopAsync()
         {
@@ -85,7 +84,7 @@ namespace PeerTalk.Discovery
             return Task.CompletedTask;
         }
 
-        void OnServiceInstanceDiscovered(object sender, ServiceInstanceDiscoveryEventArgs e)
+        private void OnServiceInstanceDiscovered(object sender, ServiceInstanceDiscoveryEventArgs e)
         {
             try
             {
@@ -110,7 +109,7 @@ namespace PeerTalk.Discovery
                 // eat it
             }
         }
-    
+
         /// <summary>
         ///   Build the profile which contains the DNS records that are needed
         ///   to locate and connect to the local peer.

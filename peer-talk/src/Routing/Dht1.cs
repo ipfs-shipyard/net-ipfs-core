@@ -65,7 +65,7 @@ namespace PeerTalk.Routing
         }
 
         /// <inheritdoc />
-        public async Task ProcessMessageAsync(PeerConnection connection, Stream stream, CancellationToken cancel = default(CancellationToken))
+        public async Task ProcessMessageAsync(PeerConnection connection, Stream stream, CancellationToken cancel = default)
         {
             while (true)
             {
@@ -153,7 +153,7 @@ namespace PeerTalk.Routing
         }
 
         /// <inheritdoc />
-        public async Task<Peer> FindPeerAsync(MultiHash id, CancellationToken cancel = default(CancellationToken))
+        public async Task<Peer> FindPeerAsync(MultiHash id, CancellationToken cancel = default)
         {
             // Can always find self.
             if (Swarm.LocalPeer.Id == id)
@@ -184,7 +184,7 @@ namespace PeerTalk.Routing
         }
 
         /// <inheritdoc />
-        public Task ProvideAsync(Cid cid, bool advertise = true, CancellationToken cancel = default(CancellationToken))
+        public Task ProvideAsync(Cid cid, bool advertise = true, CancellationToken cancel = default)
         {
             ContentRouter.Add(cid, this.Swarm.LocalPeer.Id);
             if (advertise)
@@ -200,7 +200,7 @@ namespace PeerTalk.Routing
             Cid id,
             int limit = 20,
             Action<Peer> action = null,
-            CancellationToken cancel = default(CancellationToken))
+            CancellationToken cancel = default)
         {
             var dquery = new DistributedQuery<Peer>
             {
@@ -270,7 +270,7 @@ namespace PeerTalk.Routing
                 };
                 var peers = RoutingTable
                     .NearestPeers(cid.Hash)
-                    .Where(p => p != Swarm.LocalPeer);   
+                    .Where(p => p != Swarm.LocalPeer);
                 foreach (var peer in peers)
                 {
                     try
@@ -416,6 +416,5 @@ namespace PeerTalk.Routing
             // There is no response for this request.
             return null;
         }
-
     }
 }

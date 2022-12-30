@@ -52,5 +52,4 @@ namespace PeerTalk.PubSub
         [ProtoMember(2)]
         public string Topic;
     }
-
 }

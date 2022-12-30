@@ -44,11 +44,14 @@ namespace PeerTalk.Routing
         ///   A k-bucket is full!
         /// </summary>
         /// <remarks>
-        ///  Currently this just removes the oldest contact from the list, 
+        /// <para>
+        ///  Currently this just removes the oldest contact from the list,
         ///  without acutally pinging the individual peers.
-        /// 
+        /// </para>
+        /// <para>
         ///  This is the same as go does, but should probably
         ///  be upgraded to actually ping the individual peers.
+        /// </para>
         /// </remarks>
         void Peers_Ping(object sender, PingEventArgs<RoutingPeer> e)
         {
@@ -100,10 +103,10 @@ namespace PeerTalk.Routing
         ///   The routing table key.
         /// </returns>
         /// <remarks>
-        ///   The peer ID is actually a multihash, it always starts with the same characters 
-        ///   (ie, Qm for rsa). This causes the distribution of hashes to be 
-        ///   non-equally distributed across all possible hash buckets. So the re-hash 
-        ///   into a non-multihash is to evenly distribute the potential keys and 
+        ///   The peer ID is actually a multihash, it always starts with the same characters
+        ///   (ie, Qm for rsa). This causes the distribution of hashes to be
+        ///   non-equally distributed across all possible hash buckets. So the re-hash
+        ///   into a non-multihash is to evenly distribute the potential keys and
         ///   hash buckets.
         /// </remarks>
         /// <seealso href="https://github.com/libp2p/js-libp2p-kad-dht/issues/56#issuecomment-441378802"/>
