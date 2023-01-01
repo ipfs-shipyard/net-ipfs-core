@@ -13,16 +13,18 @@ namespace PeerTalk
     [TestClass]
     public class SwarmTest
     {
-        readonly MultiAddress mars = "/ip4/10.1.10.10/tcp/29087/ipfs/QmSoLMeWqB7YGVLJN3pNLQpmmEk35v6wYtsMGLzSr5QBU3";
-        readonly MultiAddress venus = "/ip4/104.236.76.40/tcp/4001/ipfs/QmSoLV4Bbm51jM9C4gDYZQ9Cy3U6aXMJDAbzgu2fzaDs64";
-        readonly MultiAddress earth = "/ip4/178.62.158.247/tcp/4001/ipfs/QmSoLer265NRgSp2LA3dPaeykiS1J6DifTC88f5uVQKNAd";
-        Peer self = new Peer
+        private readonly MultiAddress mars = "/ip4/10.1.10.10/tcp/29087/ipfs/QmSoLMeWqB7YGVLJN3pNLQpmmEk35v6wYtsMGLzSr5QBU3";
+        private readonly MultiAddress venus = "/ip4/104.236.76.40/tcp/4001/ipfs/QmSoLV4Bbm51jM9C4gDYZQ9Cy3U6aXMJDAbzgu2fzaDs64";
+        private readonly MultiAddress earth = "/ip4/178.62.158.247/tcp/4001/ipfs/QmSoLer265NRgSp2LA3dPaeykiS1J6DifTC88f5uVQKNAd";
+
+        private Peer self = new Peer
         {
             AgentVersion = "self",
             Id = "QmXK9VBxaXFuuT29AaPUTgW3jBWZ9JgLVZYdMYTHC6LLAH",
             PublicKey = "CAASXjBcMA0GCSqGSIb3DQEBAQUAA0sAMEgCQQCC5r4nQBtnd9qgjnG8fBN5+gnqIeWEIcUFUdCG4su/vrbQ1py8XGKNUBuDjkyTv25Gd3hlrtNJV3eOKZVSL8ePAgMBAAE="
         };
-        Peer other = new Peer
+
+        private Peer other = new Peer
         {
             AgentVersion = "other",
             Id = "QmdpwjdB94eNm2Lcvp9JqoCxswo3AKQqjLuNZyLixmCM1h",
@@ -157,11 +159,13 @@ namespace PeerTalk
             };
             var swarmB = new Swarm { LocalPeer = peerB };
             await swarmB.StartAsync();
+
             var peerBAddress = await swarmB.StartListeningAsync("/ip4/127.0.0.1/tcp/0");
-            Assert.IsTrue(peerB.Addresses.Count() > 0);
+            Assert.IsTrue(peerB.Addresses.Any());
 
             var swarm = new Swarm { LocalPeer = self };
             await swarm.StartAsync();
+
             try
             {
                 var remotePeer = (await swarm.ConnectAsync(peerBAddress)).RemotePeer;
@@ -374,7 +378,6 @@ namespace PeerTalk
                 await Task.Delay(100);
             }
             Assert.IsTrue(a.IsCanceled || a.IsFaulted);
-
         }
 
         [TestMethod]
@@ -1087,7 +1090,7 @@ namespace PeerTalk
             await swarm.StartAsync();
             try
             {
-                using (var stream = await swarm.DialAsync(peerB, "/ipfs/id/1.0.0"))
+                using var stream = await swarm.DialAsync(peerB, "/ipfs/id/1.0.0");
                 {
                     Assert.IsNotNull(stream);
                     Assert.IsTrue(stream.CanRead);
@@ -1155,7 +1158,6 @@ namespace PeerTalk
             {
                 var remotePeer = await swarm.ConnectAsync(peerBAddress);
                 Assert.AreEqual(2, OpenNetwork.Count);
-
             }
             finally
             {
@@ -1222,7 +1224,7 @@ namespace PeerTalk
     /// <summary>
     ///   A noop private network.
     /// </summary>
-    class OpenNetwork : INetworkProtector
+    internal class OpenNetwork : INetworkProtector
     {
         public static int Count;
 
@@ -1233,4 +1235,3 @@ namespace PeerTalk
         }
     }
 }
-

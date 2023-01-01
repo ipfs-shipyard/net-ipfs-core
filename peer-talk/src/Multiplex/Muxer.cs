@@ -177,8 +177,6 @@ namespace PeerTalk.Multiplex
         /// </remarks>
         public async Task ProcessRequestsAsync(CancellationToken cancel = default)
         {
-            var xxxx = new StringBuilder();
-
             try
             {
                 while (Channel.CanRead && !cancel.IsCancellationRequested)
@@ -188,8 +186,6 @@ namespace PeerTalk.Multiplex
                     var length = await Channel.ReadVarint32Async(cancel).ConfigureAwait(false);
                     if (log.IsTraceEnabled)
                         log.TraceFormat("received '{0}', stream={1}, length={2}", header.PacketType, header.StreamId, length);
-
-                    xxxx.Append("Header: ").Append(header.PacketType).Append(" || Length: ").Append(length).AppendLine();
 
                     // Read the payload.
                     var payload = new byte[length];
@@ -221,7 +217,6 @@ namespace PeerTalk.Multiplex
                         SubstreamCreated?.Invoke(this, substream);
 
                         // Special hack for go-ipfs
-
                         if (Receiver && (substream.Id & 1) == 1)
                         {
                             log.Debug($"go-hack sending newstream {substream.Id}");
@@ -261,23 +256,19 @@ namespace PeerTalk.Multiplex
                             || (header.PacketType == PacketType.ResetInitiator)
                             || (header.PacketType == PacketType.ResetReceiver))
                     {
-                        xxxx.Append("Invoke Close: ").Append(header.PacketType).AppendLine();
+                        if (substream == null)
+                        {
+                            log.Warn($"Reset of unknown stream #{header.StreamId}");
+                            continue;
+                        }
+                        substream.NoMoreData();
+                        Substreams.TryRemove(substream.Id, out Substream _);
                         SubstreamClosed?.Invoke(this, substream);
-                        throw new InvalidDataException($"Invoke Close: '{xxxx}'.");
-                        //if (substream == null)
-                        //{
-                        //    log.Warn($"Reset of unknown stream #{header.StreamId}");
-                        //    continue;
-                        //}
-                        //substream.NoMoreData();
-                        //Substreams.TryRemove(substream.Id, out Substream _);
-                        //SubstreamClosed?.Invoke(this, substream);
                     }
                     else
                     {
                         throw new InvalidDataException($"Unknown Muxer packet type '{header.PacketType}'.");
                     }
-                    xxxx.Append("SubStream: ").AppendLine(substream?.Name);
                 }
             }
             catch (EndOfStreamException)
@@ -322,8 +313,6 @@ namespace PeerTalk.Multiplex
             {
                 await stream.DisposeAsync();
             }
-
-            throw new InvalidDataException($"General: '{xxxx}'.");
         }
 
         /// <summary>

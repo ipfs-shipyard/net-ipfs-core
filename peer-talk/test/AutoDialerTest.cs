@@ -12,20 +12,21 @@ namespace PeerTalk
     [TestClass]
     public class AutoDialerTest
     {
-        Peer peerA = new Peer
+        private Peer peerA = new Peer
         {
             AgentVersion = "A",
             Id = "QmXK9VBxaXFuuT29AaPUTgW3jBWZ9JgLVZYdMYTHC6LLAH",
             PublicKey = "CAASXjBcMA0GCSqGSIb3DQEBAQUAA0sAMEgCQQCC5r4nQBtnd9qgjnG8fBN5+gnqIeWEIcUFUdCG4su/vrbQ1py8XGKNUBuDjkyTv25Gd3hlrtNJV3eOKZVSL8ePAgMBAAE="
         };
-        Peer peerB = new Peer
+
+        private Peer peerB = new Peer
         {
             AgentVersion = "B",
             Id = "QmdpwjdB94eNm2Lcvp9JqoCxswo3AKQqjLuNZyLixmCM1h",
             PublicKey = "CAASXjBcMA0GCSqGSIb3DQEBAQUAA0sAMEgCQQDlTSgVLprWaXfmxDr92DJE1FP0wOexhulPqXSTsNh5ot6j+UiuMgwb0shSPKzLx9AuTolCGhnwpTBYHVhFoBErAgMBAAE="
         };
 
-        Peer peerC = new Peer
+        private Peer peerC = new Peer
         {
             AgentVersion = "C",
             Id = "QmTcEBjSTSLjeu2oTiSoBSQQgqH5MADUsemXewn6rThoDT",
@@ -46,7 +47,7 @@ namespace PeerTalk
         {
             var swarmA = new Swarm { LocalPeer = peerA };
             await swarmA.StartAsync();
-            var peerAAddress = await swarmA.StartListeningAsync("/ip4/127.0.0.1/tcp/0");
+            var peerAddress = await swarmA.StartListeningAsync("/ip4/127.0.0.1/tcp/0");
 
             var swarmB = new Swarm { LocalPeer = peerB };
             await swarmB.StartAsync();
@@ -59,7 +60,7 @@ namespace PeerTalk
                     var other = swarmA.RegisterPeerAddress(peerBAddress);
 
                     // wait for the connection.
-                    var endTime = DateTime.Now.AddSeconds(3);
+                    var endTime = DateTime.Now.AddSeconds(5);
                     while (other.ConnectedAddress == null)
                     {
                         if (DateTime.Now > endTime)
@@ -167,6 +168,5 @@ namespace PeerTalk
                 await swarmC?.StopAsync();
             }
         }
-
     }
 }
