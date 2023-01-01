@@ -15,9 +15,9 @@ namespace PeerTalk
     /// </summary>
     public static class MultiAddressExtensions
     {
-        static Dictionary<AddressFamily, string> supportedDnsAddressFamilies = new Dictionary<AddressFamily, string>();
-        static MultiAddress http = new MultiAddress("/tcp/80");
-        static MultiAddress https = new MultiAddress("/tcp/443");
+        private static readonly Dictionary<AddressFamily, string> supportedDnsAddressFamilies = new();
+        private static readonly MultiAddress http = new("/tcp/80");
+        private static readonly MultiAddress https = new("/tcp/443");
 
         static MultiAddressExtensions()
         {
@@ -40,8 +40,8 @@ namespace PeerTalk
         public static bool IsLoopback(this MultiAddress multiaddress)
         {
             return multiaddress.Protocols.Any(p =>
-                p.Name == "ip4" && p.Value == "127.0.0.1" ||
-                p.Name == "ip6" && p.Value == "::1");
+                (p.Name == "ip4" && p.Value == "127.0.0.1") ||
+                (p.Name == "ip6" && p.Value == "::1"));
         }
 
         /// <summary>
@@ -103,11 +103,9 @@ namespace PeerTalk
             // This will not then expose the domain name in plain text.
             // We also, then get to specify if A and/or AAAA records are needed.
             var addresses = (await Dns.GetHostAddressesAsync(host).ConfigureAwait(false))
-                .Where(a => supportedDnsAddressFamilies.ContainsKey(a.AddressFamily))
-                .Where(a =>
-                    protocolName == "dns" ||
-                    protocolName == "dns4" && a.AddressFamily == AddressFamily.InterNetwork ||
-                    protocolName == "dns6" && a.AddressFamily == AddressFamily.InterNetworkV6);
+                .Where(a => supportedDnsAddressFamilies.ContainsKey(a.AddressFamily) && (protocolName == "dns" ||
+                    (protocolName == "dns4" && a.AddressFamily == AddressFamily.InterNetwork) ||
+                    (protocolName == "dns6" && a.AddressFamily == AddressFamily.InterNetworkV6)));
             foreach (var addr in addresses)
             {
                 var ma0 = new MultiAddress(supportedDnsAddressFamilies[addr.AddressFamily] + addr.ToString());

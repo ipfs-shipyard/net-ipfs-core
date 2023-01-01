@@ -9,13 +9,13 @@ using System.Threading.Tasks;
 
 namespace PeerTalk.Transports
 {
-    class DatagramStream : Stream
+    internal class DatagramStream : Stream
     {
-        Socket socket;
-        bool ownsSocket;
-        MemoryStream sendBuffer = new MemoryStream();
-        MemoryStream receiveBuffer = new MemoryStream();
-        byte[] datagram = new byte[2048];
+        private Socket socket;
+        private bool ownsSocket;
+        private readonly MemoryStream sendBuffer = new();
+        private readonly MemoryStream receiveBuffer = new();
+        private readonly byte[] datagram = new byte[2048];
 
         public DatagramStream(Socket socket, bool ownsSocket = false)
         {
@@ -66,9 +66,9 @@ namespace PeerTalk.Transports
 
         public override void Flush()
         {
-#pragma warning disable VSTHRD002 
+#pragma warning disable VSTHRD002
             FlushAsync().GetAwaiter().GetResult();
-#pragma warning restore VSTHRD002 
+#pragma warning restore VSTHRD002
         }
 
         public override async Task FlushAsync(CancellationToken cancellationToken)
@@ -83,9 +83,9 @@ namespace PeerTalk.Transports
 
         public override int Read(byte[] buffer, int offset, int count)
         {
-#pragma warning disable VSTHRD002 
+#pragma warning disable VSTHRD002
             return ReadAsync(buffer, offset, count).GetAwaiter().GetResult();
-#pragma warning restore VSTHRD002 
+#pragma warning restore VSTHRD002
         }
 
         public override async Task<int> ReadAsync(byte[] buffer, int offset, int count, CancellationToken cancellationToken)
@@ -93,7 +93,7 @@ namespace PeerTalk.Transports
             // If no data.
             if (receiveBuffer.Position == receiveBuffer.Length)
             {
-                await FlushAsync().ConfigureAwait(false);
+                await FlushAsync(cancellationToken).ConfigureAwait(false);
                 receiveBuffer.Position = 0;
                 receiveBuffer.SetLength(0);
                 var size = socket.Receive(datagram);

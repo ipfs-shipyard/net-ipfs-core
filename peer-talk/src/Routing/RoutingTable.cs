@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace PeerTalk.Routing
 {
-    class RoutingPeer : IContact
+    internal class RoutingPeer : IContact
     {
         public Peer Peer;
 
@@ -26,7 +26,7 @@ namespace PeerTalk.Routing
     /// </summary>
     public class RoutingTable
     {
-        KBucket<RoutingPeer> Peers = new KBucket<RoutingPeer>();
+        private readonly KBucket<RoutingPeer> Peers = new();
 
         /// <summary>
         ///   Creates a new instance of the <see cref="RoutingTable"/> for
@@ -53,7 +53,7 @@ namespace PeerTalk.Routing
         ///  be upgraded to actually ping the individual peers.
         /// </para>
         /// </remarks>
-        void Peers_Ping(object sender, PingEventArgs<RoutingPeer> e)
+        private void Peers_Ping(object sender, PingEventArgs<RoutingPeer> e)
         {
             if (Peers.Remove(e.Oldest.First()))
             {
@@ -110,7 +110,7 @@ namespace PeerTalk.Routing
         ///   hash buckets.
         /// </remarks>
         /// <seealso href="https://github.com/libp2p/js-libp2p-kad-dht/issues/56#issuecomment-441378802"/>
-        static public byte[] Key(MultiHash id)
+        public static byte[] Key(MultiHash id)
         {
             return MultiHash.ComputeHash(id.ToArray(), "sha2-256").Digest;
         }

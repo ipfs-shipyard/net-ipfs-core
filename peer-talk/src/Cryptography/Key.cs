@@ -15,15 +15,15 @@ namespace PeerTalk.Cryptography
     /// <summary>
     ///   An asymmetric key.
     /// </summary>
-    public class Key
+    public sealed class Key
     {
-        const string RsaSigningAlgorithmName = "SHA-256withRSA";
-        const string EcSigningAlgorithmName = "SHA-256withECDSA";
-        const string Ed25519SigningAlgorithmName = "Ed25519";
+        private const string RsaSigningAlgorithmName = "SHA-256withRSA";
+        private const string EcSigningAlgorithmName = "SHA-256withECDSA";
+        private const string Ed25519SigningAlgorithmName = "Ed25519";
 
-        AsymmetricKeyParameter publicKey;
-        AsymmetricKeyParameter privateKey;
-        string signingAlgorithmName;
+        private AsymmetricKeyParameter publicKey;
+        private AsymmetricKeyParameter privateKey;
+        private string signingAlgorithmName;
 
         private Key()
         {
@@ -89,14 +89,17 @@ namespace PeerTalk.Cryptography
                     key.publicKey = PublicKeyFactory.CreateKey(ipfsKey.Data);
                     key.signingAlgorithmName = RsaSigningAlgorithmName;
                     break;
+
                 case KeyType.Ed25519:
                     key.publicKey = PublicKeyFactory.CreateKey(ipfsKey.Data);
                     key.signingAlgorithmName = Ed25519SigningAlgorithmName;
                     break;
+
                 case KeyType.Secp256k1:
                     key.publicKey = PublicKeyFactory.CreateKey(ipfsKey.Data);
                     key.signingAlgorithmName = EcSigningAlgorithmName;
                     break;
+
                 default:
                     throw new InvalidDataException($"Unknown key type of {ipfsKey.Type}.");
             }
@@ -112,8 +115,10 @@ namespace PeerTalk.Cryptography
         /// </param>
         public static Key CreatePrivateKey(AsymmetricKeyParameter privateKey)
         {
-            var key = new Key();
-            key.privateKey = privateKey;
+            var key = new Key
+            {
+                privateKey = privateKey
+            };
 
             // Get the public key from the private key.
             if (privateKey is RsaPrivateCrtKeyParameters rsa)
@@ -138,7 +143,7 @@ namespace PeerTalk.Cryptography
             return key;
         }
 
-        enum KeyType
+        private enum KeyType
         {
             RSA = 0,
             Ed25519 = 1,
@@ -147,10 +152,11 @@ namespace PeerTalk.Cryptography
         }
 
         [ProtoContract]
-        class PublicKeyMessage
+        private class PublicKeyMessage
         {
             [ProtoMember(1, IsRequired = true)]
             public KeyType Type { get; set; }
+
             [ProtoMember(2, IsRequired = true)]
             public byte[] Data { get; set; }
         }

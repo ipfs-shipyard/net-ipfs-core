@@ -22,7 +22,7 @@ namespace PeerTalk.PubSub
     /// </remarks>
     public class NotificationService : IService, IPubSubApi
     {
-        private static ILog log = LogManager.GetLogger(typeof(NotificationService));
+        private static readonly ILog log = LogManager.GetLogger(typeof(NotificationService));
 
         private class TopicHandler
         {
@@ -32,7 +32,7 @@ namespace PeerTalk.PubSub
 
         private long nextSequenceNumber;
         private ConcurrentDictionary<TopicHandler, TopicHandler> topicHandlers;
-        private MessageTracker tracker = new MessageTracker();
+        private readonly MessageTracker tracker = new();
 
         // TODO: A general purpose CancellationTokenSource that stops publishing of
         // messages when this service is stopped.
@@ -158,13 +158,11 @@ namespace PeerTalk.PubSub
         /// <inheritdoc />
         public Task PublishAsync(string topic, Stream message, CancellationToken cancel = default)
         {
-            using (var ms = new MemoryStream())
-            {
+            using var ms = new MemoryStream();
 #pragma warning disable VSTHRD103
-                message.CopyTo(ms);
+            message.CopyTo(ms);
 #pragma warning disable VSTHRD103
-                return PublishAsync(topic, ms.ToArray(), cancel);
-            }
+            return PublishAsync(topic, ms.ToArray(), cancel);
         }
 
         /// <inheritdoc />

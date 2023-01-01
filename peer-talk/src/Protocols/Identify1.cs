@@ -17,7 +17,7 @@ namespace PeerTalk.Protocols
     /// </summary>
     public class Identify1 : IPeerProtocol
     {
-        static ILog log = LogManager.GetLogger(typeof(Identify1));
+        private static readonly ILog log = LogManager.GetLogger(typeof(Identify1));
 
         /// <inheritdoc />
         public string Name { get; } = "ipfs/id";
@@ -53,7 +53,7 @@ namespace PeerTalk.Protocols
             }
 
             ProtoBuf.Serializer.SerializeWithLengthPrefix<Identify>(stream, res, PrefixStyle.Base128);
-            await stream.FlushAsync().ConfigureAwait(false);
+            await stream.FlushAsync(cancel).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -129,7 +129,7 @@ namespace PeerTalk.Protocols
                     .Select(a => a.WithPeerId(remote.Id))
                     .ToList();
             }
-            if (remote.Addresses.Count() == 0)
+            if (!remote.Addresses.Any())
                 log.Warn($"No listen address for {remote}");
 
             if (!remote.IsValid())
@@ -139,18 +139,23 @@ namespace PeerTalk.Protocols
         }
 
         [ProtoContract]
-        class Identify
+        private class Identify
         {
             [ProtoMember(5)]
             public string ProtocolVersion;
+
             [ProtoMember(6)]
             public string AgentVersion;
+
             [ProtoMember(1)]
             public byte[] PublicKey;
+
             [ProtoMember(2, IsRequired = true)]
             public byte[][] ListenAddresses;
+
             [ProtoMember(4)]
             public byte[] ObservedAddress;
+
             [ProtoMember(3)]
             public string[] Protocols;
         }

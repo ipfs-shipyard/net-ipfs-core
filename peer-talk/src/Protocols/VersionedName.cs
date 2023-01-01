@@ -42,7 +42,7 @@ namespace PeerTalk.Protocols
             return new VersionedName
             {
                 Name = string.Join("/", parts, 0, parts.Length - 1),
-                Version = SemVersion.Parse(parts[parts.Length - 1], SemVersionStyles.Strict)
+                Version = SemVersion.Parse(parts[^1], SemVersionStyles.Strict)
             };
         }
 
@@ -56,9 +56,8 @@ namespace PeerTalk.Protocols
         public override bool Equals(object obj)
         {
             var that = obj as VersionedName;
-            return (that == null)
-                ? false
-                : this.Name == that.Name && this.Version == that.Version;
+            return (that != null)
+                && this.Name == that.Name && this.Version == that.Version;
         }
 
         /// <inheritdoc />
@@ -72,9 +71,9 @@ namespace PeerTalk.Protocols
         /// </summary>
         public static bool operator ==(VersionedName a, VersionedName b)
         {
-            if (object.ReferenceEquals(a, b)) return true;
-            if (object.ReferenceEquals(a, null)) return false;
-            if (object.ReferenceEquals(b, null)) return false;
+            if (ReferenceEquals(a, b)) return true;
+            if (a is null) return false;
+            if (b is null) return false;
 
             return a.Equals(b);
         }
@@ -84,9 +83,9 @@ namespace PeerTalk.Protocols
         /// </summary>
         public static bool operator !=(VersionedName a, VersionedName b)
         {
-            if (object.ReferenceEquals(a, b)) return false;
-            if (object.ReferenceEquals(a, null)) return true;
-            if (object.ReferenceEquals(b, null)) return true;
+            if (ReferenceEquals(a, b)) return false;
+            if (a is null) return true;
+            if (b is null) return true;
 
             return !a.Equals(b);
         }

@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 using Common.Logging;
 using Ipfs;
 
-#if !NETSTANDARD14
+#if !NET5_0_OR_GREATER
 
 using JuiceStream;
 
@@ -29,7 +29,7 @@ namespace PeerTalk.Transports
     /// </remarks>
     public class Tcp : IPeerTransport
     {
-        private static ILog log = LogManager.GetLogger(typeof(Tcp));
+        private static readonly ILog log = LogManager.GetLogger(typeof(Tcp));
 
         /// <summary>
         ///  The minimum read timeout.
@@ -47,10 +47,9 @@ namespace PeerTalk.Transports
                 .Select(p => int.Parse(p.Value))
                 .First();
             var ip = address.Protocols
-                .Where(p => p.Name == "ip4" || p.Name == "ip6")
-                .FirstOrDefault();
+                .Find(p => p.Name == "ip4" || p.Name == "ip6");
             if (ip == null)
-                throw new ArgumentException($"Missing IP address in '{address}'.", "address");
+                throw new ArgumentException($"Missing IP address in '{address}'.", nameof(address));
             var socket = new Socket(
                 ip.Name == "ip4" ? AddressFamily.InterNetwork : AddressFamily.InterNetworkV6,
                 SocketType.Stream,
@@ -68,7 +67,7 @@ namespace PeerTalk.Transports
                 {
                     var ipaddr = IPAddress.Parse(ip.Value);
                     await socket.ConnectAsync(ipaddr, port).ConfigureAwait(false);
-                };
+                }
 
                 latency = DateTime.Now - start;
                 log.Trace($"connected to {address} in {latency.TotalMilliseconds} ms");
@@ -99,7 +98,7 @@ namespace PeerTalk.Transports
             stream.ReadTimeout = timeout;
             stream.WriteTimeout = timeout;
 
-#if !NETSTANDARD14
+#if !NET5_0_OR_GREATER
             // BufferedStream not available in .Net Standard 1.4
             stream = new DuplexBufferedStream(stream);
 #endif
@@ -122,10 +121,9 @@ namespace PeerTalk.Transports
                 .Select(p => int.Parse(p.Value))
                 .FirstOrDefault();
             var ip = address.Protocols
-                .Where(p => p.Name == "ip4" || p.Name == "ip6")
-                .FirstOrDefault();
+                .Find(p => p.Name == "ip4" || p.Name == "ip6");
             if (ip == null)
-                throw new ArgumentException($"Missing IP address in '{address}'.", "address");
+                throw new ArgumentException($"Missing IP address in '{address}'.", nameof(address));
             var ipAddress = IPAddress.Parse(ip.Value);
             var endPoint = new IPEndPoint(ipAddress, port);
             var socket = new Socket(
@@ -148,7 +146,7 @@ namespace PeerTalk.Transports
             if (port != actualPort)
             {
                 address = address.Clone();
-                var protocol = address.Protocols.FirstOrDefault(p => p.Name == "tcp");
+                var protocol = address.Protocols.Find(p => p.Name == "tcp");
                 if (protocol != null)
                 {
                     protocol.Value = actualPort.ToString();
@@ -159,7 +157,7 @@ namespace PeerTalk.Transports
                 }
             }
 
-            _ = Task.Run(() => ProcessConnection(socket, address, handler, cancel));
+            _ = Task.Run(() => ProcessConnection(socket, address, handler, cancel), cancel);
 
             return address;
         }
@@ -175,8 +173,6 @@ namespace PeerTalk.Transports
 
                 try
                 {
-                    // .Net Standard on Unix neeeds this to cancel the Accept
-#if !NET461
                     if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
                     {
                         socket.Shutdown(SocketShutdown.Both);
@@ -190,9 +186,6 @@ namespace PeerTalk.Transports
                     {
                         socket.Dispose();
                     }
-#else
-                    socket.Dispose();
-#endif
                 }
                 catch (Exception e)
                 {
@@ -229,7 +222,7 @@ namespace PeerTalk.Transports
 
                     conn.NoDelay = true;
                     Stream peer = new NetworkStream(conn, ownsSocket: true);
-#if !NETSTANDARD14
+#if !NET5_0_OR_GREATER
                     // BufferedStream not available in .Net Standard 1.4
                     peer = new DuplexBufferedStream(peer);
 #endif
@@ -256,10 +249,7 @@ namespace PeerTalk.Transports
             }
             finally
             {
-                if (socket != null)
-                {
-                    socket.Dispose();
-                }
+                socket?.Dispose();
             }
 
             log.Debug("stop listening on " + address);

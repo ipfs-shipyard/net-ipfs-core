@@ -19,19 +19,19 @@ namespace PeerTalk.Routing
     /// </typeparam>
     public class DistributedQuery<T> where T : class
     {
-        static ILog log = LogManager.GetLogger("PeerTalk.Routing.DistributedQuery");
-        static int nextQueryId = 1;
+        private static readonly ILog log = LogManager.GetLogger("PeerTalk.Routing.DistributedQuery");
+        private static int nextQueryId = 1;
 
         /// <summary>
         ///   The maximum number of peers that can be queried at one time
         ///   for all distributed queries.
         /// </summary>
-        static SemaphoreSlim askCount = new SemaphoreSlim(128);
+        private static readonly SemaphoreSlim askCount = new(128);
 
         /// <summary>
         ///   The maximum time spent on waiting for an answer from a peer.
         /// </summary>
-        static readonly TimeSpan askTime = TimeSpan.FromSeconds(10);
+        private static readonly TimeSpan askTime = TimeSpan.FromSeconds(10);
 
         /// <summary>
         ///   Controls the running of the distributed query.
@@ -41,12 +41,12 @@ namespace PeerTalk.Routing
         ///   or the caller of <see cref="RunAsync"/> wants to cancel
         ///   or the DHT is stopped.
         /// </remarks>
-        CancellationTokenSource runningQuery;
+        private CancellationTokenSource runningQuery;
 
-        ConcurrentDictionary<Peer, Peer> visited = new ConcurrentDictionary<Peer, Peer>();
-        ConcurrentDictionary<T, T> answers = new ConcurrentDictionary<T, T>();
-        DhtMessage queryMessage;
-        int failedConnects = 0;
+        private readonly ConcurrentDictionary<Peer, Peer> visited = new();
+        private readonly ConcurrentDictionary<T, T> answers = new();
+        private DhtMessage queryMessage;
+        private int failedConnects = 0;
 
         /// <summary>
         ///   Raised when an answer is obtained.
@@ -133,7 +133,7 @@ namespace PeerTalk.Routing
             {
                 await Task.WhenAll(tasks).ConfigureAwait(false);
             }
-            catch (Exception)
+            catch
             {
                 // eat it
             }
@@ -153,7 +153,7 @@ namespace PeerTalk.Routing
         /// <summary>
         ///   Ask the next peer the question.
         /// </summary>
-        async Task AskAsync(int taskId)
+        private async Task AskAsync(int taskId)
         {
             int pass = 0;
             int waits = 20;
@@ -162,12 +162,11 @@ namespace PeerTalk.Routing
                 // Get the nearest peer that has not been visited.
                 var peer = Dht.RoutingTable
                     .NearestPeers(QueryKey)
-                    .Where(p => !visited.ContainsKey(p))
-                    .FirstOrDefault();
+                    .FirstOrDefault(p => !visited.ContainsKey(p));
                 if (peer == null)
                 {
                     --waits;
-                    await Task.Delay(100);
+                    await Task.Delay(128);
                     continue;
                 }
 
@@ -213,7 +212,7 @@ namespace PeerTalk.Routing
             }
         }
 
-        void ProcessProviders(DhtPeerMessage[] providers)
+        private void ProcessProviders(DhtPeerMessage[] providers)
         {
             if (providers == null)
                 return;
@@ -239,7 +238,7 @@ namespace PeerTalk.Routing
             }
         }
 
-        void ProcessCloserPeers(DhtPeerMessage[] closerPeers)
+        private void ProcessCloserPeers(DhtPeerMessage[] closerPeers)
         {
             if (closerPeers == null)
                 return;
@@ -271,12 +270,12 @@ namespace PeerTalk.Routing
         {
             if (answer == null)
                 return;
-            if (runningQuery != null && runningQuery.IsCancellationRequested)
+            if (runningQuery?.IsCancellationRequested == true)
                 return;
 
             if (answers.TryAdd(answer, answer))
             {
-                if (answers.Count >= AnswersNeeded && runningQuery != null && !runningQuery.IsCancellationRequested)
+                if (answers.Count >= AnswersNeeded && runningQuery?.IsCancellationRequested == false)
                 {
                     runningQuery.Cancel(false);
                 }

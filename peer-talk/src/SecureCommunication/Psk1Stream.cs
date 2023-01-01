@@ -26,14 +26,14 @@ namespace PeerTalk.SecureCommunication
     /// <seealso href="https://github.com/libp2p/specs/blob/master/pnet/Private-Networks-PSK-V1.md"/>
     public class Psk1Stream : Stream
     {
-        const int KeyBitLength = 256;
-        const int NonceBitLength = 192;
-        const int NonceByteLength = NonceBitLength / 8;
+        private const int KeyBitLength = 256;
+        private const int NonceBitLength = 192;
+        private const int NonceByteLength = NonceBitLength / 8;
 
-        Stream stream;
-        PreSharedKey key;
-        IStreamCipher readCipher;
-        IStreamCipher writeCipher;
+        private Stream stream;
+        private PreSharedKey key;
+        private IStreamCipher readCipher;
+        private IStreamCipher writeCipher;
 
         /// <summary>
         ///   Creates a new instance of the <see cref="Psk1Stream"/> class.
@@ -55,7 +55,7 @@ namespace PeerTalk.SecureCommunication
             this.key = key;
         }
 
-        IStreamCipher WriteCipher
+        private IStreamCipher WriteCipher
         {
             get
             {
@@ -79,7 +79,7 @@ namespace PeerTalk.SecureCommunication
             }
         }
 
-        IStreamCipher ReadCipher
+        private IStreamCipher ReadCipher
         {
             get
             {

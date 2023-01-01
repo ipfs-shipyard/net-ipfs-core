@@ -22,7 +22,7 @@ namespace PeerTalk
         /// <remarks>
         ///   The key is the ID of a message.  The value is the expiry date.
         /// </remarks>
-        ConcurrentDictionary<string, DateTime> messages = new ConcurrentDictionary<string, DateTime>();
+        private readonly ConcurrentDictionary<string, DateTime> messages = new();
 
         /// <summary>
         ///   The definition of recent.
@@ -34,7 +34,7 @@ namespace PeerTalk
         ///   Messages that have been in the cache longer that this value
         ///   will be removed and then be considered as "not seen".
         /// </remarks>
-        public TimeSpan Recent { get; set; } = TimeSpan.FromMinutes(10);
+        public TimeSpan Recent { get; set; } = TimeSpan.FromMinutes(11);
 
         /// <summary>
         ///   Determines if the message has recently been seen.
@@ -49,14 +49,14 @@ namespace PeerTalk
         /// </returns>
         public bool RecentlySeen(string id, DateTime? now = null)
         {
-            now = now ?? DateTime.Now;
+            now ??= DateTime.Now;
             Prune(now.Value);
 
             var seen = false;
             messages.AddOrUpdate(
                 id,
-                (key) => now.Value + Recent,
-                (key, expiry) => { seen = true; return now.Value + Recent; });
+                (_) => now.Value + Recent,
+                (_, __) => { seen = true; return now.Value + Recent; });
 
             return seen;
         }

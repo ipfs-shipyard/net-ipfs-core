@@ -61,7 +61,7 @@ namespace PeerTalk.Cryptography
         {
             ParametersWithIV ivParam = parameters as ParametersWithIV;
             if (ivParam == null)
-                throw new ArgumentException("CTR mode requires ParametersWithIV", "parameters");
+                throw new ArgumentException("CTR mode requires ParametersWithIV", nameof(parameters));
 
             this.IV = Arrays.Clone(ivParam.GetIV());
 

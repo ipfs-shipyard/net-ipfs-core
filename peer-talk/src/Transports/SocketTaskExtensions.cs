@@ -5,7 +5,6 @@
 // SocketTaskExtensions is not available in .Net Framework 4.6.1
 // This was copied and pasted from
 // https://searchcode.com/file/115739853/mcs/class/Facades/System.Net.Sockets/SocketTaskExtensions.cs
-//#if NET461IGNORE
 
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -101,7 +100,8 @@ namespace System.Net.Sockets
                 state: socket);
         }
 
-#if MONO
+#if NET7_0_OR_GREATER
+
         public static Task<SocketReceiveFromResult> ReceiveFromAsync(
             this Socket socket,
             ArraySegment<byte> buffer,
@@ -182,13 +182,12 @@ namespace System.Net.Sockets
                     var s = (Socket)arguments[0];
                     var f = (SocketFlags)arguments[1];
                     var e = (EndPoint)arguments[2];
-                    IPPacketInformation ipPacket;
 
                     int bytesReceived = s.EndReceiveMessageFrom(
                         asyncResult,
                         ref f,
                         ref e,
-                        out ipPacket);
+                        out IPPacketInformation ipPacket);
 
                     return new SocketReceiveMessageFromResult()
                     {
@@ -201,6 +200,7 @@ namespace System.Net.Sockets
                 buffer,
                 state: packedArguments);
         }
+
 #endif
 
         public static Task<int> SendAsync(this Socket socket, ArraySegment<byte> buffer, SocketFlags socketFlags)
@@ -255,5 +255,3 @@ namespace System.Net.Sockets
         }
     }
 }
-
-//#endif

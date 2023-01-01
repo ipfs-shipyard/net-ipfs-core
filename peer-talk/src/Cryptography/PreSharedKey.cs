@@ -21,7 +21,7 @@ namespace PeerTalk.Cryptography
     /// <seealso href="https://github.com/libp2p/specs/blob/master/pnet/Private-Networks-PSK-V1.md"/>
     public class PreSharedKey
     {
-        const string codecName = "/key/swarm/psk/1.0.0/";
+        private const string codecName = "/key/swarm/psk/1.0.0/";
 
         /// <summary>
         ///   The key value.
@@ -37,7 +37,8 @@ namespace PeerTalk.Cryptography
         /// <value>
         ///   The length in bits.
         /// </value>
-        public int Length { get { return Value?.Length * 8 ?? 0; } }
+        public int Length
+        { get { return Value?.Length * 8 ?? 0; } }
 
         /// <summary>
         ///   Gets an ID for the key.
@@ -46,7 +47,7 @@ namespace PeerTalk.Cryptography
         ///   A byte array that can be used as an identifier for the key.
         /// </returns>
         /// <remarks>
-        ///   C# implementation of the GO code at 
+        ///   C# implementation of the GO code at
         ///   <see href="https://github.com/libp2p/go-libp2p-pnet/blob/bed5e6afdf9099121029f6fb675be12a50196114/fingerprint.go#L10"/>.
         /// </remarks>
         public byte[] Fingerprint()
@@ -59,12 +60,19 @@ namespace PeerTalk.Cryptography
             cipher.Init(true, new ParametersWithIV(new KeyParameter(this.Value), nonce));
             cipher.ProcessBytes(encrypted, 0, encrypted.Length, encrypted, 0);
 
+            //
+            const string algotithmName = "shake-128";
+
             // Then do Shake-128 hash to reduce its length.
             // This way if for some reason Shake is broken and Salsa20 preimage is possible,
             // attacker has only half of the bytes necessary to recreate psk.
-            return MultiHash
-                .GetHashAlgorithm("shake-128")
-                .ComputeHash(encrypted); 
+            var computedHash = MultiHash.GetHashAlgorithm(algotithmName).ComputeHash(encrypted);
+
+            var algorithm = HashingAlgorithm.GetAlgorithmMetadata(algotithmName);
+
+            // shake-128 now generates a hash with a digest size > 16
+            // and should be trucated to the desired size
+            return computedHash.Take(algorithm.DigestSize).ToArray();
         }
 
         /// <summary>
@@ -97,9 +105,9 @@ namespace PeerTalk.Cryptography
         ///   "base16" or "base64".  Defaults to "base16".
         /// </param>
         /// <remarks>
-        ///   The key is writen as three lines 
+        ///   The key is writen as three lines
         ///   (1) the codec name "/key/swarm/psk/1.0.0/"
-        ///   (2) the base encoding  "/base16/" or "/base64/", 
+        ///   (2) the base encoding  "/base16/" or "/base64/",
         ///   (3) the key value in the base encoding
         /// </remarks>
         public void Export(TextWriter text, string format = "base16")
@@ -113,9 +121,11 @@ namespace PeerTalk.Cryptography
                 case "base16":
                     text.WriteLine(Value.ToHexString());
                     break;
+
                 case "base64":
                     text.WriteLine(Value.ToBase64NoPad());
                     break;
+
                 default:
                     throw new Exception($"Unknown encoding '{format}'.");
             }
@@ -136,9 +146,11 @@ namespace PeerTalk.Cryptography
                 case "/base16/":
                     Value = text.ReadLine().ToHexBuffer();
                     break;
+
                 case "/base64/":
                     Value = text.ReadLine().FromBase64NoPad();
                     break;
+
                 default:
                     throw new FormatException("Unknown base encoding.");
             }

@@ -13,9 +13,9 @@ namespace PeerTalk.PubSub
     /// </summary>
     public class TopicManager
     {
-        static readonly IEnumerable<Peer> nopeers = Enumerable.Empty<Peer>();
+        private static readonly IEnumerable<Peer> nopeers = Enumerable.Empty<Peer>();
 
-        ConcurrentDictionary<string, HashSet<Peer>> topics = new ConcurrentDictionary<string, HashSet<Peer>>();
+        private ConcurrentDictionary<string, HashSet<Peer>> topics = new ConcurrentDictionary<string, HashSet<Peer>>();
 
         /// <summary>
         ///   Get the peers interested in a topic.
@@ -75,8 +75,8 @@ namespace PeerTalk.PubSub
         {
             topics.AddOrUpdate(
                 topic,
-                (key) => new HashSet<Peer> { peer },
-                (key, peers) =>
+                (_) => new HashSet<Peer> { peer },
+                (_, peers) =>
                 {
                     peers.Add(peer);
                     return peers;
@@ -97,8 +97,8 @@ namespace PeerTalk.PubSub
         {
             topics.AddOrUpdate(
                 topic,
-                (key) => new HashSet<Peer>(),
-                (Key, list) =>
+                (_) => new HashSet<Peer>(),
+                (_, list) =>
                 {
                     list.Remove(peer);
                     return list;

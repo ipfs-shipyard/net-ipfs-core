@@ -18,7 +18,7 @@ namespace PeerTalk
     /// </remarks>
     public class MultiAddressBlackList : ICollection<MultiAddress>, IPolicy<MultiAddress>
     {
-        ConcurrentDictionary<MultiAddress, MultiAddress> filters = new ConcurrentDictionary<MultiAddress, MultiAddress>();
+        private readonly ConcurrentDictionary<MultiAddress, MultiAddress> filters = new();
 
         /// <inheritdoc />
         public bool IsAllowed(MultiAddress target)
@@ -26,7 +26,7 @@ namespace PeerTalk
             return !filters.Any(kvp => Matches(kvp.Key, target));
         }
 
-        bool Matches(MultiAddress filter, MultiAddress target)
+        private bool Matches(MultiAddress filter, MultiAddress target)
         {
             return filter
                 .Protocols
@@ -49,7 +49,7 @@ namespace PeerTalk
         public void Clear() => filters.Clear();
 
         /// <inheritdoc />
-        public bool Contains(MultiAddress item) => filters.Keys.Contains(item);
+        public bool Contains(MultiAddress item) => filters.ContainsKey(item);
 
         /// <inheritdoc />
         public void CopyTo(MultiAddress[] array, int arrayIndex) => filters.Keys.CopyTo(array, arrayIndex);

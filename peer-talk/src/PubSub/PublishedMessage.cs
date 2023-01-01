@@ -20,7 +20,7 @@ namespace PeerTalk.PubSub
     [ProtoContract]
     public class PublishedMessage : IPublishedMessage
     {
-        string messageId;
+        private string messageId;
 
         /// <inheritdoc />
         public Peer Sender { get; set; }
@@ -28,10 +28,10 @@ namespace PeerTalk.PubSub
         /// <summary>
         ///   Who sent the the message.
         /// </summary>
-        public Peer Forwarder {get; set; }
+        public Peer Forwarder { get; set; }
 
         [ProtoMember(1)]
-        byte[] From
+        private byte[] From
         {
             get
             {
@@ -53,7 +53,7 @@ namespace PeerTalk.PubSub
 
         /// <inheritdoc />
         [ProtoMember(2)]
-        public byte[] DataBytes { get;  set; }
+        public byte[] DataBytes { get; set; }
 
         /// <inheritdoc />
         public Stream DataStream
@@ -82,10 +82,7 @@ namespace PeerTalk.PubSub
         {
             get
             {
-                if (messageId == null)
-                {
-                    messageId = Sender.Id.ToBase58() + SequenceNumber.ToHexString();
-                }
+                messageId ??= Sender.Id.ToBase58() + SequenceNumber.ToHexString();
                 return messageId;
             }
         }

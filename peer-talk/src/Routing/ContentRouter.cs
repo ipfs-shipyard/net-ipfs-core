@@ -18,7 +18,7 @@ namespace PeerTalk.Routing
     /// </remarks>
     public class ContentRouter : IDisposable
     {
-        class ProviderInfo
+        private class ProviderInfo
         {
             /// <summary>
             ///   When the provider entry expires.
@@ -31,8 +31,9 @@ namespace PeerTalk.Routing
             public MultiHash PeerId { get; set; }
         }
 
-        ConcurrentDictionary<string, List<ProviderInfo>> content = new ConcurrentDictionary<string, List<ProviderInfo>>();
-        string Key(Cid cid) => "/providers/" + cid.Hash.ToBase32();
+        private readonly ConcurrentDictionary<string, List<ProviderInfo>> content = new();
+
+        private string Key(Cid cid) => "/providers/" + cid.Hash.ToBase32();
 
         /// <summary>
         ///   How long a provider is assumed to provide some content.
@@ -80,12 +81,11 @@ namespace PeerTalk.Routing
 
             content.AddOrUpdate(
                 Key(cid),
-                (key) => new List<ProviderInfo> { pi },
-                (key, providers) =>
+                (_) => new List<ProviderInfo> { pi },
+                (_, providers) =>
                 {
                     var existing = providers
-                        .Where(p => p.PeerId == provider)
-                        .FirstOrDefault();
+                        .Find(p => p.PeerId == provider);
                     if (existing != null)
                     {
                         existing.Expiry = pi.Expiry;
@@ -123,6 +123,5 @@ namespace PeerTalk.Routing
         public void Dispose()
         {
         }
-
     }
 }

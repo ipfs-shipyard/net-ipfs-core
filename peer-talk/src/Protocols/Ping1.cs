@@ -12,7 +12,6 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-
 namespace PeerTalk.Protocols
 {
     /// <summary>
@@ -20,9 +19,9 @@ namespace PeerTalk.Protocols
     /// </summary>
     public class Ping1 : IPeerProtocol, IService
     {
-        const int PingSize = 32;
+        private const int PingSize = 32;
 
-        static ILog log = LogManager.GetLogger(typeof(Ping1));
+        private static readonly ILog log = LogManager.GetLogger(typeof(Ping1));
 
         /// <inheritdoc />
         public string Name { get; } = "ipfs/ping";
@@ -121,7 +120,7 @@ namespace PeerTalk.Protocols
             return await PingAsync(peer, count, cancel).ConfigureAwait(false);
         }
 
-        async Task<IEnumerable<PingResult>> PingAsync(Peer peer, int count, CancellationToken cancel)
+        private async Task<IEnumerable<PingResult>> PingAsync(Peer peer, int count, CancellationToken cancel)
         {
             var ping = new byte[PingSize];
             var rng = new Random();
@@ -180,14 +179,14 @@ namespace PeerTalk.Protocols
             results.Add(new PingResult
             {
                 Success = true,
-                Text = $"Average latency: {avg.ToString("0.000")}ms"
+                Text = $"Average latency: {avg:0.000}ms"
             });
 
             return results;
         }
     }
 
-    class PingMessage
+    internal class PingMessage
     {
     }
 }

@@ -23,8 +23,8 @@ namespace PeerTalk.Protocols
     /// </remarks>
     public static class Message
     {
-        static byte[] newline = new byte[] { 0x0a };
-        static ILog log = LogManager.GetLogger(typeof(Message));
+        private static readonly byte[] newline = "\n"u8.ToArray();
+        private static readonly ILog log = LogManager.GetLogger(typeof(Message));
 
         /// <summary>
         ///   Read the message as a sequence of bytes from the <see cref="Stream"/>.

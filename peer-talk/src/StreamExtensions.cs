@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace PeerTalk
 {
     /// <summary>
-    ///
+    /// Stream Extensions
     /// </summary>
     public static class StreamExtensions
     {
@@ -41,7 +41,7 @@ namespace PeerTalk
         {
             while (0 < length)
             {
-                var n = await stream.ReadAsync(buffer, offset, length);
+                var n = await stream.ReadAsync(buffer.AsMemory(offset, length));
                 if (n == 0)
                 {
                     throw new EndOfStreamException();
@@ -82,7 +82,8 @@ namespace PeerTalk
         {
             while (0 < length)
             {
-                var n = await stream.ReadAsync(buffer, offset, length, cancel);
+                //var n = await stream.ReadAsync(buffer.AsMemory(offset, length), cancel);
+                var n = await stream.ReadAsync(buffer.AsMemory(offset, length), cancel);
                 if (n == 0)
                 {
                     throw new EndOfStreamException();

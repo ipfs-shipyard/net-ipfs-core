@@ -40,7 +40,7 @@ namespace PeerTalk.Discovery
                 profile.Resources.Add(new TXTRecord
                 {
                     Name = profile.FullyQualifiedName,
-                    Strings = { $"dnsaddr={address.ToString()}" }
+                    Strings = { $"dnsaddr={address}" }
                 });
             }
 
@@ -54,7 +54,7 @@ namespace PeerTalk.Discovery
                 .OfType<TXTRecord>()
                 .SelectMany(t => t.Strings)
                 .Where(s => s.StartsWith("dnsaddr="))
-                .Select(s => s.Substring(8))
+                .Select(s => s[8..])
                 .Select(s => MultiAddress.TryCreate(s))
                 .Where(a => a != null);
         }
@@ -73,9 +73,9 @@ namespace PeerTalk.Discovery
             var sb = new StringBuilder();
             while (label.Length > maxLength)
             {
-                sb.Append(label.Substring(0, maxLength));
+                sb.Append(label, 0, maxLength);
                 sb.Append('.');
-                label = label.Substring(maxLength);
+                label = label[maxLength..];
             }
             sb.Append(label);
             return sb.ToString();

@@ -13,7 +13,7 @@ namespace PeerTalk.Discovery
     /// </summary>
     public class Bootstrap : IPeerDiscovery
     {
-        private static ILog log = LogManager.GetLogger(typeof(Bootstrap));
+        private static readonly ILog log = LogManager.GetLogger(typeof(Bootstrap));
 
         /// <inheritdoc />
         public event EventHandler<Peer> PeerDiscovered;

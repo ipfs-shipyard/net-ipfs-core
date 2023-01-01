@@ -3,6 +3,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net.Security;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
@@ -21,7 +22,7 @@ namespace PeerTalk.Multiplex
     /// </remarks>
     public class Muxer
     {
-        private static ILog log = LogManager.GetLogger(typeof(Muxer));
+        private static readonly ILog log = LogManager.GetLogger(typeof(Muxer));
 
         /// <summary>
         ///   The next stream ID to create.
@@ -57,7 +58,7 @@ namespace PeerTalk.Multiplex
         /// </summary>
         public event EventHandler<Substream> SubstreamClosed;
 
-        private readonly AsyncLock ChannelWriteLock = new AsyncLock();
+        private readonly AsyncLock ChannelWriteLock = new();
 
         /// <summary>
         ///   The substreams that are open.
@@ -65,7 +66,7 @@ namespace PeerTalk.Multiplex
         /// <value>
         ///   The key is stream ID and the value is a <see cref="Substream"/>.
         /// </value>
-        public ConcurrentDictionary<long, Substream> Substreams = new ConcurrentDictionary<long, Substream>();
+        public ConcurrentDictionary<long, Substream> Substreams = new();
 
         /// <summary>
         ///   Determines if the muxer is the initiator.
@@ -80,7 +81,7 @@ namespace PeerTalk.Multiplex
             set
             {
                 if (value != Initiator)
-                    NextStreamId += 1;
+                    NextStreamId++;
             }
         }
 
@@ -127,10 +128,10 @@ namespace PeerTalk.Multiplex
             {
                 var header = new Header { StreamId = streamId, PacketType = PacketType.NewStream };
                 var wireName = Encoding.UTF8.GetBytes(name);
-                await header.WriteAsync(Channel, cancel).ConfigureAwait(false);
+                await header.WriteAsync(Channel).ConfigureAwait(false);
                 await Channel.WriteVarintAsync(wireName.Length, cancel).ConfigureAwait(false);
                 await Channel.WriteAsync(wireName, 0, wireName.Length).ConfigureAwait(false);
-                await Channel.FlushAsync().ConfigureAwait(false);
+                await Channel.FlushAsync(cancel).ConfigureAwait(false);
             }
             return substream;
         }
@@ -155,7 +156,7 @@ namespace PeerTalk.Multiplex
                     };
                     await header.WriteAsync(Channel, cancel).ConfigureAwait(false);
                     Channel.WriteByte(0); // length
-                    await Channel.FlushAsync().ConfigureAwait(false);
+                    await Channel.FlushAsync(cancel).ConfigureAwait(false);
                 }
             }
 
@@ -176,15 +177,19 @@ namespace PeerTalk.Multiplex
         /// </remarks>
         public async Task ProcessRequestsAsync(CancellationToken cancel = default)
         {
+            var xxxx = new StringBuilder();
+
             try
             {
                 while (Channel.CanRead && !cancel.IsCancellationRequested)
                 {
                     // Read the packet prefix.
                     var header = await Header.ReadAsync(Channel, cancel).ConfigureAwait(false);
-                    var length = await Varint.ReadVarint32Async(Channel, cancel).ConfigureAwait(false);
+                    var length = await Channel.ReadVarint32Async(cancel).ConfigureAwait(false);
                     if (log.IsTraceEnabled)
                         log.TraceFormat("received '{0}', stream={1}, length={2}", header.PacketType, header.StreamId, length);
+
+                    xxxx.Append("Header: ").Append(header.PacketType).Append(" || Length: ").Append(length).AppendLine();
 
                     // Read the payload.
                     var payload = new byte[length];
@@ -192,82 +197,87 @@ namespace PeerTalk.Multiplex
 
                     // Process the packet
                     Substreams.TryGetValue(header.StreamId, out Substream substream);
-                    switch (header.PacketType)
+
+                    if (header.PacketType == PacketType.NewStream)
                     {
-                        case PacketType.NewStream:
-                            if (substream != null)
-                            {
-                                log.Warn($"Stream {substream.Id} already exists");
-                                continue;
-                            }
-                            substream = new Substream
-                            {
-                                Id = header.StreamId,
-                                Name = Encoding.UTF8.GetString(payload),
-                                Muxer = this
-                            };
-                            if (!Substreams.TryAdd(substream.Id, substream))
-                            {
-                                // Should not happen.
-                                throw new Exception($"Stream {substream.Id} already exists");
-                            }
-                            SubstreamCreated?.Invoke(this, substream);
+                        if (substream != null)
+                        {
+                            log.Warn($"Stream {substream.Id} already exists");
+                            continue;
+                        }
 
-                            // Special hack for go-ipfs
-#if true
-                            if (Receiver && (substream.Id & 1) == 1)
+                        substream = new Substream
+                        {
+                            Id = header.StreamId,
+                            Name = Encoding.UTF8.GetString(payload),
+                            Muxer = this
+                        };
+
+                        if (!Substreams.TryAdd(substream.Id, substream))
+                        {
+                            // Should not happen.
+                            throw new Exception($"Stream {substream.Id} already exists");
+                        }
+                        SubstreamCreated?.Invoke(this, substream);
+
+                        // Special hack for go-ipfs
+
+                        if (Receiver && (substream.Id & 1) == 1)
+                        {
+                            log.Debug($"go-hack sending newstream {substream.Id}");
+                            using (await AcquireWriteAccessAsync().ConfigureAwait(false))
                             {
-                                log.Debug($"go-hack sending newstream {substream.Id}");
-                                using (await AcquireWriteAccessAsync().ConfigureAwait(false))
+                                var hdr = new Header
                                 {
-                                    var hdr = new Header
-                                    {
-                                        StreamId = substream.Id,
-                                        PacketType = PacketType.NewStream
-                                    };
-                                    await hdr.WriteAsync(Channel, cancel).ConfigureAwait(false);
-                                    Channel.WriteByte(0); // length
-                                    await Channel.FlushAsync().ConfigureAwait(false);
-                                }
+                                    StreamId = substream.Id,
+                                    PacketType = PacketType.NewStream
+                                };
+                                await hdr.WriteAsync(Channel, cancel).ConfigureAwait(false);
+                                Channel.WriteByte(0); // length
+                                await Channel.FlushAsync(cancel).ConfigureAwait(false);
                             }
-#endif
-                            break;
-
-                        case PacketType.MessageInitiator:
-                            if (substream == null)
-                            {
-                                log.Warn($"Message to unknown stream #{header.StreamId}");
-                                continue;
-                            }
-                            substream.AddData(payload);
-                            break;
-
-                        case PacketType.MessageReceiver:
-                            if (substream == null)
-                            {
-                                log.Warn($"Message to unknown stream #{header.StreamId}");
-                                continue;
-                            }
-                            substream.AddData(payload);
-                            break;
-
-                        case PacketType.CloseInitiator:
-                        case PacketType.CloseReceiver:
-                        case PacketType.ResetInitiator:
-                        case PacketType.ResetReceiver:
-                            if (substream == null)
-                            {
-                                log.Warn($"Reset of unknown stream #{header.StreamId}");
-                                continue;
-                            }
-                            substream.NoMoreData();
-                            Substreams.TryRemove(substream.Id, out Substream _);
-                            SubstreamClosed?.Invoke(this, substream);
-                            break;
-
-                        default:
-                            throw new InvalidDataException($"Unknown Muxer packet type '{header.PacketType}'.");
+                        }
                     }
+                    else if (header.PacketType == PacketType.MessageInitiator)
+                    {
+                        if (substream == null)
+                        {
+                            log.Warn($"Message to unknown stream #{header.StreamId}");
+                            continue;
+                        }
+                        substream.AddData(payload);
+                    }
+                    else if (header.PacketType == PacketType.MessageReceiver)
+                    {
+                        if (substream == null)
+                        {
+                            log.Warn($"Message to unknown stream #{header.StreamId}");
+                            continue;
+                        }
+                        substream.AddData(payload);
+                    }
+                    else if ((header.PacketType == PacketType.CloseInitiator)
+                            || (header.PacketType == PacketType.CloseReceiver)
+                            || (header.PacketType == PacketType.ResetInitiator)
+                            || (header.PacketType == PacketType.ResetReceiver))
+                    {
+                        xxxx.Append("Invoke Close: ").Append(header.PacketType).AppendLine();
+                        SubstreamClosed?.Invoke(this, substream);
+                        throw new InvalidDataException($"Invoke Close: '{xxxx}'.");
+                        //if (substream == null)
+                        //{
+                        //    log.Warn($"Reset of unknown stream #{header.StreamId}");
+                        //    continue;
+                        //}
+                        //substream.NoMoreData();
+                        //Substreams.TryRemove(substream.Id, out Substream _);
+                        //SubstreamClosed?.Invoke(this, substream);
+                    }
+                    else
+                    {
+                        throw new InvalidDataException($"Unknown Muxer packet type '{header.PacketType}'.");
+                    }
+                    xxxx.Append("SubStream: ").AppendLine(substream?.Name);
                 }
             }
             catch (EndOfStreamException)
@@ -288,9 +298,12 @@ namespace PeerTalk.Multiplex
             }
             catch (Exception e)
             {
+                // eat it
+
                 // Log error if the channel is not closed.
                 if (Channel.CanRead || Channel.CanWrite)
                 {
+                    // eat it
                     log.Error("failed", e);
                 }
             }
@@ -303,11 +316,14 @@ namespace PeerTalk.Multiplex
 
             // Dispose of all the substreams.
             var streams = Substreams.Values.ToArray();
+
             Substreams.Clear();
             foreach (var stream in streams)
             {
                 await stream.DisposeAsync();
             }
+
+            throw new InvalidDataException($"General: '{xxxx}'.");
         }
 
         /// <summary>

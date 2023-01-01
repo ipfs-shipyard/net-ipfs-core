@@ -36,18 +36,18 @@ namespace PeerTalk.Discovery
         {
             // Only internet addresses.
             var addresses = LocalPeer.Addresses
-                .Where(a => a.Protocols.First().Name == "ip4" || a.Protocols.First().Name == "ip6")
+                .Where(a => a.Protocols.FirstOrDefault().Name == "ip4" || a.Protocols.FirstOrDefault().Name == "ip6")
                 .ToArray();
             if (addresses.Length == 0)
             {
                 return null;
             }
             var ipAddresses = addresses
-                .Select(a => IPAddress.Parse(a.Protocols.First().Value));
+                .Select(a => IPAddress.Parse(a.Protocols.FirstOrDefault().Value));
 
             // Only one port is supported.
-            var tcpPort = addresses.First()
-                .Protocols.First(p => p.Name == "tcp")
+            var tcpPort = addresses.FirstOrDefault()
+                .Protocols.Find(p => p.Name == "tcp")
                 .Value;
 
             // Create the DNS records for this peer.  The TXT record
@@ -79,7 +79,7 @@ namespace PeerTalk.Discovery
                 var id = name.Labels[0];
                 var srv = message.Answers
                     .OfType<SRVRecord>()
-                    .First(r => r.Name == name);
+                    .FirstOrDefault(r => r.Name == name);
                 var aRecords = message.Answers
                     .OfType<ARecord>()
                     .Where(a => a.Name == name || a.Name == srv.Target);

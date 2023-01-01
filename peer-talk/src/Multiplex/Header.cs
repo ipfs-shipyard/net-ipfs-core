@@ -66,7 +66,7 @@ namespace PeerTalk.Multiplex
         public async Task WriteAsync(Stream stream, CancellationToken cancel = default)
         {
             var header = (StreamId << 3) | (long)PacketType;
-            await Varint.WriteVarintAsync(stream, header, cancel).ConfigureAwait(false);
+            await stream.WriteVarintAsync(header, cancel).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -84,7 +84,7 @@ namespace PeerTalk.Multiplex
         /// </returns>
         public static async Task<Header> ReadAsync(Stream stream, CancellationToken cancel = default)
         {
-            var varint = await Varint.ReadVarint64Async(stream, cancel).ConfigureAwait(false);
+            var varint = await stream.ReadVarint64Async(cancel).ConfigureAwait(false);
             return new Header
             {
                 StreamId = varint >> 3,

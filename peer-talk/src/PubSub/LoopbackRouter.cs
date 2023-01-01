@@ -18,7 +18,7 @@ namespace PeerTalk.PubSub
     /// </remarks>
     public class LoopbackRouter : IMessageRouter
     {
-        MessageTracker tracker = new MessageTracker();
+        private readonly MessageTracker tracker = new();
 
         /// <inheritdoc />
         public event EventHandler<PublishedMessage> MessageReceived;

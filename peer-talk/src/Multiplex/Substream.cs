@@ -23,7 +23,7 @@ namespace PeerTalk.Multiplex
     /// </remarks>
     public class Substream : Stream
     {
-        private BufferBlock<byte[]> inBlocks = new BufferBlock<byte[]>();
+        private readonly BufferBlock<byte[]> inBlocks = new();
         private byte[] inBlock;
         private int inBlockOffset;
         private bool eos;
@@ -187,7 +187,7 @@ namespace PeerTalk.Multiplex
                     PacketType = SentMessageType
                 };
                 await header.WriteAsync(Muxer.Channel, cancel).ConfigureAwait(false);
-                await Varint.WriteVarintAsync(Muxer.Channel, outStream.Length, cancel).ConfigureAwait(false);
+                await Muxer.Channel.WriteVarintAsync(outStream.Length, cancel).ConfigureAwait(false);
                 await outStream.CopyToAsync(Muxer.Channel).ConfigureAwait(false);
                 await Muxer.Channel.FlushAsync(cancel).ConfigureAwait(false);
 

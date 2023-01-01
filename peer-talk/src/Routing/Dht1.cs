@@ -13,7 +13,6 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-
 namespace PeerTalk.Routing
 {
     /// <summary>
@@ -21,7 +20,7 @@ namespace PeerTalk.Routing
     /// </summary>
     public class Dht1 : IPeerProtocol, IService, IPeerRouting, IContentRouting
     {
-        static ILog log = LogManager.GetLogger(typeof(Dht1));
+        private static readonly ILog log = LogManager.GetLogger(typeof(Dht1));
 
         /// <inheritdoc />
         public string Name { get; } = "ipfs/kad";
@@ -82,15 +81,19 @@ namespace PeerTalk.Routing
                     case MessageType.Ping:
                         response = ProcessPing(request, response);
                         break;
+
                     case MessageType.FindNode:
                         response = ProcessFindNode(request, response);
                         break;
+
                     case MessageType.GetProviders:
                         response = ProcessGetProviders(request, response);
                         break;
+
                     case MessageType.AddProvider:
                         response = ProcessAddProvider(connection.RemotePeer, request, response);
                         break;
+
                     default:
                         log.Debug($"unknown {request.Type} from {connection.RemotePeer}");
                         // TODO: Should we close the stream?
@@ -139,7 +142,7 @@ namespace PeerTalk.Routing
         /// <summary>
         ///   The swarm has discovered a new peer, update the routing table.
         /// </summary>
-        void Swarm_PeerDiscovered(object sender, Peer e)
+        private void Swarm_PeerDiscovered(object sender, Peer e)
         {
             RoutingTable.Add(e);
         }
@@ -161,7 +164,7 @@ namespace PeerTalk.Routing
 
             // Maybe the swarm knows about it.
             var found = Swarm.KnownPeers.FirstOrDefault(p => p.Id == id);
-            if (found != null && found.Addresses.Count() > 0)
+            if (found?.Addresses.Count() > 0)
                 return found;
 
             // Ask our peers for information on the requested peer.
@@ -175,7 +178,7 @@ namespace PeerTalk.Routing
             await dquery.RunAsync(cancel).ConfigureAwait(false);
 
             // If not found, return the closest peer.
-            if (dquery.Answers.Count() == 0)
+            if (!dquery.Answers.Any())
             {
                 return RoutingTable.NearestPeers(id).FirstOrDefault();
             }
@@ -211,7 +214,7 @@ namespace PeerTalk.Routing
             };
             if (action != null)
             {
-                dquery.AnswerObtained += (s, e) => action.Invoke(e);
+                dquery.AnswerObtained += (_, e) => action.Invoke(e);
             }
 
             // Add any providers that we already know about.
@@ -283,7 +286,7 @@ namespace PeerTalk.Routing
                         if (--advertsNeeded == 0)
                             break;
                     }
-                    catch (Exception)
+                    catch
                     {
                         // eat it.  This is fire and forget.
                     }
@@ -297,7 +300,7 @@ namespace PeerTalk.Routing
         /// <remarks>
         ///   Simply return the <paramref name="request"/>.
         /// </remarks>
-        DhtMessage ProcessPing(DhtMessage request, DhtMessage response)
+        private DhtMessage ProcessPing(DhtMessage request, DhtMessage response)
         {
             return request;
         }
@@ -375,7 +378,7 @@ namespace PeerTalk.Routing
                         Addresses = peer.Addresses.Select(a => a.WithoutPeerId().ToArray()).ToArray()
                     };
                 })
-                .Take(20)
+                .Take(21)
                 .ToArray();
 
             // Also return the closest peers
@@ -403,15 +406,12 @@ namespace PeerTalk.Routing
             }
             var providers = request.ProviderPeers
                 .Select(p => p.TryToPeer(out Peer peer) ? peer : (Peer)null)
-                .Where(p => p != null)
-                .Where(p => p == remotePeer)
-                .Where(p => p.Addresses.Count() > 0)
-                .Where(p => Swarm.IsAllowed(p));
+                .Where(p => p != null && p == remotePeer && p.Addresses.Any() && Swarm.IsAllowed(p));
             foreach (var provider in providers)
             {
                 Swarm.RegisterPeer(provider);
                 ContentRouter.Add(cid, provider.Id);
-            };
+            }
 
             // There is no response for this request.
             return null;

@@ -163,7 +163,7 @@ namespace PeerTalk
         {
             try
             {
-                var n = await stream.ReadAsync(buffer, offset, count, cancellationToken).ConfigureAwait(false);
+                var n = await stream.ReadAsync(buffer.AsMemory(offset, count), cancellationToken).ConfigureAwait(false);
                 bytesRead += n;
                 lastUsed = DateTime.Now;
                 if (n > 0)
@@ -188,7 +188,7 @@ namespace PeerTalk
         {
             try
             {
-                await stream.WriteAsync(buffer, offset, count, cancellationToken).ConfigureAwait(false);
+                await stream.WriteAsync(buffer.AsMemory(offset, count), cancellationToken).ConfigureAwait(false);
                 bytesWritten += count;
                 lastUsed = DateTime.Now;
                 if (count > 0)

@@ -22,12 +22,12 @@ namespace PeerTalk
     /// </remarks>
     public class ConnectionManager
     {
-        private static ILog log = LogManager.GetLogger(typeof(ConnectionManager));
+        private static readonly ILog log = LogManager.GetLogger(typeof(ConnectionManager));
 
         /// <summary>
         ///   The connections to other peers. Key is the base58 hash of the peer ID.
         /// </summary>
-        private ConcurrentDictionary<string, List<PeerConnection>> connections = new ConcurrentDictionary<string, List<PeerConnection>>();
+        private readonly ConcurrentDictionary<string, List<PeerConnection>> connections = new();
 
         private string Key(Peer peer) => peer.Id.ToBase58();
 
@@ -84,9 +84,7 @@ namespace PeerTalk
                 return false;
             }
 
-            connection = conns
-                .Where(c => c.IsActive)
-                .FirstOrDefault();
+            connection = conns.Find(c => c.IsActive);
 
             return connection != null;
         }
@@ -105,10 +103,11 @@ namespace PeerTalk
         ///   <paramref name="connection"/> is closed and existing connection
         ///   is returned.
         /// </remarks>
+        /// <exception cref="ArgumentNullException"></exception>
         public PeerConnection Add(PeerConnection connection)
         {
             if (connection == null)
-                throw new ArgumentNullException("connection");
+                throw new ArgumentNullException(nameof(connection));
             if (connection.RemotePeer == null)
                 throw new ArgumentNullException("connection.RemotePeer");
             if (connection.RemotePeer.Id == null)
@@ -116,8 +115,8 @@ namespace PeerTalk
 
             connections.AddOrUpdate(
                 Key(connection.RemotePeer),
-                (key) => new List<PeerConnection> { connection },
-                (key, conns) =>
+                (_) => new List<PeerConnection> { connection },
+                (_, conns) =>
                 {
                     if (!conns.Contains(connection))
                     {
@@ -131,7 +130,7 @@ namespace PeerTalk
             {
                 connection.RemotePeer.ConnectedAddress = connection.RemoteAddress;
             }
-            connection.Closed += (s, e) => Remove(e);
+            connection.Closed += (_, e) => Remove(e);
             return connection;
         }
 

@@ -16,7 +16,7 @@ namespace PeerTalk.Protocols
     /// <seealso href="https://github.com/multiformats/multistream-select"/>
     public class Multistream1 : IPeerProtocol
     {
-        static ILog log = LogManager.GetLogger(typeof(Multistream1));
+        private static readonly ILog log = LogManager.GetLogger(typeof(Multistream1));
 
         /// <inheritdoc />
         public string Name { get; } = "multistream";

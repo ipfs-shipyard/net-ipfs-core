@@ -90,7 +90,7 @@ namespace PeerTalk.Multiplex
             channel.Position = 0;
             var muxer3 = new Muxer { Channel = channel };
             await muxer3.ProcessRequestsAsync(new CancellationTokenSource(500).Token);
-       
+
             // The channel is closed because of 2 new streams with same id.
             Assert.IsFalse(channel.CanRead);
             Assert.IsFalse(channel.CanWrite);
@@ -120,20 +120,23 @@ namespace PeerTalk.Multiplex
         {
             var channel = new MemoryStream();
             var muxer1 = new Muxer { Channel = channel, Initiator = true };
-            using (var foo = await muxer1.CreateStreamAsync("foo"))
+
+            var foo = await muxer1.CreateStreamAsync("foo");
+
             using (var bar = await muxer1.CreateStreamAsync("bar"))
             {
                 // open and close a stream.
             }
 
             channel.Position = 0;
+
             var muxer2 = new Muxer { Channel = channel };
+
             int closeCount = 0;
-            muxer2.SubstreamClosed += (s, e) =>
-            {
-                ++closeCount;
-            };
+            muxer2.SubstreamClosed += (s, e) => ++closeCount;
+
             await muxer2.ProcessRequestsAsync();
+
             Assert.AreEqual(2, closeCount);
         }
 

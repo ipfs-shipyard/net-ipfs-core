@@ -23,7 +23,12 @@ namespace PeerTalk
         /// <summary>
         ///   The default minimum number of connections to maintain (16).
         /// </summary>
-        public const int DefaultMinConnections = 16;
+        public const int DefaultMinConnections = 8;
+
+        /// <summary>
+        ///   The default maximum number of connections to maintain (1024).
+        /// </summary>
+        public const int DefaultMaxConnections = 21;
 
         private readonly Swarm swarm;
         private int pendingConnects;
@@ -61,10 +66,7 @@ namespace PeerTalk
         ///   Performs application-defined tasks associated with freeing,
         ///   releasing, or resetting unmanaged resources.
         /// </summary>
-        public void Dispose()
-        {
-            Dispose(true);
-        }
+        public void Dispose() => Dispose(true);
 
         /// <summary>
         ///   The low water mark for peer connections.
@@ -76,6 +78,17 @@ namespace PeerTalk
         ///   Setting this to zero will basically disable the auto dial features.
         /// </remarks>
         public int MinConnections { get; set; } = DefaultMinConnections;
+
+        /// <summary>
+        ///   The higher water mark for peer connections.
+        /// </summary>
+        /// <value>
+        ///   Defaults to <see cref="DefaultMinConnections"/>.
+        /// </value>
+        /// <remarks>
+        ///   Setting this to zero will basically disable the auto dial features.
+        /// </remarks>
+        public int MaxConnections { get; set; } = DefaultMaxConnections;
 
 #pragma warning disable VSTHRD100 // Avoid async void methods
 
@@ -134,20 +147,28 @@ namespace PeerTalk
 #pragma warning restore VSTHRD100 // Avoid async void methods
         {
             var n = swarm.Manager.Connections.Count() + pendingConnects;
-            if (!swarm.IsRunning || n >= MinConnections)
-                return;
+
+            if (MaxConnections > 0) // use range
+            {
+                // check range
+                if (!swarm.IsRunning || (n > MinConnections && n <= MaxConnections))
+                    return;
+            }
+            else // use minimum
+            {
+                //
+                if (!swarm.IsRunning || n >= MinConnections)
+                    return;
+            }
 
             // Find a random peer to connect with.
             var peers = swarm.KnownPeers
-                .Where(p => p.ConnectedAddress == null)
-                .Where(p => p != disconnectedPeer)
-                .Where(p => swarm.IsAllowed(p))
-                .Where(p => !swarm.HasPendingConnection(p))
+                .Where(p => p.ConnectedAddress == null && p != disconnectedPeer && swarm.IsAllowed(p) && !swarm.HasPendingConnection(p))
                 .ToArray();
             if (peers.Length == 0)
                 return;
             var rng = new Random();
-            var peer = peers[rng.Next(peers.Count())];
+            var peer = peers[rng.Next(peers.Length)];
 
             Interlocked.Increment(ref pendingConnects);
             log.Debug($"Dialing {peer}");

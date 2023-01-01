@@ -15,7 +15,7 @@ namespace PeerTalk.Discovery
     /// </summary>
     public abstract class Mdns : IPeerDiscovery
     {
-        private static ILog log = LogManager.GetLogger(typeof(Mdns));
+        private static readonly ILog log = LogManager.GetLogger(typeof(Mdns));
 
         /// <inheritdoc />
         public event EventHandler<Peer> PeerDiscovered;

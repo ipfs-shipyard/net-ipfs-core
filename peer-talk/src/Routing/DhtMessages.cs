@@ -118,7 +118,7 @@ namespace PeerTalk.Routing
     public class DhtPeerMessage
     {
         /// <summary>
-        /// ID of a given peer. 
+        /// ID of a given peer.
         /// </summary>
         /// <value>
         ///   The <see cref="MultiHash"/> as a byte array,

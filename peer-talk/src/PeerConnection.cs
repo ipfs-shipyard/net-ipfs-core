@@ -20,7 +20,7 @@ namespace PeerTalk
     /// </remarks>
     public class PeerConnection : IDisposable
     {
-        private static ILog log = LogManager.GetLogger(typeof(PeerConnection));
+        private static readonly ILog log = LogManager.GetLogger(typeof(PeerConnection));
 
         private Stream stream;
         private StatsStream statsStream;
@@ -70,7 +70,7 @@ namespace PeerTalk
         /// </value>
         public bool IsActive
         {
-            get { return Stream != null && Stream.CanRead && Stream.CanWrite; }
+            get { return Stream?.CanRead == true && Stream.CanWrite; }
         }
 
         /// <summary>
@@ -217,10 +217,10 @@ namespace PeerTalk
                 Initiator = true,
                 Connection = this
             };
-            muxer.SubstreamCreated += (s, e) => _ = ReadMessagesAsync(e, CancellationToken.None);
+            muxer.SubstreamCreated += (_, e) => _ = ReadMessagesAsync(e, CancellationToken.None);
             this.MuxerEstablished.SetResult(muxer);
 
-            _ = muxer.ProcessRequestsAsync();
+            _ = muxer.ProcessRequestsAsync(cancel);
         }
 
         /// <summary>
@@ -257,7 +257,7 @@ namespace PeerTalk
                     return;
                 }
             }
-            if (protocols.Count() == 0)
+            if (!protocols.Any())
             {
                 throw new Exception($"Protocol '{name}' is not registered.");
             }
@@ -299,7 +299,7 @@ namespace PeerTalk
             {
                 Stream?.DisposeAsync();
             }
-            catch (Exception)
+            catch
             {
                 // eat it.
             }
@@ -315,7 +315,7 @@ namespace PeerTalk
             IPeerProtocol protocol = new Multistream1();
             try
             {
-                while (!cancel.IsCancellationRequested && stream != null && stream.CanRead)
+                while (!cancel.IsCancellationRequested && stream?.CanRead == true)
                 {
                     await protocol.ProcessMessageAsync(this, stream, cancel).ConfigureAwait(false);
                 }
@@ -393,7 +393,7 @@ namespace PeerTalk
         // }
 
         /// <summary>
-        ///
+        /// Dispose
         /// </summary>
         public void Dispose()
         {

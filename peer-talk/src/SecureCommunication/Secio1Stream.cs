@@ -28,14 +28,14 @@ namespace PeerTalk.SecureCommunication
     /// </remarks>
     public class Secio1Stream : Stream
     {
-        Stream stream;
-        byte[] inBlock;
-        int inBlockOffset;
-        MemoryStream outStream = new MemoryStream();
-        HMac inHmac;
-        HMac outHmac;
-        IStreamCipher decrypt;
-        IStreamCipher encrypt;
+        private readonly MemoryStream outStream = new();
+        private Stream stream;
+        private byte[] inBlock;
+        private int inBlockOffset;
+        private HMac inHmac;
+        private HMac outHmac;
+        private IStreamCipher decrypt;
+        private IStreamCipher encrypt;
 
         /// <summary>
         ///   Creates a new instance of the <see cref="Secio1Stream"/> class.
@@ -121,9 +121,9 @@ namespace PeerTalk.SecureCommunication
         /// <inheritdoc />
         public override int Read(byte[] buffer, int offset, int count)
         {
-#pragma warning disable VSTHRD002 
+#pragma warning disable VSTHRD002
             return ReadAsync(buffer, offset, count).GetAwaiter().GetResult();
-#pragma warning restore VSTHRD002 
+#pragma warning restore VSTHRD002
         }
 
         /// <inheritdoc />
@@ -162,7 +162,7 @@ namespace PeerTalk.SecureCommunication
         /// <remarks>
         ///   A packet consists of a [uint32 length of packet | encrypted body | hmac signature of encrypted body].
         /// </remarks>
-        async Task<byte[]> ReadPacketAsync(CancellationToken cancel)
+        private async Task<byte[]> ReadPacketAsync(CancellationToken cancel)
         {
             var lengthBuffer = await ReadPacketBytesAsync(4, cancel).ConfigureAwait(false);
             var length =
@@ -189,7 +189,7 @@ namespace PeerTalk.SecureCommunication
             return encryptedData;
         }
 
-        async Task<byte[]> ReadPacketBytesAsync(int count, CancellationToken cancel)
+        private async Task<byte[]> ReadPacketBytesAsync(int count, CancellationToken cancel)
         {
             byte[] buffer = new byte[count];
             await stream.ReadExactAsync(buffer, 0, count, cancel).ConfigureAwait(false);
@@ -199,9 +199,9 @@ namespace PeerTalk.SecureCommunication
         /// <inheritdoc />
         public override void Flush()
         {
-#pragma warning disable VSTHRD002 
+#pragma warning disable VSTHRD002
             FlushAsync().GetAwaiter().GetResult();
-#pragma warning restore VSTHRD002 
+#pragma warning restore VSTHRD002
         }
 
         /// <inheritdoc />

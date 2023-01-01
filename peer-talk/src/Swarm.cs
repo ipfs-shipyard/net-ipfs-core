@@ -23,23 +23,23 @@ namespace PeerTalk
     /// </summary>
     public class Swarm : IService, IPolicy<MultiAddress>, IPolicy<Peer>
     {
-        private static ILog log = LogManager.GetLogger(typeof(Swarm));
+        private static readonly ILog log = LogManager.GetLogger(typeof(Swarm));
 
         /// <summary>
         ///   The time to wait for a low level connection to be established.
         /// </summary>
         /// <value>
-        ///   Defaults to 30 seconds.
+        ///   Defaults to 33 seconds.
         /// </value>
-        public TimeSpan TransportConnectionTimeout = TimeSpan.FromSeconds(30);
+        public TimeSpan TransportConnectionTimeout = TimeSpan.FromSeconds(33);
 
         /// <summary>
         ///  The supported protocols.
         /// </summary>
         /// <remarks>
-        ///   Use sychronized access, e.g. <code>lock (protocols) { ... }</code>.
+        ///   Use sychronized access, e.g. <c>lock (protocols) { ... }</c>.
         /// </remarks>
-        private List<IPeerProtocol> protocols = new List<IPeerProtocol>
+        private List<IPeerProtocol> protocols = new()
         {
             new Multistream1(),
             new SecureCommunication.Secio1(),
@@ -50,7 +50,7 @@ namespace PeerTalk
         /// <summary>
         ///   Added to connection protocols when needed.
         /// </summary>
-        private readonly Plaintext1 plaintext1 = new Plaintext1();
+        private readonly Plaintext1 plaintext1 = new();
 
         private Peer localPeer;
 
@@ -100,6 +100,8 @@ namespace PeerTalk
         ///   The local peer must have an <see cref="Peer.Id"/> and
         ///   <see cref="Peer.PublicKey"/>.
         /// </value>
+        /// <exception cref="ArgumentNullException"></exception>
+        /// <exception cref="ArgumentException"></exception>
         public Peer LocalPeer
         {
             get { return localPeer; }
@@ -128,7 +130,7 @@ namespace PeerTalk
         /// <summary>
         ///   Other nodes. Key is the bae58 hash of the peer ID.
         /// </summary>
-        private ConcurrentDictionary<string, Peer> otherPeers = new ConcurrentDictionary<string, Peer>();
+        private readonly ConcurrentDictionary<string, Peer> otherPeers = new();
 
         /// <summary>
         ///   Used to cancel any task when the swarm is stopped.
@@ -138,12 +140,12 @@ namespace PeerTalk
         /// <summary>
         ///  Outstanding connection tasks initiated by the local peer.
         /// </summary>
-        private ConcurrentDictionary<Peer, AsyncLazy<PeerConnection>> pendingConnections = new ConcurrentDictionary<Peer, AsyncLazy<PeerConnection>>();
+        private readonly ConcurrentDictionary<Peer, AsyncLazy<PeerConnection>> pendingConnections = new();
 
         /// <summary>
         ///  Outstanding connection tasks initiated by a remote peer.
         /// </summary>
-        private ConcurrentDictionary<MultiAddress, object> pendingRemoteConnections = new ConcurrentDictionary<MultiAddress, object>();
+        private readonly ConcurrentDictionary<MultiAddress, object> pendingRemoteConnections = new();
 
         /// <summary>
         ///   Manages the swarm's peer connections.
@@ -173,7 +175,7 @@ namespace PeerTalk
         /// <summary>
         ///   Cancellation tokens for the listeners.
         /// </summary>
-        private ConcurrentDictionary<MultiAddress, CancellationTokenSource> listeners = new ConcurrentDictionary<MultiAddress, CancellationTokenSource>();
+        private readonly ConcurrentDictionary<MultiAddress, CancellationTokenSource> listeners = new();
 
         /// <summary>
         ///   Get the sequence of all known peer addresses.
@@ -264,6 +266,8 @@ namespace PeerTalk
         /// <exception cref="Exception">
         ///   The <see cref="BlackList"/> or <see cref="WhiteList"/> policies forbid it.
         /// </exception>
+        /// <exception cref="ArgumentNullException"></exception>
+        /// <exception cref="ArgumentException"></exception>
         public Peer RegisterPeer(Peer peer)
         {
             if (peer.Id == null)
@@ -281,12 +285,12 @@ namespace PeerTalk
 
             var isNew = false;
             var p = otherPeers.AddOrUpdate(peer.Id.ToBase58(),
-                (id) =>
+                (_) =>
                 {
                     isNew = true;
                     return peer;
                 },
-                (id, existing) =>
+                (_, existing) =>
                 {
                     if (!Object.ReferenceEquals(existing, peer))
                     {
@@ -324,6 +328,7 @@ namespace PeerTalk
         ///   Remove all knowledge of the peer. The <see cref="PeerRemoved"/> event
         ///   is raised.
         /// </remarks>
+        /// <exception cref="ArgumentNullException"></exception>
         public void DeregisterPeer(Peer peer)
         {
             if (peer.Id == null)
@@ -413,7 +418,7 @@ namespace PeerTalk
             log.Debug($"Stopping {LocalPeer}");
 
             // Stop the listeners.
-            while (listeners.Count > 0)
+            while (!listeners.IsEmpty)
             {
                 await StopListeningAsync(listeners.Keys.First()).ConfigureAwait(false);
             }
@@ -494,7 +499,7 @@ namespace PeerTalk
                 using (var cts = CancellationTokenSource.CreateLinkedTokenSource(swarmCancellation.Token, cancel))
                 {
                     return await pendingConnections
-                        .GetOrAdd(peer, (key) => new AsyncLazy<PeerConnection>(() => DialAsync(peer, peer.Addresses, cts.Token)))
+                        .GetOrAdd(peer, (_) => new AsyncLazy<PeerConnection>(() => DialAsync(peer, peer.Addresses, cts.Token)))
                         .ConfigureAwait(false);
                 }
             }
@@ -578,7 +583,7 @@ namespace PeerTalk
             }
 
             // If no addresses, then ask peer routing.
-            if (Router != null && addrs.Count() == 0)
+            if (Router != null && !addrs.Any())
             {
                 var found = await Router.FindPeerAsync(remote.Id, cancel).ConfigureAwait(false);
                 addrs = found.Addresses;
@@ -777,7 +782,7 @@ namespace PeerTalk
             }
             if (!didSomething)
             {
-                throw new ArgumentException($"Missing a transport protocol name '{address}'.", "address");
+                throw new ArgumentException($"Missing a transport protocol name '{address}'.", nameof(address));
             }
 
             var result = new MultiAddress($"{address}/ipfs/{LocalPeer.Id}");
@@ -813,7 +818,7 @@ namespace PeerTalk
             {
                 addresses = new MultiAddress[] { result };
             }
-            if (addresses.Count() == 0)
+            if (!addresses.Any())
             {
                 var msg = "Cannot determine address(es) for " + result;
                 foreach (var ip in ips)
@@ -1036,8 +1041,7 @@ namespace PeerTalk
                     .ToArray();
 
                 LocalPeer.Addresses = LocalPeer.Addresses
-                    .Where(a => a != address)
-                    .Where(a => !others.Contains(a))
+                    .Where(a => a != address && !others.Contains(a))
                     .ToArray();
 
                 foreach (var other in others)

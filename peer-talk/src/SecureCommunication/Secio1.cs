@@ -21,7 +21,7 @@ namespace PeerTalk.SecureCommunication
     /// </summary>
     public class Secio1 : IEncryptionProtocol
     {
-        static ILog log = LogManager.GetLogger(typeof(Secio1));
+        private static readonly ILog log = LogManager.GetLogger(typeof(Secio1));
 
         /// <inheritdoc />
         public string Name { get; } = "secio";
@@ -41,13 +41,14 @@ namespace PeerTalk.SecureCommunication
             await EncryptAsync(connection, cancel).ConfigureAwait(false);
         }
 
-#pragma warning disable VSTHRD103 
+#pragma warning disable VSTHRD103
+
         /// <inheritdoc />
         public async Task<Stream> EncryptAsync(PeerConnection connection, CancellationToken cancel = default)
         {
             var stream = connection.Stream;
             var localPeer = connection.LocalPeer;
-            connection.RemotePeer = connection.RemotePeer ?? new Peer();
+            connection.RemotePeer ??= new Peer();
             var remotePeer = connection.RemotePeer;
 
             // =============================================================================
@@ -65,7 +66,7 @@ namespace PeerTalk.SecureCommunication
             };
 
             ProtoBuf.Serializer.SerializeWithLengthPrefix(stream, localProposal, PrefixStyle.Fixed32BigEndian);
-            await stream.FlushAsync().ConfigureAwait(false);
+            await stream.FlushAsync(cancel).ConfigureAwait(false);
 
             // =============================================================================
             // step 1.1 Identify -- get identity from their key
@@ -170,9 +171,7 @@ namespace PeerTalk.SecureCommunication
             StretchedKey.Generate(cipherName, hashName, sharedSecret, out StretchedKey k1, out StretchedKey k2);
             if (order < 0)
             {
-                StretchedKey tmp = k1;
-                k1 = k2;
-                k2 = tmp;
+                (k2, k1) = (k1, k2);
             }
 
             // =============================================================================
@@ -183,7 +182,7 @@ namespace PeerTalk.SecureCommunication
             // step 3. Finish -- send expected message to verify encryption works (send local nonce)
 
             // Send thier nonce,
-            await secureStream.WriteAsync(remoteProposal.Nonce, 0, remoteProposal.Nonce.Length, cancel).ConfigureAwait(false);
+            await secureStream.WriteAsync(remoteProposal.Nonce.AsMemory(0, remoteProposal.Nonce.Length), cancel).ConfigureAwait(false);
             await secureStream.FlushAsync(cancel).ConfigureAwait(false);
 
             // Receive our nonce.
@@ -191,7 +190,7 @@ namespace PeerTalk.SecureCommunication
             await secureStream.ReadExactAsync(verification, 0, verification.Length, cancel);
             if (!localNonce.SequenceEqual(verification))
             {
-                throw new Exception($"SECIO verification message failure.");
+                throw new Exception("SECIO verification message failure.");
             }
 
             log.Debug($"Secure session with {remotePeer}");
@@ -205,11 +204,11 @@ namespace PeerTalk.SecureCommunication
             return secureStream;
         }
 
-        string SelectBest(int order, string local, string remote)
+        private string SelectBest(int order, string local, string remote)
         {
             var first = order < 0 ? remote.Split(',') : local.Split(',');
             string[] second = order < 0 ? local.Split(',') : remote.Split(',');
-            return first.FirstOrDefault(f => second.Contains(f));
+            return Array.Find(first, f => second.Contains(f));
         }
     }
 }

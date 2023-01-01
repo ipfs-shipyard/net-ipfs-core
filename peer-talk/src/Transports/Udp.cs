@@ -18,7 +18,7 @@ namespace PeerTalk.Transports
     /// </summary>
     public class Udp : IPeerTransport
     {
-        static ILog log = LogManager.GetLogger(typeof(Udp));
+        private static readonly ILog log = LogManager.GetLogger(typeof(Udp));
 
         /// <inheritdoc />
         public async Task<Stream> ConnectAsync(MultiAddress address, CancellationToken cancel = default)
@@ -28,8 +28,7 @@ namespace PeerTalk.Transports
                 .Select(p => int.Parse(p.Value))
                 .First();
             var ip = address.Protocols
-                .Where(p => p.Name == "ip4" || p.Name == "ip6")
-                .First();
+                .Find(p => p.Name == "ip4" || p.Name == "ip6");
             var socket = new Socket(
                 ip.Name == "ip4" ? AddressFamily.InterNetwork : AddressFamily.InterNetworkV6,
                 SocketType.Dgram,
@@ -74,8 +73,7 @@ namespace PeerTalk.Transports
                 .Select(p => int.Parse(p.Value))
                 .FirstOrDefault();
             var ip = address.Protocols
-                .Where(p => p.Name == "ip4" || p.Name == "ip6")
-                .First();
+                        .First(p => p.Name == "ip4" || p.Name == "ip6");
             var ipAddress = IPAddress.Parse(ip.Value);
             var endPoint = new IPEndPoint(ipAddress, port);
             var socket = new Socket(
@@ -89,7 +87,7 @@ namespace PeerTalk.Transports
             if (port != actualPort)
             {
                 address = address.Clone();
-                var protocol = address.Protocols.FirstOrDefault(p => p.Name == "udp");
+                var protocol = address.Protocols.Find(p => p.Name == "udp");
                 if (protocol != null)
                 {
                     protocol.Value = actualPort.ToString();

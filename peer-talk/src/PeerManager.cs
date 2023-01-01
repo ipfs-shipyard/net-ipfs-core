@@ -19,7 +19,7 @@ namespace PeerTalk
     /// </remarks>
     public class PeerManager : IService
     {
-        private static ILog log = LogManager.GetLogger(typeof(PeerManager));
+        private static readonly ILog log = LogManager.GetLogger(typeof(PeerManager));
         private CancellationTokenSource cancel;
 
         /// <summary>
@@ -47,7 +47,7 @@ namespace PeerTalk
         /// <summary>
         ///   The peers that are reachable.
         /// </summary>
-        public ConcurrentDictionary<Peer, DeadPeer> DeadPeers = new ConcurrentDictionary<Peer, DeadPeer>();
+        public ConcurrentDictionary<Peer, DeadPeer> DeadPeers = new();
 
         /// <inheritdoc />
         public Task StartAsync()
@@ -89,7 +89,7 @@ namespace PeerTalk
                     Backoff = InitialBackoff,
                     NextAttempt = DateTime.Now + InitialBackoff
                 },
-                (key, existing) =>
+                (_, existing) =>
                 {
                     existing.Backoff += existing.Backoff;
                     existing.NextAttempt = existing.Backoff <= MaxBackoff
