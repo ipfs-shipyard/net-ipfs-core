@@ -292,7 +292,7 @@ namespace PeerTalk
                 },
                 (_, existing) =>
                 {
-                    if (!Object.ReferenceEquals(existing, peer))
+                    if (!ReferenceEquals(existing, peer))
                     {
                         existing.AgentVersion = peer.AgentVersion ?? existing.AgentVersion;
                         existing.ProtocolVersion = peer.ProtocolVersion ?? existing.ProtocolVersion;
