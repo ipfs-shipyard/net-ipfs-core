@@ -34,6 +34,7 @@ namespace Ipfs
             NetworkProtocol.Register<P2pNetworkProtocol>();
             NetworkProtocol.RegisterAlias<IpfsNetworkProtocol>();
             NetworkProtocol.Register<QuicNetworkProtocol>();
+            NetworkProtocol.Register<QuicV1NetworkProtocol>();
             NetworkProtocol.Register<HttpNetworkProtocol>();
             NetworkProtocol.Register<HttpsNetworkProtocol>();
             NetworkProtocol.Register<DccpNetworkProtocol>();
@@ -395,6 +396,12 @@ namespace Ipfs
     {
         public override string Name { get { return "quic"; } }
         public override uint Code { get { return 460; } }
+    }
+
+    class QuicV1NetworkProtocol : ValuelessNetworkProtocol
+    {
+        public override string Name { get { return "quic-v1"; } }
+        public override uint Code { get { return 461; } }
     }
 
     class HttpNetworkProtocol : ValuelessNetworkProtocol
