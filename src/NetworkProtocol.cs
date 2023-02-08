@@ -33,7 +33,7 @@ namespace Ipfs
             NetworkProtocol.Register<UdpNetworkProtocol>();
             NetworkProtocol.Register<P2pNetworkProtocol>();
             NetworkProtocol.RegisterAlias<IpfsNetworkProtocol>();
-            NetworkProtocol.Register<QuicNetworkProtocol>();~
+            NetworkProtocol.Register<QuicNetworkProtocol>();
             NetworkProtocol.Register<QuicV1NetworkProtocol>();
             NetworkProtocol.Register<HttpNetworkProtocol>();
             NetworkProtocol.Register<HttpsNetworkProtocol>();
