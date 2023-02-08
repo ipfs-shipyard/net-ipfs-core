@@ -7,6 +7,7 @@ using System.Net;
 using System.Net.Sockets;
 using Google.Protobuf;
 using System.Globalization;
+using Org.BouncyCastle.Asn1.IsisMtt.Ocsp;
 
 namespace Ipfs
 {
@@ -14,7 +15,8 @@ namespace Ipfs
     ///   Metadata on an IPFS network address protocol.
     /// </summary>
     /// <remarks>
-    ///   Protocols are defined at <see href="https://github.com/multiformats/multiaddr/blob/master/protocols.csv"/>.
+    ///   Protocols are defined at <see href="https://github.com/multiformats/multiaddr/blob/master/protocols.csv"/>
+    ///   and https://github.com/multiformats/go-multiaddr/blob/master/protocols.go.
     /// </remarks>
     /// <seealso cref="MultiAddress"/>
     public abstract class NetworkProtocol
@@ -35,6 +37,8 @@ namespace Ipfs
             NetworkProtocol.RegisterAlias<IpfsNetworkProtocol>();
             NetworkProtocol.Register<QuicNetworkProtocol>();
             NetworkProtocol.Register<QuicV1NetworkProtocol>();
+            NetworkProtocol.Register<WebTransportNetworkProtocol>();
+            NetworkProtocol.Register<CertHashNetworkProtocol>();
             NetworkProtocol.Register<HttpNetworkProtocol>();
             NetworkProtocol.Register<HttpsNetworkProtocol>();
             NetworkProtocol.Register<DccpNetworkProtocol>();
@@ -188,8 +192,9 @@ namespace Ipfs
     class TcpNetworkProtocol : NetworkProtocol
     {
         public UInt16 Port { get; set; }
-        public override string Name { get { return "tcp"; } }
-        public override uint Code { get { return 6; } }
+        public override string Name => "tcp";
+        public override uint Code => 6;
+
         public override void ReadValue(TextReader stream)
         {
             base.ReadValue(stream);
@@ -217,20 +222,20 @@ namespace Ipfs
 
     class UdpNetworkProtocol : TcpNetworkProtocol
     {
-        public override string Name { get { return "udp"; } }
-        public override uint Code { get { return 273; } }
+        public override string Name => "udp";
+        public override uint Code => 273;
     }
 
     class DccpNetworkProtocol : TcpNetworkProtocol
     {
-        public override string Name { get { return "dccp"; } }
-        public override uint Code { get { return 33; } }
+        public override string Name => "dccp";
+        public override uint Code => 33;
     }
 
     class SctpNetworkProtocol : TcpNetworkProtocol
     {
-        public override string Name { get { return "sctp"; } }
-        public override uint Code { get { return 132; } }
+        public override string Name => "sctp";
+        public override uint Code => 132;
     }
 
     abstract class IpNetworkProtocol : NetworkProtocol
@@ -250,7 +255,7 @@ namespace Ipfs
             }
             catch (Exception e)
             {
-                throw new FormatException(string.Format("'{0}' is not a valid IP address.", Value), e);
+                throw new FormatException($"'{Value}' is not a valid IP address.", e);
             }
         }
         public override void WriteValue(TextWriter stream)
@@ -269,8 +274,9 @@ namespace Ipfs
     {
         static int AddressSize = IPAddress.Any.GetAddressBytes().Length;
 
-        public override string Name { get { return "ip4"; } }
-        public override uint Code { get { return 4; } }
+        public override string Name => "ip4";
+        public override uint Code => 4;
+
         public override void ReadValue(TextReader stream)
         {
             base.ReadValue(stream);
@@ -290,8 +296,9 @@ namespace Ipfs
     {
         static int AddressSize = IPAddress.IPv6Any.GetAddressBytes().Length;
 
-        public override string Name { get { return "ip6"; } }
-        public override uint Code { get { return 41; } }
+        public override string Name => "ip6";
+        public override uint Code => 41;
+
         public override void ReadValue(TextReader stream)
         {
             base.ReadValue(stream);
@@ -309,19 +316,22 @@ namespace Ipfs
     class P2pNetworkProtocol : NetworkProtocol
     {
         public MultiHash MultiHash { get; private set; }
-        public override string Name { get { return "p2p"; } }
-        public override uint Code { get { return 421; } }
+        public override string Name => "p2p";
+        public override uint Code => 421;
+
         public override void ReadValue(TextReader stream)
         {
             base.ReadValue(stream);
             MultiHash = new MultiHash(Value);
         }
+
         public override void ReadValue(CodedInputStream stream)
         {
             stream.ReadLength();
             MultiHash = new MultiHash(stream);
             Value = MultiHash.ToBase58();
         }
+
         public override void WriteValue(CodedOutputStream stream)
         {
             var bytes = MultiHash.ToArray();
@@ -332,15 +342,16 @@ namespace Ipfs
 
     class IpfsNetworkProtocol : P2pNetworkProtocol
     {
-        public override string Name { get { return "ipfs"; } }
+        public override string Name => "ipfs";
     }
 
     class OnionNetworkProtocol : NetworkProtocol
     {
         public byte[] Address { get; private set; }
         public UInt16 Port { get; private set; }
-        public override string Name { get { return "onion"; } }
-        public override uint Code { get { return 444; } }
+        public override string Name => "onion";
+        public override uint Code => 444;
+
         public override void ReadValue(TextReader stream)
         {
             base.ReadValue(stream);
@@ -394,68 +405,90 @@ namespace Ipfs
 
     class QuicNetworkProtocol : ValuelessNetworkProtocol
     {
-        public override string Name { get { return "quic"; } }
-        public override uint Code { get { return 460; } }
+        public override string Name => "quic";
+        public override uint Code => 460;
     }
 
     class QuicV1NetworkProtocol : ValuelessNetworkProtocol
     {
-        public override string Name { get { return "quic-v1"; } }
-        public override uint Code { get { return 461; } }
+        public override string Name => "quic-v1";
+        public override uint Code => 465;
+    }
+
+    class WebTransportNetworkProtocol : ValuelessNetworkProtocol
+    {
+        public override string Name => "webtransport";
+        public override uint Code => 461;
+    }
+
+    class CertHashNetworkProtocol : NetworkProtocol
+    {
+        public override string Name => "certhash";
+        public override uint Code => 466;
+
+        public override void ReadValue(CodedInputStream stream)
+        {
+            Value = stream.ReadString();
+        }
+
+        public override void WriteValue(CodedOutputStream stream)
+        {
+            stream.WriteString(Value);
+        }
     }
 
     class HttpNetworkProtocol : ValuelessNetworkProtocol
     {
-        public override string Name { get { return "http"; } }
-        public override uint Code { get { return 480; } }
+        public override string Name => "http";
+        public override uint Code => 480;
     }
 
     class HttpsNetworkProtocol : ValuelessNetworkProtocol
     {
-        public override string Name { get { return "https"; } }
-        public override uint Code { get { return 443; } }
+        public override string Name => "https";
+        public override uint Code => 443;
     }
 
     class WsNetworkProtocol : ValuelessNetworkProtocol
     {
-        public override string Name { get { return "ws"; } }
-        public override uint Code { get { return 477; } }
+        public override string Name => "ws";
+        public override uint Code => 477;
     }
 
     class WssNetworkProtocol : ValuelessNetworkProtocol
     {
-        public override string Name { get { return "wss"; } }
-        public override uint Code { get { return 478; } }
+        public override string Name => "wss";
+        public override uint Code => 478;
     }
 
     class Libp2pWebrtcStarNetworkProtocol : ValuelessNetworkProtocol
     {
-        public override string Name { get { return "libp2p-webrtc-star"; } }
-        public override uint Code { get { return 275; } }
+        public override string Name => "libp2p-webrtc-star";
+        public override uint Code => 275;
     }
 
     class Libp2pWebrtcDirectNetworkProtocol : ValuelessNetworkProtocol
     {
-        public override string Name { get { return "libp2p-webrtc-direct"; } }
-        public override uint Code { get { return 276; } }
+        public override string Name => "libp2p-webrtc-direct";
+        public override uint Code => 276;
     }
 
     class UdtNetworkProtocol : ValuelessNetworkProtocol
     {
-        public override string Name { get { return "udt"; } }
-        public override uint Code { get { return 301; } }
+        public override string Name => "udt";
+        public override uint Code => 301;
     }
 
     class UtpNetworkProtocol : ValuelessNetworkProtocol
     {
-        public override string Name { get { return "utp"; } }
-        public override uint Code { get { return 302; } }
+        public override string Name => "utp";
+        public override uint Code => 302;
     }
 
     class P2pCircuitNetworkProtocol : ValuelessNetworkProtocol
     {
-        public override string Name { get { return "p2p-circuit"; } }
-        public override uint Code { get { return 290; } }
+        public override string Name => "p2p-circuit";
+        public override uint Code => 290;
     }
 
     abstract class DomainNameNetworkProtocol : NetworkProtocol
@@ -485,34 +518,36 @@ namespace Ipfs
 
     class DnsNetworkProtocol : DomainNameNetworkProtocol
     {
-        public override string Name { get { return "dns"; } }
-        public override uint Code { get { return 53; } }
+        public override string Name => "dns";
+        public override uint Code => 53;
     }
 
     class DnsAddrNetworkProtocol : DomainNameNetworkProtocol
     {
-        public override string Name { get { return "dnsaddr"; } }
-        public override uint Code { get { return 56; } }
+        public override string Name => "dnsaddr";
+        public override uint Code => 56;
     }
 
     class Dns4NetworkProtocol : DomainNameNetworkProtocol
     {
-        public override string Name { get { return "dns4"; } }
-        public override uint Code { get { return 54; } }
+        public override string Name => "dns4";
+        public override uint Code => 54;
     }
 
     class Dns6NetworkProtocol : DomainNameNetworkProtocol
     {
-        public override string Name { get { return "dns6"; } }
-        public override uint Code { get { return 55; } }
+        public override string Name => "dns6";
+        public override uint Code => 55;
     }
 
     class IpcidrNetworkProtocol : NetworkProtocol
     {
         public UInt16 RoutingPrefix { get; set; }
-        public override string Name { get { return "ipcidr"; } }
+        public override string Name => "ipcidr";
+
         // TODO: https://github.com/multiformats/multiaddr/issues/60
-        public override uint Code { get { return 999; } }
+        public override uint Code => 999;
+
         public override void ReadValue(TextReader stream)
         {
             base.ReadValue(stream);

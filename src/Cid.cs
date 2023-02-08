@@ -411,6 +411,7 @@ namespace Ipfs
                 cid.Version = stream.ReadInt32();
                 cid.ContentType = stream.ReadMultiCodec().Name;
             }
+
             cid.Hash = new MultiHash(stream);
 
             return cid;

@@ -337,25 +337,27 @@ namespace Ipfs
 
             var name = new StringBuilder();
             Protocols.Clear();
-            int c;
             while (true)
             {
                 name.Clear();
+
+                int c;
                 while (-1 != (c = stream.Read()) && c != '/')
-                {
                     name.Append((char)c);
-                }
+                
                 if (name.Length == 0)
                     break;
+
                 if (!NetworkProtocol.Names.TryGetValue(name.ToString(), out Type protocolType))
-                    throw new FormatException(string.Format("The IPFS network protocol '{0}' is unknown.", name.ToString()));
+                    throw new FormatException($"The IPFS network protocol '{name}' is unknown.");
+
                 var p = (NetworkProtocol)Activator.CreateInstance(protocolType);
                 p.ReadValue(stream);
                 Protocols.Add(p);
             }
 
             if (Protocols.Count == 0)
-                throw new FormatException("The IFPS multiaddr has no protocol specified.");
+                throw new FormatException("The IPFS multiaddr has no protocol specified.");
         }
 
         /// <inheritdoc />
