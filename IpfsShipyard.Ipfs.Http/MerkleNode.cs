@@ -123,18 +123,7 @@ public class MerkleNode : IMerkleNode<IMerkleLink>, IEquatable<MerkleNode>
 
     /// <inheritdoc />
     [DataMember]
-    public IEnumerable<IMerkleLink> Links
-    {
-        get
-        {
-            if (_links == null)
-            {
-                _links = IpfsClient.Object.LinksAsync(Id).Result;
-            }
-
-            return _links;
-        }
-    }
+    public IEnumerable<IMerkleLink> Links => _links ??= IpfsClient.Object.LinksAsync(Id).Result;
 
     /// <inheritdoc />
     [DataMember]
@@ -218,7 +207,7 @@ public class MerkleNode : IMerkleNode<IMerkleLink>, IEquatable<MerkleNode>
     /// <summary>
     ///  TODO
     /// </summary>
-    static public implicit operator MerkleNode(string hash)
+    public static implicit operator MerkleNode(string hash)
     {
         return new(hash);
     }

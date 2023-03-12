@@ -18,8 +18,7 @@ internal partial class KeccakManaged : Keccak
         if (cbSize == 0)
             return;
         var sizeInBytes = SizeInBytes;
-        if (Buffer == null)
-            Buffer = new byte[sizeInBytes];
+        Buffer ??= new byte[sizeInBytes];
         var stride = sizeInBytes >> 3;
         var utemps = new ulong[stride];
         if (BuffLength == sizeInBytes)

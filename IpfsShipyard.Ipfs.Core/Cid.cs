@@ -492,7 +492,7 @@ public class Cid : IEquatable<Cid>
     ///   A new <see cref="Cid"/> based on the <paramref name="hash"/>.  A <see cref="Version"/> 0
     ///   CID is returned if the <paramref name="hash"/> is "sha2-356"; otherwise <see cref="Version"/> 1.
     /// </returns>
-    static public implicit operator Cid(MultiHash hash)
+    public static implicit operator Cid(MultiHash hash)
     {
         if (hash.Algorithm.Name == "sha2-256")
         {
@@ -584,7 +584,7 @@ public class Cid : IEquatable<Cid>
     /// <remarks>
     ///    Equivalent to <code> Cid.Decode(s)</code>
     /// </remarks>
-    static public implicit operator Cid(string s)
+    public static implicit operator Cid(string s)
     {
         return Decode(s);
     }
@@ -601,7 +601,7 @@ public class Cid : IEquatable<Cid>
     /// <remarks>
     ///    Equivalent to <code>Cid.Encode()</code>
     /// </remarks>
-    static public implicit operator string(Cid id)
+    public static implicit operator string(Cid id)
     {
         return id.Encode();
     }

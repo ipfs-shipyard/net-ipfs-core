@@ -169,7 +169,7 @@ public class Peer : IEquatable<Peer>
     /// <remarks>
     ///    Equivalent to <code>new Peer { Id = s }</code>
     /// </remarks>
-    static public implicit operator Peer(string s)
+    public static implicit operator Peer(string s)
     {
         return new() { Id = s };
     }

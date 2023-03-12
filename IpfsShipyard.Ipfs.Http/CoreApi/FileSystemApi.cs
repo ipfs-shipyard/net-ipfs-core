@@ -39,8 +39,7 @@ internal class FileSystemApi : IFileSystemApi
 
     public async Task<IFileSystemNode> AddAsync(Stream stream, string name = "", AddFileOptions options = null, CancellationToken cancel = default(CancellationToken))
     {
-        if (options == null)
-            options = new();
+        options ??= new();
         var opts = new List<string>();
         if (!options.Pin)
             opts.Add("pin=false");
@@ -105,8 +104,7 @@ internal class FileSystemApi : IFileSystemApi
 
     public async Task<IFileSystemNode> AddDirectoryAsync(string path, bool recursive = true, AddFileOptions options = null, CancellationToken cancel = default(CancellationToken))
     {
-        if (options == null)
-            options = new();
+        options ??= new();
         options.Wrap = false;
 
         // Add the files and sub-directories.

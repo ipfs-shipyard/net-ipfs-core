@@ -148,8 +148,7 @@ public class HashingAlgorithm
             throw new ArgumentException(string.Format("The IPFS hashing algorithm '{0}' is already defined.", name));
         if (Codes.ContainsKey(code))
             throw new ArgumentException(string.Format("The IPFS hashing algorithm code 0x{0:x2} is already defined.", code));
-        if (hasher == null)
-            hasher = () => { throw new NotImplementedException(string.Format("The IPFS hashing algorithm '{0}' is not implemented.", name)); };
+        hasher ??= () => throw new NotImplementedException(string.Format("The IPFS hashing algorithm '{0}' is not implemented.", name));
 
         var a = new HashingAlgorithm
         {

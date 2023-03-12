@@ -236,7 +236,7 @@ public class MultiHash : IEquatable<MultiHash>
     /// <remarks>
     ///    Equivalent to <code>new MultiHash(s)</code>
     /// </remarks>
-    static public implicit operator MultiHash(string s)
+    public static implicit operator MultiHash(string s)
     {
         return new(s);
     }

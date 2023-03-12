@@ -457,7 +457,7 @@ public class MultiAddress : IEquatable<MultiAddress>
     /// </summary>
     /// <param name="s">The string representation of a <see cref="MultiAddress"/>.</param>
     /// <returns>A new <see cref="MultiAddress"/>.</returns>
-    static public implicit operator MultiAddress(string s)
+    public static implicit operator MultiAddress(string s)
     {
         return new(s);
     }

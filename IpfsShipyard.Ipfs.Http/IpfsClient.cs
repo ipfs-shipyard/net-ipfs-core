@@ -479,10 +479,7 @@ public partial class IpfsClient : ICoreApi
 
         streamContent.Headers.ContentType = new("application/octet-stream");
 
-        if (string.IsNullOrEmpty(name))
-            content.Add(streamContent, "file", UnknownFilename);
-        else
-            content.Add(streamContent, "file", name);
+        content.Add(streamContent, "file", string.IsNullOrEmpty(name) ? UnknownFilename : name);
 
         var url = BuildCommand(command, null, options);
 

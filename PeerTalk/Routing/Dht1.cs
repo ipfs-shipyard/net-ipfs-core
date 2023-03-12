@@ -321,15 +321,7 @@ public class Dht1 : IPeerProtocol, IService, IPeerRouting, IContentRouting
         }
 
         // Do we know the peer?.
-        Peer found = null;
-        if (Swarm.LocalPeer.Id == peerId)
-        {
-            found = Swarm.LocalPeer;
-        }
-        else
-        {
-            found = Swarm.KnownPeers.FirstOrDefault(p => p.Id == peerId);
-        }
+        var found = Swarm.LocalPeer.Id == peerId ? Swarm.LocalPeer : Swarm.KnownPeers.FirstOrDefault(p => p.Id == peerId);
 
         // Find the closer peers.
         var closerPeers = new List<Peer>();

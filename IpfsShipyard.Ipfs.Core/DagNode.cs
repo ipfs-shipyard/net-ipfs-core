@@ -285,8 +285,7 @@ public class DagNode : IMerkleNode<IMerkleLink>
             }
         }
 
-        if (DataBytes == null)
-            DataBytes = new byte[0];
+        DataBytes ??= new byte[0];
         Links = links.ToArray();
     }
 
