@@ -206,8 +206,7 @@ namespace IpfsShipyard.PeerTalk.Transports
                         continue;
                     }
                     MultiAddress remote = null;
-                    var endPoint = conn.RemoteEndPoint as IPEndPoint;
-                    if (endPoint != null)
+                    if (conn.RemoteEndPoint is IPEndPoint endPoint)
                     {
                         var s = new StringBuilder();
                         s.Append(endPoint.AddressFamily == AddressFamily.InterNetwork ? "/ip4/" : "/ip6/");

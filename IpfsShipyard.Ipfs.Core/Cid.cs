@@ -636,8 +636,7 @@ public class Cid : IEquatable<Cid>
         /// <inheritdoc />
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
-            var s = reader.Value as string;
-            return s == null ? null : Decode(s);
+            return reader.Value is not string s ? null : Decode(s);
         }
     }
 

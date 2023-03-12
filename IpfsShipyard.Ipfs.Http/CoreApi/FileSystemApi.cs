@@ -234,8 +234,7 @@ internal class FileSystemApi : IFileSystemApi
             Links = new FileSystemLink[0],
             IpfsClient = _ipfs
         };
-        var links = o["Links"] as JArray;
-        if (links != null)
+        if (o["Links"] is JArray links)
         {
             node.Links = links
                 .Select(l => new FileSystemLink()

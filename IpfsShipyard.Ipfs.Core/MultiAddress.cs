@@ -528,8 +528,7 @@ public class MultiAddress : IEquatable<MultiAddress>
 
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
-            var s = reader.Value as string;
-            return s == null ? null : new MultiAddress(s);
+            return reader.Value is not string s ? null : new MultiAddress(s);
         }
     }
 

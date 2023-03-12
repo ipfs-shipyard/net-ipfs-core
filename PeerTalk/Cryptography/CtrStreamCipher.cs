@@ -59,8 +59,7 @@ public class CtrStreamCipher : IStreamCipher
     /// </example>
     public void Init(bool forEncryption, ICipherParameters parameters)
     {
-        var ivParam = parameters as ParametersWithIV;
-        if (ivParam == null)
+        if (parameters is not ParametersWithIV ivParam)
             throw new ArgumentException("CTR mode requires ParametersWithIV", nameof(parameters));
 
         _iv = Arrays.Clone(ivParam.GetIV());

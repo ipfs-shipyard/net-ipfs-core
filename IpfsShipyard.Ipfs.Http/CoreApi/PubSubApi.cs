@@ -25,8 +25,7 @@ internal class PubSubApi : IPubSubApi
     {
         var json = await _ipfs.DoCommandAsync("pubsub/ls", cancel);
         var result = JObject.Parse(json);
-        var strings = result["Strings"] as JArray;
-        if (strings == null) return new string[0];
+        if (result["Strings"] is not JArray strings) return new string[0];
         return strings.Select(s => (string)s);
     }
 
@@ -34,9 +33,8 @@ internal class PubSubApi : IPubSubApi
     {
         var json = await _ipfs.DoCommandAsync("pubsub/peers", cancel, topic);
         var result = JObject.Parse(json);
-        var strings = result["Strings"] as JArray;
 
-        if (strings == null)
+        if (result["Strings"] is not JArray strings)
             return Array.Empty<Peer>();
 
         return strings.Select(s => new Peer { Id = (string)s });

@@ -225,7 +225,7 @@ public partial class IpfsClient : ICoreApi
             {
                 if (_api == null)
                 {
-                    if (HttpMessageHandler is HttpClientHandler handler && handler.SupportsAutomaticDecompression)
+                    if (HttpMessageHandler is HttpClientHandler { SupportsAutomaticDecompression: true } handler)
                     {
                         handler.AutomaticDecompression = DecompressionMethods.GZip
                                                          | DecompressionMethods.Deflate;
