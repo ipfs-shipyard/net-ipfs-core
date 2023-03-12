@@ -41,11 +41,7 @@ public static class MultiCodec
     {
         var code = stream.ReadVarint32();
         Codec.Codes.TryGetValue(code, out var codec);
-        if (codec == null)
-        {
-            codec = Codec.Register($"codec-{code}", code);
-        }
-        return codec;
+        return codec ?? Codec.Register($"codec-{code}", code);
     }
 
     /// <summary>
