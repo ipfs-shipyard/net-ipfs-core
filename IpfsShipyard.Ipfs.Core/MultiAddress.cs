@@ -41,7 +41,7 @@ public class MultiAddress : IEquatable<MultiAddress>
     /// <summary>
     ///   The components of the <b>MultiAddress</b>.
     /// </summary>
-    public List<NetworkProtocol> Protocols { get; private set; }
+    public List<NetworkProtocol> Protocols { get; }
 
     /// <summary>
     ///   Creates a new instance of the <see cref="MultiAddress"/> class with the string.

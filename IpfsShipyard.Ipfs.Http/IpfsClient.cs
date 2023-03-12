@@ -118,58 +118,58 @@ public partial class IpfsClient : ICoreApi
     /// <remarks>
     ///   This is equivalent to <c>ipfs bootstrap list</c>.
     /// </remarks>
-    public TrustedPeerCollection TrustedPeers { get; private set; }
+    public TrustedPeerCollection TrustedPeers { get; }
 
     /// <inheritdoc />
-    public IBitswapApi Bitswap { get; private set; }
+    public IBitswapApi Bitswap { get; }
 
     /// <inheritdoc />
-    public IBootstrapApi Bootstrap { get; private set; }
+    public IBootstrapApi Bootstrap { get; }
 
     /// <inheritdoc />
-    public IGenericApi Generic { get; private set; }
+    public IGenericApi Generic { get; }
 
     /// <inheritdoc />
-    public IDnsApi Dns { get; private set; }
+    public IDnsApi Dns { get; }
 
     /// <inheritdoc />
-    public IStatsApi Stats { get; private set; }
+    public IStatsApi Stats { get; }
 
     /// <inheritdoc />
-    public INameApi Name { get; private set; }
+    public INameApi Name { get; }
 
     /// <inheritdoc />
-    public IBlockApi Block { get; private set; }
+    public IBlockApi Block { get; }
 
     /// <inheritdoc />
-    public IBlockRepositoryApi BlockRepository { get; private set; }
+    public IBlockRepositoryApi BlockRepository { get; }
 
     /// <inheritdoc />
-    public IConfigApi Config { get; private set; }
+    public IConfigApi Config { get; }
 
     /// <inheritdoc />
-    public IPinApi Pin { get; private set; }
+    public IPinApi Pin { get; }
 
     /// <inheritdoc />
-    public IDagApi Dag { get; private set; }
+    public IDagApi Dag { get; }
 
     /// <inheritdoc />
-    public IDhtApi Dht { get; private set; }
+    public IDhtApi Dht { get; }
 
     /// <inheritdoc />
-    public ISwarmApi Swarm { get; private set; }
+    public ISwarmApi Swarm { get; }
 
     /// <inheritdoc />
-    public IObjectApi Object { get; private set; }
+    public IObjectApi Object { get; }
 
     /// <inheritdoc />
-    public IFileSystemApi FileSystem { get; private set; }
+    public IFileSystemApi FileSystem { get; }
 
     /// <inheritdoc />
-    public IPubSubApi PubSub { get; private set; }
+    public IPubSubApi PubSub { get; }
 
     /// <inheritdoc />
-    public IKeyApi Key { get; private set; }
+    public IKeyApi Key { get; }
 
     private Uri BuildCommand(string command, string arg = null, params string[] options)
     {

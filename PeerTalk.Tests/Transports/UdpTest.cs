@@ -132,7 +132,7 @@ public class UdpTest
             Address = udp.Listen("/ip4/127.0.0.1", Handler, _cs.Token);
         }
 
-        public MultiAddress Address { get; set; }
+        public MultiAddress Address { get; }
 
         public void Dispose()
         {
