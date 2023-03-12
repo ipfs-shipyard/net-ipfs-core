@@ -12,11 +12,11 @@ namespace IpfsShipyard.Ipfs.Http.CoreApi
 {
     class ObjectApi : IObjectApi
     {
-        private IpfsClient ipfs;
+        private IpfsClient _ipfs;
 
         internal ObjectApi(IpfsClient ipfs)
         {
-            this.ipfs = ipfs;
+            _ipfs = ipfs;
         }
 
         public Task<DagNode> NewDirectoryAsync(CancellationToken cancel = default(CancellationToken))
@@ -26,14 +26,14 @@ namespace IpfsShipyard.Ipfs.Http.CoreApi
 
         public async Task<DagNode> NewAsync(string template = null, CancellationToken cancel = default(CancellationToken))
         {
-            var json = await ipfs.DoCommandAsync("object/new", cancel, template);
+            var json = await _ipfs.DoCommandAsync("object/new", cancel, template);
             var hash = (string)(JObject.Parse(json)["Hash"]);
             return await GetAsync(hash);
         }
 
         public async Task<DagNode> GetAsync(Cid id, CancellationToken cancel = default(CancellationToken))
         {
-            var json = await ipfs.DoCommandAsync("object/get", cancel, id);
+            var json = await _ipfs.DoCommandAsync("object/get", cancel, id);
             return GetDagFromJson(json);
         }
 
@@ -44,18 +44,18 @@ namespace IpfsShipyard.Ipfs.Http.CoreApi
 
         public async Task<DagNode> PutAsync(DagNode node, CancellationToken cancel = default(CancellationToken))
         {
-            var json = await ipfs.UploadAsync("object/put", cancel, node.ToArray(), "inputenc=protobuf");
+            var json = await _ipfs.UploadAsync("object/put", cancel, node.ToArray(), "inputenc=protobuf");
             return node;
         }
 
         public Task<Stream> DataAsync(Cid id, CancellationToken cancel = default(CancellationToken))
         {
-            return ipfs.PostDownloadAsync("object/data", cancel, id);
+            return _ipfs.PostDownloadAsync("object/data", cancel, id);
         }
 
         public async Task<IEnumerable<IMerkleLink>> LinksAsync(Cid id, CancellationToken cancel = default(CancellationToken))
         {
-            var json = await ipfs.DoCommandAsync("object/links", cancel, id);
+            var json = await _ipfs.DoCommandAsync("object/links", cancel, id);
             return GetDagFromJson(json).Links;
         }
 
@@ -78,7 +78,7 @@ namespace IpfsShipyard.Ipfs.Http.CoreApi
 
         public async Task<ObjectStat> StatAsync(Cid id, CancellationToken cancel = default(CancellationToken))
         {
-            var json = await ipfs.DoCommandAsync("object/stat", cancel, id);
+            var json = await _ipfs.DoCommandAsync("object/stat", cancel, id);
             var r = JObject.Parse(json);
 
             return new ObjectStat

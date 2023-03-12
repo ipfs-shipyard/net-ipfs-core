@@ -15,7 +15,7 @@ public class HashingTest
         public string Digest { get; set; }
     }
 
-    TestVector[] TestVectors = new TestVector[]
+    TestVector[] _testVectors = new TestVector[]
     {
         new TestVector
         {
@@ -131,7 +131,7 @@ public class HashingTest
     [TestMethod]
     public void CheckHashes()
     {
-        foreach (var v in TestVectors)
+        foreach (var v in _testVectors)
         {
             var actual = MultiHash
                 .GetHashAlgorithm(v.Algorithm)

@@ -12,11 +12,11 @@ namespace IpfsShipyard.Ipfs.Http.CoreApi
 {
     class DagApi : IDagApi
     {
-        private IpfsClient ipfs;
+        private IpfsClient _ipfs;
 
         internal DagApi(IpfsClient ipfs)
         {
-            this.ipfs = ipfs;
+            _ipfs = ipfs;
         }
 
         public async Task<Cid> PutAsync(
@@ -67,7 +67,7 @@ namespace IpfsShipyard.Ipfs.Http.CoreApi
             bool pin = true,
             CancellationToken cancel = default(CancellationToken))
         {
-            var json = await ipfs.UploadAsync("dag/put", cancel,
+            var json = await _ipfs.UploadAsync("dag/put", cancel,
                 data, null,
                 $"format={contentType}",
                 $"pin={pin.ToString().ToLowerInvariant()}",
@@ -81,7 +81,7 @@ namespace IpfsShipyard.Ipfs.Http.CoreApi
             Cid id,
             CancellationToken cancel = default(CancellationToken))
         {
-            var json = await ipfs.DoCommandAsync("dag/get", cancel, id);
+            var json = await _ipfs.DoCommandAsync("dag/get", cancel, id);
             return JObject.Parse(json);
         }
 
@@ -90,13 +90,13 @@ namespace IpfsShipyard.Ipfs.Http.CoreApi
             string path,
             CancellationToken cancel = default(CancellationToken))
         {
-            var json = await ipfs.DoCommandAsync("dag/get", cancel, path);
+            var json = await _ipfs.DoCommandAsync("dag/get", cancel, path);
             return JToken.Parse(json);
         }
 
         public async Task<T> GetAsync<T>(Cid id, CancellationToken cancel = default(CancellationToken))
         {
-            var json = await ipfs.DoCommandAsync("dag/get", cancel, id);
+            var json = await _ipfs.DoCommandAsync("dag/get", cancel, id);
             return JsonConvert.DeserializeObject<T>(json);
         }
     }

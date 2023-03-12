@@ -9,7 +9,7 @@ namespace IpfsShipyard.Ipfs.Http.Tests;
 [TestClass]
 public partial class PublishedMessageTest
 {
-    private const string json = @"{
+    private const string Json = @"{
             ""from"":""EiDzOYdzT4BE42JXwxVM8Q19w6tx30Bp2N3T7tOH/a2nCw=="",
             ""data"":""aGVsbG8gd29ybGQ="",
             ""seqno"":""FPBVj+oTUug="",
@@ -19,7 +19,7 @@ public partial class PublishedMessageTest
     [TestMethod]
     public void FromJson()
     {
-        var msg = new PublishedMessage(json);
+        var msg = new PublishedMessage(Json);
         Assert.AreEqual("Qmei6fBYij8gjbetgHLXmoR54iRc9hioPR7dtmBTNG3oWa", msg.Sender);
         Assert.AreEqual("14f0558fea1352e8", msg.SequenceNumber.ToHexString());
         Assert.AreEqual("68656c6c6f20776f726c64", msg.DataBytes.ToHexString());
@@ -35,7 +35,7 @@ public partial class PublishedMessageTest
     [TestMethod]
     public void Id_NotSupported()
     {
-        var msg = new PublishedMessage(json);
+        var msg = new PublishedMessage(Json);
         ExceptionAssert.Throws<NotSupportedException>(() =>
         {
             var _ = msg.Id;

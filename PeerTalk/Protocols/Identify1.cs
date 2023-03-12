@@ -50,7 +50,7 @@ public class Identify1 : IPeerProtocol
             res.PublicKey = Convert.FromBase64String(peer.PublicKey);
         }
 
-        ProtoBuf.Serializer.SerializeWithLengthPrefix<Identify>(stream, res, PrefixStyle.Base128);
+        Serializer.SerializeWithLengthPrefix<Identify>(stream, res, PrefixStyle.Base128);
         await stream.FlushAsync(cancel).ConfigureAwait(false);
     }
 

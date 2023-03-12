@@ -18,7 +18,7 @@ namespace IpfsShipyard.PeerTalk;
 public class PeerManager : IService
 {
     private static readonly ILog log = LogManager.GetLogger(typeof(PeerManager));
-    private CancellationTokenSource cancel;
+    private CancellationTokenSource _cancel;
 
     /// <summary>
     ///   Initial time to wait before attempting a reconnection
@@ -53,8 +53,8 @@ public class PeerManager : IService
         Swarm.ConnectionEstablished += Swarm_ConnectionEstablished;
         Swarm.PeerNotReachable += Swarm_PeerNotReachable;
 
-        cancel = new CancellationTokenSource();
-        var _ = PhoenixAsync(cancel.Token);
+        _cancel = new CancellationTokenSource();
+        var _ = PhoenixAsync(_cancel.Token);
 
         log.Debug("started");
         return Task.CompletedTask;
@@ -67,8 +67,8 @@ public class PeerManager : IService
         Swarm.PeerNotReachable -= Swarm_PeerNotReachable;
         DeadPeers.Clear();
 
-        cancel.Cancel();
-        cancel.Dispose();
+        _cancel.Cancel();
+        _cancel.Dispose();
 
         log.Debug("stopped");
         return Task.CompletedTask;
@@ -155,7 +155,7 @@ public class PeerManager : IService
                         Swarm.BlackList.Remove($"/p2p/{dead.Peer.Id}");
                         try
                         {
-                            await Swarm.ConnectAsync(dead.Peer, cancel.Token);
+                            await Swarm.ConnectAsync(dead.Peer, _cancel.Token);
                         }
                         catch
                         {

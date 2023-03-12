@@ -29,9 +29,9 @@ public class NotificationService : IService, IPubSubApi
         public Action<IPublishedMessage> Handler;
     }
 
-    private long nextSequenceNumber;
-    private ConcurrentDictionary<TopicHandler, TopicHandler> topicHandlers;
-    private readonly MessageTracker tracker = new();
+    private long _nextSequenceNumber;
+    private ConcurrentDictionary<TopicHandler, TopicHandler> _topicHandlers;
+    private readonly MessageTracker _tracker = new();
 
     // TODO: A general purpose CancellationTokenSource that stops publishing of
     // messages when this service is stopped.
@@ -67,10 +67,10 @@ public class NotificationService : IService, IPubSubApi
     /// <inheritdoc />
     public async Task StartAsync()
     {
-        topicHandlers = new ConcurrentDictionary<TopicHandler, TopicHandler>();
+        _topicHandlers = new ConcurrentDictionary<TopicHandler, TopicHandler>();
 
         // Resolution of 100 nanoseconds.
-        nextSequenceNumber = DateTime.UtcNow.Ticks;
+        _nextSequenceNumber = DateTime.UtcNow.Ticks;
 
         // Init the stats.
         MesssagesPublished = 0;
@@ -88,7 +88,7 @@ public class NotificationService : IService, IPubSubApi
     /// <inheritdoc />
     public async Task StopAsync()
     {
-        topicHandlers.Clear();
+        _topicHandlers.Clear();
 
         foreach (var router in Routers)
         {
@@ -115,7 +115,7 @@ public class NotificationService : IService, IPubSubApi
     /// </remarks>
     public PublishedMessage CreateMessage(string topic, byte[] data)
     {
-        var next = Interlocked.Increment(ref nextSequenceNumber);
+        var next = Interlocked.Increment(ref _nextSequenceNumber);
         var seqno = BitConverter.GetBytes(next);
         if (BitConverter.IsLittleEndian)
         {
@@ -133,7 +133,7 @@ public class NotificationService : IService, IPubSubApi
     /// <inheritdoc />
     public Task<IEnumerable<string>> SubscribedTopicsAsync(CancellationToken cancel = default)
     {
-        var topics = topicHandlers.Values
+        var topics = _topicHandlers.Values
             .Select(t => t.Topic)
             .Distinct();
         return Task.FromResult(topics);
@@ -177,14 +177,14 @@ public class NotificationService : IService, IPubSubApi
     public async Task SubscribeAsync(string topic, Action<IPublishedMessage> handler, CancellationToken cancellationToken)
     {
         var topicHandler = new TopicHandler { Topic = topic, Handler = handler };
-        topicHandlers.TryAdd(topicHandler, topicHandler);
+        _topicHandlers.TryAdd(topicHandler, topicHandler);
 
         // TODO: need a better way.
 #pragma warning disable VSTHRD101
         cancellationToken.Register(async () =>
         {
-            topicHandlers.TryRemove(topicHandler, out _);
-            if (!topicHandlers.Values.Any(t => t.Topic == topic))
+            _topicHandlers.TryRemove(topicHandler, out _);
+            if (!_topicHandlers.Values.Any(t => t.Topic == topic))
             {
                 await Task.WhenAll(Routers.Select(r => r.LeaveTopicAsync(topic, CancellationToken.None))).ConfigureAwait(false);
             }
@@ -192,7 +192,7 @@ public class NotificationService : IService, IPubSubApi
 #pragma warning restore VSTHRD101
 
         // Tell routers if first time.
-        if (topicHandlers.Values.Count(t => t.Topic == topic) == 1)
+        if (_topicHandlers.Values.Count(t => t.Topic == topic) == 1)
         {
             await Task.WhenAll(Routers.Select(r => r.JoinTopicAsync(topic, CancellationToken.None))).ConfigureAwait(false);
         }
@@ -215,14 +215,14 @@ public class NotificationService : IService, IPubSubApi
         ++MesssagesReceived;
 
         // Check for duplicate message.
-        if (tracker.RecentlySeen(msg.MessageId))
+        if (_tracker.RecentlySeen(msg.MessageId))
         {
             ++DuplicateMesssagesReceived;
             return;
         }
 
         // Call local topic handlers.
-        var handlers = topicHandlers.Values
+        var handlers = _topicHandlers.Values
             .Where(th => msg.Topics.Contains(th.Topic));
         foreach (var handler in handlers)
         {

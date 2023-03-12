@@ -15,8 +15,8 @@ namespace IpfsShipyard.Ipfs.Core;
 /// </typeparam>
 /// <seealso href="https://en.wikipedia.org/wiki/Directed_acyclic_graph"/>
 /// <seealso href="https://github.com/ipfs/specs/tree/master/merkledag"/>
-public interface IMerkleNode<out Link> : IDataBlock
-    where Link : IMerkleLink
+public interface IMerkleNode<out TLink> : IDataBlock
+    where TLink : IMerkleLink
 {
 
     /// <summary>
@@ -32,7 +32,7 @@ public interface IMerkleNode<out Link> : IDataBlock
     ///   name is compared as "".
     ///   </para>
     /// </remarks>
-    IEnumerable<Link> Links { get; }
+    IEnumerable<TLink> Links { get; }
 
     /// <summary>
     ///   Returns a link to the node.
@@ -43,6 +43,6 @@ public interface IMerkleNode<out Link> : IDataBlock
     /// <returns>
     ///   A new <see cref="IMerkleLink"/> to the node.
     /// </returns>
-    Link ToLink(string name = "");
+    TLink ToLink(string name = "");
 
 }

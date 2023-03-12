@@ -5,16 +5,16 @@ namespace IpfsShipyard.Ipfs.Http.Tests;
 [TestClass]
 public class BlockTest
 {
-    private byte[] someBytes = new byte[] { 1, 2, 3 };
+    private byte[] _someBytes = new byte[] { 1, 2, 3 };
 
     [TestMethod]
     public void DataBytes()
     {
         var block = new Block
         {
-            DataBytes = someBytes
+            DataBytes = _someBytes
         };
-        CollectionAssert.AreEqual(someBytes, block.DataBytes);
+        CollectionAssert.AreEqual(_someBytes, block.DataBytes);
     }
 
     [TestMethod]
@@ -22,7 +22,7 @@ public class BlockTest
     {
         var block = new Block
         {
-            DataBytes = someBytes
+            DataBytes = _someBytes
         };
         var stream = block.DataStream;
         Assert.AreEqual(1, stream.ReadByte());

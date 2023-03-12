@@ -9,13 +9,13 @@ namespace IpfsShipyard.Ipfs.Core.Tests;
 [TestClass]
 public class MultiAddressTest
 {
-    const string somewhere = "/ip4/10.1.10.10/tcp/29087/ipfs/QmVcSqVEsvm5RR9mBLjwpb2XjFVn5bPdPL69mL8PH45pPC";
-    const string nowhere = "/ip4/10.1.10.11/tcp/29087/ipfs/QmVcSqVEsvm5RR9mBLjwpb2XjFVn5bPdPL69mL8PH45pPC";
+    const string Somewhere = "/ip4/10.1.10.10/tcp/29087/ipfs/QmVcSqVEsvm5RR9mBLjwpb2XjFVn5bPdPL69mL8PH45pPC";
+    const string Nowhere = "/ip4/10.1.10.11/tcp/29087/ipfs/QmVcSqVEsvm5RR9mBLjwpb2XjFVn5bPdPL69mL8PH45pPC";
 
     [TestMethod]
     public void Parsing()
     {
-        var a = new MultiAddress(somewhere);
+        var a = new MultiAddress(Somewhere);
         Assert.AreEqual(3, a.Protocols.Count);
         Assert.AreEqual("ip4", a.Protocols[0].Name);
         Assert.AreEqual("10.1.10.10", a.Protocols[0].Value);
@@ -44,15 +44,15 @@ public class MultiAddressTest
     [TestMethod]
     public new void ToString()
     {
-        Assert.AreEqual(somewhere, new MultiAddress(somewhere).ToString());
+        Assert.AreEqual(Somewhere, new MultiAddress(Somewhere).ToString());
     }
 
     [TestMethod]
     public void Value_Equality()
     {
-        var a0 = new MultiAddress(somewhere);
-        var a1 = new MultiAddress(somewhere);
-        var b = new MultiAddress(nowhere);
+        var a0 = new MultiAddress(Somewhere);
+        var a1 = new MultiAddress(Somewhere);
+        var b = new MultiAddress(Nowhere);
         MultiAddress c = null;
         MultiAddress d = null;
 
@@ -140,7 +140,7 @@ public class MultiAddressTest
     {
         var addresses = new[]
         {
-            somewhere,
+            Somewhere,
             "/ip4/1.2.3.4/tcp/80/http",
             "/ip6/3ffe:1900:4545:3:200:f8ff:fe21:67cf/tcp/443/https",
             "/ip6/3ffe:1900:4545:3:200:f8ff:fe21:67cf/udp/8001",
@@ -196,7 +196,7 @@ public class MultiAddressTest
     [TestMethod]
     public void Implicit_Conversion_From_String()
     {
-        MultiAddress a = somewhere;
+        MultiAddress a = Somewhere;
         Assert.IsInstanceOfType(a, typeof(MultiAddress));
     }
 
@@ -241,14 +241,14 @@ public class MultiAddressTest
     public void PeerID_ipfs_p2p_are_equal()
     {
         var ipfs = new MultiAddress("/ip4/10.1.10.10/tcp/29087/ipfs/QmVcSqVEsvm5RR9mBLjwpb2XjFVn5bPdPL69mL8PH45pPC");
-        var p2p = new MultiAddress("/ip4/10.1.10.10/tcp/29087/p2p/QmVcSqVEsvm5RR9mBLjwpb2XjFVn5bPdPL69mL8PH45pPC");
-        Assert.AreEqual(ipfs, p2p);
+        var p2P = new MultiAddress("/ip4/10.1.10.10/tcp/29087/p2p/QmVcSqVEsvm5RR9mBLjwpb2XjFVn5bPdPL69mL8PH45pPC");
+        Assert.AreEqual(ipfs, p2P);
 
-        var p2p1 = new MultiAddress("/ip4/10.1.10.10/tcp/29087/p2p/QmVCSqVEsvm5RR9mBLjwpb2XjFVn5bPdPL69mL8PH45pPC");
-        Assert.AreNotEqual(p2p, p2p1);
+        var p2P1 = new MultiAddress("/ip4/10.1.10.10/tcp/29087/p2p/QmVCSqVEsvm5RR9mBLjwpb2XjFVn5bPdPL69mL8PH45pPC");
+        Assert.AreNotEqual(p2P, p2P1);
 
-        var p2p2 = new MultiAddress("/p2p/QmVcSqVEsvm5RR9mBLjwpb2XjFVn5bPdPL69mL8PH45pPC");
-        Assert.AreNotEqual(p2p, p2p2);
+        var p2P2 = new MultiAddress("/p2p/QmVcSqVEsvm5RR9mBLjwpb2XjFVn5bPdPL69mL8PH45pPC");
+        Assert.AreNotEqual(p2P, p2P2);
     }
 
     [TestMethod]
@@ -386,7 +386,7 @@ public class MultiAddressTest
     }
 
     [TestMethod]
-    public void FromIPAddress()
+    public void FromIpAddress()
     {
         var ma = new MultiAddress(IPAddress.Loopback);
         Assert.AreEqual("/ip4/127.0.0.1", ma.ToString());
@@ -396,7 +396,7 @@ public class MultiAddressTest
     }
 
     [TestMethod]
-    public void FromIPEndpoint()
+    public void FromIpEndpoint()
     {
         var ma = new MultiAddress(new IPEndPoint(IPAddress.Loopback, 4001));
         Assert.AreEqual("/ip4/127.0.0.1/tcp/4001", ma.ToString());

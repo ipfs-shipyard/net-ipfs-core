@@ -10,7 +10,7 @@ namespace IpfsShipyard.Ipfs.Http.Tests.CoreApi;
 [TestClass]
 public class DhtApiTest
 {
-    private const string helloWorldID = "QmT78zSuBmuS4z925WZfrqQ1qHaJ56DQaTfyMUF7F8ff5o";
+    private const string HelloWorldId = "QmT78zSuBmuS4z925WZfrqQ1qHaJ56DQaTfyMUF7F8ff5o";
 
     [TestMethod]
     public async Task FindPeer()
@@ -26,7 +26,7 @@ public class DhtApiTest
     {
         var ipfs = TestFixture.Ipfs;
         var cts = new CancellationTokenSource(TimeSpan.FromMinutes(2));
-        var providers = await ipfs.Dht.FindProvidersAsync(helloWorldID, 1, cancel: cts.Token);
+        var providers = await ipfs.Dht.FindProvidersAsync(HelloWorldId, 1, cancel: cts.Token);
         Assert.AreNotEqual(0, Enumerable.Count<Peer>(providers));
     }
 

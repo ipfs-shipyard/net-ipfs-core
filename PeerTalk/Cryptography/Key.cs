@@ -16,9 +16,9 @@ public sealed class Key
     private const string EcSigningAlgorithmName = "SHA-256withECDSA";
     private const string Ed25519SigningAlgorithmName = "Ed25519";
 
-    private AsymmetricKeyParameter publicKey;
-    private AsymmetricKeyParameter privateKey;
-    private string signingAlgorithmName;
+    private AsymmetricKeyParameter _publicKey;
+    private AsymmetricKeyParameter _privateKey;
+    private string _signingAlgorithmName;
 
     private Key()
     {
@@ -38,8 +38,8 @@ public sealed class Key
     /// </exception>
     public void Verify(byte[] data, byte[] signature)
     {
-        var signer = SignerUtilities.GetSigner(signingAlgorithmName);
-        signer.Init(false, publicKey);
+        var signer = SignerUtilities.GetSigner(_signingAlgorithmName);
+        signer.Init(false, _publicKey);
         signer.BlockUpdate(data, 0, data.Length);
         if (!signer.VerifySignature(signature))
             throw new InvalidDataException("Data does not match the signature.");
@@ -56,8 +56,8 @@ public sealed class Key
     /// </returns>
     public byte[] Sign(byte[] data)
     {
-        var signer = SignerUtilities.GetSigner(signingAlgorithmName);
-        signer.Init(true, privateKey);
+        var signer = SignerUtilities.GetSigner(_signingAlgorithmName);
+        signer.Init(true, _privateKey);
         signer.BlockUpdate(data, 0, data.Length);
         return signer.GenerateSignature();
     }
@@ -76,23 +76,23 @@ public sealed class Key
         var key = new Key();
 
         var ms = new MemoryStream(bytes, false);
-        var ipfsKey = ProtoBuf.Serializer.Deserialize<PublicKeyMessage>(ms);
+        var ipfsKey = Serializer.Deserialize<PublicKeyMessage>(ms);
 
         switch (ipfsKey.Type)
         {
-            case KeyType.RSA:
-                key.publicKey = PublicKeyFactory.CreateKey(ipfsKey.Data);
-                key.signingAlgorithmName = RsaSigningAlgorithmName;
+            case KeyType.Rsa:
+                key._publicKey = PublicKeyFactory.CreateKey(ipfsKey.Data);
+                key._signingAlgorithmName = RsaSigningAlgorithmName;
                 break;
 
             case KeyType.Ed25519:
-                key.publicKey = PublicKeyFactory.CreateKey(ipfsKey.Data);
-                key.signingAlgorithmName = Ed25519SigningAlgorithmName;
+                key._publicKey = PublicKeyFactory.CreateKey(ipfsKey.Data);
+                key._signingAlgorithmName = Ed25519SigningAlgorithmName;
                 break;
 
-            case KeyType.Secp256k1:
-                key.publicKey = PublicKeyFactory.CreateKey(ipfsKey.Data);
-                key.signingAlgorithmName = EcSigningAlgorithmName;
+            case KeyType.Secp256K1:
+                key._publicKey = PublicKeyFactory.CreateKey(ipfsKey.Data);
+                key._signingAlgorithmName = EcSigningAlgorithmName;
                 break;
 
             default:
@@ -112,27 +112,27 @@ public sealed class Key
     {
         var key = new Key
         {
-            privateKey = privateKey
+            _privateKey = privateKey
         };
 
         // Get the public key from the private key.
         if (privateKey is RsaPrivateCrtKeyParameters rsa)
         {
-            key.publicKey = new RsaKeyParameters(false, rsa.Modulus, rsa.PublicExponent);
-            key.signingAlgorithmName = RsaSigningAlgorithmName;
+            key._publicKey = new RsaKeyParameters(false, rsa.Modulus, rsa.PublicExponent);
+            key._signingAlgorithmName = RsaSigningAlgorithmName;
         }
         else if (privateKey is Ed25519PrivateKeyParameters ed)
         {
-            key.publicKey = ed.GeneratePublicKey();
-            key.signingAlgorithmName = Ed25519SigningAlgorithmName;
+            key._publicKey = ed.GeneratePublicKey();
+            key._signingAlgorithmName = Ed25519SigningAlgorithmName;
         }
         else if (privateKey is ECPrivateKeyParameters ec)
         {
             var q = ec.Parameters.G.Multiply(ec.D);
-            key.publicKey = new ECPublicKeyParameters(q, ec.Parameters);
-            key.signingAlgorithmName = EcSigningAlgorithmName;
+            key._publicKey = new ECPublicKeyParameters(q, ec.Parameters);
+            key._signingAlgorithmName = EcSigningAlgorithmName;
         }
-        if (key.publicKey == null)
+        if (key._publicKey == null)
             throw new NotSupportedException($"The key type {privateKey.GetType().Name} is not supported.");
 
         return key;
@@ -140,10 +140,10 @@ public sealed class Key
 
     private enum KeyType
     {
-        RSA = 0,
+        Rsa = 0,
         Ed25519 = 1,
-        Secp256k1 = 2,
-        ECDH = 4,
+        Secp256K1 = 2,
+        Ecdh = 4,
     }
 
     [ProtoContract]

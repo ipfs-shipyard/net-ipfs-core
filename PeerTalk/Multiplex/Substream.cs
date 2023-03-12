@@ -20,12 +20,12 @@ namespace IpfsShipyard.PeerTalk.Multiplex;
 /// </remarks>
 public class Substream : Stream
 {
-    private readonly BufferBlock<byte[]> inBlocks = new();
-    private byte[] inBlock;
-    private int inBlockOffset;
-    private bool eos;
+    private readonly BufferBlock<byte[]> _inBlocks = new();
+    private byte[] _inBlock;
+    private int _inBlockOffset;
+    private bool _eos;
 
-    private Stream outStream = new MemoryStream();
+    private Stream _outStream = new MemoryStream();
 
     /// <summary>
     ///   The type of message of sent to the other side.
@@ -58,13 +58,13 @@ public class Substream : Stream
     public Muxer Muxer { get; set; }
 
     /// <inheritdoc />
-    public override bool CanRead => !eos;
+    public override bool CanRead => !_eos;
 
     /// <inheritdoc />
     public override bool CanSeek => false;
 
     /// <inheritdoc />
-    public override bool CanWrite => outStream != null;
+    public override bool CanWrite => _outStream != null;
 
     /// <inheritdoc />
     public override bool CanTimeout => false;
@@ -103,7 +103,7 @@ public class Substream : Stream
     /// </remarks>
     public void AddData(byte[] data)
     {
-        inBlocks.Post(data);
+        _inBlocks.Post(data);
     }
 
     /// <summary>
@@ -116,7 +116,7 @@ public class Substream : Stream
     /// </remarks>
     public void NoMoreData()
     {
-        inBlocks.Complete();
+        _inBlocks.Complete();
     }
 
     /// <inheritdoc />
@@ -131,29 +131,29 @@ public class Substream : Stream
     public override async Task<int> ReadAsync(byte[] buffer, int offset, int count, CancellationToken cancellationToken)
     {
         int total = 0;
-        while (count > 0 && !eos)
+        while (count > 0 && !_eos)
         {
             // Does the current block have some unread data?
-            if (inBlock != null && inBlockOffset < inBlock.Length)
+            if (_inBlock != null && _inBlockOffset < _inBlock.Length)
             {
-                var n = Math.Min(inBlock.Length - inBlockOffset, count);
-                Array.Copy(inBlock, inBlockOffset, buffer, offset, n);
+                var n = Math.Min(_inBlock.Length - _inBlockOffset, count);
+                Array.Copy(_inBlock, _inBlockOffset, buffer, offset, n);
                 total += n;
                 count -= n;
                 offset += n;
-                inBlockOffset += n;
+                _inBlockOffset += n;
             }
             // Otherwise, wait for a new block of data.
             else
             {
                 try
                 {
-                    inBlock = await inBlocks.ReceiveAsync(cancellationToken).ConfigureAwait(false);
-                    inBlockOffset = 0;
+                    _inBlock = await _inBlocks.ReceiveAsync(cancellationToken).ConfigureAwait(false);
+                    _inBlockOffset = 0;
                 }
                 catch (InvalidOperationException) // no more data!
                 {
-                    eos = true;
+                    _eos = true;
                 }
             }
         }
@@ -171,43 +171,43 @@ public class Substream : Stream
     /// <inheritdoc />
     public override async Task FlushAsync(CancellationToken cancel)
     {
-        if (outStream.Length == 0)
+        if (_outStream.Length == 0)
             return;
 
         // Send the response over the muxer channel
         using (await Muxer.AcquireWriteAccessAsync().ConfigureAwait(false))
         {
-            outStream.Position = 0;
+            _outStream.Position = 0;
             var header = new Header
             {
                 StreamId = Id,
                 PacketType = SentMessageType
             };
             await header.WriteAsync(Muxer.Channel, cancel).ConfigureAwait(false);
-            await Muxer.Channel.WriteVarintAsync(outStream.Length, cancel).ConfigureAwait(false);
-            await outStream.CopyToAsync(Muxer.Channel).ConfigureAwait(false);
+            await Muxer.Channel.WriteVarintAsync(_outStream.Length, cancel).ConfigureAwait(false);
+            await _outStream.CopyToAsync(Muxer.Channel).ConfigureAwait(false);
             await Muxer.Channel.FlushAsync(cancel).ConfigureAwait(false);
 
-            outStream.SetLength(0);
+            _outStream.SetLength(0);
         }
     }
 
     /// <inheritdoc />
     public override void Write(byte[] buffer, int offset, int count)
     {
-        outStream.Write(buffer, offset, count);
+        _outStream.Write(buffer, offset, count);
     }
 
     /// <inheritdoc />
     public override Task WriteAsync(byte[] buffer, int offset, int count, CancellationToken cancellationToken)
     {
-        return outStream.WriteAsync(buffer, offset, count, cancellationToken);
+        return _outStream.WriteAsync(buffer, offset, count, cancellationToken);
     }
 
     /// <inheritdoc />
     public override void WriteByte(byte value)
     {
-        outStream.WriteByte(value);
+        _outStream.WriteByte(value);
     }
 
     /// <inheritdoc />
@@ -218,11 +218,11 @@ public class Substream : Stream
             // TODO: find a better method
             _ = Task.Run(async () => await Muxer?.RemoveStreamAsync(this));
 
-            eos = true;
-            if (outStream != null)
+            _eos = true;
+            if (_outStream != null)
             {
-                outStream.Dispose();
-                outStream = null;
+                _outStream.Dispose();
+                _outStream = null;
             }
         }
         base.Dispose(disposing);

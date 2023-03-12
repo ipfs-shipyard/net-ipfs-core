@@ -26,33 +26,33 @@ public abstract class NetworkProtocol
     /// </summary>
     static NetworkProtocol()
     {
-        NetworkProtocol.Register<Ipv4NetworkProtocol>();
-        NetworkProtocol.Register<Ipv6NetworkProtocol>();
-        NetworkProtocol.Register<TcpNetworkProtocol>();
-        NetworkProtocol.Register<UdpNetworkProtocol>();
-        NetworkProtocol.Register<P2pNetworkProtocol>();
-        NetworkProtocol.RegisterAlias<IpfsNetworkProtocol>();
-        NetworkProtocol.Register<QuicNetworkProtocol>();
-        NetworkProtocol.Register<QuicV1NetworkProtocol>();
-        NetworkProtocol.Register<WebTransportNetworkProtocol>();
-        NetworkProtocol.Register<CertHashNetworkProtocol>();
-        NetworkProtocol.Register<HttpNetworkProtocol>();
-        NetworkProtocol.Register<HttpsNetworkProtocol>();
-        NetworkProtocol.Register<DccpNetworkProtocol>();
-        NetworkProtocol.Register<SctpNetworkProtocol>();
-        NetworkProtocol.Register<WsNetworkProtocol>();
-        NetworkProtocol.Register<Libp2pWebrtcStarNetworkProtocol>();
-        NetworkProtocol.Register<UdtNetworkProtocol>();
-        NetworkProtocol.Register<UtpNetworkProtocol>();
-        NetworkProtocol.Register<OnionNetworkProtocol>();
-        NetworkProtocol.Register<Libp2pWebrtcDirectNetworkProtocol>();
-        NetworkProtocol.Register<P2pCircuitNetworkProtocol>();
-        NetworkProtocol.Register<DnsNetworkProtocol>();
-        NetworkProtocol.Register<Dns4NetworkProtocol>();
-        NetworkProtocol.Register<Dns6NetworkProtocol>();
-        NetworkProtocol.Register<DnsAddrNetworkProtocol>();
-        NetworkProtocol.Register<WssNetworkProtocol>();
-        NetworkProtocol.Register<IpcidrNetworkProtocol>();
+        Register<Ipv4NetworkProtocol>();
+        Register<Ipv6NetworkProtocol>();
+        Register<TcpNetworkProtocol>();
+        Register<UdpNetworkProtocol>();
+        Register<P2PNetworkProtocol>();
+        RegisterAlias<IpfsNetworkProtocol>();
+        Register<QuicNetworkProtocol>();
+        Register<QuicV1NetworkProtocol>();
+        Register<WebTransportNetworkProtocol>();
+        Register<CertHashNetworkProtocol>();
+        Register<HttpNetworkProtocol>();
+        Register<HttpsNetworkProtocol>();
+        Register<DccpNetworkProtocol>();
+        Register<SctpNetworkProtocol>();
+        Register<WsNetworkProtocol>();
+        Register<Libp2PWebrtcStarNetworkProtocol>();
+        Register<UdtNetworkProtocol>();
+        Register<UtpNetworkProtocol>();
+        Register<OnionNetworkProtocol>();
+        Register<Libp2PWebrtcDirectNetworkProtocol>();
+        Register<P2PCircuitNetworkProtocol>();
+        Register<DnsNetworkProtocol>();
+        Register<Dns4NetworkProtocol>();
+        Register<Dns6NetworkProtocol>();
+        Register<DnsAddrNetworkProtocol>();
+        Register<WssNetworkProtocol>();
+        Register<IpcidrNetworkProtocol>();
     }
 
     /// <summary>
@@ -269,7 +269,7 @@ abstract class IpNetworkProtocol : NetworkProtocol
 
 class Ipv4NetworkProtocol : IpNetworkProtocol
 {
-    static int AddressSize = IPAddress.Any.GetAddressBytes().Length;
+    static int _addressSize = IPAddress.Any.GetAddressBytes().Length;
 
     public override string Name => "ip4";
     public override uint Code => 4;
@@ -282,7 +282,7 @@ class Ipv4NetworkProtocol : IpNetworkProtocol
     }
     public override void ReadValue(CodedInputStream stream)
     {
-        var a = stream.ReadSomeBytes(AddressSize);
+        var a = stream.ReadSomeBytes(_addressSize);
         Address = new IPAddress(a);
         Value = Address.ToString();
     }
@@ -291,7 +291,7 @@ class Ipv4NetworkProtocol : IpNetworkProtocol
 
 class Ipv6NetworkProtocol : IpNetworkProtocol
 {
-    static int AddressSize = IPAddress.IPv6Any.GetAddressBytes().Length;
+    static int _addressSize = IPAddress.IPv6Any.GetAddressBytes().Length;
 
     public override string Name => "ip6";
     public override uint Code => 41;
@@ -304,13 +304,13 @@ class Ipv6NetworkProtocol : IpNetworkProtocol
     }
     public override void ReadValue(CodedInputStream stream)
     {
-        var a = stream.ReadSomeBytes(AddressSize);
+        var a = stream.ReadSomeBytes(_addressSize);
         Address = new IPAddress(a);
         Value = Address.ToString();
     }
 }
 
-class P2pNetworkProtocol : NetworkProtocol
+class P2PNetworkProtocol : NetworkProtocol
 {
     public MultiHash MultiHash { get; private set; }
     public override string Name => "p2p";
@@ -337,7 +337,7 @@ class P2pNetworkProtocol : NetworkProtocol
     }
 }
 
-class IpfsNetworkProtocol : P2pNetworkProtocol
+class IpfsNetworkProtocol : P2PNetworkProtocol
 {
     public override string Name => "ipfs";
 }
@@ -458,13 +458,13 @@ class WssNetworkProtocol : ValuelessNetworkProtocol
     public override uint Code => 478;
 }
 
-class Libp2pWebrtcStarNetworkProtocol : ValuelessNetworkProtocol
+class Libp2PWebrtcStarNetworkProtocol : ValuelessNetworkProtocol
 {
     public override string Name => "libp2p-webrtc-star";
     public override uint Code => 275;
 }
 
-class Libp2pWebrtcDirectNetworkProtocol : ValuelessNetworkProtocol
+class Libp2PWebrtcDirectNetworkProtocol : ValuelessNetworkProtocol
 {
     public override string Name => "libp2p-webrtc-direct";
     public override uint Code => 276;
@@ -482,7 +482,7 @@ class UtpNetworkProtocol : ValuelessNetworkProtocol
     public override uint Code => 302;
 }
 
-class P2pCircuitNetworkProtocol : ValuelessNetworkProtocol
+class P2PCircuitNetworkProtocol : ValuelessNetworkProtocol
 {
     public override string Name => "p2p-circuit";
     public override uint Code => 290;

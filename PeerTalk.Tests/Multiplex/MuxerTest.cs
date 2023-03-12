@@ -155,7 +155,7 @@ public class MuxerTest
         var muxer = new Muxer();
         var tasks = new List<Task<string>>
         {
-            Task<string>.Run(async () =>
+            Task.Run(async () =>
             {
                 using (await muxer.AcquireWriteAccessAsync())
                 {
@@ -163,7 +163,7 @@ public class MuxerTest
                 }
                 return "step 1";
             }),
-            Task<string>.Run(async () =>
+            Task.Run(async () =>
             {
                 using (await muxer.AcquireWriteAccessAsync())
                 {

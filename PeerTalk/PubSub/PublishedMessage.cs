@@ -17,7 +17,7 @@ namespace IpfsShipyard.PeerTalk.PubSub;
 [ProtoContract]
 public class PublishedMessage : IPublishedMessage
 {
-    private string messageId;
+    private string _messageId;
 
     /// <inheritdoc />
     public Peer Sender { get; set; }
@@ -79,8 +79,8 @@ public class PublishedMessage : IPublishedMessage
     {
         get
         {
-            messageId ??= Sender.Id.ToBase58() + SequenceNumber.ToHexString();
-            return messageId;
+            _messageId ??= Sender.Id.ToBase58() + SequenceNumber.ToHexString();
+            return _messageId;
         }
     }
 

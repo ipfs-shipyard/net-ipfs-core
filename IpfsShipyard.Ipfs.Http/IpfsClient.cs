@@ -29,10 +29,10 @@ namespace IpfsShipyard.Ipfs.Http
     /// </remarks>
     public partial class IpfsClient : ICoreApi
     {
-        const string unknownFilename = "unknown";
+        const string UnknownFilename = "unknown";
 
-        static object safe = new object();
-        static HttpClient api = null;
+        static object _safe = new object();
+        static HttpClient _api = null;
 
         /// <summary>
         ///   The default URL to the IPFS HTTP API server.
@@ -219,11 +219,11 @@ namespace IpfsShipyard.Ipfs.Http
         /// </remarks>
         HttpClient Api()
         {
-            if (api == null)
+            if (_api == null)
             {
-                lock (safe)
+                lock (_safe)
                 {
-                    if (api == null)
+                    if (_api == null)
                     {
                         if (HttpMessageHandler is HttpClientHandler handler && handler.SupportsAutomaticDecompression)
                         {
@@ -231,16 +231,16 @@ namespace IpfsShipyard.Ipfs.Http
                                 | DecompressionMethods.Deflate;
                         }
 
-                        api = new HttpClient(HttpMessageHandler)
+                        _api = new HttpClient(HttpMessageHandler)
                         {
                             Timeout = Timeout.InfiniteTimeSpan
                         };
 
-                        api.DefaultRequestHeaders.Add("User-Agent", UserAgent);
+                        _api.DefaultRequestHeaders.Add("User-Agent", UserAgent);
                     }
                 }
             }
-            return api;
+            return _api;
         }
 
         /// <summary>
@@ -480,7 +480,7 @@ namespace IpfsShipyard.Ipfs.Http
             streamContent.Headers.ContentType = new MediaTypeHeaderValue("application/octet-stream");
 
             if (string.IsNullOrEmpty(name))
-                content.Add(streamContent, "file", unknownFilename);
+                content.Add(streamContent, "file", UnknownFilename);
             else
                 content.Add(streamContent, "file", name);
 
@@ -529,7 +529,7 @@ namespace IpfsShipyard.Ipfs.Http
 
             streamContent.Headers.ContentType = new MediaTypeHeaderValue("application/octet-stream");
 
-            content.Add(streamContent, "file", string.IsNullOrEmpty(name) ? unknownFilename : name);
+            content.Add(streamContent, "file", string.IsNullOrEmpty(name) ? UnknownFilename : name);
 
             var url = BuildCommand(command, null, options);
 
@@ -548,7 +548,7 @@ namespace IpfsShipyard.Ipfs.Http
             var streamContent = new ByteArrayContent(data);
 
             streamContent.Headers.ContentType = new MediaTypeHeaderValue("application/octet-stream");
-            content.Add(streamContent, "file", unknownFilename);
+            content.Add(streamContent, "file", UnknownFilename);
 
             var url = BuildCommand(command, null, options);
 

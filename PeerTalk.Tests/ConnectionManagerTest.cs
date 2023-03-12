@@ -8,14 +8,14 @@ namespace IpfsShipyard.PeerTalk.Tests;
 [TestClass]
 public class ConnectionManagerTest
 {
-    MultiHash aId = "QmXFX2P5ammdmXQgfqGkfswtEVFsZUJ5KeHRXQYCTdiTAb";
-    MultiHash bId = "QmdpwjdB94eNm2Lcvp9JqoCxswo3AKQqjLuNZyLixmCM1h";
+    MultiHash _aId = "QmXFX2P5ammdmXQgfqGkfswtEVFsZUJ5KeHRXQYCTdiTAb";
+    MultiHash _bId = "QmdpwjdB94eNm2Lcvp9JqoCxswo3AKQqjLuNZyLixmCM1h";
 
     [TestMethod]
     public void IsConnected()
     {
         var manager = new ConnectionManager();
-        var peer = new Peer { Id = aId };
+        var peer = new Peer { Id = _aId };
         var connection = new PeerConnection { RemotePeer = peer, Stream = Stream.Null };
 
         Assert.IsFalse(manager.IsConnected(peer));
@@ -27,7 +27,7 @@ public class ConnectionManagerTest
     public void IsConnected_NotActive()
     {
         var manager = new ConnectionManager();
-        var peer = new Peer { Id = aId };
+        var peer = new Peer { Id = _aId };
         var connection = new PeerConnection { RemotePeer = peer, Stream = Stream.Null };
 
         Assert.IsFalse(manager.IsConnected(peer));
@@ -45,7 +45,7 @@ public class ConnectionManagerTest
     public void Add_Duplicate()
     {
         var manager = new ConnectionManager();
-        var peer = new Peer { Id = aId };
+        var peer = new Peer { Id = _aId };
         var a = new PeerConnection { RemotePeer = peer, Stream = Stream.Null };
         var b = new PeerConnection { RemotePeer = peer, Stream = Stream.Null };
 
@@ -70,7 +70,7 @@ public class ConnectionManagerTest
     public void Add_Duplicate_SameConnection()
     {
         var manager = new ConnectionManager();
-        var peer = new Peer { Id = aId };
+        var peer = new Peer { Id = _aId };
         var a = new PeerConnection { RemotePeer = peer, Stream = Stream.Null };
 
         Assert.AreSame(a, manager.Add(a));
@@ -90,7 +90,7 @@ public class ConnectionManagerTest
         var address = "/ip6/::1/tcp/4007";
 
         var manager = new ConnectionManager();
-        var peer = new Peer { Id = aId, ConnectedAddress = address };
+        var peer = new Peer { Id = _aId, ConnectedAddress = address };
         var a = new PeerConnection { RemotePeer = peer, RemoteAddress = address, Stream = Stream.Null };
         var b = new PeerConnection { RemotePeer = peer, RemoteAddress = address, Stream = Stream.Null };
 
@@ -115,7 +115,7 @@ public class ConnectionManagerTest
         var address2 = "/ip4/127.0.0.2/tcp/4007";
 
         var manager = new ConnectionManager();
-        var peer = new Peer { Id = aId };
+        var peer = new Peer { Id = _aId };
         var a = new PeerConnection { RemotePeer = peer, RemoteAddress = address1, Stream = Stream.Null };
         var b = new PeerConnection { RemotePeer = peer, RemoteAddress = address2, Stream = Stream.Null };
 
@@ -153,7 +153,7 @@ public class ConnectionManagerTest
         var address = "/ip6/::1/tcp/4007";
 
         var manager = new ConnectionManager();
-        var peer = new Peer { Id = aId, ConnectedAddress = address };
+        var peer = new Peer { Id = _aId, ConnectedAddress = address };
         var a = new PeerConnection { RemotePeer = peer, RemoteAddress = address, Stream = Stream.Null };
         var b = new PeerConnection { RemotePeer = peer, RemoteAddress = address, Stream = Stream.Null };
 
@@ -176,7 +176,7 @@ public class ConnectionManagerTest
     public void Add_NotActive()
     {
         var manager = new ConnectionManager();
-        var peer = new Peer { Id = aId };
+        var peer = new Peer { Id = _aId };
         var a = new PeerConnection { RemotePeer = peer, Stream = Stream.Null };
         var b = new PeerConnection { RemotePeer = peer, Stream = Stream.Null };
 
@@ -199,7 +199,7 @@ public class ConnectionManagerTest
     public void Remove_Connection()
     {
         var manager = new ConnectionManager();
-        var peer = new Peer { Id = aId };
+        var peer = new Peer { Id = _aId };
         var a = new PeerConnection { RemotePeer = peer, Stream = Stream.Null };
 
         manager.Add(a);
@@ -218,7 +218,7 @@ public class ConnectionManagerTest
     public void Remove_PeerId()
     {
         var manager = new ConnectionManager();
-        var peer = new Peer { Id = aId };
+        var peer = new Peer { Id = _aId };
         var a = new PeerConnection { RemotePeer = peer, Stream = Stream.Null };
 
         manager.Add(a);
@@ -236,7 +236,7 @@ public class ConnectionManagerTest
     public void Remove_DoesNotExist()
     {
         var manager = new ConnectionManager();
-        var peer = new Peer { Id = aId };
+        var peer = new Peer { Id = _aId };
         var a = new PeerConnection { RemotePeer = peer, Stream = Stream.Null };
 
         Assert.IsFalse(manager.Remove(a));
@@ -249,8 +249,8 @@ public class ConnectionManagerTest
     public void Clear()
     {
         var manager = new ConnectionManager();
-        var peerA = new Peer { Id = aId };
-        var peerB = new Peer { Id = bId };
+        var peerA = new Peer { Id = _aId };
+        var peerB = new Peer { Id = _bId };
         var a = new PeerConnection { RemotePeer = peerA, Stream = Stream.Null };
         var b = new PeerConnection { RemotePeer = peerB, Stream = Stream.Null };
 
@@ -276,7 +276,7 @@ public class ConnectionManagerTest
         bool gotEvent = false;
         var manager = new ConnectionManager();
         manager.PeerDisconnected += (s, e) => gotEvent = true;
-        var peerA = new Peer { Id = aId };
+        var peerA = new Peer { Id = _aId };
         var a = new PeerConnection { RemotePeer = peerA, Stream = Stream.Null };
         manager.Add(a);
 
@@ -290,7 +290,7 @@ public class ConnectionManagerTest
         int gotEvent = 0;
         var manager = new ConnectionManager();
         manager.PeerDisconnected += (s, e) => gotEvent += 1;
-        var peerA = new Peer { Id = aId };
+        var peerA = new Peer { Id = _aId };
         var a = new PeerConnection { RemotePeer = peerA, Stream = Stream.Null };
         manager.Add(a);
 
@@ -304,7 +304,7 @@ public class ConnectionManagerTest
         int gotEvent = 0;
         var manager = new ConnectionManager();
         manager.PeerDisconnected += (s, e) => gotEvent += 1;
-        var peerA = new Peer { Id = aId };
+        var peerA = new Peer { Id = _aId };
         var a = new PeerConnection { RemotePeer = peerA, Stream = Stream.Null };
         manager.Add(a);
         a.Dispose();

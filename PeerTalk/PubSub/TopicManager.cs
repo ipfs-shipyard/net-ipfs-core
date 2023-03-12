@@ -12,7 +12,7 @@ public class TopicManager
 {
     private static readonly IEnumerable<Peer> nopeers = Enumerable.Empty<Peer>();
 
-    private ConcurrentDictionary<string, HashSet<Peer>> topics = new ConcurrentDictionary<string, HashSet<Peer>>();
+    private ConcurrentDictionary<string, HashSet<Peer>> _topics = new ConcurrentDictionary<string, HashSet<Peer>>();
 
     /// <summary>
     ///   Get the peers interested in a topic.
@@ -28,10 +28,10 @@ public class TopicManager
     {
         if (topic == null)
         {
-            return topics.Values.SelectMany(v => v);
+            return _topics.Values.SelectMany(v => v);
         }
 
-        if (!topics.TryGetValue(topic, out HashSet<Peer> peers))
+        if (!_topics.TryGetValue(topic, out HashSet<Peer> peers))
         {
             return nopeers;
         }
@@ -50,7 +50,7 @@ public class TopicManager
     /// </returns>
     public IEnumerable<string> GetTopics(Peer peer)
     {
-        return topics
+        return _topics
             .Where(kp => kp.Value.Contains(peer))
             .Select(kp => kp.Key);
     }
@@ -70,7 +70,7 @@ public class TopicManager
     /// </remarks>
     public void AddInterest(string topic, Peer peer)
     {
-        topics.AddOrUpdate(
+        _topics.AddOrUpdate(
             topic,
             (_) => new HashSet<Peer> { peer },
             (_, peers) =>
@@ -92,7 +92,7 @@ public class TopicManager
     /// </param>
     public void RemoveInterest(string topic, Peer peer)
     {
-        topics.AddOrUpdate(
+        _topics.AddOrUpdate(
             topic,
             (_) => new HashSet<Peer>(),
             (_, list) =>
@@ -110,7 +110,7 @@ public class TopicManager
     /// </param>
     public void Clear(Peer peer)
     {
-        foreach (var topic in topics.Keys)
+        foreach (var topic in _topics.Keys)
         {
             RemoveInterest(topic, peer);
         }
@@ -121,6 +121,6 @@ public class TopicManager
     /// </summary>
     public void Clear()
     {
-        topics.Clear();
+        _topics.Clear();
     }
 }

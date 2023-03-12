@@ -17,13 +17,13 @@ namespace IpfsShipyard.Ipfs.Core;
 ///   See the <see cref="HashingAlgorithm">registry</see> for supported algorithms.
 /// </remarks>
 /// <seealso href="https://github.com/jbenet/multihash"/>
-[JsonConverter(typeof(MultiHash.Json))]
+[JsonConverter(typeof(Json))]
 public class MultiHash : IEquatable<MultiHash>
 {
     /// <summary>
     ///   The cached base-58 encoding of the multihash.
     /// </summary>
-    string b58String;
+    string _b58String;
 
     /// <summary>
     ///   The default hashing algorithm is "sha2-256".
@@ -350,14 +350,14 @@ public class MultiHash : IEquatable<MultiHash>
         var that = obj as MultiHash;
         return (that == null)
             ? false
-            : this.Equals(that);
+            : Equals(that);
     }
 
     /// <inheritdoc />
     public bool Equals(MultiHash that)
     {
-        return this.Algorithm.Code == that.Algorithm.Code
-               && this.Digest.SequenceEqual(that.Digest);
+        return Algorithm.Code == that.Algorithm.Code
+               && Digest.SequenceEqual(that.Digest);
     }
 
     /// <summary>
@@ -365,7 +365,7 @@ public class MultiHash : IEquatable<MultiHash>
     /// </summary>
     public static bool operator ==(MultiHash a, MultiHash b)
     {
-        if (object.ReferenceEquals(a, b)) return true;
+        if (ReferenceEquals(a, b)) return true;
         if (a is null) return false;
         if (b is null) return false;
 
@@ -389,7 +389,7 @@ public class MultiHash : IEquatable<MultiHash>
     /// <seealso cref="ToBase58"/>
     public override string ToString()
     {
-        return this.ToBase58();
+        return ToBase58();
     }
 
     /// <summary>
@@ -400,16 +400,16 @@ public class MultiHash : IEquatable<MultiHash>
     /// </returns>
     public string ToBase58()
     {
-        if (b58String != null)
+        if (_b58String != null)
         {
-            return b58String;
+            return _b58String;
         }
 
         using (var ms = new MemoryStream())
         {
             Write(ms);
-            b58String = ms.ToArray().ToBase58();
-            return b58String;
+            _b58String = ms.ToArray().ToBase58();
+            return _b58String;
         }
     }
 

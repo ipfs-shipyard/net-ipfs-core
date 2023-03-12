@@ -38,7 +38,7 @@ public class Swarm : IService, IPolicy<MultiAddress>, IPolicy<Peer>
     /// <remarks>
     ///   Use sychronized access, e.g. <c>lock (protocols) { ... }</c>.
     /// </remarks>
-    private List<IPeerProtocol> protocols = new()
+    private List<IPeerProtocol> _protocols = new()
     {
         new Multistream1(),
         new SecureCommunication.Secio1(),
@@ -49,9 +49,9 @@ public class Swarm : IService, IPolicy<MultiAddress>, IPolicy<Peer>
     /// <summary>
     ///   Added to connection protocols when needed.
     /// </summary>
-    private readonly Plaintext1 plaintext1 = new();
+    private readonly Plaintext1 _plaintext1 = new();
 
-    private Peer localPeer;
+    private Peer _localPeer;
 
     /// <summary>
     ///   Raised when a listener is establihed.
@@ -103,7 +103,7 @@ public class Swarm : IService, IPolicy<MultiAddress>, IPolicy<Peer>
     /// <exception cref="ArgumentException"></exception>
     public Peer LocalPeer
     {
-        get { return localPeer; }
+        get { return _localPeer; }
         set
         {
             if (value == null)
@@ -114,7 +114,7 @@ public class Swarm : IService, IPolicy<MultiAddress>, IPolicy<Peer>
                 throw new ArgumentNullException("peer.PublicKey");
             if (!value.IsValid())
                 throw new ArgumentException("Invalid peer.");
-            localPeer = value;
+            _localPeer = value;
         }
     }
 
@@ -129,22 +129,22 @@ public class Swarm : IService, IPolicy<MultiAddress>, IPolicy<Peer>
     /// <summary>
     ///   Other nodes. Key is the bae58 hash of the peer ID.
     /// </summary>
-    private readonly ConcurrentDictionary<string, Peer> otherPeers = new();
+    private readonly ConcurrentDictionary<string, Peer> _otherPeers = new();
 
     /// <summary>
     ///   Used to cancel any task when the swarm is stopped.
     /// </summary>
-    private CancellationTokenSource swarmCancellation;
+    private CancellationTokenSource _swarmCancellation;
 
     /// <summary>
     ///  Outstanding connection tasks initiated by the local peer.
     /// </summary>
-    private readonly ConcurrentDictionary<Peer, AsyncLazy<PeerConnection>> pendingConnections = new();
+    private readonly ConcurrentDictionary<Peer, AsyncLazy<PeerConnection>> _pendingConnections = new();
 
     /// <summary>
     ///  Outstanding connection tasks initiated by a remote peer.
     /// </summary>
-    private readonly ConcurrentDictionary<MultiAddress, object> pendingRemoteConnections = new();
+    private readonly ConcurrentDictionary<MultiAddress, object> _pendingRemoteConnections = new();
 
     /// <summary>
     ///   Manages the swarm's peer connections.
@@ -174,7 +174,7 @@ public class Swarm : IService, IPolicy<MultiAddress>, IPolicy<Peer>
     /// <summary>
     ///   Cancellation tokens for the listeners.
     /// </summary>
-    private readonly ConcurrentDictionary<MultiAddress, CancellationTokenSource> listeners = new();
+    private readonly ConcurrentDictionary<MultiAddress, CancellationTokenSource> _listeners = new();
 
     /// <summary>
     ///   Get the sequence of all known peer addresses.
@@ -188,7 +188,7 @@ public class Swarm : IService, IPolicy<MultiAddress>, IPolicy<Peer>
     {
         get
         {
-            return otherPeers
+            return _otherPeers
                 .Values
                 .SelectMany(p => p.Addresses);
         }
@@ -206,7 +206,7 @@ public class Swarm : IService, IPolicy<MultiAddress>, IPolicy<Peer>
     {
         get
         {
-            return otherPeers.Values;
+            return _otherPeers.Values;
         }
     }
 
@@ -283,7 +283,7 @@ public class Swarm : IService, IPolicy<MultiAddress>, IPolicy<Peer>
         }
 
         var isNew = false;
-        var p = otherPeers.AddOrUpdate(peer.Id.ToBase58(),
+        var p = _otherPeers.AddOrUpdate(peer.Id.ToBase58(),
             (_) =>
             {
                 isNew = true;
@@ -335,7 +335,7 @@ public class Swarm : IService, IPolicy<MultiAddress>, IPolicy<Peer>
             throw new ArgumentNullException("peer.ID");
         }
 
-        if (otherPeers.TryRemove(peer.Id.ToBase58(), out Peer found))
+        if (_otherPeers.TryRemove(peer.Id.ToBase58(), out Peer found))
         {
             peer = found;
         }
@@ -353,7 +353,7 @@ public class Swarm : IService, IPolicy<MultiAddress>, IPolicy<Peer>
     /// </returns>
     public bool HasPendingConnection(Peer peer)
     {
-        return pendingConnections.TryGetValue(peer, out AsyncLazy<PeerConnection> _);
+        return _pendingConnections.TryGetValue(peer, out AsyncLazy<PeerConnection> _);
     }
 
     /// <summary>
@@ -379,21 +379,21 @@ public class Swarm : IService, IPolicy<MultiAddress>, IPolicy<Peer>
         // TODO: make the tests setup the security protocols.
         if (LocalPeerKey == null)
         {
-            lock (protocols)
+            lock (_protocols)
             {
-                var security = protocols.OfType<IEncryptionProtocol>().ToArray();
+                var security = _protocols.OfType<IEncryptionProtocol>().ToArray();
                 foreach (var p in security)
                 {
-                    protocols.Remove(p);
+                    _protocols.Remove(p);
                 }
-                protocols.Add(plaintext1);
+                _protocols.Add(_plaintext1);
             }
             log.Warn("Peer key is missing, using unencrypted connections.");
         }
 
         Manager.PeerDisconnected += OnPeerDisconnected;
         IsRunning = true;
-        swarmCancellation = new CancellationTokenSource();
+        _swarmCancellation = new CancellationTokenSource();
         log.Debug("Started");
 
         return Task.CompletedTask;
@@ -401,7 +401,7 @@ public class Swarm : IService, IPolicy<MultiAddress>, IPolicy<Peer>
 
     private void OnPeerDisconnected(object sender, MultiHash peerId)
     {
-        if (!otherPeers.TryGetValue(peerId.ToBase58(), out Peer peer))
+        if (!_otherPeers.TryGetValue(peerId.ToBase58(), out Peer peer))
         {
             peer = new Peer { Id = peerId };
         }
@@ -412,24 +412,24 @@ public class Swarm : IService, IPolicy<MultiAddress>, IPolicy<Peer>
     public async Task StopAsync()
     {
         IsRunning = false;
-        swarmCancellation?.Cancel(true);
+        _swarmCancellation?.Cancel(true);
 
         log.Debug($"Stopping {LocalPeer}");
 
         // Stop the listeners.
-        while (!listeners.IsEmpty)
+        while (!_listeners.IsEmpty)
         {
-            await StopListeningAsync(listeners.Keys.First()).ConfigureAwait(false);
+            await StopListeningAsync(_listeners.Keys.First()).ConfigureAwait(false);
         }
 
         // Disconnect from remote peers.
         Manager.Clear();
         Manager.PeerDisconnected -= OnPeerDisconnected;
 
-        otherPeers.Clear();
-        listeners.Clear();
-        pendingConnections.Clear();
-        pendingRemoteConnections.Clear();
+        _otherPeers.Clear();
+        _listeners.Clear();
+        _pendingConnections.Clear();
+        _pendingRemoteConnections.Clear();
         BlackList = new MultiAddressBlackList();
         WhiteList = new MultiAddressWhiteList();
 
@@ -495,9 +495,9 @@ public class Swarm : IService, IPolicy<MultiAddress>, IPolicy<Peer>
         // Use a current connection attempt to the peer or create a new one.
         try
         {
-            using (var cts = CancellationTokenSource.CreateLinkedTokenSource(swarmCancellation.Token, cancel))
+            using (var cts = CancellationTokenSource.CreateLinkedTokenSource(_swarmCancellation.Token, cancel))
             {
-                return await pendingConnections
+                return await _pendingConnections
                     .GetOrAdd(peer, (_) => new AsyncLazy<PeerConnection>(() => DialAsync(peer, peer.Addresses, cts.Token)))
                     .ConfigureAwait(false);
             }
@@ -509,7 +509,7 @@ public class Swarm : IService, IPolicy<MultiAddress>, IPolicy<Peer>
         }
         finally
         {
-            pendingConnections.TryRemove(peer, out AsyncLazy<PeerConnection> _);
+            _pendingConnections.TryRemove(peer, out AsyncLazy<PeerConnection> _);
         }
     }
 
@@ -591,7 +591,7 @@ public class Swarm : IService, IPolicy<MultiAddress>, IPolicy<Peer>
 
         // Get the addresses we can use to dial the remote.  Filter
         // out any addresses (ip and port) we are listening on.
-        var blackList = listeners.Keys
+        var blackList = _listeners.Keys
             .Select(a => a.WithoutPeerId())
             .ToArray();
         var possibleAddresses = (await Task.WhenAll(addrs.Select(a => a.ResolveAsync(cancel))).ConfigureAwait(false))
@@ -630,16 +630,16 @@ public class Swarm : IService, IPolicy<MultiAddress>, IPolicy<Peer>
         {
             MountProtocols(connection);
             IEncryptionProtocol[] security = null;
-            lock (protocols)
+            lock (_protocols)
             {
-                security = protocols.OfType<IEncryptionProtocol>().ToArray();
+                security = _protocols.OfType<IEncryptionProtocol>().ToArray();
             }
             await connection.InitiateAsync(security, cancel).ConfigureAwait(false);
             await connection.MuxerEstablished.Task.ConfigureAwait(false);
             Identify1 identify = null;
-            lock (protocols)
+            lock (_protocols)
             {
-                identify = protocols.OfType<Identify1>().First();
+                identify = _protocols.OfType<Identify1>().First();
             }
             await identify.GetRemotePeerAsync(connection, cancel).ConfigureAwait(false);
         }
@@ -762,7 +762,7 @@ public class Swarm : IService, IPolicy<MultiAddress>, IPolicy<Peer>
     {
         var cancel = new CancellationTokenSource();
 
-        if (!listeners.TryAdd(address, cancel))
+        if (!_listeners.TryAdd(address, cancel))
         {
             throw new Exception($"Already listening on '{address}'.");
         }
@@ -774,7 +774,7 @@ public class Swarm : IService, IPolicy<MultiAddress>, IPolicy<Peer>
             if (TransportRegistry.Transports.TryGetValue(protocol.Name, out Func<IPeerTransport> transport))
             {
                 address = transport().Listen(address, OnRemoteConnect, cancel.Token);
-                listeners.TryAdd(address, cancel);
+                _listeners.TryAdd(address, cancel);
                 didSomething = true;
                 break;
             }
@@ -832,7 +832,7 @@ public class Swarm : IService, IPolicy<MultiAddress>, IPolicy<Peer>
         foreach (var a in addresses)
         {
             log.Debug($"Listening on {a}");
-            listeners.TryAdd(a, cancel);
+            _listeners.TryAdd(a, cancel);
         }
         LocalPeer.Addresses = LocalPeer
             .Addresses
@@ -879,7 +879,7 @@ public class Swarm : IService, IPolicy<MultiAddress>, IPolicy<Peer>
 
         // If the remote is already trying to establish a connection, then we
         // can just refuse this one.
-        if (!pendingRemoteConnections.TryAdd(remote, null))
+        if (!_pendingRemoteConnections.TryAdd(remote, null))
         {
             log.Debug($"Duplicate remote connection from {remote}");
             try
@@ -934,9 +934,9 @@ public class Swarm : IService, IPolicy<MultiAddress>, IPolicy<Peer>
 
             // Need details on the remote peer.
             Identify1 identify = null;
-            lock (protocols)
+            lock (_protocols)
             {
-                identify = protocols.OfType<Identify1>().First();
+                identify = _protocols.OfType<Identify1>().First();
             }
             connection.RemotePeer = await identify.GetRemotePeerAsync(connection, default).ConfigureAwait(false);
 
@@ -965,7 +965,7 @@ public class Swarm : IService, IPolicy<MultiAddress>, IPolicy<Peer>
         }
         finally
         {
-            pendingRemoteConnections.TryRemove(remote, out object _);
+            _pendingRemoteConnections.TryRemove(remote, out object _);
         }
     }
 
@@ -977,9 +977,9 @@ public class Swarm : IService, IPolicy<MultiAddress>, IPolicy<Peer>
     /// </param>
     public void AddProtocol(IPeerProtocol protocol)
     {
-        lock (protocols)
+        lock (_protocols)
         {
-            protocols.Add(protocol);
+            _protocols.Add(protocol);
         }
     }
 
@@ -991,17 +991,17 @@ public class Swarm : IService, IPolicy<MultiAddress>, IPolicy<Peer>
     /// </param>
     public void RemoveProtocol(IPeerProtocol protocol)
     {
-        lock (protocols)
+        lock (_protocols)
         {
-            protocols.Remove(protocol);
+            _protocols.Remove(protocol);
         }
     }
 
     private void MountProtocols(PeerConnection connection)
     {
-        lock (protocols)
+        lock (_protocols)
         {
-            connection.AddProtocols(protocols);
+            connection.AddProtocols(_protocols);
         }
     }
 
@@ -1021,7 +1021,7 @@ public class Swarm : IService, IPolicy<MultiAddress>, IPolicy<Peer>
     /// </remarks>
     public async Task StopListeningAsync(MultiAddress address)
     {
-        if (!listeners.TryRemove(address, out CancellationTokenSource listener))
+        if (!_listeners.TryRemove(address, out CancellationTokenSource listener))
         {
             return;
         }
@@ -1034,7 +1034,7 @@ public class Swarm : IService, IPolicy<MultiAddress>, IPolicy<Peer>
             }
 
             // Remove any local peer address that depend on the cancellation token.
-            var others = listeners
+            var others = _listeners
                 .Where(l => l.Value == listener)
                 .Select(l => l.Key)
                 .ToArray();
@@ -1045,7 +1045,7 @@ public class Swarm : IService, IPolicy<MultiAddress>, IPolicy<Peer>
 
             foreach (var other in others)
             {
-                listeners.TryRemove(other, out CancellationTokenSource _);
+                _listeners.TryRemove(other, out CancellationTokenSource _);
             }
 
             // Give some time away, so that cancel can run

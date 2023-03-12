@@ -14,12 +14,12 @@ namespace IpfsShipyard.PeerTalk.Cryptography;
 /// </remarks>
 public class CtrStreamCipher : IStreamCipher
 {
-    private readonly IBlockCipher cipher;
-    private readonly int blockSize;
-    private readonly byte[] counter;
-    private readonly byte[] counterOut;
-    private int byteCount;
-    private byte[] IV;
+    private readonly IBlockCipher _cipher;
+    private readonly int _blockSize;
+    private readonly byte[] _counter;
+    private readonly byte[] _counterOut;
+    private int _byteCount;
+    private byte[] _iv;
 
     /// <summary>
     ///   Creates a new instance of the <see cref="CtrStreamCipher"/> with
@@ -31,17 +31,17 @@ public class CtrStreamCipher : IStreamCipher
     /// </param>
     public CtrStreamCipher(IBlockCipher cipher)
     {
-        this.cipher = cipher;
-        this.blockSize = cipher.GetBlockSize();
-        this.counter = new byte[blockSize];
-        this.counterOut = new byte[blockSize];
-        this.IV = new byte[blockSize];
+        _cipher = cipher;
+        _blockSize = cipher.GetBlockSize();
+        _counter = new byte[_blockSize];
+        _counterOut = new byte[_blockSize];
+        _iv = new byte[_blockSize];
     }
 
     /// <summary>
     ///   The name of this algorithm.
     /// </summary>
-    public string AlgorithmName => cipher.AlgorithmName + "/CTR";
+    public string AlgorithmName => _cipher.AlgorithmName + "/CTR";
 
     /// <summary>
     ///   Init the cipher.
@@ -63,19 +63,19 @@ public class CtrStreamCipher : IStreamCipher
         if (ivParam == null)
             throw new ArgumentException("CTR mode requires ParametersWithIV", nameof(parameters));
 
-        this.IV = Arrays.Clone(ivParam.GetIV());
+        _iv = Arrays.Clone(ivParam.GetIV());
 
-        if (blockSize < IV.Length)
-            throw new ArgumentException("CTR mode requires IV no greater than: " + blockSize + " bytes.");
+        if (_blockSize < _iv.Length)
+            throw new ArgumentException("CTR mode requires IV no greater than: " + _blockSize + " bytes.");
 
-        int maxCounterSize = System.Math.Min(8, blockSize / 2);
-        if (blockSize - IV.Length > maxCounterSize)
-            throw new ArgumentException("CTR mode requires IV of at least: " + (blockSize - maxCounterSize) + " bytes.");
+        int maxCounterSize = Math.Min(8, _blockSize / 2);
+        if (_blockSize - _iv.Length > maxCounterSize)
+            throw new ArgumentException("CTR mode requires IV of at least: " + (_blockSize - maxCounterSize) + " bytes.");
 
         // if null it's an IV changed only.
         if (ivParam.Parameters != null)
         {
-            cipher.Init(true, ivParam.Parameters);
+            _cipher.Init(true, ivParam.Parameters);
         }
 
         Reset();
@@ -84,10 +84,10 @@ public class CtrStreamCipher : IStreamCipher
     /// <inheritdoc />
     public void Reset()
     {
-        byteCount = 0;
-        Arrays.Fill(counter, (byte)0);
-        Array.Copy(IV, 0, counter, 0, IV.Length);
-        cipher.Reset();
+        _byteCount = 0;
+        Arrays.Fill(_counter, (byte)0);
+        Array.Copy(_iv, 0, _counter, 0, _iv.Length);
+        _cipher.Reset();
     }
 
     /// <inheritdoc />
@@ -116,20 +116,20 @@ public class CtrStreamCipher : IStreamCipher
     /// <inheritdoc />
     public byte ReturnByte(byte input)
     {
-        if (byteCount == 0)
+        if (_byteCount == 0)
         {
-            cipher.ProcessBlock(counter, 0, counterOut, 0);
+            _cipher.ProcessBlock(_counter, 0, _counterOut, 0);
             // Increment the counter
-            int j = counter.Length;
-            while (--j >= 0 && ++counter[j] == 0)
+            int j = _counter.Length;
+            while (--j >= 0 && ++_counter[j] == 0)
             {
             }
         }
 
-        byte rv = (byte)(counterOut[byteCount++] ^ input);
-        if (byteCount == counterOut.Length)
+        byte rv = (byte)(_counterOut[_byteCount++] ^ input);
+        if (_byteCount == _counterOut.Length)
         {
-            byteCount = 0;
+            _byteCount = 0;
         }
         return rv;
     }

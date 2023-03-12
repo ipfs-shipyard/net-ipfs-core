@@ -306,7 +306,7 @@ public class MultiHashTest
         public bool Ignore { get; set; }
     }
 
-    TestVector[] TestVectors = new TestVector[]
+    TestVector[] _testVectors = new TestVector[]
     {
         // From https://github.com/multiformats/js-multihashing-async/blob/master/test/fixtures/encodes.js
         new TestVector {
@@ -411,7 +411,7 @@ public class MultiHashTest
     [TestMethod]
     public void CheckMultiHash()
     {
-        foreach (var v in TestVectors)
+        foreach (var v in _testVectors)
         {
             if (v.Ignore) continue;
             var bytes = Encoding.UTF8.GetBytes(v.Input);
@@ -423,7 +423,7 @@ public class MultiHashTest
     [TestMethod]
     public void CheckMultiHash_Stream()
     {
-        foreach (var v in TestVectors)
+        foreach (var v in _testVectors)
         {
             if (v.Ignore) continue;
             var bytes = Encoding.UTF8.GetBytes(v.Input);

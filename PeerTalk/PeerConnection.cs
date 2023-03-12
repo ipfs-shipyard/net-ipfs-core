@@ -22,8 +22,8 @@ public class PeerConnection : IDisposable
 {
     private static readonly ILog log = LogManager.GetLogger(typeof(PeerConnection));
 
-    private Stream stream;
-    private StatsStream statsStream;
+    private Stream _stream;
+    private StatsStream _statsStream;
 
     /// <summary>
     ///   The local peer.
@@ -78,15 +78,15 @@ public class PeerConnection : IDisposable
     /// </summary>
     public Stream Stream
     {
-        get { return stream; }
+        get { return _stream; }
         set
         {
-            if (value != null && statsStream == null)
+            if (value != null && _statsStream == null)
             {
-                statsStream = new StatsStream(value);
-                value = statsStream;
+                _statsStream = new StatsStream(value);
+                value = _statsStream;
             }
-            stream = value;
+            _stream = value;
         }
     }
 
@@ -161,17 +161,17 @@ public class PeerConnection : IDisposable
     /// <summary>
     ///   When the connection was last used.
     /// </summary>
-    public DateTime LastUsed => statsStream.LastUsed;
+    public DateTime LastUsed => _statsStream.LastUsed;
 
     /// <summary>
     ///   Number of bytes read over the connection.
     /// </summary>
-    public long BytesRead => statsStream.BytesRead;
+    public long BytesRead => _statsStream.BytesRead;
 
     /// <summary>
     ///   Number of bytes written over the connection.
     /// </summary>
-    public long BytesWritten => statsStream.BytesWritten;
+    public long BytesWritten => _statsStream.BytesWritten;
 
     /// <summary>
     ///  Establish the connection with the remote node.
@@ -218,7 +218,7 @@ public class PeerConnection : IDisposable
             Connection = this
         };
         muxer.SubstreamCreated += (_, e) => _ = ReadMessagesAsync(e, CancellationToken.None);
-        this.MuxerEstablished.SetResult(muxer);
+        MuxerEstablished.SetResult(muxer);
 
         _ = muxer.ProcessRequestsAsync(cancel);
     }
@@ -335,7 +335,7 @@ public class PeerConnection : IDisposable
 
     #region IDisposable Support
 
-    private bool disposedValue = false; // To detect redundant calls
+    private bool _disposedValue = false; // To detect redundant calls
 
     /// <summary>
     ///   Signals that the connection is closed (disposed).
@@ -348,9 +348,9 @@ public class PeerConnection : IDisposable
     /// <param name="disposing"></param>
     protected virtual void Dispose(bool disposing)
     {
-        if (disposedValue)
+        if (_disposedValue)
             return;
-        disposedValue = true;
+        _disposedValue = true;
 
         if (disposing)
         {
@@ -373,7 +373,7 @@ public class PeerConnection : IDisposable
                 finally
                 {
                     Stream = null;
-                    statsStream = null;
+                    _statsStream = null;
                 }
             }
             SecurityEstablished.TrySetCanceled();

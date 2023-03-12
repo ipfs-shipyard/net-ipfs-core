@@ -22,7 +22,7 @@ namespace IpfsShipyard.Ipfs.Core;
 ///   </note>
 /// </remarks>
 /// <seealso href="https://github.com/ipld/cid"/>
-[JsonConverter(typeof(Cid.CidJsonConverter))]
+[JsonConverter(typeof(CidJsonConverter))]
 public class Cid : IEquatable<Cid>
 {
     /// <summary>
@@ -30,11 +30,11 @@ public class Cid : IEquatable<Cid>
     /// </summary>
     public const string DefaultContentType = "dag-pb";
 
-    string encodedValue;
-    int version;
-    string encoding = MultiBase.DefaultAlgorithmName;
-    string contentType = DefaultContentType;
-    MultiHash hash;
+    string _encodedValue;
+    int _version;
+    string _encoding = MultiBase.DefaultAlgorithmName;
+    string _contentType = DefaultContentType;
+    MultiHash _hash;
  
     /// <summary>
     ///   Throws if a property cannot be set.
@@ -48,7 +48,7 @@ public class Cid : IEquatable<Cid>
     /// </remarks>
     void EnsureMutable()
     {
-        if (encodedValue != null)
+        if (_encodedValue != null)
         {
             throw new NotSupportedException("CID cannot be changed.");
         }
@@ -80,16 +80,16 @@ public class Cid : IEquatable<Cid>
     {
         get
         {
-            return version;
+            return _version;
         }
         set
         {
             EnsureMutable();
-            if (version == 0 && value > 0 && Encoding == "base58btc")
+            if (_version == 0 && value > 0 && Encoding == "base58btc")
             {
-                encoding = "base32";
+                _encoding = "base32";
             }
-            version = value;
+            _version = value;
         }
     }
 
@@ -108,7 +108,7 @@ public class Cid : IEquatable<Cid>
     {
         get
         {
-            return encoding;
+            return _encoding;
         }
         set
         {
@@ -117,7 +117,7 @@ public class Cid : IEquatable<Cid>
             {
                 Version = 1;
             }
-            encoding = value;
+            _encoding = value;
         }
     }
 
@@ -136,12 +136,12 @@ public class Cid : IEquatable<Cid>
     {
         get
         {
-            return contentType;
+            return _contentType;
         }
         set
         {
             EnsureMutable();
-            contentType = value;
+            _contentType = value;
             if (Version == 0 && value != "dag-pb")
             {
                 Version = 1;
@@ -168,12 +168,12 @@ public class Cid : IEquatable<Cid>
     {
         get
         {
-            return hash;
+            return _hash;
         }
         set
         {
             EnsureMutable();
-            hash = value;
+            _hash = value;
             if (Version == 0 && Hash.Algorithm.Name != "sha2-256")
             {
                 Version = 1;
@@ -270,13 +270,13 @@ public class Cid : IEquatable<Cid>
     /// <seealso cref="Decode"/>
     public string Encode()
     {
-        if (encodedValue != null)
+        if (_encodedValue != null)
         {
-            return encodedValue;
+            return _encodedValue;
         }
         if (Version == 0)
         {
-            encodedValue = Hash.ToBase58();
+            _encodedValue = Hash.ToBase58();
         }
         else
         {
@@ -285,10 +285,10 @@ public class Cid : IEquatable<Cid>
                 ms.WriteVarint(Version);
                 ms.WriteMultiCodec(ContentType);
                 Hash.Write(ms);
-                encodedValue = MultiBase.Encode(ms.ToArray(), Encoding);
+                _encodedValue = MultiBase.Encode(ms.ToArray(), Encoding);
             }
         }
-        return encodedValue;
+        return _encodedValue;
     }
 
     /// <summary>
@@ -377,7 +377,7 @@ public class Cid : IEquatable<Cid>
             if (Version != 0)
             {
                 ms.WriteVarint(Version);
-                ms.WriteMultiCodec(this.ContentType);
+                ms.WriteMultiCodec(ContentType);
             }
             Hash.Write(ms);
 
@@ -428,7 +428,7 @@ public class Cid : IEquatable<Cid>
             if (Version != 0)
             {
                 ms.WriteVarint(Version);
-                ms.WriteMultiCodec(this.ContentType);
+                ms.WriteMultiCodec(ContentType);
             }
             Hash.Write(ms);
 
@@ -488,7 +488,7 @@ public class Cid : IEquatable<Cid>
         using (var ms = new MemoryStream())
         {
             ms.WriteVarint(Version);
-            ms.WriteMultiCodec(this.ContentType);
+            ms.WriteMultiCodec(ContentType);
             Hash.Write(ms);
             return ms.ToArray();
         }
@@ -535,13 +535,13 @@ public class Cid : IEquatable<Cid>
         var that = obj as Cid;
         return (that == null)
             ? false
-            : this.Encode() == that.Encode();
+            : Encode() == that.Encode();
     }
 
     /// <inheritdoc />
     public bool Equals(Cid that)
     {
-        return this.Encode() == that.Encode();
+        return Encode() == that.Encode();
     }
 
     /// <summary>
@@ -549,15 +549,15 @@ public class Cid : IEquatable<Cid>
     /// </summary>
     public static bool operator ==(Cid a, Cid b)
     {
-        if (object.ReferenceEquals(a, b))
+        if (ReferenceEquals(a, b))
         {
             return true;
         }
-        if (object.ReferenceEquals(a, null))
+        if (ReferenceEquals(a, null))
         {
             return false;
         }
-        if (object.ReferenceEquals(b, null))
+        if (ReferenceEquals(b, null))
         {
             return false;
         }
@@ -569,15 +569,15 @@ public class Cid : IEquatable<Cid>
     /// </summary>
     public static bool operator !=(Cid a, Cid b)
     {
-        if (object.ReferenceEquals(a, b))
+        if (ReferenceEquals(a, b))
         {
             return false;
         }
-        if (object.ReferenceEquals(a, null))
+        if (ReferenceEquals(a, null))
         {
             return true;
         }
-        if (object.ReferenceEquals(b, null))
+        if (ReferenceEquals(b, null))
         {
             return true;
         }
@@ -598,7 +598,7 @@ public class Cid : IEquatable<Cid>
     /// </remarks>
     static public implicit operator Cid(string s)
     {
-        return Cid.Decode(s);
+        return Decode(s);
     }
 
     /// <summary>
@@ -649,7 +649,7 @@ public class Cid : IEquatable<Cid>
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
             var s = reader.Value as string;
-            return s == null ? null : Cid.Decode(s);
+            return s == null ? null : Decode(s);
         }
     }
 

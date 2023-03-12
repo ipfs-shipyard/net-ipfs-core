@@ -56,7 +56,7 @@ public class Muxer
     /// </summary>
     public event EventHandler<Substream> SubstreamClosed;
 
-    private readonly AsyncLock ChannelWriteLock = new();
+    private readonly AsyncLock _channelWriteLock = new();
 
     /// <summary>
     ///   The substreams that are open.
@@ -322,6 +322,6 @@ public class Muxer
     /// </returns>
     public Task<IDisposable> AcquireWriteAccessAsync()
     {
-        return ChannelWriteLock.LockAsync();
+        return _channelWriteLock.LockAsync();
     }
 }

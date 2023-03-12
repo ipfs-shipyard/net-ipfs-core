@@ -9,7 +9,7 @@ namespace IpfsShipyard.Ipfs.Core;
 ///   Commonly referred to as 'z-base-32'.
 /// </remarks>
 /// <seealso href="https://en.wikipedia.org/wiki/Base32#z-base-32"/>
-public static class Base32z
+public static class Base32Z
 {
     static readonly Base32Alphabet alphabet =
         new Base32Alphabet("ybndrfg8ejkmcpqxot1uwisza345h769");

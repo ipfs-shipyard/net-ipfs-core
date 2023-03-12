@@ -73,8 +73,8 @@ public class MultiBaseAlgorithm
             bytes => SimpleBase.Base32.ExtendedHex.Encode(bytes, true),
             s => SimpleBase.Base32.ExtendedHex.Decode(s));
         Register("base32z", 'h',
-            bytes => Base32z.Codec.Encode(bytes, false),
-            s => Base32z.Codec.Decode(s));
+            bytes => Base32Z.Codec.Encode(bytes, false),
+            s => Base32Z.Codec.Decode(s));
         // Not supported
 #if false
             Register("base1", '1');

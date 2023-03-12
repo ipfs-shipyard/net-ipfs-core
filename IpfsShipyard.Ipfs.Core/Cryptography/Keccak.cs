@@ -22,8 +22,8 @@ internal abstract class Keccak : System.Security.Cryptography.HashAlgorithm
     public readonly ulong[] RoundConstants;
 
     protected ulong[] state;
-    protected byte[] buffer;
-    protected int buffLength;
+    protected byte[] Buffer;
+    protected int BuffLength;
     protected int keccakR;
 
     public int KeccakR
@@ -112,17 +112,17 @@ internal abstract class Keccak : System.Security.Cryptography.HashAlgorithm
         };
     }
 
-    protected ulong ROL(ulong a, int offset)
+    protected ulong Rol(ulong a, int offset)
     {
         return (((a) << ((offset) % KeccakLaneSizeInBits)) ^ ((a) >> (KeccakLaneSizeInBits - ((offset) % KeccakLaneSizeInBits))));
     }
 
     protected void AddToBuffer(byte[] array, ref int offset, ref int count)
     {
-        int amount = Math.Min(count, buffer.Length - buffLength);
-        Buffer.BlockCopy(array, offset, buffer, buffLength, amount);
+        int amount = Math.Min(count, Buffer.Length - BuffLength);
+        System.Buffer.BlockCopy(array, offset, Buffer, BuffLength, amount);
         offset += amount;
-        buffLength += amount;
+        BuffLength += amount;
         count -= amount;
     }
 
@@ -146,7 +146,7 @@ internal abstract class Keccak : System.Security.Cryptography.HashAlgorithm
 
     public override void Initialize()
     {
-        buffLength = 0;
+        BuffLength = 0;
         state = new ulong[5 * 5];//1600 bits
         HashValue = null;
     }

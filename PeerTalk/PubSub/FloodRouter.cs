@@ -20,8 +20,8 @@ public class FloodRouter : IPeerProtocol, IMessageRouter
 {
     private static readonly ILog log = LogManager.GetLogger(typeof(FloodRouter));
 
-    private readonly MessageTracker tracker = new();
-    private readonly ConcurrentDictionary<string, string> localTopics = new();
+    private readonly MessageTracker _tracker = new();
+    private readonly ConcurrentDictionary<string, string> _localTopics = new();
 
     /// <summary>
     ///   The topics of interest of other peers.
@@ -69,7 +69,7 @@ public class FloodRouter : IPeerProtocol, IMessageRouter
         Swarm.PeerDisconnected -= Swarm_PeerDisconnected;
         Swarm.RemoveProtocol(this);
         RemoteTopics.Clear();
-        localTopics.Clear();
+        _localTopics.Clear();
 
         return Task.CompletedTask;
     }
@@ -139,7 +139,7 @@ public class FloodRouter : IPeerProtocol, IMessageRouter
     /// <inheritdoc />
     public async Task JoinTopicAsync(string topic, CancellationToken cancel)
     {
-        localTopics.TryAdd(topic, topic);
+        _localTopics.TryAdd(topic, topic);
         var msg = new PubSubMessage
         {
             Subscriptions = new Subscription[]
@@ -165,7 +165,7 @@ public class FloodRouter : IPeerProtocol, IMessageRouter
     /// <inheritdoc />
     public async Task LeaveTopicAsync(string topic, CancellationToken cancel)
     {
-        localTopics.TryRemove(topic, out _);
+        _localTopics.TryRemove(topic, out _);
         var msg = new PubSubMessage
         {
             Subscriptions = new Subscription[]
@@ -191,7 +191,7 @@ public class FloodRouter : IPeerProtocol, IMessageRouter
     /// <inheritdoc />
     public Task PublishAsync(PublishedMessage message, CancellationToken cancel)
     {
-        if (tracker.RecentlySeen(message.MessageId))
+        if (_tracker.RecentlySeen(message.MessageId))
             return Task.CompletedTask;
 
         // Find a set of peers that are interested in the topic(s).
@@ -226,7 +226,7 @@ public class FloodRouter : IPeerProtocol, IMessageRouter
     {
         try
         {
-            using (var stream = await Swarm.DialAsync(peer, this.ToString(), cancel).ConfigureAwait(false))
+            using (var stream = await Swarm.DialAsync(peer, ToString(), cancel).ConfigureAwait(false))
             {
                 await stream.WriteAsync(message, 0, message.Length, cancel).ConfigureAwait(false);
                 await stream.FlushAsync(cancel).ConfigureAwait(false);
@@ -254,14 +254,14 @@ public class FloodRouter : IPeerProtocol, IMessageRouter
     private async void Swarm_ConnectionEstablished(object sender, PeerConnection connection)
 #pragma warning restore VSTHRD100 // Avoid async void methods
     {
-        if (localTopics.IsEmpty)
+        if (_localTopics.IsEmpty)
             return;
 
         try
         {
             var hello = new PubSubMessage
             {
-                Subscriptions = localTopics.Values
+                Subscriptions = _localTopics.Values
                     .Select(topic => new Subscription
                     {
                         Subscribe = true,

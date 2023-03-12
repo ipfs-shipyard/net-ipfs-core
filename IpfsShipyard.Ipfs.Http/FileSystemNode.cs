@@ -9,10 +9,10 @@ namespace IpfsShipyard.Ipfs.Http
     [DataContract]
     public class FileSystemNode : IFileSystemNode
     {
-        IpfsClient ipfsClient;
-        IEnumerable<IFileSystemLink> links;
-        long? size;
-        bool? isDirectory;
+        IpfsClient _ipfsClient;
+        IEnumerable<IFileSystemLink> _links;
+        long? _size;
+        bool? _isDirectory;
 
         /// <inheritdoc />
         public byte[] DataBytes
@@ -52,12 +52,12 @@ namespace IpfsShipyard.Ipfs.Http
         {
             get
             {
-                if (links == null) GetInfo();
-                return links;
+                if (_links == null) GetInfo();
+                return _links;
             }
             set
             {
-                links = value;
+                _links = value;
             }
         }
 
@@ -73,12 +73,12 @@ namespace IpfsShipyard.Ipfs.Http
         {
             get
             {
-                if (!size.HasValue) GetInfo();
-                return size.Value;
+                if (!_size.HasValue) GetInfo();
+                return _size.Value;
             }
             set
             {
-                size = value;
+                _size = value;
             }
         }
 
@@ -94,12 +94,12 @@ namespace IpfsShipyard.Ipfs.Http
         {
             get
             {
-                if (!isDirectory.HasValue) GetInfo();
-                return isDirectory.Value;
+                if (!_isDirectory.HasValue) GetInfo();
+                return _isDirectory.Value;
             }
             set
             {
-                isDirectory = value;
+                _isDirectory = value;
             }
         }
 
@@ -131,27 +131,27 @@ namespace IpfsShipyard.Ipfs.Http
         {
             get
             {
-                if (ipfsClient == null)
+                if (_ipfsClient == null)
                 {
                     lock (this)
                     {
-                        ipfsClient = new IpfsClient();
+                        _ipfsClient = new IpfsClient();
                     }
                 }
-                return ipfsClient;
+                return _ipfsClient;
             }
             set
             {
-                ipfsClient = value;
+                _ipfsClient = value;
             }
         }
 
         void GetInfo()
         {
             var node = IpfsClient.FileSystem.ListFileAsync(Id).Result;
-            this.IsDirectory = node.IsDirectory;
-            this.Links = node.Links;
-            this.Size = node.Size;
+            IsDirectory = node.IsDirectory;
+            Links = node.Links;
+            Size = node.Size;
         }
 
     }

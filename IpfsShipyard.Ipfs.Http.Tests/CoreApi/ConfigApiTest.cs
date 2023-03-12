@@ -8,15 +8,15 @@ namespace IpfsShipyard.Ipfs.Http.Tests.CoreApi;
 [TestClass]
 public class ConfigApiTest
 {
-    private const string apiAddress = "/ip4/127.0.0.1/tcp/";
-    private const string gatewayAddress = "/ip4/127.0.0.1/tcp/";
+    private const string ApiAddress = "/ip4/127.0.0.1/tcp/";
+    private const string GatewayAddress = "/ip4/127.0.0.1/tcp/";
 
     [TestMethod]
     public void Get_Entire_Config()
     {
         IpfsClient ipfs = TestFixture.Ipfs;
         var config = ipfs.Config.GetAsync().Result;
-        StringAssert.StartsWith(Extensions.Value<string>(config["Addresses"]["API"]), apiAddress);
+        StringAssert.StartsWith(Extensions.Value<string>(config["Addresses"]["API"]), ApiAddress);
     }
 
     [TestMethod]
@@ -24,7 +24,7 @@ public class ConfigApiTest
     {
         IpfsClient ipfs = TestFixture.Ipfs;
         var api = ipfs.Config.GetAsync("Addresses.API").Result;
-        StringAssert.StartsWith(Extensions.Value<string>(api), apiAddress);
+        StringAssert.StartsWith(Extensions.Value<string>(api), ApiAddress);
     }
 
     [TestMethod]
@@ -32,8 +32,8 @@ public class ConfigApiTest
     {
         IpfsClient ipfs = TestFixture.Ipfs;
         var addresses = ipfs.Config.GetAsync("Addresses").Result;
-        StringAssert.StartsWith(Extensions.Value<string>(addresses["API"]), apiAddress);
-        StringAssert.StartsWith(Extensions.Value<string>(addresses["Gateway"]), gatewayAddress);
+        StringAssert.StartsWith(Extensions.Value<string>(addresses["API"]), ApiAddress);
+        StringAssert.StartsWith(Extensions.Value<string>(addresses["Gateway"]), GatewayAddress);
     }
 
     [TestMethod]
@@ -41,7 +41,7 @@ public class ConfigApiTest
     {
         IpfsClient ipfs = TestFixture.Ipfs;
         var api = ipfs.Config.GetAsync("Addresses.API").Result;
-        StringAssert.StartsWith(Extensions.Value<string>(api), apiAddress);
+        StringAssert.StartsWith(Extensions.Value<string>(api), ApiAddress);
 
         ExceptionAssert.Throws<Exception>(() => { var x = ipfs.Config.GetAsync("Addresses.api").Result; });
     }

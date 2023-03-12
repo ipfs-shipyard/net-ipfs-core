@@ -127,7 +127,7 @@ public class Ping1 : IPeerProtocol, IService
         };
         var totalTime = TimeSpan.Zero;
 
-        using (var stream = await Swarm.DialAsync(peer, this.ToString(), cancel))
+        using (var stream = await Swarm.DialAsync(peer, ToString(), cancel))
         {
             for (int i = 0; i < count; ++i)
             {

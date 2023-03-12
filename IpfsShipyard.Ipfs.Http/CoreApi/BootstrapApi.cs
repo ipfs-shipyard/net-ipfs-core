@@ -10,16 +10,16 @@ namespace IpfsShipyard.Ipfs.Http.CoreApi
 {
     class BootstrapApi : IBootstrapApi
     {
-        IpfsClient ipfs;
+        IpfsClient _ipfs;
 
         internal BootstrapApi(IpfsClient ipfs)
         {
-            this.ipfs = ipfs;
+            _ipfs = ipfs;
         }
 
         public async Task<MultiAddress> AddAsync(MultiAddress address, CancellationToken cancel = default(CancellationToken))
         {
-            var json = await ipfs.DoCommandAsync("bootstrap/add", cancel, address.ToString());
+            var json = await _ipfs.DoCommandAsync("bootstrap/add", cancel, address.ToString());
             var addrs = (JArray)(JObject.Parse(json)["Peers"]);
             var a = addrs.FirstOrDefault();
             if (a == null)
@@ -29,7 +29,7 @@ namespace IpfsShipyard.Ipfs.Http.CoreApi
 
         public async Task<IEnumerable<MultiAddress>> AddDefaultsAsync(CancellationToken cancel = default(CancellationToken))
         {
-            var json = await ipfs.DoCommandAsync("bootstrap/add/default", cancel);
+            var json = await _ipfs.DoCommandAsync("bootstrap/add/default", cancel);
             var addrs = (JArray)(JObject.Parse(json)["Peers"]);
             return addrs
                 .Select(a => MultiAddress.TryCreate((string)a))
@@ -38,7 +38,7 @@ namespace IpfsShipyard.Ipfs.Http.CoreApi
 
         public async Task<IEnumerable<MultiAddress>> ListAsync(CancellationToken cancel = default(CancellationToken))
         {
-            var json = await ipfs.DoCommandAsync("bootstrap/list", cancel);
+            var json = await _ipfs.DoCommandAsync("bootstrap/list", cancel);
             var addrs = (JArray)(JObject.Parse(json)["Peers"]);
             return addrs
                 .Select(a => MultiAddress.TryCreate((string)a))
@@ -47,12 +47,12 @@ namespace IpfsShipyard.Ipfs.Http.CoreApi
 
         public Task RemoveAllAsync(CancellationToken cancel = default(CancellationToken))
         {
-            return ipfs.DoCommandAsync("bootstrap/rm/all", cancel);
+            return _ipfs.DoCommandAsync("bootstrap/rm/all", cancel);
         }
 
         public async Task<MultiAddress> RemoveAsync(MultiAddress address, CancellationToken cancel = default(CancellationToken))
         {
-            var json = await ipfs.DoCommandAsync("bootstrap/rm", cancel, address.ToString());
+            var json = await _ipfs.DoCommandAsync("bootstrap/rm", cancel, address.ToString());
             var addrs = (JArray)(JObject.Parse(json)["Peers"]);
             var a = addrs.FirstOrDefault();
             if (a == null)

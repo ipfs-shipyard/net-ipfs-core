@@ -54,13 +54,13 @@ public class VersionedName : IEquatable<VersionedName>, IComparable<VersionedNam
     {
         var that = obj as VersionedName;
         return (that != null)
-               && this.Name == that.Name && this.Version == that.Version;
+               && Name == that.Name && Version == that.Version;
     }
 
     /// <inheritdoc />
     public bool Equals(VersionedName that)
     {
-        return this.Name == that.Name && this.Version == that.Version;
+        return Name == that.Name && Version == that.Version;
     }
 
     /// <summary>
@@ -91,7 +91,7 @@ public class VersionedName : IEquatable<VersionedName>, IComparable<VersionedNam
     public int CompareTo(VersionedName that)
     {
         if (that == null) return 1;
-        if (this.Name == that.Name) return this.Version.ComparePrecedenceTo(that.Version);
-        return this.Name.CompareTo(that.Name);
+        if (Name == that.Name) return Version.ComparePrecedenceTo(that.Version);
+        return Name.CompareTo(that.Name);
     }
 }

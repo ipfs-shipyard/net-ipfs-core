@@ -14,13 +14,13 @@ namespace IpfsShipyard.Ipfs.Http.CoreApi
 {
     class FileSystemApi : IFileSystemApi
     {
-        private IpfsClient ipfs;
-        private Lazy<DagNode> emptyFolder;
+        private IpfsClient _ipfs;
+        private Lazy<DagNode> _emptyFolder;
 
         internal FileSystemApi(IpfsClient ipfs)
         {
-            this.ipfs = ipfs;
-            this.emptyFolder = new Lazy<DagNode>(() => ipfs.Object.NewDirectoryAsync().Result);
+            _ipfs = ipfs;
+            _emptyFolder = new Lazy<DagNode>(() => ipfs.Object.NewDirectoryAsync().Result);
         }
 
         public async Task<IFileSystemNode> AddFileAsync(string path, AddFileOptions options = null, CancellationToken cancel = default(CancellationToken))
@@ -62,7 +62,7 @@ namespace IpfsShipyard.Ipfs.Http.CoreApi
                 opts.Add($"protect={options.ProtectionKey}");
             opts.Add($"chunker=size-{options.ChunkSize}");
 
-            var response = await ipfs.Upload2Async("add", cancel, stream, name, opts.ToArray());
+            var response = await _ipfs.Upload2Async("add", cancel, stream, name, opts.ToArray());
 
             // The result is a stream of LDJSON objects.
             // See https://github.com/ipfs/go-ipfs/issues/4852
@@ -93,7 +93,7 @@ namespace IpfsShipyard.Ipfs.Http.CoreApi
                             Size = long.Parse((string)r["Size"]),
                             IsDirectory = false,
                             Name = name,
-                            IpfsClient = ipfs
+                            IpfsClient = _ipfs
                         };
                     }
                 }
@@ -136,8 +136,8 @@ namespace IpfsShipyard.Ipfs.Http.CoreApi
             var links = nodes.Select(node => node.ToLink());
 #endif
             // Create the directory with links to the created files and sub-directories
-            var folder = emptyFolder.Value.AddLinks(links);
-            var directory = await ipfs.Object.PutAsync(folder, cancel);
+            var folder = _emptyFolder.Value.AddLinks(links);
+            var directory = await _ipfs.Object.PutAsync(folder, cancel);
 
             return new FileSystemNode
             {
@@ -146,7 +146,7 @@ namespace IpfsShipyard.Ipfs.Http.CoreApi
                 Links = links,
                 IsDirectory = true,
                 Size = directory.Size,
-                IpfsClient = ipfs
+                IpfsClient = _ipfs
             };
 
         }
@@ -189,7 +189,7 @@ namespace IpfsShipyard.Ipfs.Http.CoreApi
         /// </returns>
         public Task<Stream> ReadFileAsync(string path, CancellationToken cancel = default(CancellationToken))
         {
-            return ipfs.PostDownloadAsync("cat", cancel, path);
+            return _ipfs.PostDownloadAsync("cat", cancel, path);
         }
 
         public Task<Stream> ReadFileAsync(string path, long offset, long length = 0, CancellationToken cancel = default(CancellationToken))
@@ -202,7 +202,7 @@ namespace IpfsShipyard.Ipfs.Http.CoreApi
 
             if (length == 0)
                 length = int.MaxValue; // go-ipfs only accepts int lengths
-            return ipfs.PostDownloadAsync("cat", cancel, path,
+            return _ipfs.PostDownloadAsync("cat", cancel, path,
                 $"offset={offset}",
                 $"length={length}");
         }
@@ -220,7 +220,7 @@ namespace IpfsShipyard.Ipfs.Http.CoreApi
         /// <returns></returns>
         public async Task<IFileSystemNode> ListFileAsync(string path, CancellationToken cancel = default(CancellationToken))
         {
-            var json = await ipfs.DoCommandAsync("file/ls", cancel, path);
+            var json = await _ipfs.DoCommandAsync("file/ls", cancel, path);
             var r = JObject.Parse(json);
             var hash = (string)r["Arguments"][path];
             var o = (JObject)r["Objects"][hash];
@@ -230,7 +230,7 @@ namespace IpfsShipyard.Ipfs.Http.CoreApi
                 Size = (long)o["Size"],
                 IsDirectory = (string)o["Type"] == "Directory",
                 Links = new FileSystemLink[0],
-                IpfsClient = ipfs
+                IpfsClient = _ipfs
             };
             var links = o["Links"] as JArray;
             if (links != null)
@@ -250,7 +250,7 @@ namespace IpfsShipyard.Ipfs.Http.CoreApi
 
         public Task<Stream> GetAsync(string path, bool compress = false, CancellationToken cancel = default(CancellationToken))
         {
-            return ipfs.PostDownloadAsync("get", cancel, path, $"compress={compress}");
+            return _ipfs.PostDownloadAsync("get", cancel, path, $"compress={compress}");
         }
     }
 }

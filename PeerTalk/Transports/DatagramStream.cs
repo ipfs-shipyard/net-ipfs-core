@@ -8,16 +8,16 @@ namespace IpfsShipyard.PeerTalk.Transports;
 
 internal class DatagramStream : Stream
 {
-    private Socket socket;
-    private bool ownsSocket;
-    private readonly MemoryStream sendBuffer = new();
-    private readonly MemoryStream receiveBuffer = new();
-    private readonly byte[] datagram = new byte[2048];
+    private Socket _socket;
+    private bool _ownsSocket;
+    private readonly MemoryStream _sendBuffer = new();
+    private readonly MemoryStream _receiveBuffer = new();
+    private readonly byte[] _datagram = new byte[2048];
 
     public DatagramStream(Socket socket, bool ownsSocket = false)
     {
-        this.socket = socket;
-        this.ownsSocket = ownsSocket;
+        _socket = socket;
+        _ownsSocket = ownsSocket;
     }
 
     protected override void Dispose(bool disposing)
@@ -33,11 +33,11 @@ internal class DatagramStream : Stream
                 // eat it
             }
         }
-        if (ownsSocket && socket != null)
+        if (_ownsSocket && _socket != null)
         {
             try
             {
-                socket.Dispose();
+                _socket.Dispose();
             }
             catch (SocketException)
             {
@@ -45,7 +45,7 @@ internal class DatagramStream : Stream
             }
             finally
             {
-                socket = null;
+                _socket = null;
             }
         }
         base.Dispose(disposing);
@@ -70,11 +70,11 @@ internal class DatagramStream : Stream
 
     public override async Task FlushAsync(CancellationToken cancellationToken)
     {
-        if (sendBuffer.Position > 0)
+        if (_sendBuffer.Position > 0)
         {
-            var bytes = new ArraySegment<byte>(sendBuffer.ToArray());
-            sendBuffer.Position = 0;
-            await socket.SendAsync(bytes, SocketFlags.None).ConfigureAwait(false);
+            var bytes = new ArraySegment<byte>(_sendBuffer.ToArray());
+            _sendBuffer.Position = 0;
+            await _socket.SendAsync(bytes, SocketFlags.None).ConfigureAwait(false);
         }
     }
 
@@ -88,16 +88,16 @@ internal class DatagramStream : Stream
     public override async Task<int> ReadAsync(byte[] buffer, int offset, int count, CancellationToken cancellationToken)
     {
         // If no data.
-        if (receiveBuffer.Position == receiveBuffer.Length)
+        if (_receiveBuffer.Position == _receiveBuffer.Length)
         {
             await FlushAsync(cancellationToken).ConfigureAwait(false);
-            receiveBuffer.Position = 0;
-            receiveBuffer.SetLength(0);
-            var size = socket.Receive(datagram);
-            await receiveBuffer.WriteAsync(datagram, 0, size);
-            receiveBuffer.Position = 0;
+            _receiveBuffer.Position = 0;
+            _receiveBuffer.SetLength(0);
+            var size = _socket.Receive(_datagram);
+            await _receiveBuffer.WriteAsync(_datagram, 0, size);
+            _receiveBuffer.Position = 0;
         }
-        return receiveBuffer.Read(buffer, offset, count);
+        return _receiveBuffer.Read(buffer, offset, count);
     }
 
     public override long Seek(long offset, SeekOrigin origin)
@@ -112,7 +112,7 @@ internal class DatagramStream : Stream
 
     public override void Write(byte[] buffer, int offset, int count)
     {
-        sendBuffer.Write(buffer, offset, count);
+        _sendBuffer.Write(buffer, offset, count);
     }
 
     public override Task WriteAsync(byte[] buffer, int offset, int count, CancellationToken cancellationToken)

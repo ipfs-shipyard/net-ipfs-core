@@ -31,12 +31,12 @@ namespace IpfsShipyard.Ipfs.Http
         {
             var o = JObject.Parse(json);
 
-            this.Sender = (string)o["from"];
-            this.SequenceNumber = Multibase.Decode((string)o["seqno"], out MultibaseEncoding _);
-            this.DataBytes = Multibase.Decode((string)o["data"], out MultibaseEncoding _);
+            Sender = (string)o["from"];
+            SequenceNumber = Multibase.Decode((string)o["seqno"], out MultibaseEncoding _);
+            DataBytes = Multibase.Decode((string)o["data"], out MultibaseEncoding _);
 
             var topics = (JArray) (o["topicIDs"]);
-            this.Topics = topics.Select(t => Encoding.UTF8.GetString(Multibase.Decode((string)t, out MultibaseEncoding _)));
+            Topics = topics.Select(t => Encoding.UTF8.GetString(Multibase.Decode((string)t, out MultibaseEncoding _)));
         }
 
         /// <inheritdoc />

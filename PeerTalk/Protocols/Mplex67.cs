@@ -13,7 +13,7 @@ namespace IpfsShipyard.PeerTalk.Protocols;
 /// <seealso href="https://github.com/libp2p/mplex"/>
 public class Mplex67 : IPeerProtocol
 {
-    static ILog log = LogManager.GetLogger(typeof(Mplex67));
+    static ILog _log = LogManager.GetLogger(typeof(Mplex67));
 
     /// <inheritdoc />
     public string Name { get; } = "mplex";
@@ -30,7 +30,7 @@ public class Mplex67 : IPeerProtocol
     /// <inheritdoc />
     public async Task ProcessMessageAsync(PeerConnection connection, Stream stream, CancellationToken cancel = default)
     {
-        log.Debug("start processing requests from " + connection.RemoteAddress);
+        _log.Debug("start processing requests from " + connection.RemoteAddress);
         var muxer = new Muxer
         {
             Channel = stream,
@@ -43,7 +43,7 @@ public class Mplex67 : IPeerProtocol
         connection.MuxerEstablished.SetResult(muxer);
         await muxer.ProcessRequestsAsync().ConfigureAwait(false);
 
-        log.Debug("stop processing from " + connection.RemoteAddress);
+        _log.Debug("stop processing from " + connection.RemoteAddress);
     }
 
     /// <inheritdoc />

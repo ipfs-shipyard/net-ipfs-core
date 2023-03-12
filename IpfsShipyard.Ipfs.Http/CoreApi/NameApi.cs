@@ -9,16 +9,16 @@ namespace IpfsShipyard.Ipfs.Http.CoreApi
 {
     class NameApi : INameApi
     {
-        private IpfsClient ipfs;
+        private IpfsClient _ipfs;
 
         internal NameApi(IpfsClient ipfs)
         {
-            this.ipfs = ipfs;
+            _ipfs = ipfs;
         }
 
         public async Task<NamedContent> PublishAsync(string path, bool resolve = true, string key = "self", TimeSpan? lifetime = null, CancellationToken cancel = default(CancellationToken))
         {
-            var json = await ipfs.DoCommandAsync("name/publish", cancel,
+            var json = await _ipfs.DoCommandAsync("name/publish", cancel,
                 path,
                 "lifetime=24h", // TODO
                 $"resolve={resolve.ToString().ToLowerInvariant()}",
@@ -39,7 +39,7 @@ namespace IpfsShipyard.Ipfs.Http.CoreApi
 
         public async Task<string> ResolveAsync(string name, bool recursive = false, bool nocache = false, CancellationToken cancel = default(CancellationToken))
         {
-            var json = await ipfs.DoCommandAsync("name/resolve", cancel,
+            var json = await _ipfs.DoCommandAsync("name/resolve", cancel,
                 name,
                 $"recursive={recursive.ToString().ToLowerInvariant()}",
                 $"nocache={nocache.ToString().ToLowerInvariant()}");

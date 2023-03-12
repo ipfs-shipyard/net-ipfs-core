@@ -49,7 +49,7 @@ public interface IMfsApi
     /// </summary>
     /// <param name="path">Path to show listing for. Defaults to '/'. Required: no
     /// </param>
-    /// <param name="U">Do not sort; list entries in directory order. Required: no
+    /// <param name="u">Do not sort; list entries in directory order. Required: no
     /// </param>
     /// <param name="cancel">Is used to stop the task.  When cancelled, the <see cref="TaskCanceledException"/> is raised.
     /// </param>
@@ -58,7 +58,7 @@ public interface IMfsApi
     /// <remarks>
     ///   Paramter long is ommitted and should always be passed as true in implementation.
     /// </remarks>
-    Task<IEnumerable<IFileSystemNode>> ListAsync(string path, bool? U = null, CancellationToken cancel = default(CancellationToken));
+    Task<IEnumerable<IFileSystemNode>> ListAsync(string path, bool? u = null, CancellationToken cancel = default(CancellationToken));
 
     /// <summary>
     ///   Make directories in the local mutable namespace.

@@ -12,19 +12,19 @@ namespace IpfsShipyard.PeerTalk.Tests.PubSub;
 [TestClass]
 public class NotificationServiceTest
 {
-    Peer self = new Peer
+    Peer _self = new Peer
     {
         AgentVersion = "self",
         Id = "QmXK9VBxaXFuuT29AaPUTgW3jBWZ9JgLVZYdMYTHC6LLAH",
         PublicKey = "CAASXjBcMA0GCSqGSIb3DQEBAQUAA0sAMEgCQQCC5r4nQBtnd9qgjnG8fBN5+gnqIeWEIcUFUdCG4su/vrbQ1py8XGKNUBuDjkyTv25Gd3hlrtNJV3eOKZVSL8ePAgMBAAE="
     };
-    Peer other1 = new Peer { Id = "QmaCpDMGvV2BGHeYERUEnRQAwe3N8SzbUtfsmvsqQLuvuJ" };
-    Peer other2 = new Peer { Id = "QmaCpDMGvV2BGHeYERUEnRQAwe3N8SzbUtfsmvsqQLuvUJ" };
+    Peer _other1 = new Peer { Id = "QmaCpDMGvV2BGHeYERUEnRQAwe3N8SzbUtfsmvsqQLuvuJ" };
+    Peer _other2 = new Peer { Id = "QmaCpDMGvV2BGHeYERUEnRQAwe3N8SzbUtfsmvsqQLuvUJ" };
 
     [TestMethod]
     public async Task MessageID_Increments()
     {
-        var ns = new NotificationService { LocalPeer = self };
+        var ns = new NotificationService { LocalPeer = _self };
         await ns.StartAsync();
         try
         {
@@ -41,7 +41,7 @@ public class NotificationServiceTest
     [TestMethod]
     public async Task Publish()
     {
-        var ns = new NotificationService { LocalPeer = self };
+        var ns = new NotificationService { LocalPeer = _self };
         await ns.StartAsync();
         try
         {
@@ -60,7 +60,7 @@ public class NotificationServiceTest
     [TestMethod]
     public async Task Topics()
     {
-        var ns = new NotificationService { LocalPeer = self };
+        var ns = new NotificationService { LocalPeer = _self };
         await ns.StartAsync();
         try
         {
@@ -96,7 +96,7 @@ public class NotificationServiceTest
     [TestMethod]
     public async Task Subscribe()
     {
-        var ns = new NotificationService { LocalPeer = self };
+        var ns = new NotificationService { LocalPeer = _self };
         await ns.StartAsync();
         try
         {
@@ -118,7 +118,7 @@ public class NotificationServiceTest
     [TestMethod]
     public async Task Subscribe_HandlerExceptionIsIgnored()
     {
-        var ns = new NotificationService { LocalPeer = self };
+        var ns = new NotificationService { LocalPeer = _self };
         await ns.StartAsync();
         try
         {
@@ -139,7 +139,7 @@ public class NotificationServiceTest
     [TestMethod]
     public async Task DuplicateMessagesAreIgnored()
     {
-        var ns = new NotificationService { LocalPeer = self };
+        var ns = new NotificationService { LocalPeer = _self };
         ns.Routers.Add(new LoopbackRouter());
         await ns.StartAsync();
         try
@@ -165,21 +165,21 @@ public class NotificationServiceTest
     {
         var topic1 = Guid.NewGuid().ToString();
         var topic2 = Guid.NewGuid().ToString();
-        var ns = new NotificationService { LocalPeer = self };
+        var ns = new NotificationService { LocalPeer = _self };
         var router = new FloodRouter() { Swarm = new Swarm() };
-        router.RemoteTopics.AddInterest(topic1, other1);
-        router.RemoteTopics.AddInterest(topic2, other2);
+        router.RemoteTopics.AddInterest(topic1, _other1);
+        router.RemoteTopics.AddInterest(topic2, _other2);
         ns.Routers.Add(router);
         await ns.StartAsync();
         try
         {
             var peers = (await ns.PeersAsync(topic1)).ToArray();
             Assert.AreEqual(1, peers.Length);
-            Assert.AreEqual(other1, peers[0]);
+            Assert.AreEqual(_other1, peers[0]);
 
             peers = (await ns.PeersAsync(topic2)).ToArray();
             Assert.AreEqual(1, peers.Length);
-            Assert.AreEqual(other2, peers[0]);
+            Assert.AreEqual(_other2, peers[0]);
         }
         finally
         {
@@ -192,10 +192,10 @@ public class NotificationServiceTest
     {
         var topic1 = Guid.NewGuid().ToString();
         var topic2 = Guid.NewGuid().ToString();
-        var ns = new NotificationService { LocalPeer = self };
+        var ns = new NotificationService { LocalPeer = _self };
         var router = new FloodRouter { Swarm = new Swarm() };
-        router.RemoteTopics.AddInterest(topic1, other1);
-        router.RemoteTopics.AddInterest(topic2, other2);
+        router.RemoteTopics.AddInterest(topic1, _other1);
+        router.RemoteTopics.AddInterest(topic2, _other2);
         ns.Routers.Add(router);
         await ns.StartAsync();
         try

@@ -52,7 +52,7 @@ public class MultiBaseTest
         public string Output { get; set; }
     }
 
-    TestVector[] TestVectors = new TestVector[]
+    TestVector[] _testVectors = new TestVector[]
     {
         new TestVector {
             Algorithm = "base16",
@@ -188,7 +188,7 @@ public class MultiBaseTest
     [TestMethod]
     public void CheckMultiBase()
     {
-        foreach (var v in TestVectors)
+        foreach (var v in _testVectors)
         {
             var bytes = Encoding.UTF8.GetBytes(v.Input);
             var s = MultiBase.Encode(bytes, v.Algorithm);

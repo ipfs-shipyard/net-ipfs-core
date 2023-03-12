@@ -62,12 +62,12 @@ public class Secio1 : IEncryptionProtocol
             PublicKey = Convert.FromBase64String(localPeer.PublicKey)
         };
 
-        ProtoBuf.Serializer.SerializeWithLengthPrefix(stream, localProposal, PrefixStyle.Fixed32BigEndian);
+        Serializer.SerializeWithLengthPrefix(stream, localProposal, PrefixStyle.Fixed32BigEndian);
         await stream.FlushAsync(cancel).ConfigureAwait(false);
 
         // =============================================================================
         // step 1.1 Identify -- get identity from their key
-        var remoteProposal = ProtoBuf.Serializer.DeserializeWithLengthPrefix<Secio1Propose>(stream, PrefixStyle.Fixed32BigEndian);
+        var remoteProposal = Serializer.DeserializeWithLengthPrefix<Secio1Propose>(stream, PrefixStyle.Fixed32BigEndian);
         var ridAlg = (remoteProposal.PublicKey.Length <= 48) ? "identity" : "sha2-256";
         var remoteId = MultiHash.ComputeHash(remoteProposal.PublicKey, ridAlg);
         if (remotePeer.Id == null)
@@ -133,18 +133,18 @@ public class Secio1 : IEncryptionProtocol
         var localExchange = new Secio1Exchange();
         using (var ms = new MemoryStream())
         {
-            ProtoBuf.Serializer.Serialize(ms, localProposal);
-            ProtoBuf.Serializer.Serialize(ms, remoteProposal);
+            Serializer.Serialize(ms, localProposal);
+            Serializer.Serialize(ms, remoteProposal);
             ms.Write(localEphemeralPublicKey, 0, localEphemeralPublicKey.Length);
             localExchange.Signature = connection.LocalPeerKey.Sign(ms.ToArray());
         }
         localExchange.EPublicKey = localEphemeralPublicKey;
-        ProtoBuf.Serializer.SerializeWithLengthPrefix(stream, localExchange, PrefixStyle.Fixed32BigEndian);
+        Serializer.SerializeWithLengthPrefix(stream, localExchange, PrefixStyle.Fixed32BigEndian);
         await stream.FlushAsync(cancel).ConfigureAwait(false);
 
         // Receive their Exchange packet.  If nothing, then most likely the
         // remote has closed the connection because it does not like us.
-        var remoteExchange = ProtoBuf.Serializer.DeserializeWithLengthPrefix<Secio1Exchange>(stream, PrefixStyle.Fixed32BigEndian);
+        var remoteExchange = Serializer.DeserializeWithLengthPrefix<Secio1Exchange>(stream, PrefixStyle.Fixed32BigEndian);
         if (remoteExchange == null)
         {
             throw new Exception("Remote refuses the SECIO exchange.");
@@ -155,8 +155,8 @@ public class Secio1 : IEncryptionProtocol
         var remotePeerKey = Key.CreatePublicKeyFromIpfs(remoteProposal.PublicKey);
         using (var ms = new MemoryStream())
         {
-            ProtoBuf.Serializer.Serialize(ms, remoteProposal);
-            ProtoBuf.Serializer.Serialize(ms, localProposal);
+            Serializer.Serialize(ms, remoteProposal);
+            Serializer.Serialize(ms, localProposal);
             ms.Write(remoteExchange.EPublicKey, 0, remoteExchange.EPublicKey.Length);
             remotePeerKey.Verify(ms.ToArray(), remoteExchange.Signature);
         }

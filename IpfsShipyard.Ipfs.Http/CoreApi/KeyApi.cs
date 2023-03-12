@@ -29,16 +29,16 @@ namespace IpfsShipyard.Ipfs.Http.CoreApi
             }
 
         }
-        IpfsClient ipfs;
+        IpfsClient _ipfs;
 
         internal KeyApi(IpfsClient ipfs)
         {
-            this.ipfs = ipfs;
+            _ipfs = ipfs;
         }
 
         public async Task<IKey> CreateAsync(string name, string keyType, int size, CancellationToken cancel = default(CancellationToken))
         {
-            return await ipfs.DoCommandAsync<KeyInfo>("key/gen", cancel,
+            return await _ipfs.DoCommandAsync<KeyInfo>("key/gen", cancel,
                 name,
                 $"type={keyType}",
                 $"size={size}");
@@ -46,7 +46,7 @@ namespace IpfsShipyard.Ipfs.Http.CoreApi
 
         public async Task<IEnumerable<IKey>> ListAsync(CancellationToken cancel = default(CancellationToken))
         {
-            var json = await ipfs.DoCommandAsync("key/list", cancel, null, "l=true");
+            var json = await _ipfs.DoCommandAsync("key/list", cancel, null, "l=true");
             var keys = (JArray)(JObject.Parse(json)["Keys"]);
             return keys
                 .Select(k => new KeyInfo
@@ -58,7 +58,7 @@ namespace IpfsShipyard.Ipfs.Http.CoreApi
 
         public async Task<IKey> RemoveAsync(string name, CancellationToken cancel = default(CancellationToken))
         {
-            var json = await ipfs.DoCommandAsync("key/rm", cancel, name);
+            var json = await _ipfs.DoCommandAsync("key/rm", cancel, name);
             var keys = JObject.Parse(json)["Keys"] as JArray;
 
             return keys?
@@ -72,7 +72,7 @@ namespace IpfsShipyard.Ipfs.Http.CoreApi
 
         public async Task<IKey> RenameAsync(string oldName, string newName, CancellationToken cancel = default(CancellationToken))
         {
-            var json = await ipfs.DoCommandAsync("key/rename", cancel, oldName, $"arg={newName}");
+            var json = await _ipfs.DoCommandAsync("key/rename", cancel, oldName, $"arg={newName}");
             var key = JObject.Parse(json);
             return new KeyInfo
             {

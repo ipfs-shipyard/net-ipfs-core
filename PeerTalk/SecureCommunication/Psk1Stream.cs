@@ -23,10 +23,10 @@ public class Psk1Stream : Stream
     private const int NonceBitLength = 192;
     private const int NonceByteLength = NonceBitLength / 8;
 
-    private Stream stream;
-    private PreSharedKey key;
-    private IStreamCipher readCipher;
-    private IStreamCipher writeCipher;
+    private Stream _stream;
+    private PreSharedKey _key;
+    private IStreamCipher _readCipher;
+    private IStreamCipher _writeCipher;
 
     /// <summary>
     ///   Creates a new instance of the <see cref="Psk1Stream"/> class.
@@ -44,15 +44,15 @@ public class Psk1Stream : Stream
         if (key.Length != KeyBitLength)
             throw new Exception($"The pre-shared key must be {KeyBitLength} bits in length.");
 
-        this.stream = stream;
-        this.key = key;
+        _stream = stream;
+        _key = key;
     }
 
     private IStreamCipher WriteCipher
     {
         get
         {
-            if (writeCipher == null)
+            if (_writeCipher == null)
             {
                 // Get a random nonce
                 var nonce = new byte[NonceByteLength];
@@ -62,13 +62,13 @@ public class Psk1Stream : Stream
                 }
 
                 // Send the nonce to the remote
-                stream.Write(nonce, 0, nonce.Length);
+                _stream.Write(nonce, 0, nonce.Length);
 
                 // Create the cipher
-                writeCipher = new XSalsa20Engine();
-                writeCipher.Init(true, new ParametersWithIV(new KeyParameter(key.Value), nonce));
+                _writeCipher = new XSalsa20Engine();
+                _writeCipher.Init(true, new ParametersWithIV(new KeyParameter(_key.Value), nonce));
             }
-            return writeCipher;
+            return _writeCipher;
         }
     }
 
@@ -76,36 +76,36 @@ public class Psk1Stream : Stream
     {
         get
         {
-            if (readCipher == null)
+            if (_readCipher == null)
             {
                 // Get the nonce from the remote.
                 var nonce = new byte[NonceByteLength];
                 for (int i = 0, n; i < NonceByteLength; i += n)
                 {
-                    n = stream.Read(nonce, i, NonceByteLength - i);
+                    n = _stream.Read(nonce, i, NonceByteLength - i);
                     if (n < 1)
                         throw new EndOfStreamException();
                 }
 
                 // Create the cipher
-                readCipher = new XSalsa20Engine();
-                readCipher.Init(false, new ParametersWithIV(new KeyParameter(key.Value), nonce));
+                _readCipher = new XSalsa20Engine();
+                _readCipher.Init(false, new ParametersWithIV(new KeyParameter(_key.Value), nonce));
             }
-            return readCipher;
+            return _readCipher;
         }
     }
 
     /// <inheritdoc />
-    public override bool CanRead => stream.CanRead;
+    public override bool CanRead => _stream.CanRead;
 
     /// <inheritdoc />
     public override bool CanSeek => false;
 
     /// <inheritdoc />
-    public override bool CanWrite => stream.CanWrite;
+    public override bool CanWrite => _stream.CanWrite;
 
     /// <inheritdoc />
-    public override bool CanTimeout => stream.CanTimeout;
+    public override bool CanTimeout => _stream.CanTimeout;
 
     /// <inheritdoc />
     public override long Length => throw new NotSupportedException();
@@ -133,7 +133,7 @@ public class Psk1Stream : Stream
     public override int Read(byte[] buffer, int offset, int count)
     {
         var cipher = ReadCipher;
-        var n = stream.Read(buffer, offset, count);
+        var n = _stream.Read(buffer, offset, count);
         cipher.ProcessBytes(buffer, offset, n, buffer, offset);
         return n;
     }
@@ -142,7 +142,7 @@ public class Psk1Stream : Stream
     public override async Task<int> ReadAsync(byte[] buffer, int offset, int count, CancellationToken cancellationToken)
     {
         var cipher = ReadCipher;
-        var n = await stream.ReadAsync(buffer, offset, count, cancellationToken).ConfigureAwait(false);
+        var n = await _stream.ReadAsync(buffer, offset, count, cancellationToken).ConfigureAwait(false);
         cipher.ProcessBytes(buffer, offset, n, buffer, offset);
         return n;
     }
@@ -150,13 +150,13 @@ public class Psk1Stream : Stream
     /// <inheritdoc />
     public override void Flush()
     {
-        stream.Flush();
+        _stream.Flush();
     }
 
     /// <inheritdoc />
     public override Task FlushAsync(CancellationToken cancel)
     {
-        return stream.FlushAsync(cancel);
+        return _stream.FlushAsync(cancel);
     }
 
     /// <inheritdoc />
@@ -164,7 +164,7 @@ public class Psk1Stream : Stream
     {
         var x = new byte[count];
         WriteCipher.ProcessBytes(buffer, offset, count, x, 0);
-        stream.Write(x, 0, count);
+        _stream.Write(x, 0, count);
     }
 
     /// <inheritdoc />
@@ -172,13 +172,13 @@ public class Psk1Stream : Stream
     {
         var x = new byte[count];
         WriteCipher.ProcessBytes(buffer, offset, count, x, 0);
-        return stream.WriteAsync(x, 0, count, cancellationToken);
+        return _stream.WriteAsync(x, 0, count, cancellationToken);
     }
 
     /// <inheritdoc />
     public override void WriteByte(byte value)
     {
-        stream.WriteByte(WriteCipher.ReturnByte(value));
+        _stream.WriteByte(WriteCipher.ReturnByte(value));
     }
 
     /// <inheritdoc />
@@ -186,7 +186,7 @@ public class Psk1Stream : Stream
     {
         if (disposing)
         {
-            stream.Dispose();
+            _stream.Dispose();
         }
         base.Dispose(disposing);
     }

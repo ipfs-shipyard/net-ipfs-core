@@ -5,7 +5,7 @@ namespace IpfsShipyard.Ipfs.Core.Cryptography;
 
 class IdentityHash : HashAlgorithm
 {
-    byte[] digest;
+    byte[] _digest;
 
     public override void Initialize()
     {
@@ -13,21 +13,21 @@ class IdentityHash : HashAlgorithm
 
     protected override void HashCore(byte[] array, int ibStart, int cbSize)
     {
-        if (digest == null)
+        if (_digest == null)
         {
-            digest = new byte[cbSize];
-            Buffer.BlockCopy(array, ibStart, digest, 0, cbSize);
+            _digest = new byte[cbSize];
+            Buffer.BlockCopy(array, ibStart, _digest, 0, cbSize);
             return;
         }
 
-        var buffer = new byte[digest.Length + cbSize];
-        Buffer.BlockCopy(digest, 0, buffer, digest.Length, digest.Length);
-        Buffer.BlockCopy(array, ibStart, digest, digest.Length, cbSize);
-        digest = buffer;
+        var buffer = new byte[_digest.Length + cbSize];
+        Buffer.BlockCopy(_digest, 0, buffer, _digest.Length, _digest.Length);
+        Buffer.BlockCopy(array, ibStart, _digest, _digest.Length, cbSize);
+        _digest = buffer;
     }
 
     protected override byte[] HashFinal()
     {
-        return digest;
+        return _digest;
     }
 }

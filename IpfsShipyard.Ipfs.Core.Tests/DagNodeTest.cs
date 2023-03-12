@@ -11,7 +11,7 @@ namespace IpfsShipyard.Ipfs.Core.Tests;
 public class DagNodeTest
 {
     [TestMethod]
-    public void EmptyDAG()
+    public void EmptyDag()
     {
         var node = new DagNode((byte[]) null);
         Assert.AreEqual(0, node.DataBytes.Length);
@@ -71,7 +71,7 @@ public class DagNodeTest
     }
 
     [TestMethod]
-    public void MultipleLinksDataDAG()
+    public void MultipleLinksDataDag()
     {
         var a = Encoding.UTF8.GetBytes("a");
         var anode = new DagNode(a);
@@ -154,7 +154,7 @@ public class DagNodeTest
         var bnode = new DagNode(b);
 
         var cnode = bnode.AddLink(anode.ToLink());
-        Assert.IsFalse(Object.ReferenceEquals(bnode, cnode));
+        Assert.IsFalse(ReferenceEquals(bnode, cnode));
         Assert.AreEqual(1, cnode.DataBytes.Length);
         Assert.AreEqual(1, cnode.Links.Count());
         Assert.AreEqual(anode.Id, cnode.Links.First().Id);
@@ -176,7 +176,7 @@ public class DagNodeTest
         var cnode = new DagNode(c, new[] { anode.ToLink(), bnode.ToLink() });
 
         var dnode = cnode.RemoveLink(anode.ToLink());
-        Assert.IsFalse(Object.ReferenceEquals(dnode, cnode));
+        Assert.IsFalse(ReferenceEquals(dnode, cnode));
         Assert.AreEqual(1, dnode.DataBytes.Length);
         Assert.AreEqual(1, dnode.Links.Count());
         Assert.AreEqual(bnode.Id, dnode.Links.First().Id);

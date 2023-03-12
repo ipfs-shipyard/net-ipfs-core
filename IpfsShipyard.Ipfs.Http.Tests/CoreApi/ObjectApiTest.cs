@@ -10,22 +10,22 @@ namespace IpfsShipyard.Ipfs.Http.Tests.CoreApi;
 [TestClass]
 public class ObjectApiTest
 {
-    private IpfsClient ipfs = TestFixture.Ipfs;
+    private IpfsClient _ipfs = TestFixture.Ipfs;
 
     [TestMethod]
     public async Task New_Template_Null()
     {
-        var node = await ipfs.Object.NewAsync();
+        var node = await _ipfs.Object.NewAsync();
         Assert.AreEqual("QmdfTbBqBPQ7VNxZEYEj14VmRuZBkqFbiwReogJgS1zR1n", (string)node.Id);
     }
 
     [TestMethod]
     public async Task New_Template_UnixfsDir()
     {
-        var node = await ipfs.Object.NewAsync("unixfs-dir");
+        var node = await _ipfs.Object.NewAsync("unixfs-dir");
         Assert.AreEqual("QmUNLLsPACCz1vLxQVkXqqLX5R1X345qqfHbsf67hvA3Nn", (string)node.Id);
 
-        node = await ipfs.Object.NewDirectoryAsync();
+        node = await _ipfs.Object.NewDirectoryAsync();
         Assert.AreEqual("QmUNLLsPACCz1vLxQVkXqqLX5R1X345qqfHbsf67hvA3Nn", (string)node.Id);
 
     }
@@ -37,8 +37,8 @@ public class ObjectApiTest
         var bdata = Encoding.UTF8.GetBytes("beta");
         var alpha = new DagNode(adata);
         var beta = new DagNode(bdata, new[] { alpha.ToLink() });
-        var x = await ipfs.Object.PutAsync(beta);
-        var node = await ipfs.Object.GetAsync(x.Id);
+        var x = await _ipfs.Object.PutAsync(beta);
+        var node = await _ipfs.Object.GetAsync(x.Id);
         CollectionAssert.AreEqual(beta.DataBytes, node.DataBytes);
         Assert.AreEqual(beta.Links.Count(), Enumerable.Count<IMerkleLink>(node.Links));
         Assert.AreEqual(beta.Links.First().Id, Enumerable.First<IMerkleLink>(node.Links).Id);
@@ -52,8 +52,8 @@ public class ObjectApiTest
         var adata = Encoding.UTF8.GetBytes("alpha");
         var bdata = Encoding.UTF8.GetBytes("beta");
         var alpha = new DagNode(adata);
-        var beta = await ipfs.Object.PutAsync(bdata, new[] { alpha.ToLink() });
-        var node = await ipfs.Object.GetAsync(beta.Id);
+        var beta = await _ipfs.Object.PutAsync(bdata, new[] { alpha.ToLink() });
+        var node = await _ipfs.Object.GetAsync(beta.Id);
         CollectionAssert.AreEqual(beta.DataBytes, node.DataBytes);
         Assert.AreEqual(Enumerable.Count<IMerkleLink>(beta.Links), Enumerable.Count<IMerkleLink>(node.Links));
         Assert.AreEqual(Enumerable.First<IMerkleLink>(beta.Links).Id, Enumerable.First<IMerkleLink>(node.Links).Id);
@@ -65,8 +65,8 @@ public class ObjectApiTest
     public async Task Data()
     {
         var adata = Encoding.UTF8.GetBytes("alpha");
-        var node = await ipfs.Object.PutAsync(adata);
-        using (var stream = await ipfs.Object.DataAsync(node.Id))
+        var node = await _ipfs.Object.PutAsync(adata);
+        using (var stream = await _ipfs.Object.DataAsync(node.Id))
         {
             var bdata = new byte[adata.Length];
             stream.Read(bdata, 0, bdata.Length);
@@ -80,8 +80,8 @@ public class ObjectApiTest
         var adata = Encoding.UTF8.GetBytes("alpha");
         var bdata = Encoding.UTF8.GetBytes("beta");
         var alpha = new DagNode(adata);
-        var beta = await ipfs.Object.PutAsync(bdata, new[] { alpha.ToLink() });
-        var links = await ipfs.Object.LinksAsync(beta.Id);
+        var beta = await _ipfs.Object.PutAsync(bdata, new[] { alpha.ToLink() });
+        var links = await _ipfs.Object.LinksAsync(beta.Id);
         Assert.AreEqual(Enumerable.Count<IMerkleLink>(beta.Links), Enumerable.Count<IMerkleLink>(links));
         Assert.AreEqual(Enumerable.First<IMerkleLink>(beta.Links).Id, Enumerable.First<IMerkleLink>(links).Id);
         Assert.AreEqual(Enumerable.First<IMerkleLink>(beta.Links).Name, Enumerable.First<IMerkleLink>(links).Name);
@@ -94,9 +94,9 @@ public class ObjectApiTest
         var data1 = Encoding.UTF8.GetBytes("Some data 1");
         var data2 = Encoding.UTF8.GetBytes("Some data 2");
         var node2 = new DagNode(data2);
-        var node1 = await ipfs.Object.PutAsync(data1,
+        var node1 = await _ipfs.Object.PutAsync(data1,
             new[] { node2.ToLink("some-link") });
-        var info = await ipfs.Object.StatAsync(node1.Id);
+        var info = await _ipfs.Object.StatAsync(node1.Id);
         Assert.AreEqual<int>(1, info.LinkCount);
         Assert.AreEqual<long>(64, info.BlockSize);
         Assert.AreEqual<long>(53, info.LinkSize);
@@ -113,7 +113,7 @@ public class ObjectApiTest
         var cs = new CancellationTokenSource(500);
         try
         {
-            var _ = await ipfs.Object.GetAsync(id, cs.Token);
+            var _ = await _ipfs.Object.GetAsync(id, cs.Token);
             Assert.Fail("Did not throw TaskCanceledException");
         }
         catch (TaskCanceledException)

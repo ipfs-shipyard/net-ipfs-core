@@ -24,7 +24,7 @@ public class ConnectionManager
     /// <summary>
     ///   The connections to other peers. Key is the base58 hash of the peer ID.
     /// </summary>
-    private readonly ConcurrentDictionary<string, List<PeerConnection>> connections = new();
+    private readonly ConcurrentDictionary<string, List<PeerConnection>> _connections = new();
 
     private string Key(Peer peer) => peer.Id.ToBase58();
 
@@ -38,7 +38,7 @@ public class ConnectionManager
     /// <summary>
     ///   Gets the current active connections.
     /// </summary>
-    public IEnumerable<PeerConnection> Connections => connections.Values
+    public IEnumerable<PeerConnection> Connections => _connections.Values
         .SelectMany(c => c)
         .Where(c => c.IsActive);
 
@@ -76,7 +76,7 @@ public class ConnectionManager
     public bool TryGet(Peer peer, out PeerConnection connection)
     {
         connection = null;
-        if (!connections.TryGetValue(Key(peer), out List<PeerConnection> conns))
+        if (!_connections.TryGetValue(Key(peer), out List<PeerConnection> conns))
         {
             return false;
         }
@@ -110,7 +110,7 @@ public class ConnectionManager
         if (connection.RemotePeer.Id == null)
             throw new ArgumentNullException("connection.RemotePeer.Id");
 
-        connections.AddOrUpdate(
+        _connections.AddOrUpdate(
             Key(connection.RemotePeer),
             (_) => new List<PeerConnection> { connection },
             (_, conns) =>
@@ -151,7 +151,7 @@ public class ConnectionManager
             return false;
         }
 
-        if (!connections.TryGetValue(Key(connection.RemotePeer), out List<PeerConnection> originalConns))
+        if (!_connections.TryGetValue(Key(connection.RemotePeer), out List<PeerConnection> originalConns))
         {
             connection.Dispose();
             return false;
@@ -164,7 +164,7 @@ public class ConnectionManager
 
         var newConns = new List<PeerConnection>();
         newConns.AddRange(originalConns.Where(c => c != connection));
-        connections.TryUpdate(Key(connection.RemotePeer), newConns, originalConns);
+        _connections.TryUpdate(Key(connection.RemotePeer), newConns, originalConns);
 
         connection.Dispose();
         if (newConns.Count > 0)
@@ -191,7 +191,7 @@ public class ConnectionManager
     /// </returns>
     public bool Remove(MultiHash id)
     {
-        if (!connections.TryRemove(Key(id), out List<PeerConnection> conns))
+        if (!_connections.TryRemove(Key(id), out List<PeerConnection> conns))
         {
             return false;
         }
@@ -210,7 +210,7 @@ public class ConnectionManager
     /// </summary>
     public void Clear()
     {
-        var conns = connections.Values.SelectMany(c => c).ToArray();
+        var conns = _connections.Values.SelectMany(c => c).ToArray();
         foreach (var conn in conns)
         {
             Remove(conn);

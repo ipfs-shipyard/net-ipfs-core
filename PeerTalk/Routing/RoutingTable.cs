@@ -22,7 +22,7 @@ internal class RoutingPeer : IContact
 /// </summary>
 public class RoutingTable
 {
-    private readonly KBucket<RoutingPeer> Peers = new();
+    private readonly KBucket<RoutingPeer> _peers = new();
 
     /// <summary>
     ///   Creates a new instance of the <see cref="RoutingTable"/> for
@@ -31,9 +31,9 @@ public class RoutingTable
     /// <param name="localPeer"></param>
     public RoutingTable(Peer localPeer)
     {
-        Peers.LocalContactId = Key(localPeer.Id);
-        Peers.ContactsToPing = 1;
-        Peers.Ping += Peers_Ping;
+        _peers.LocalContactId = Key(localPeer.Id);
+        _peers.ContactsToPing = 1;
+        _peers.Ping += Peers_Ping;
     }
 
     /// <summary>
@@ -51,9 +51,9 @@ public class RoutingTable
     /// </remarks>
     private void Peers_Ping(object sender, PingEventArgs<RoutingPeer> e)
     {
-        if (Peers.Remove(e.Oldest.First()))
+        if (_peers.Remove(e.Oldest.First()))
         {
-            Peers.Add(e.Newest);
+            _peers.Add(e.Newest);
         }
     }
 
@@ -62,7 +62,7 @@ public class RoutingTable
     /// </summary>
     public void Add(Peer peer)
     {
-        Peers.Add(new RoutingPeer(peer));
+        _peers.Add(new RoutingPeer(peer));
     }
 
     /// <summary>
@@ -70,7 +70,7 @@ public class RoutingTable
     /// </summary>
     public void Remove(Peer peer)
     {
-        Peers.Remove(new RoutingPeer(peer));
+        _peers.Remove(new RoutingPeer(peer));
     }
 
     /// <summary>
@@ -78,7 +78,7 @@ public class RoutingTable
     /// </summary>
     public bool Contains(Peer peer)
     {
-        return Peers.Contains(new RoutingPeer(peer));
+        return _peers.Contains(new RoutingPeer(peer));
     }
 
     /// <summary>
@@ -86,7 +86,7 @@ public class RoutingTable
     /// </summary>
     public IEnumerable<Peer> NearestPeers(MultiHash id)
     {
-        return Peers
+        return _peers
             .Closest(Key(id))
             .Select(r => r.Peer);
     }

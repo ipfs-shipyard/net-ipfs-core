@@ -9,7 +9,7 @@ internal class DaemonCommand : CommandBase // TODO
 
     protected override Task<int> OnExecute(CommandLineApplication app)
     {
-        global::IpfsShipyard.Ipfs.Server.Program.Main(Array.Empty<string>());
+        Server.Program.Main(Array.Empty<string>());
         return Task.FromResult(0);
     }
 }

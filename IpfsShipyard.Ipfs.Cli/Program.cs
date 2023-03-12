@@ -49,7 +49,7 @@ internal class Program : CommandBase
     private ICoreApi _coreApi;
 
     [Option("--api <url>", Description = "Use a specific API instance")]
-    public string ApiUrl { get; set; } = Http.IpfsClient.DefaultApiUri.ToString();
+    public string ApiUrl { get; set; } = IpfsClient.DefaultApiUri.ToString();
 
     [Option("-L|--local", Description = "Run the command locally, instead of using the daemon")]
     public bool UseLocalEngine { get; set; }

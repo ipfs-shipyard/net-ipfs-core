@@ -19,7 +19,7 @@ namespace IpfsShipyard.PeerTalk.Routing;
 public class DistributedQuery<T> where T : class
 {
     private static readonly ILog log = LogManager.GetLogger("PeerTalk.Routing.DistributedQuery");
-    private static int nextQueryId = 1;
+    private static int _nextQueryId = 1;
 
     /// <summary>
     ///   The maximum number of peers that can be queried at one time
@@ -40,12 +40,12 @@ public class DistributedQuery<T> where T : class
     ///   or the caller of <see cref="RunAsync"/> wants to cancel
     ///   or the DHT is stopped.
     /// </remarks>
-    private CancellationTokenSource runningQuery;
+    private CancellationTokenSource _runningQuery;
 
-    private readonly ConcurrentDictionary<Peer, Peer> visited = new();
-    private readonly ConcurrentDictionary<T, T> answers = new();
-    private DhtMessage queryMessage;
-    private int failedConnects = 0;
+    private readonly ConcurrentDictionary<Peer, Peer> _visited = new();
+    private readonly ConcurrentDictionary<T, T> _answers = new();
+    private DhtMessage _queryMessage;
+    private int _failedConnects = 0;
 
     /// <summary>
     ///   Raised when an answer is obtained.
@@ -55,7 +55,7 @@ public class DistributedQuery<T> where T : class
     /// <summary>
     ///   The unique identifier of the query.
     /// </summary>
-    public int Id { get; } = nextQueryId++;
+    public int Id { get; } = _nextQueryId++;
 
     /// <summary>
     ///   The received answers for the query.
@@ -64,7 +64,7 @@ public class DistributedQuery<T> where T : class
     {
         get
         {
-            return answers.Values;
+            return _answers.Values;
         }
     }
 
@@ -117,9 +117,9 @@ public class DistributedQuery<T> where T : class
     {
         log.Debug($"Q{Id} run {QueryType} {QueryKey}");
 
-        runningQuery = CancellationTokenSource.CreateLinkedTokenSource(cancel);
+        _runningQuery = CancellationTokenSource.CreateLinkedTokenSource(cancel);
         Dht.Stopped += OnDhtStopped;
-        queryMessage = new DhtMessage
+        _queryMessage = new DhtMessage
         {
             Type = QueryType,
             Key = QueryKey?.ToArray(),
@@ -140,13 +140,13 @@ public class DistributedQuery<T> where T : class
         {
             Dht.Stopped -= OnDhtStopped;
         }
-        log.Debug($"Q{Id} found {answers.Count} answers, visited {visited.Count} peers, failed {failedConnects}");
+        log.Debug($"Q{Id} found {_answers.Count} answers, visited {_visited.Count} peers, failed {_failedConnects}");
     }
 
     private void OnDhtStopped(object sender, EventArgs e)
     {
         log.Debug($"Q{Id} cancelled because DHT stopped.");
-        runningQuery.Cancel();
+        _runningQuery.Cancel();
     }
 
     /// <summary>
@@ -156,12 +156,12 @@ public class DistributedQuery<T> where T : class
     {
         int pass = 0;
         int waits = 20;
-        while (!runningQuery.IsCancellationRequested && waits > 0)
+        while (!_runningQuery.IsCancellationRequested && waits > 0)
         {
             // Get the nearest peer that has not been visited.
             var peer = Dht.RoutingTable
                 .NearestPeers(QueryKey)
-                .FirstOrDefault(p => !visited.ContainsKey(p));
+                .FirstOrDefault(p => !_visited.ContainsKey(p));
             if (peer == null)
             {
                 --waits;
@@ -169,24 +169,24 @@ public class DistributedQuery<T> where T : class
                 continue;
             }
 
-            if (!visited.TryAdd(peer, peer))
+            if (!_visited.TryAdd(peer, peer))
             {
                 continue;
             }
             ++pass;
 
             // Ask the nearest peer.
-            await askCount.WaitAsync(runningQuery.Token).ConfigureAwait(false);
+            await askCount.WaitAsync(_runningQuery.Token).ConfigureAwait(false);
             var start = DateTime.Now;
             log.Debug($"Q{Id}.{taskId}.{pass} ask {peer}");
             try
             {
                 using (var timeout = new CancellationTokenSource(askTime))
-                using (var cts = CancellationTokenSource.CreateLinkedTokenSource(timeout.Token, runningQuery.Token))
+                using (var cts = CancellationTokenSource.CreateLinkedTokenSource(timeout.Token, _runningQuery.Token))
                 using (var stream = await Dht.Swarm.DialAsync(peer, Dht.ToString(), cts.Token).ConfigureAwait(false))
                 {
                     // Send the KAD query and get a response.
-                    ProtoBuf.Serializer.SerializeWithLengthPrefix(stream, queryMessage, PrefixStyle.Base128);
+                    Serializer.SerializeWithLengthPrefix(stream, _queryMessage, PrefixStyle.Base128);
                     await stream.FlushAsync(cts.Token).ConfigureAwait(false);
                     var response = await ProtoBufHelper.ReadMessageAsync<DhtMessage>(stream, cts.Token).ConfigureAwait(false);
 
@@ -199,7 +199,7 @@ public class DistributedQuery<T> where T : class
             }
             catch (Exception e)
             {
-                Interlocked.Increment(ref failedConnects);
+                Interlocked.Increment(ref _failedConnects);
                 var time = DateTime.Now - start;
                 log.Warn($"Q{Id}.{taskId}.{pass} failed ({time.TotalMilliseconds} ms) - {e.Message}");
                 // eat it
@@ -228,7 +228,7 @@ public class DistributedQuery<T> where T : class
                 {
                     // Only unique answers
                     var answer = p as T;
-                    if (!answers.ContainsKey(answer))
+                    if (!_answers.ContainsKey(answer))
                     {
                         AddAnswer(answer);
                     }
@@ -269,14 +269,14 @@ public class DistributedQuery<T> where T : class
     {
         if (answer == null)
             return;
-        if (runningQuery?.IsCancellationRequested == true)
+        if (_runningQuery?.IsCancellationRequested == true)
             return;
 
-        if (answers.TryAdd(answer, answer))
+        if (_answers.TryAdd(answer, answer))
         {
-            if (answers.Count >= AnswersNeeded && runningQuery?.IsCancellationRequested == false)
+            if (_answers.Count >= AnswersNeeded && _runningQuery?.IsCancellationRequested == false)
             {
-                runningQuery.Cancel(false);
+                _runningQuery.Cancel(false);
             }
         }
 

@@ -27,8 +27,8 @@ public class AutoDialer : IDisposable
     /// </summary>
     public const int DefaultMaxConnections = 21;
 
-    private readonly Swarm swarm;
-    private int pendingConnects;
+    private readonly Swarm _swarm;
+    private int _pendingConnects;
 
     /// <summary>
     ///   Creates a new instance of the <see cref="AutoDialer"/> class.
@@ -38,7 +38,7 @@ public class AutoDialer : IDisposable
     /// </param>
     public AutoDialer(Swarm swarm)
     {
-        this.swarm = swarm;
+        _swarm = swarm;
         swarm.PeerDiscovered += OnPeerDiscovered;
         swarm.PeerDisconnected += OnPeerDisconnected;
     }
@@ -54,8 +54,8 @@ public class AutoDialer : IDisposable
     {
         if (disposing)
         {
-            swarm.PeerDiscovered -= OnPeerDiscovered;
-            swarm.PeerDisconnected -= OnPeerDisconnected;
+            _swarm.PeerDiscovered -= OnPeerDiscovered;
+            _swarm.PeerDisconnected -= OnPeerDisconnected;
         }
     }
 
@@ -105,14 +105,14 @@ public class AutoDialer : IDisposable
     private async void OnPeerDiscovered(object sender, Peer peer)
 #pragma warning restore VSTHRD100 // Avoid async void methods
     {
-        var n = swarm.Manager.Connections.Count() + pendingConnects;
-        if (swarm.IsRunning && n < MinConnections)
+        var n = _swarm.Manager.Connections.Count() + _pendingConnects;
+        if (_swarm.IsRunning && n < MinConnections)
         {
-            Interlocked.Increment(ref pendingConnects);
+            Interlocked.Increment(ref _pendingConnects);
             log.Debug($"Dialing new {peer}");
             try
             {
-                await swarm.ConnectAsync(peer).ConfigureAwait(false);
+                await _swarm.ConnectAsync(peer).ConfigureAwait(false);
             }
             catch (Exception)
             {
@@ -120,7 +120,7 @@ public class AutoDialer : IDisposable
             }
             finally
             {
-                Interlocked.Decrement(ref pendingConnects);
+                Interlocked.Decrement(ref _pendingConnects);
             }
         }
     }
@@ -143,35 +143,35 @@ public class AutoDialer : IDisposable
     private async void OnPeerDisconnected(object sender, Peer disconnectedPeer)
 #pragma warning restore VSTHRD100 // Avoid async void methods
     {
-        var n = swarm.Manager.Connections.Count() + pendingConnects;
+        var n = _swarm.Manager.Connections.Count() + _pendingConnects;
 
         if (MaxConnections > 0) // use range
         {
             // check range
-            if (!swarm.IsRunning || (n > MinConnections && n <= MaxConnections))
+            if (!_swarm.IsRunning || (n > MinConnections && n <= MaxConnections))
                 return;
         }
         else // use minimum
         {
             //
-            if (!swarm.IsRunning || n >= MinConnections)
+            if (!_swarm.IsRunning || n >= MinConnections)
                 return;
         }
 
         // Find a random peer to connect with.
-        var peers = swarm.KnownPeers
-            .Where(p => p.ConnectedAddress == null && p != disconnectedPeer && swarm.IsAllowed(p) && !swarm.HasPendingConnection(p))
+        var peers = _swarm.KnownPeers
+            .Where(p => p.ConnectedAddress == null && p != disconnectedPeer && _swarm.IsAllowed(p) && !_swarm.HasPendingConnection(p))
             .ToArray();
         if (peers.Length == 0)
             return;
         var rng = new Random();
         var peer = peers[rng.Next(peers.Length)];
 
-        Interlocked.Increment(ref pendingConnects);
+        Interlocked.Increment(ref _pendingConnects);
         log.Debug($"Dialing {peer}");
         try
         {
-            await swarm.ConnectAsync(peer).ConfigureAwait(false);
+            await _swarm.ConnectAsync(peer).ConfigureAwait(false);
         }
         catch (Exception)
         {
@@ -179,7 +179,7 @@ public class AutoDialer : IDisposable
         }
         finally
         {
-            Interlocked.Decrement(ref pendingConnects);
+            Interlocked.Decrement(ref _pendingConnects);
         }
     }
 }

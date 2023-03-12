@@ -124,19 +124,19 @@ public class UdpTest
 
     class HelloServer : IDisposable
     {
-        CancellationTokenSource cs = new CancellationTokenSource(TimeSpan.FromSeconds(30));
+        CancellationTokenSource _cs = new CancellationTokenSource(TimeSpan.FromSeconds(30));
 
         public HelloServer()
         {
             var udp = new Udp();
-            Address = udp.Listen("/ip4/127.0.0.1", Handler, cs.Token);
+            Address = udp.Listen("/ip4/127.0.0.1", Handler, _cs.Token);
         }
 
         public MultiAddress Address { get; set; }
 
         public void Dispose()
         {
-            cs.Cancel();
+            _cs.Cancel();
         }
 
         void Handler(Stream stream, MultiAddress local, MultiAddress remote)

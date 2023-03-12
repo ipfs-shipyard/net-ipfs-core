@@ -65,12 +65,12 @@ public class PubSubApiTest
         }
     }
 
-    volatile int messageCount = 0;
+    volatile int _messageCount = 0;
 
     [TestMethod]
     public async Task Subscribe()
     {
-        messageCount = 0;
+        _messageCount = 0;
         var ipfs = TestFixture.Ipfs;
         var topic = "net-ipfs-http-client-test-" + Guid.NewGuid();
         var cs = new CancellationTokenSource();
@@ -78,12 +78,12 @@ public class PubSubApiTest
         {
             await ipfs.PubSub.SubscribeAsync(topic, msg =>
             {
-                Interlocked.Increment(ref messageCount);
+                Interlocked.Increment(ref _messageCount);
             }, cs.Token);
             await ipfs.PubSub.PublishAsync(topic, "hello world!");
 
             await Task.Delay(1000);
-            Assert.AreEqual(1, messageCount);
+            Assert.AreEqual(1, _messageCount);
         }
         finally
         {
@@ -94,7 +94,7 @@ public class PubSubApiTest
     [TestMethod]
     public async Task Subscribe_Mutiple_Messages()
     {
-        messageCount = 0;
+        _messageCount = 0;
         var messages = "hello world this is pubsub".Split();
         var ipfs = TestFixture.Ipfs;
         var topic = "net-ipfs-http-client-test-" + Guid.NewGuid();
@@ -103,7 +103,7 @@ public class PubSubApiTest
         {
             await ipfs.PubSub.SubscribeAsync(topic, msg =>
             {
-                Interlocked.Increment(ref messageCount);
+                Interlocked.Increment(ref _messageCount);
             }, cs.Token);
             foreach (var msg in messages)
             {
@@ -111,7 +111,7 @@ public class PubSubApiTest
             }
 
             await Task.Delay(1000);
-            Assert.AreEqual(messages.Length, messageCount);
+            Assert.AreEqual(messages.Length, _messageCount);
         }
         finally
         {
@@ -122,14 +122,14 @@ public class PubSubApiTest
     [TestMethod]
     public async Task Multiple_Subscribe_Multiple_Messages()
     {
-        messageCount = 0;
+        _messageCount = 0;
         var messages = "hello world this is pubsub".Split();
         var ipfs = TestFixture.Ipfs;
         var topic = "net-ipfs-http-client-test-" + Guid.NewGuid();
         var cs = new CancellationTokenSource();
         Action<IPublishedMessage> processMessage = (msg) =>
         {
-            Interlocked.Increment(ref messageCount);
+            Interlocked.Increment(ref _messageCount);
         };
         try
         {
@@ -141,7 +141,7 @@ public class PubSubApiTest
             }
 
             await Task.Delay(1000);
-            Assert.AreEqual(messages.Length * 2, messageCount);
+            Assert.AreEqual(messages.Length * 2, _messageCount);
         }
         finally
         {
@@ -149,27 +149,27 @@ public class PubSubApiTest
         }
     }
 
-    volatile int messageCount1 = 0;
+    volatile int _messageCount1 = 0;
 
     [TestMethod]
     public async Task Unsubscribe()
     {
-        messageCount1 = 0;
+        _messageCount1 = 0;
         var ipfs = TestFixture.Ipfs;
         var topic = "net-ipfs-http-client-test-" + Guid.NewGuid();
         var cs = new CancellationTokenSource();
         await ipfs.PubSub.SubscribeAsync(topic, msg =>
         {
-            Interlocked.Increment(ref messageCount1);
+            Interlocked.Increment(ref _messageCount1);
         }, cs.Token);
         await ipfs.PubSub.PublishAsync(topic, "hello world!");
         await Task.Delay(1000);
-        Assert.AreEqual(1, messageCount1);
+        Assert.AreEqual(1, _messageCount1);
 
         cs.Cancel();
         await ipfs.PubSub.PublishAsync(topic, "hello world!!!");
         await Task.Delay(1000);
-        Assert.AreEqual(1, messageCount1);
+        Assert.AreEqual(1, _messageCount1);
     }
 
     [TestMethod]

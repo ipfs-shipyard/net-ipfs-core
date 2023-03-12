@@ -8,7 +8,7 @@ namespace IpfsShipyard.Ipfs.Http
     [DataContract]
     public class Block : IDataBlock
     {
-        long? size;
+        long? _size;
 
         /// <inheritdoc />
         [DataMember]
@@ -33,15 +33,15 @@ namespace IpfsShipyard.Ipfs.Http
         {
             get
             {
-                if (size.HasValue)
+                if (_size.HasValue)
                 {
-                    return size.Value;
+                    return _size.Value;
                 }
                 return DataBytes.Length;
             }
             set
             {
-                size = value;
+                _size = value;
             }
         }
 

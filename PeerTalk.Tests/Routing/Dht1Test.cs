@@ -9,14 +9,14 @@ namespace IpfsShipyard.PeerTalk.Tests.Routing;
 [TestClass]
 public class Dht1Test
 {
-    Peer self = new Peer
+    Peer _self = new Peer
     {
         AgentVersion = "self",
         Id = "QmXK9VBxaXFuuT29AaPUTgW3jBWZ9JgLVZYdMYTHC6LLAH",
         PublicKey = "CAASXjBcMA0GCSqGSIb3DQEBAQUAA0sAMEgCQQCC5r4nQBtnd9qgjnG8fBN5+gnqIeWEIcUFUdCG4su/vrbQ1py8XGKNUBuDjkyTv25Gd3hlrtNJV3eOKZVSL8ePAgMBAAE="
     };
 
-    Peer other = new Peer
+    Peer _other = new Peer
     {
         AgentVersion = "other",
         Id = "QmdpwjdB94eNm2Lcvp9JqoCxswo3AKQqjLuNZyLixmCM1h",
@@ -29,7 +29,7 @@ public class Dht1Test
     [TestMethod]
     public async Task StoppedEventRaised()
     {
-        var swarm = new Swarm { LocalPeer = self };
+        var swarm = new Swarm { LocalPeer = _self };
         var dht = new Dht1 { Swarm = swarm };
         bool stopped = false;
         dht.Stopped += (s, e) => { stopped = true;  };
@@ -41,7 +41,7 @@ public class Dht1Test
     [TestMethod]
     public async Task SeedsRoutingTableFromSwarm()
     {
-        var swarm = new Swarm { LocalPeer = self };
+        var swarm = new Swarm { LocalPeer = _self };
         var peer = swarm.RegisterPeerAddress("/ip4/127.0.0.1/tcp/4001/ipfs/QmdpwjdB94eNm2Lcvp9JqoCxswo3AKQqjLuNZyLixmCM1h");
         var dht = new Dht1 { Swarm = swarm };
         await dht.StartAsync();
@@ -58,7 +58,7 @@ public class Dht1Test
     [TestMethod]
     public async Task AddDiscoveredPeerToRoutingTable()
     {
-        var swarm = new Swarm { LocalPeer = self };
+        var swarm = new Swarm { LocalPeer = _self };
         var dht = new Dht1 { Swarm = swarm };
         await dht.StartAsync();
         try
@@ -75,7 +75,7 @@ public class Dht1Test
     [TestMethod]
     public async Task RemovesPeerFromRoutingTable()
     {
-        var swarm = new Swarm { LocalPeer = self };
+        var swarm = new Swarm { LocalPeer = _self };
         var dht = new Dht1 { Swarm = swarm };
         await dht.StartAsync();
         try
@@ -95,7 +95,7 @@ public class Dht1Test
     [TestMethod]
     public async Task ProcessFindNodeMessage_Self()
     {
-        var swarm = new Swarm { LocalPeer = self };
+        var swarm = new Swarm { LocalPeer = _self };
         var dht = new Dht1 { Swarm = swarm };
         await dht.StartAsync();
         try
@@ -103,13 +103,13 @@ public class Dht1Test
             var request = new DhtMessage
             {
                 Type = MessageType.FindNode,
-                Key = self.Id.ToArray()
+                Key = _self.Id.ToArray()
             };
             var response = dht.ProcessFindNode(request, new DhtMessage());
             Assert.AreEqual(1, response.CloserPeers.Length);
             var ok = response.CloserPeers[0].TryToPeer(out Peer found);
             Assert.IsTrue(ok);
-            Assert.AreEqual(self, found);
+            Assert.AreEqual(_self, found);
         }
         finally
         {
@@ -120,23 +120,23 @@ public class Dht1Test
     [TestMethod]
     public async Task ProcessFindNodeMessage_InRoutingTable()
     {
-        var swarm = new Swarm { LocalPeer = self };
+        var swarm = new Swarm { LocalPeer = _self };
         var dht = new Dht1 { Swarm = swarm };
         await dht.StartAsync();
         try
         {
-            dht.RoutingTable.Add(other);
+            dht.RoutingTable.Add(_other);
             var request = new DhtMessage
             {
                 Type = MessageType.FindNode,
-                Key = other.Id.ToArray()
+                Key = _other.Id.ToArray()
             };
             var response = dht.ProcessFindNode(request, new DhtMessage());
             Assert.AreEqual(1, response.CloserPeers.Length);
             var ok = response.CloserPeers[0].TryToPeer(out Peer found);
             Assert.IsTrue(ok);
-            Assert.AreEqual(other, found);
-            CollectionAssert.AreEqual(other.Addresses.ToArray(), 
+            Assert.AreEqual(_other, found);
+            CollectionAssert.AreEqual(_other.Addresses.ToArray(), 
                 found.Addresses.Select(a => a.WithoutPeerId()).ToArray());
         }
         finally
@@ -148,7 +148,7 @@ public class Dht1Test
     [TestMethod]
     public async Task ProcessFindNodeMessage_InSwarm()
     {
-        var swarm = new Swarm { LocalPeer = self };
+        var swarm = new Swarm { LocalPeer = _self };
         var other = swarm.RegisterPeerAddress("/ip4/127.0.0.1/tcp/4001/ipfs/QmdpwjdB94eNm2Lcvp9JqoCxswo3AKQqjLuNZyLixmCM1h");
         var dht = new Dht1 { Swarm = swarm };
         await dht.StartAsync();
@@ -178,7 +178,7 @@ public class Dht1Test
     [TestMethod]
     public async Task ProcessFindNodeMessage_Closest()
     {
-        var swarm = new Swarm { LocalPeer = self };
+        var swarm = new Swarm { LocalPeer = _self };
         swarm.RegisterPeerAddress("/ip4/127.0.0.1/tcp/4001/ipfs/QmdpwjdB94eNm2Lcvp9JqoCxswo3AKQqjLuNZyLixmCM1a");
         swarm.RegisterPeerAddress("/ip4/127.0.0.2/tcp/4001/ipfs/QmdpwjdB94eNm2Lcvp9JqoCxswo3AKQqjLuNZyLixmCM1b");
         swarm.RegisterPeerAddress("/ip4/127.0.0.3/tcp/4001/ipfs/QmdpwjdB94eNm2Lcvp9JqoCxswo3AKQqjLuNZyLixmCM1c");
@@ -188,11 +188,11 @@ public class Dht1Test
         await dht.StartAsync();
         try
         {
-            dht.RoutingTable.Add(other);
+            dht.RoutingTable.Add(_other);
             var request = new DhtMessage
             {
                 Type = MessageType.FindNode,
-                Key = other.Id.ToArray()
+                Key = _other.Id.ToArray()
             };
             var response = dht.ProcessFindNode(request, new DhtMessage());
             Assert.AreEqual(3, response.CloserPeers.Length);
@@ -206,7 +206,7 @@ public class Dht1Test
     [TestMethod]
     public async Task ProcessFindNodeMessage_BadNodeId()
     {
-        var swarm = new Swarm { LocalPeer = self };
+        var swarm = new Swarm { LocalPeer = _self };
         swarm.RegisterPeerAddress("/ip4/127.0.0.1/tcp/4001/ipfs/QmdpwjdB94eNm2Lcvp9JqoCxswo3AKQqjLuNZyLixmCM1a");
         swarm.RegisterPeerAddress("/ip4/127.0.0.2/tcp/4001/ipfs/QmdpwjdB94eNm2Lcvp9JqoCxswo3AKQqjLuNZyLixmCM1b");
         swarm.RegisterPeerAddress("/ip4/127.0.0.3/tcp/4001/ipfs/QmdpwjdB94eNm2Lcvp9JqoCxswo3AKQqjLuNZyLixmCM1c");
@@ -216,7 +216,7 @@ public class Dht1Test
         await dht.StartAsync();
         try
         {
-            dht.RoutingTable.Add(other);
+            dht.RoutingTable.Add(_other);
             var request = new DhtMessage
             {
                 Type = MessageType.FindNode,
@@ -234,7 +234,7 @@ public class Dht1Test
     [TestMethod]
     public async Task ProcessFindNodeMessage_NoOtherPeers()
     {
-        var swarm = new Swarm { LocalPeer = self };
+        var swarm = new Swarm { LocalPeer = _self };
         var dht = new Dht1 { Swarm = swarm };
         await dht.StartAsync();
         try
@@ -256,12 +256,12 @@ public class Dht1Test
     [TestMethod]
     public async Task ProcessGetProvidersMessage_HasCloserPeers()
     {
-        var swarm = new Swarm { LocalPeer = self };
+        var swarm = new Swarm { LocalPeer = _self };
         var dht = new Dht1 { Swarm = swarm };
         await dht.StartAsync();
         try
         {
-            dht.RoutingTable.Add(other);
+            dht.RoutingTable.Add(_other);
             Cid cid = "zBunRGrmCGokA1oMESGGTfrtcMFsVA8aEtcNzM54akPWXF97uXCqTjF3GZ9v8YzxHrG66J8QhtPFWwZebRZ2zeUEELu67";
             var request = new DhtMessage
             {
@@ -280,14 +280,14 @@ public class Dht1Test
     [TestMethod]
     public async Task ProcessGetProvidersMessage_HasProvider()
     {
-        var swarm = new Swarm { LocalPeer = self };
+        var swarm = new Swarm { LocalPeer = _self };
         var dht = new Dht1 { Swarm = swarm };
         await dht.StartAsync();
         try
         {
-            swarm.RegisterPeer(other);
+            swarm.RegisterPeer(_other);
             Cid cid = "zBunRGrmCGokA1oMESGGTfrtcMFsVA8aEtcNzM54akPWXF97uXCqTjF3GZ9v8YzxHrG66J8QhtPFWwZebRZ2zeUEELu67";
-            dht.ContentRouter.Add(cid, other.Id);
+            dht.ContentRouter.Add(cid, _other.Id);
             var request = new DhtMessage
             {
                 Type = MessageType.GetProviders,
@@ -296,7 +296,7 @@ public class Dht1Test
             var response = dht.ProcessGetProviders(request, new DhtMessage());
             Assert.AreEqual(1, response.ProviderPeers.Length);
             response.ProviderPeers[0].TryToPeer(out Peer found);
-            Assert.AreEqual(other, found);
+            Assert.AreEqual(_other, found);
             Assert.AreNotEqual(0, found.Addresses.Count());
         }
         finally
@@ -308,7 +308,7 @@ public class Dht1Test
     [TestMethod]
     public async Task ProcessAddProviderMessage()
     {
-        var swarm = new Swarm { LocalPeer = self };
+        var swarm = new Swarm { LocalPeer = _self };
         var dht = new Dht1 { Swarm = swarm };
         await dht.StartAsync();
         try
@@ -322,18 +322,18 @@ public class Dht1Test
                 {
                     new DhtPeerMessage
                     {
-                        Id = other.Id.ToArray(),
-                        Addresses = other.Addresses.Select(a => a.ToArray()).ToArray()
+                        Id = _other.Id.ToArray(),
+                        Addresses = _other.Addresses.Select(a => a.ToArray()).ToArray()
                     }
                 }
             };
-            var response = dht.ProcessAddProvider(other, request, new DhtMessage());
+            var response = dht.ProcessAddProvider(_other, request, new DhtMessage());
             Assert.IsNull(response);
             var providers = dht.ContentRouter.Get(cid).ToArray();
             Assert.AreEqual(1, providers.Length);
-            Assert.AreEqual(other.Id, providers[0]);
+            Assert.AreEqual(_other.Id, providers[0]);
 
-            var provider = swarm.KnownPeers.Single(p => p == other);
+            var provider = swarm.KnownPeers.Single(p => p == _other);
             Assert.AreNotEqual(0, provider.Addresses.Count());
         }
         finally
@@ -346,7 +346,7 @@ public class Dht1Test
     public async Task QueryIsCancelled_WhenDhtStops()
     {
         var unknownPeer = new MultiHash("QmdpwjdB94eNm2Lcvp9JqoCxswo3AKQqjLuNZyLixmCxxx");
-        var swarm = new Swarm { LocalPeer = self };
+        var swarm = new Swarm { LocalPeer = _self };
         swarm.RegisterPeerAddress("/ip4/178.62.158.247/tcp/4001/ipfs/QmSoLer265NRgSp2LA3dPaeykiS1J6DifTC88f5uVQKNAd");
         swarm.RegisterPeerAddress("/ip4/104.236.76.40/tcp/4001/ipfs/QmSoLV4Bbm51jM9C4gDYZQ9Cy3U6aXMJDAbzgu2fzaDs64");
         var dht = new Dht1 { Swarm = swarm };
@@ -360,7 +360,7 @@ public class Dht1Test
     public async Task FindPeer_NoPeers()
     {
         var unknownPeer = new MultiHash("QmdpwjdB94eNm2Lcvp9JqoCxswo3AKQqjLuNZyLixmCxxx");
-        var swarm = new Swarm { LocalPeer = self };
+        var swarm = new Swarm { LocalPeer = _self };
         var dht = new Dht1 { Swarm = swarm };
         await dht.StartAsync();
 
@@ -379,15 +379,15 @@ public class Dht1Test
     public async Task FindPeer_Closest()
     {
         var unknownPeer = new MultiHash("QmdpwjdB94eNm2Lcvp9JqoCxswo3AKQqjLuNZyLixmCxxx");
-        var swarm = new Swarm { LocalPeer = self };
+        var swarm = new Swarm { LocalPeer = _self };
         await swarm.StartAsync();
         var dht = new Dht1 { Swarm = swarm };
         await dht.StartAsync();
-        dht.RoutingTable.Add(other);
+        dht.RoutingTable.Add(_other);
         try
         {
             var peer = await dht.FindPeerAsync(unknownPeer);
-            Assert.AreEqual(other, peer);
+            Assert.AreEqual(_other, peer);
         }
         finally
         {
@@ -400,16 +400,16 @@ public class Dht1Test
     public async Task Add_FindProviders()
     {
         Cid cid = "zBunRGrmCGokA1oMESGGTfrtcMFsVA8aEtcNzM54akPWXF97uXCqTjF3GZ9v8YzxHrG66J8QhtPFWwZebRZ2zeUEELu67";
-        var swarm = new Swarm { LocalPeer = self };
+        var swarm = new Swarm { LocalPeer = _self };
         var dht = new Dht1 { Swarm = swarm };
         await dht.StartAsync();
 
         try
         {
-            dht.ContentRouter.Add(cid, other.Id);
+            dht.ContentRouter.Add(cid, _other.Id);
             var peers = (await dht.FindProvidersAsync(cid, limit: 1)).ToArray();
             Assert.AreEqual(1, peers.Length);
-            Assert.AreEqual(other, peers[0]);
+            Assert.AreEqual(_other, peers[0]);
         }
         finally
         {
@@ -421,7 +421,7 @@ public class Dht1Test
     public async Task Provide()
     {
         Cid cid = "zBunRGrmCGokA1oMESGGTfrtcMFsVA8aEtcNzM54akPWXF97uXCqTjF3GZ9v8YzxHrG66J8QhtPFWwZebRZ2zeUEELu67";
-        var swarm = new Swarm { LocalPeer = self };
+        var swarm = new Swarm { LocalPeer = _self };
         var dht = new Dht1 { Swarm = swarm };
         await dht.StartAsync();
 
@@ -433,7 +433,7 @@ public class Dht1Test
             await dht.ProvideAsync(cid, advertise: true);
             var peers = (await dht.FindProvidersAsync(cid, limit: 1)).ToArray();
             Assert.AreEqual(1, peers.Length);
-            Assert.AreEqual(self, peers[0]);
+            Assert.AreEqual(_self, peers[0]);
         }
         finally
         {

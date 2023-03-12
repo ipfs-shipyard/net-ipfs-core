@@ -17,9 +17,9 @@ namespace IpfsShipyard.Ipfs.Core;
 [DataContract]
 public class DagNode : IMerkleNode<IMerkleLink>
 {
-    Cid id;
-    string hashAlgorithm = MultiHash.DefaultAlgorithmName;
-    long? size;
+    Cid _id;
+    string _hashAlgorithm = MultiHash.DefaultAlgorithmName;
+    long? _size;
 
     /// <summary>
     ///   Create a new instance of a <see cref="DagNode"/> with the specified
@@ -37,10 +37,10 @@ public class DagNode : IMerkleNode<IMerkleLink>
     /// </param>
     public DagNode(byte[] data, IEnumerable<IMerkleLink> links = null, string hashAlgorithm = MultiHash.DefaultAlgorithmName)
     {
-        this.DataBytes = data ?? (new byte[0]);
-        this.Links = (links ?? (new DagLink[0]))
+        DataBytes = data ?? (new byte[0]);
+        Links = (links ?? (new DagLink[0]))
             .OrderBy(link => link.Name ?? "");
-        this.hashAlgorithm = hashAlgorithm;
+        _hashAlgorithm = hashAlgorithm;
     }
 
     /// <summary>
@@ -94,11 +94,11 @@ public class DagNode : IMerkleNode<IMerkleLink>
     {
         get
         {
-            if (!size.HasValue)
+            if (!_size.HasValue)
             {
                 ComputeSize();
             }
-            return size.Value;
+            return _size.Value;
         }
     }
 
@@ -108,18 +108,18 @@ public class DagNode : IMerkleNode<IMerkleLink>
     {
         get
         {
-            if (id == null)
+            if (_id == null)
             {
                 ComputeHash();
             }
-            return id;
+            return _id;
         }
         set
         {
-            id = value;
-            if (id != null)
+            _id = value;
+            if (_id != null)
             {
-                hashAlgorithm = id.Hash.Algorithm.Name;
+                _hashAlgorithm = _id.Hash.Algorithm.Name;
             }
         }
     }
@@ -164,7 +164,7 @@ public class DagNode : IMerkleNode<IMerkleLink>
     public DagNode AddLinks(IEnumerable<IMerkleLink> links)
     {
         var all = Links.Union(links);
-        return new DagNode(DataBytes, all, hashAlgorithm);
+        return new DagNode(DataBytes, all, _hashAlgorithm);
     }
 
     /// <summary>
@@ -210,7 +210,7 @@ public class DagNode : IMerkleNode<IMerkleLink>
     {
         var ignore = links.ToLookup(link => link.Id);
         var some = Links.Where(link => !ignore.Contains(link.Id));
-        return new DagNode(DataBytes, some, hashAlgorithm);
+        return new DagNode(DataBytes, some, _hashAlgorithm);
     }
 
     /// <summary>
@@ -316,9 +316,9 @@ public class DagNode : IMerkleNode<IMerkleLink>
         using (var ms = new MemoryStream())
         {
             Write(ms);
-            size = ms.Position;
+            _size = ms.Position;
             ms.Position = 0;
-            id = MultiHash.ComputeHash(ms, hashAlgorithm);
+            _id = MultiHash.ComputeHash(ms, _hashAlgorithm);
         }
     }
 
@@ -327,7 +327,7 @@ public class DagNode : IMerkleNode<IMerkleLink>
         using (var ms = new MemoryStream())
         {
             Write(ms);
-            size = ms.Position;
+            _size = ms.Position;
         }
     }
 }

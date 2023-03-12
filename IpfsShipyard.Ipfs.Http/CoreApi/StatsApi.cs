@@ -10,21 +10,21 @@ namespace IpfsShipyard.Ipfs.Http.CoreApi
 
     class StatApi : IStatsApi
     {
-        private IpfsClient ipfs;
+        private IpfsClient _ipfs;
 
         internal StatApi(IpfsClient ipfs)
         {
-            this.ipfs = ipfs;
+            _ipfs = ipfs;
         }
 
         public Task<BandwidthData> BandwidthAsync(CancellationToken cancel = default(CancellationToken))
         {
-            return ipfs.DoCommandAsync<BandwidthData>("stats/bw", cancel);
+            return _ipfs.DoCommandAsync<BandwidthData>("stats/bw", cancel);
         }
 
         public async Task<BitswapData> BitswapAsync(CancellationToken cancel = default(CancellationToken))
         {
-            var json = await ipfs.DoCommandAsync("stats/bitswap", cancel);
+            var json = await _ipfs.DoCommandAsync("stats/bitswap", cancel);
             var stat = JObject.Parse(json);
             return new BitswapData
             {
@@ -42,7 +42,7 @@ namespace IpfsShipyard.Ipfs.Http.CoreApi
 
         public Task<RepositoryData> RepositoryAsync(CancellationToken cancel = default(CancellationToken))
         {
-            return ipfs.DoCommandAsync<RepositoryData>("stats/repo", cancel);
+            return _ipfs.DoCommandAsync<RepositoryData>("stats/repo", cancel);
         }
 
 

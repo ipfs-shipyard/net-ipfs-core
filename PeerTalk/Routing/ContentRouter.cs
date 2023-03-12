@@ -10,7 +10,7 @@ namespace IpfsShipyard.PeerTalk.Routing;
 ///   Manages a list of content that is provided by multiple peers.
 /// </summary>
 /// <remarks>
-///   A peer is expected to provide content for at least <see cref="ProviderTTL"/>.
+///   A peer is expected to provide content for at least <see cref="ProviderTtl"/>.
 ///   After this expires the provider is removed from the list.
 /// </remarks>
 public class ContentRouter : IDisposable
@@ -28,7 +28,7 @@ public class ContentRouter : IDisposable
         public MultiHash PeerId { get; set; }
     }
 
-    private readonly ConcurrentDictionary<string, List<ProviderInfo>> content = new();
+    private readonly ConcurrentDictionary<string, List<ProviderInfo>> _content = new();
 
     private string Key(Cid cid) => "/providers/" + cid.Hash.ToBase32();
 
@@ -38,7 +38,7 @@ public class ContentRouter : IDisposable
     /// <value>
     ///   Defaults to 24 hours (1 day).
     /// </value>
-    public TimeSpan ProviderTTL { get; set; } = TimeSpan.FromHours(24);
+    public TimeSpan ProviderTtl { get; set; } = TimeSpan.FromHours(24);
 
     /// <summary>
     ///    Adds the <see cref="Cid"/> and <see cref="Peer"/> to the content routing system.
@@ -72,11 +72,11 @@ public class ContentRouter : IDisposable
     {
         var pi = new ProviderInfo
         {
-            Expiry = now + ProviderTTL,
+            Expiry = now + ProviderTtl,
             PeerId = provider
         };
 
-        content.AddOrUpdate(
+        _content.AddOrUpdate(
             Key(cid),
             (_) => new List<ProviderInfo> { pi },
             (_, providers) =>
@@ -106,7 +106,7 @@ public class ContentRouter : IDisposable
     /// </returns>
     public IEnumerable<MultiHash> Get(Cid cid)
     {
-        if (!content.TryGetValue(Key(cid), out List<ProviderInfo> providers))
+        if (!_content.TryGetValue(Key(cid), out List<ProviderInfo> providers))
         {
             return Enumerable.Empty<MultiHash>();
         }

@@ -20,10 +20,10 @@ public class StatsStream : Stream
         RateOut = 1024
     };
 
-    private Stream stream;
-    private long bytesRead;
-    private long bytesWritten;
-    private DateTime lastUsed;
+    private Stream _stream;
+    private long _bytesRead;
+    private long _bytesWritten;
+    private DateTime _lastUsed;
 
     static StatsStream()
     {
@@ -46,60 +46,60 @@ public class StatsStream : Stream
     /// </summary>
     public StatsStream(Stream stream)
     {
-        this.stream = stream;
+        _stream = stream;
     }
 
     /// <summary>
     ///   Total number of bytes read on the stream.
     /// </summary>
-    public long BytesRead => bytesRead;
+    public long BytesRead => _bytesRead;
 
     /// <summary>
     ///   Total number of byte written to the stream.
     /// </summary>
-    public long BytesWritten => bytesWritten;
+    public long BytesWritten => _bytesWritten;
 
     /// <summary>
     ///   The last time a write or read occured.
     /// </summary>
-    public DateTime LastUsed => lastUsed;
+    public DateTime LastUsed => _lastUsed;
 
     /// <inheritdoc />
-    public override bool CanRead => stream.CanRead;
+    public override bool CanRead => _stream.CanRead;
 
     /// <inheritdoc />
-    public override bool CanSeek => stream.CanSeek;
+    public override bool CanSeek => _stream.CanSeek;
 
     /// <inheritdoc />
-    public override bool CanWrite => stream.CanWrite;
+    public override bool CanWrite => _stream.CanWrite;
 
     /// <inheritdoc />
-    public override long Length => stream.Length;
+    public override long Length => _stream.Length;
 
     /// <inheritdoc />
-    public override bool CanTimeout => stream.CanTimeout;
+    public override bool CanTimeout => _stream.CanTimeout;
 
     /// <inheritdoc />
-    public override int ReadTimeout { get => stream.ReadTimeout; set => stream.ReadTimeout = value; }
+    public override int ReadTimeout { get => _stream.ReadTimeout; set => _stream.ReadTimeout = value; }
 
     /// <inheritdoc />
-    public override long Position { get => stream.Position; set => stream.Position = value; }
+    public override long Position { get => _stream.Position; set => _stream.Position = value; }
 
     /// <inheritdoc />
-    public override int WriteTimeout { get => stream.WriteTimeout; set => stream.WriteTimeout = value; }
+    public override int WriteTimeout { get => _stream.WriteTimeout; set => _stream.WriteTimeout = value; }
 
     /// <inheritdoc />
     public override void Flush()
     {
-        stream.Flush();
+        _stream.Flush();
     }
 
     /// <inheritdoc />
     public override int Read(byte[] buffer, int offset, int count)
     {
-        var n = stream.Read(buffer, offset, count);
-        bytesRead += n;
-        lastUsed = DateTime.Now;
+        var n = _stream.Read(buffer, offset, count);
+        _bytesRead += n;
+        _lastUsed = DateTime.Now;
         if (n > 0)
         {
             //lock (AllBandwidth)
@@ -114,21 +114,21 @@ public class StatsStream : Stream
     /// <inheritdoc />
     public override long Seek(long offset, SeekOrigin origin)
     {
-        return stream.Seek(offset, origin);
+        return _stream.Seek(offset, origin);
     }
 
     /// <inheritdoc />
     public override void SetLength(long value)
     {
-        stream.SetLength(value);
+        _stream.SetLength(value);
     }
 
     /// <inheritdoc />
     public override void Write(byte[] buffer, int offset, int count)
     {
-        stream.Write(buffer, offset, count);
-        bytesWritten += count;
-        lastUsed = DateTime.Now;
+        _stream.Write(buffer, offset, count);
+        _bytesWritten += count;
+        _lastUsed = DateTime.Now;
         if (count > 0)
         {
             //lock (AllBandwidth)
@@ -144,7 +144,7 @@ public class StatsStream : Stream
     {
         if (disposing)
         {
-            stream.Dispose();
+            _stream.Dispose();
         }
         base.Dispose(disposing);
     }
@@ -152,7 +152,7 @@ public class StatsStream : Stream
     /// <inheritdoc />
     public override Task FlushAsync(CancellationToken cancellationToken)
     {
-        return stream.FlushAsync(cancellationToken);
+        return _stream.FlushAsync(cancellationToken);
     }
 
     /// <inheritdoc />
@@ -160,9 +160,9 @@ public class StatsStream : Stream
     {
         try
         {
-            var n = await stream.ReadAsync(buffer.AsMemory(offset, count), cancellationToken).ConfigureAwait(false);
-            bytesRead += n;
-            lastUsed = DateTime.Now;
+            var n = await _stream.ReadAsync(buffer.AsMemory(offset, count), cancellationToken).ConfigureAwait(false);
+            _bytesRead += n;
+            _lastUsed = DateTime.Now;
             if (n > 0)
             {
                 //lock (AllBandwidth)
@@ -185,9 +185,9 @@ public class StatsStream : Stream
     {
         try
         {
-            await stream.WriteAsync(buffer.AsMemory(offset, count), cancellationToken).ConfigureAwait(false);
-            bytesWritten += count;
-            lastUsed = DateTime.Now;
+            await _stream.WriteAsync(buffer.AsMemory(offset, count), cancellationToken).ConfigureAwait(false);
+            _bytesWritten += count;
+            _lastUsed = DateTime.Now;
             if (count > 0)
             {
                 //lock (AllBandwidth)
@@ -206,26 +206,26 @@ public class StatsStream : Stream
     /// <inheritdoc />
     public override int ReadByte()
     {
-        var n = stream.ReadByte();
+        var n = _stream.ReadByte();
         if (n > -1)
         {
-            ++bytesRead;
+            ++_bytesRead;
             //lock (AllBandwidth)
             {
                 ++AllBandwidth.TotalIn;
                 ++AllBandwidth.RateIn;
             }
         }
-        lastUsed = DateTime.Now;
+        _lastUsed = DateTime.Now;
         return n;
     }
 
     /// <inheritdoc />
     public override void WriteByte(byte value)
     {
-        stream.WriteByte(value);
-        ++bytesWritten;
-        lastUsed = DateTime.Now;
+        _stream.WriteByte(value);
+        ++_bytesWritten;
+        _lastUsed = DateTime.Now;
         //lock (AllBandwidth)
         {
             ++AllBandwidth.TotalOut;

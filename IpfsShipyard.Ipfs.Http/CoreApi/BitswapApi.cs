@@ -10,21 +10,21 @@ namespace IpfsShipyard.Ipfs.Http.CoreApi
 {
     class BitswapApi : IBitswapApi
     {
-        IpfsClient ipfs;
+        IpfsClient _ipfs;
 
         internal BitswapApi(IpfsClient ipfs)
         {
-            this.ipfs = ipfs;
+            _ipfs = ipfs;
         }
 
         public Task<IDataBlock> GetAsync(Cid id, CancellationToken cancel = default(CancellationToken))
         {
-            return ipfs.Block.GetAsync(id, cancel);
+            return _ipfs.Block.GetAsync(id, cancel);
         }
 
         public async Task<IEnumerable<Cid>> WantsAsync(MultiHash peer = null, CancellationToken cancel = default(CancellationToken))
         {
-            var json = await ipfs.DoCommandAsync("bitswap/wantlist", cancel, peer?.ToString());
+            var json = await _ipfs.DoCommandAsync("bitswap/wantlist", cancel, peer?.ToString());
             var keys = (JArray)(JObject.Parse(json)["Keys"]);
             // https://github.com/ipfs/go-ipfs/issues/5077
             return keys
@@ -39,12 +39,12 @@ namespace IpfsShipyard.Ipfs.Http.CoreApi
 
         public async Task UnwantAsync(Cid id, CancellationToken cancel = default(CancellationToken))
         {
-            await ipfs.DoCommandAsync("bitswap/unwant", cancel, id);
+            await _ipfs.DoCommandAsync("bitswap/unwant", cancel, id);
         }
 
         public async Task<BitswapLedger> LedgerAsync(Peer peer, CancellationToken cancel = default(CancellationToken))
         {
-            var json = await ipfs.DoCommandAsync("bitswap/ledger", cancel, peer.Id.ToString());
+            var json = await _ipfs.DoCommandAsync("bitswap/ledger", cancel, peer.Id.ToString());
             var o = JObject.Parse(json);
             return new BitswapLedger
             {

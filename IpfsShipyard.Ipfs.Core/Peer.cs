@@ -11,8 +11,8 @@ namespace IpfsShipyard.Ipfs.Core;
 /// </remarks>
 public class Peer : IEquatable<Peer>
 {
-    static MultiAddress[] noAddress = new MultiAddress[0];
-    const string unknown = "unknown/0.0";
+    static MultiAddress[] _noAddress = new MultiAddress[0];
+    const string Unknown = "unknown/0.0";
 
     /// <summary>
     ///   Universally unique identifier.
@@ -43,7 +43,7 @@ public class Peer : IEquatable<Peer>
     /// <value>
     ///   Where the peer can be found.  The default is an empty sequence.
     /// </value>
-    public IEnumerable<MultiAddress> Addresses { get; set; } = noAddress;
+    public IEnumerable<MultiAddress> Addresses { get; set; } = _noAddress;
 
     /// <summary>
     ///   The name and version of the IPFS software.
@@ -55,7 +55,7 @@ public class Peer : IEquatable<Peer>
     ///   There is no specification that describes the agent version string.  The default
     ///   is "unknown/0.0".
     /// </remarks>
-    public string AgentVersion { get; set; } = unknown;
+    public string AgentVersion { get; set; } = Unknown;
 
     /// <summary>
     ///  The name and version of the supported IPFS protocol.
@@ -67,7 +67,7 @@ public class Peer : IEquatable<Peer>
     ///   There is no specification that describes the protocol version string. The default
     ///   is "unknown/0.0".
     /// </remarks>
-    public string ProtocolVersion { get; set; } = unknown;
+    public string ProtocolVersion { get; set; } = Unknown;
 
     /// <summary>
     ///   The <see cref="MultiAddress"/> that the peer is connected on.
@@ -117,13 +117,13 @@ public class Peer : IEquatable<Peer>
         var that = obj as Peer;
         return (that == null)
             ? false
-            : this.Equals(that);
+            : Equals(that);
     }
 
     /// <inheritdoc />
     public bool Equals(Peer that)
     {
-        return this.Id == that.Id;
+        return Id == that.Id;
     }
 
     /// <summary>
@@ -131,7 +131,7 @@ public class Peer : IEquatable<Peer>
     /// </summary>
     public static bool operator ==(Peer a, Peer b)
     {
-        if (object.ReferenceEquals(a, b)) return true;
+        if (ReferenceEquals(a, b)) return true;
         if (a is null) return false;
         if (b is null) return false;
 

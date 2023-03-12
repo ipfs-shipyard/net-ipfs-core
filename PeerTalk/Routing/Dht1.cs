@@ -99,7 +99,7 @@ public class Dht1 : IPeerProtocol, IService, IPeerRouting, IContentRouting
             }
             if (response != null)
             {
-                ProtoBuf.Serializer.SerializeWithLengthPrefix(stream, response, PrefixStyle.Base128);
+                Serializer.SerializeWithLengthPrefix(stream, response, PrefixStyle.Base128);
                 await stream.FlushAsync(cancel).ConfigureAwait(false);
             }
         }
@@ -187,7 +187,7 @@ public class Dht1 : IPeerProtocol, IService, IPeerRouting, IContentRouting
     /// <inheritdoc />
     public Task ProvideAsync(Cid cid, bool advertise = true, CancellationToken cancel = default)
     {
-        ContentRouter.Add(cid, this.Swarm.LocalPeer.Id);
+        ContentRouter.Add(cid, Swarm.LocalPeer.Id);
         if (advertise)
         {
             Advertise(cid);
@@ -276,9 +276,9 @@ public class Dht1 : IPeerProtocol, IService, IPeerRouting, IContentRouting
             {
                 try
                 {
-                    using (var stream = await Swarm.DialAsync(peer, this.ToString()))
+                    using (var stream = await Swarm.DialAsync(peer, ToString()))
                     {
-                        ProtoBuf.Serializer.SerializeWithLengthPrefix(stream, message, PrefixStyle.Base128);
+                        Serializer.SerializeWithLengthPrefix(stream, message, PrefixStyle.Base128);
                         await stream.FlushAsync();
                     }
                     if (--advertsNeeded == 0)

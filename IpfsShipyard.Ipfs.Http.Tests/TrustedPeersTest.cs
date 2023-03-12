@@ -6,7 +6,7 @@ namespace IpfsShipyard.Ipfs.Http.Tests;
 
 public partial class IpfsClientTest
 {
-    private MultiAddress newTrustedPeer = new MultiAddress("/ip4/25.196.147.100/tcp/4001/ipfs/QmaMqSwWShsPg2RbredZtoneFjXhim7AQkqbLxib45Lx4S");
+    private MultiAddress _newTrustedPeer = new MultiAddress("/ip4/25.196.147.100/tcp/4001/ipfs/QmaMqSwWShsPg2RbredZtoneFjXhim7AQkqbLxib45Lx4S");
 
     [TestMethod]
     public void Trusted_Peers_List()
@@ -20,13 +20,13 @@ public partial class IpfsClientTest
     public void Trusted_Peers_Add_Remove()
     {
         var ipfs = TestFixture.Ipfs;
-        Assert.IsFalse(ipfs.TrustedPeers.Contains(newTrustedPeer));
+        Assert.IsFalse(ipfs.TrustedPeers.Contains(_newTrustedPeer));
 
-        ipfs.TrustedPeers.Add(newTrustedPeer);
-        Assert.IsTrue(ipfs.TrustedPeers.Contains(newTrustedPeer));
+        ipfs.TrustedPeers.Add(_newTrustedPeer);
+        Assert.IsTrue(ipfs.TrustedPeers.Contains(_newTrustedPeer));
 
-        ipfs.TrustedPeers.Remove(newTrustedPeer);
-        Assert.IsFalse(ipfs.TrustedPeers.Contains(newTrustedPeer));
+        ipfs.TrustedPeers.Remove(_newTrustedPeer);
+        Assert.IsFalse(ipfs.TrustedPeers.Contains(_newTrustedPeer));
     }
 
     // js-ipfs does NOT check IPFS addresses.

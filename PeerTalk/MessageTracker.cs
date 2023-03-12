@@ -19,7 +19,7 @@ public class MessageTracker
     /// <remarks>
     ///   The key is the ID of a message.  The value is the expiry date.
     /// </remarks>
-    private readonly ConcurrentDictionary<string, DateTime> messages = new();
+    private readonly ConcurrentDictionary<string, DateTime> _messages = new();
 
     /// <summary>
     ///   The definition of recent.
@@ -50,7 +50,7 @@ public class MessageTracker
         Prune(now.Value);
 
         var seen = false;
-        messages.AddOrUpdate(
+        _messages.AddOrUpdate(
             id,
             (_) => now.Value + Recent,
             (_, __) => { seen = true; return now.Value + Recent; });
@@ -66,13 +66,13 @@ public class MessageTracker
     /// </param>
     public void Prune(DateTime now)
     {
-        var expired = messages
+        var expired = _messages
             .Where(e => now >= e.Value)
             .Select(e => e.Key)
             .ToArray();
         foreach (var key in expired)
         {
-            messages.TryRemove(key, out DateTime _);
+            _messages.TryRemove(key, out DateTime _);
         }
     }
 }

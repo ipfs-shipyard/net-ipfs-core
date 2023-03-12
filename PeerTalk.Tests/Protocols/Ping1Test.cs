@@ -9,13 +9,13 @@ namespace IpfsShipyard.PeerTalk.Tests.Protocols;
 [TestClass]
 public class PingTest
 {
-    Peer self = new Peer
+    Peer _self = new Peer
     {
         AgentVersion = "self",
         Id = "QmXK9VBxaXFuuT29AaPUTgW3jBWZ9JgLVZYdMYTHC6LLAH",
         PublicKey = "CAASXjBcMA0GCSqGSIb3DQEBAQUAA0sAMEgCQQCC5r4nQBtnd9qgjnG8fBN5+gnqIeWEIcUFUdCG4su/vrbQ1py8XGKNUBuDjkyTv25Gd3hlrtNJV3eOKZVSL8ePAgMBAAE="
     };
-    Peer other = new Peer
+    Peer _other = new Peer
     {
         AgentVersion = "other",
         Id = "QmdpwjdB94eNm2Lcvp9JqoCxswo3AKQqjLuNZyLixmCM1h",
@@ -26,20 +26,20 @@ public class PingTest
     [TestMethod]
     public async Task MultiAddress()
     {
-        var swarmB = new Swarm { LocalPeer = other };
+        var swarmB = new Swarm { LocalPeer = _other };
         await swarmB.StartAsync();
         var pingB = new Ping1 { Swarm = swarmB };
         await pingB.StartAsync();
         var peerBAddress = await swarmB.StartListeningAsync("/ip4/127.0.0.1/tcp/0");
 
-        var swarm = new Swarm { LocalPeer = self };
+        var swarm = new Swarm { LocalPeer = _self };
         await swarm.StartAsync();
         var pingA = new Ping1 { Swarm = swarm };
         await pingA.StartAsync();
         try
         {
             await swarm.ConnectAsync(peerBAddress);
-            var result = await pingA.PingAsync(other.Id, 4);
+            var result = await pingA.PingAsync(_other.Id, 4);
             Assert.IsTrue(result.All(r => r.Success));
         }
         finally
@@ -54,13 +54,13 @@ public class PingTest
     [TestMethod]
     public async Task PeerId()
     {
-        var swarmB = new Swarm { LocalPeer = other };
+        var swarmB = new Swarm { LocalPeer = _other };
         await swarmB.StartAsync();
         var pingB = new Ping1 { Swarm = swarmB };
         await pingB.StartAsync();
         var peerBAddress = await swarmB.StartListeningAsync("/ip4/127.0.0.1/tcp/0");
 
-        var swarm = new Swarm { LocalPeer = self };
+        var swarm = new Swarm { LocalPeer = _self };
         await swarm.StartAsync();
         var pingA = new Ping1 { Swarm = swarm };
         await pingA.StartAsync();

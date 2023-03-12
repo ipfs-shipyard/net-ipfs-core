@@ -19,7 +19,7 @@ namespace IpfsShipyard.PeerTalk.Cryptography;
 /// <seealso href="https://github.com/libp2p/specs/blob/master/pnet/Private-Networks-PSK-V1.md"/>
 public class PreSharedKey
 {
-    private const string codecName = "/key/swarm/psk/1.0.0/";
+    private const string CodecName = "/key/swarm/psk/1.0.0/";
 
     /// <summary>
     ///   The key value.
@@ -55,7 +55,7 @@ public class PreSharedKey
         var encrypted = new byte[64];
         var nonce = Encoding.ASCII.GetBytes("finprint");
         var cipher = new Salsa20Engine();
-        cipher.Init(true, new ParametersWithIV(new KeyParameter(this.Value), nonce));
+        cipher.Init(true, new ParametersWithIV(new KeyParameter(Value), nonce));
         cipher.ProcessBytes(encrypted, 0, encrypted.Length, encrypted, 0);
 
         //
@@ -110,7 +110,7 @@ public class PreSharedKey
     /// </remarks>
     public void Export(TextWriter text, string format = "base16")
     {
-        text.WriteLine(codecName);
+        text.WriteLine(CodecName);
         text.Write("/");
         text.Write(format);
         text.WriteLine("/");
@@ -137,8 +137,8 @@ public class PreSharedKey
     /// </param>
     public void Import(TextReader text)
     {
-        if (text.ReadLine() != codecName)
-            throw new FormatException($"Expected '{codecName}'.");
+        if (text.ReadLine() != CodecName)
+            throw new FormatException($"Expected '{CodecName}'.");
         switch (text.ReadLine())
         {
             case "/base16/":

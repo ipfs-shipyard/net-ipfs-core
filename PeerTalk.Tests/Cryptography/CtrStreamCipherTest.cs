@@ -12,7 +12,7 @@ public class CtrStreamCipherTest
 {
 
     [TestMethod]
-    public void SameAsNodeJS()
+    public void SameAsNodeJs()
     {
         var key = new byte[32];
         var iv = new byte[16];

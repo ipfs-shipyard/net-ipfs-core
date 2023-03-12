@@ -20,8 +20,8 @@ namespace IpfsShipyard.PeerTalk.Cryptography;
 /// </remarks>
 public class EphermalKey
 {
-    ECPublicKeyParameters publicKey;
-    ECPrivateKeyParameters privateKey;
+    ECPublicKeyParameters _publicKey;
+    ECPrivateKeyParameters _privateKey;
 
     /// <summary>
     ///   Gets the IPFS encoding of the public key.
@@ -31,7 +31,7 @@ public class EphermalKey
     /// </returns>
     public byte[] PublicKeyBytes()
     {
-        return publicKey.Q.GetEncoded(compressed: false);
+        return _publicKey.Q.GetEncoded(compressed: false);
     }
 
     /// <summary>
@@ -49,8 +49,8 @@ public class EphermalKey
     public byte[] GenerateSharedSecret(EphermalKey other)
     {
         var agreement = AgreementUtilities.GetBasicAgreement("ECDH");
-        agreement.Init(privateKey);
-        var secret = agreement.CalculateAgreement(other.publicKey);
+        agreement.Init(_privateKey);
+        var secret = agreement.CalculateAgreement(other._publicKey);
         return BigIntegers.AsUnsignedByteArray(agreement.GetFieldSize(), secret);
     }
 
@@ -72,7 +72,7 @@ public class EphermalKey
         var q = ecP.Curve.DecodePoint(bytes);
         return new EphermalKey
         {
-            publicKey = new ECPublicKeyParameters(q, domain)
+            _publicKey = new ECPublicKeyParameters(q, domain)
         };
     }
 
@@ -97,8 +97,8 @@ public class EphermalKey
 
         return new EphermalKey
         {
-            privateKey = (ECPrivateKeyParameters)keyPair.Private,
-            publicKey = (ECPublicKeyParameters)keyPair.Public
+            _privateKey = (ECPrivateKeyParameters)keyPair.Private,
+            _publicKey = (ECPublicKeyParameters)keyPair.Public
         };
     }
 }

@@ -25,12 +25,12 @@ namespace IpfsShipyard.Ipfs.Http
             public MultiAddress[] Peers { get; set; }
         }
 
-        IpfsClient ipfs;
-        MultiAddress[] peers;
+        IpfsClient _ipfs;
+        MultiAddress[] _peers;
 
         internal TrustedPeerCollection(IpfsClient ipfs)
         {
-            this.ipfs = ipfs;
+            _ipfs = ipfs;
         }
 
         /// <inheritdoc />
@@ -39,8 +39,8 @@ namespace IpfsShipyard.Ipfs.Http
             if (peer == null)
                 throw new ArgumentNullException();
 
-            ipfs.DoCommandAsync("bootstrap/add", default(CancellationToken), peer.ToString()).Wait();
-            peers = null;
+            _ipfs.DoCommandAsync("bootstrap/add", default(CancellationToken), peer.ToString()).Wait();
+            _peers = null;
         }
 
         /// <summary>
@@ -51,8 +51,8 @@ namespace IpfsShipyard.Ipfs.Http
         /// </remarks>
         public void AddDefaultNodes()
         {
-            ipfs.DoCommandAsync("bootstrap/add", default(CancellationToken), null, "default=true").Wait();
-            peers = null;
+            _ipfs.DoCommandAsync("bootstrap/add", default(CancellationToken), null, "default=true").Wait();
+            _peers = null;
         }
 
         /// <summary>
@@ -63,22 +63,22 @@ namespace IpfsShipyard.Ipfs.Http
         /// </remarks>
         public void Clear()
         {
-            ipfs.DoCommandAsync("bootstrap/rm", default(CancellationToken), null, "all=true").Wait();
-            peers = null;
+            _ipfs.DoCommandAsync("bootstrap/rm", default(CancellationToken), null, "all=true").Wait();
+            _peers = null;
         }
 
         /// <inheritdoc />
         public bool Contains(MultiAddress item)
         {
             Fetch();
-            return peers.Contains(item);
+            return _peers.Contains(item);
         }
 
         /// <inheritdoc />
         public void CopyTo(MultiAddress[] array, int index)
         {
             Fetch();
-            peers.CopyTo(array, index);
+            _peers.CopyTo(array, index);
         }
 
         /// <inheritdoc />
@@ -86,9 +86,9 @@ namespace IpfsShipyard.Ipfs.Http
         {
             get
             {
-                if (peers == null)
+                if (_peers == null)
                     Fetch();
-                return peers.Count();
+                return _peers.Count();
             }
         }
 
@@ -109,8 +109,8 @@ namespace IpfsShipyard.Ipfs.Http
             if (peer == null)
                 throw new ArgumentNullException();
 
-            ipfs.DoCommandAsync("bootstrap/rm", default(CancellationToken), peer.ToString()).Wait();
-            peers = null;
+            _ipfs.DoCommandAsync("bootstrap/rm", default(CancellationToken), peer.ToString()).Wait();
+            _peers = null;
             return true;
         }
 
@@ -118,19 +118,19 @@ namespace IpfsShipyard.Ipfs.Http
         public IEnumerator<MultiAddress> GetEnumerator()
         {
             Fetch();
-            return ((IEnumerable<MultiAddress>)peers).GetEnumerator();
+            return ((IEnumerable<MultiAddress>)_peers).GetEnumerator();
         }
 
         /// <inheritdoc />
         IEnumerator IEnumerable.GetEnumerator()
         {
             Fetch();
-            return peers.GetEnumerator();
+            return _peers.GetEnumerator();
         }
 
         void Fetch()
         {
-            peers = ipfs.DoCommandAsync<BootstrapListResponse>("bootstrap/list", default(CancellationToken)).Result.Peers;
+            _peers = _ipfs.DoCommandAsync<BootstrapListResponse>("bootstrap/list", default(CancellationToken)).Result.Peers;
         }
     }
 }

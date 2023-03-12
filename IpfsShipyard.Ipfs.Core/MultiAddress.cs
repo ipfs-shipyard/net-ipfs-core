@@ -27,7 +27,7 @@ namespace IpfsShipyard.Ipfs.Core;
 ///   </para>
 /// </remarks>
 /// <seealso href="https://github.com/multiformats/multiaddr"/>
-[JsonConverter(typeof(MultiAddress.Json))]
+[JsonConverter(typeof(Json))]
 public class MultiAddress : IEquatable<MultiAddress>
 {
     /// <summary>
@@ -207,7 +207,7 @@ public class MultiAddress : IEquatable<MultiAddress>
             return this;
         }
 
-        return new MultiAddress(this.ToString() + $"/p2p/{peerId}");
+        return new MultiAddress(ToString() + $"/p2p/{peerId}");
     }
 
     /// <summary>
@@ -379,19 +379,19 @@ public class MultiAddress : IEquatable<MultiAddress>
         var that = obj as MultiAddress;
         return (that == null)
             ? false
-            : this.Equals(that);
+            : Equals(that);
     }
 
     /// <inheritdoc />
     public bool Equals(MultiAddress that)
     {
-        if (this.Protocols.Count != that.Protocols.Count)
+        if (Protocols.Count != that.Protocols.Count)
             return false;
         for (int i = 0; i < Protocols.Count; ++i)
         {
-            if (this.Protocols[i].Code != that.Protocols[i].Code)
+            if (Protocols[i].Code != that.Protocols[i].Code)
                 return false;
-            if (this.Protocols[i].Value != that.Protocols[i].Value)
+            if (Protocols[i].Value != that.Protocols[i].Value)
                 return false;
         }
         return true;
@@ -402,7 +402,7 @@ public class MultiAddress : IEquatable<MultiAddress>
     /// </summary>
     public static bool operator ==(MultiAddress a, MultiAddress b)
     {
-        if (object.ReferenceEquals(a, b)) return true;
+        if (ReferenceEquals(a, b)) return true;
         if (a is null) return false;
         if (b is null) return false;
 
@@ -414,7 +414,7 @@ public class MultiAddress : IEquatable<MultiAddress>
     /// </summary>
     public static bool operator !=(MultiAddress a, MultiAddress b)
     {
-        if (object.ReferenceEquals(a, b)) return false;
+        if (ReferenceEquals(a, b)) return false;
         if (a is null) return true;
         if (b is null) return true;
 

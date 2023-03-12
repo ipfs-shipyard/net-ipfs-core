@@ -17,7 +17,7 @@ namespace IpfsShipyard.PeerTalk.PubSub;
 /// </remarks>
 public class LoopbackRouter : IMessageRouter
 {
-    private readonly MessageTracker tracker = new();
+    private readonly MessageTracker _tracker = new();
 
     /// <inheritdoc />
     public event EventHandler<PublishedMessage> MessageReceived;
@@ -45,7 +45,7 @@ public class LoopbackRouter : IMessageRouter
     {
         cancel.ThrowIfCancellationRequested();
 
-        if (!tracker.RecentlySeen(message.MessageId))
+        if (!_tracker.RecentlySeen(message.MessageId))
         {
             MessageReceived?.Invoke(this, message);
         }

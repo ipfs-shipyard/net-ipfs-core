@@ -8,7 +8,7 @@ namespace IpfsShipyard.PeerTalk.Tests;
 [TestClass]
 public class PeerManagerTest
 {
-    Peer self = new Peer
+    Peer _self = new Peer
     {
         AgentVersion = "self",
         Id = "QmXK9VBxaXFuuT29AaPUTgW3jBWZ9JgLVZYdMYTHC6LLAH",
@@ -60,7 +60,7 @@ public class PeerManagerTest
                 "/ip4/127.0.0.1/tcp/4040/ipfs/QmXFX2P5ammdmXQgfqGkfswtEVFsZUJ5KeHRXQYCTdiTxx"
             }
         };
-        var swarm = new Swarm { LocalPeer = self };
+        var swarm = new Swarm { LocalPeer = _self };
         var manager = new PeerManager
         {
             Swarm = swarm,
@@ -105,7 +105,7 @@ public class PeerManagerTest
                 "/ip4/127.0.0.1/tcp/4040/ipfs/QmXFX2P5ammdmXQgfqGkfswtEVFsZUJ5KeHRXQYCTdiTAb"
             }
         };
-        var swarm = new Swarm { LocalPeer = self };
+        var swarm = new Swarm { LocalPeer = _self };
         var manager = new PeerManager
         {
             Swarm = swarm,

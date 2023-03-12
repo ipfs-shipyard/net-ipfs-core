@@ -7,16 +7,16 @@ namespace IpfsShipyard.Ipfs.Core.Tests;
 [TestClass]
 public class PeerTest
 {
-    const string marsId = "QmSoLMeWqB7YGVLJN3pNLQpmmEk35v6wYtsMGLzSr5QBU3";
-    const string plutoId = "QmSoLPppuBtQSGwKDZT2M73ULpjvfd3aZ6ha4oFGL1KrGM";
-    const string marsPublicKey = "CAASogEwgZ8wDQYJKoZIhvcNAQEBBQADgY0AMIGJAoGBAKGUtbRQf+a9SBHFEruNAUatS/tsGUnHuCtifGrlbYPELD3UyyhWf/FYczBCavx3i8hIPEW2jQv4ehxQxi/cg9SHswZCQblSi0ucwTBFr8d40JEiyB9CcapiMdFQxdMgGvXEOQdLz1pz+UPUDojkdKZq8qkkeiBn7KlAoGEocnmpAgMBAAE=";
-    static string marsAddress = "/ip4/10.1.10.10/tcp/29087/ipfs/QmSoLMeWqB7YGVLJN3pNLQpmmEk35v6wYtsMGLzSr5QBU3";
+    const string MarsId = "QmSoLMeWqB7YGVLJN3pNLQpmmEk35v6wYtsMGLzSr5QBU3";
+    const string PlutoId = "QmSoLPppuBtQSGwKDZT2M73ULpjvfd3aZ6ha4oFGL1KrGM";
+    const string MarsPublicKey = "CAASogEwgZ8wDQYJKoZIhvcNAQEBBQADgY0AMIGJAoGBAKGUtbRQf+a9SBHFEruNAUatS/tsGUnHuCtifGrlbYPELD3UyyhWf/FYczBCavx3i8hIPEW2jQv4ehxQxi/cg9SHswZCQblSi0ucwTBFr8d40JEiyB9CcapiMdFQxdMgGvXEOQdLz1pz+UPUDojkdKZq8qkkeiBn7KlAoGEocnmpAgMBAAE=";
+    static string _marsAddress = "/ip4/10.1.10.10/tcp/29087/ipfs/QmSoLMeWqB7YGVLJN3pNLQpmmEk35v6wYtsMGLzSr5QBU3";
 
     [TestMethod]
     public new void ToString()
     {
         Assert.AreEqual("", new Peer().ToString());
-        Assert.AreEqual(marsId, new Peer { Id = marsId }.ToString());
+        Assert.AreEqual(MarsId, new Peer { Id = MarsId }.ToString());
     }
 
     [TestMethod]
@@ -38,10 +38,10 @@ public class PeerTest
     {
         var peer = new Peer
         {
-            ConnectedAddress = new MultiAddress(marsAddress),
+            ConnectedAddress = new MultiAddress(_marsAddress),
             Latency = TimeSpan.FromHours(3.03 * 2)
         };
-        Assert.AreEqual(marsAddress, peer.ConnectedAddress.ToString());
+        Assert.AreEqual(_marsAddress, peer.ConnectedAddress.ToString());
         Assert.AreEqual(3.03 * 2, peer.Latency.Value.TotalHours);
     }
 
@@ -55,7 +55,7 @@ public class PeerTest
     [TestMethod]
     public void Validation_With_Id()
     {
-        Peer peer = marsId;
+        Peer peer = MarsId;
         Assert.AreEqual(true, peer.IsValid());
     }
 
@@ -64,8 +64,8 @@ public class PeerTest
     {
         var peer = new Peer
         {
-            Id = marsId,
-            PublicKey = marsPublicKey
+            Id = MarsId,
+            PublicKey = MarsPublicKey
         };
         Assert.AreEqual(true, peer.IsValid());
     }
@@ -75,8 +75,8 @@ public class PeerTest
     {
         var peer = new Peer
         {
-            Id = plutoId,
-            PublicKey = marsPublicKey
+            Id = PlutoId,
+            PublicKey = MarsPublicKey
         };
         Assert.AreEqual(false, peer.IsValid());
     }
@@ -84,9 +84,9 @@ public class PeerTest
     [TestMethod]
     public void Value_Equality()
     {
-        var a0 = new Peer { Id = marsId };
-        var a1 = new Peer { Id = marsId };
-        var b = new Peer { Id = plutoId };
+        var a0 = new Peer { Id = MarsId };
+        var a1 = new Peer { Id = MarsId };
+        var b = new Peer { Id = PlutoId };
         Peer c = null;
         Peer d = null;
 
@@ -129,7 +129,7 @@ public class PeerTest
     [TestMethod]
     public void Implicit_Conversion_From_String()
     {
-        Peer a = marsId;
+        Peer a = MarsId;
         Assert.IsInstanceOfType(a, typeof(Peer));
     }
 

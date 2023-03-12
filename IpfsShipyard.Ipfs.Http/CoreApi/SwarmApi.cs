@@ -11,16 +11,16 @@ namespace IpfsShipyard.Ipfs.Http.CoreApi
 {
     class SwarmApi : ISwarmApi
     {
-        private IpfsClient ipfs;
+        private IpfsClient _ipfs;
 
         internal SwarmApi(IpfsClient ipfs)
         {
-            this.ipfs = ipfs;
+            _ipfs = ipfs;
         }
 
         public async Task<IEnumerable<Peer>> AddressesAsync(CancellationToken cancel = default(CancellationToken))
         {
-            var json = await ipfs.DoCommandAsync("swarm/addrs", cancel);
+            var json = await _ipfs.DoCommandAsync("swarm/addrs", cancel);
             return ((JObject)JObject.Parse(json)["Addrs"])
                 .Properties()
                 .Select(p => new Peer
@@ -34,7 +34,7 @@ namespace IpfsShipyard.Ipfs.Http.CoreApi
 
         public async Task<IEnumerable<Peer>> PeersAsync(CancellationToken cancel = default(CancellationToken))
         {
-            var json = await ipfs.DoCommandAsync("swarm/peers", cancel, null, "verbose=true");
+            var json = await _ipfs.DoCommandAsync("swarm/peers", cancel, null, "verbose=true");
             var result = JObject.Parse(json);
 
             // Older servers return an array of strings
@@ -73,18 +73,18 @@ namespace IpfsShipyard.Ipfs.Http.CoreApi
 
         public async Task ConnectAsync(MultiAddress address, CancellationToken cancel = default(CancellationToken))
         {
-            await ipfs.DoCommandAsync("swarm/connect", cancel, address.ToString());
+            await _ipfs.DoCommandAsync("swarm/connect", cancel, address.ToString());
         }
 
         public async Task DisconnectAsync(MultiAddress address, CancellationToken cancel = default(CancellationToken))
         {
-            await ipfs.DoCommandAsync("swarm/disconnect", cancel, address.ToString());
+            await _ipfs.DoCommandAsync("swarm/disconnect", cancel, address.ToString());
         }
 
         public async Task<MultiAddress> AddAddressFilterAsync(MultiAddress address, bool persist = false, CancellationToken cancel = default(CancellationToken))
         {
             // go-ipfs always does persist, https://github.com/ipfs/go-ipfs/issues/4605
-            var json = await ipfs.DoCommandAsync("swarm/filters/add", cancel, address.ToString());
+            var json = await _ipfs.DoCommandAsync("swarm/filters/add", cancel, address.ToString());
             var addrs = (JArray)(JObject.Parse(json)["Strings"]);
             var a = addrs.FirstOrDefault();
             if (a == null)
@@ -97,11 +97,11 @@ namespace IpfsShipyard.Ipfs.Http.CoreApi
             JArray addrs;
             if (persist)
             {
-                addrs = await ipfs.Config.GetAsync("Swarm.AddrFilters", cancel) as JArray;
+                addrs = await _ipfs.Config.GetAsync("Swarm.AddrFilters", cancel) as JArray;
             }
             else
             {
-                var json = await ipfs.DoCommandAsync("swarm/filters", cancel);
+                var json = await _ipfs.DoCommandAsync("swarm/filters", cancel);
                 addrs = (JObject.Parse(json)["Strings"]) as JArray;
             }
 
@@ -115,7 +115,7 @@ namespace IpfsShipyard.Ipfs.Http.CoreApi
         public async Task<MultiAddress> RemoveAddressFilterAsync(MultiAddress address, bool persist = false, CancellationToken cancel = default(CancellationToken))
         {
             // go-ipfs always does persist, https://github.com/ipfs/go-ipfs/issues/4605
-            var json = await ipfs.DoCommandAsync("swarm/filters/rm", cancel, address.ToString());
+            var json = await _ipfs.DoCommandAsync("swarm/filters/rm", cancel, address.ToString());
             var addrs = (JArray)(JObject.Parse(json)["Strings"]);
             var a = addrs.FirstOrDefault();
             if (a == null)

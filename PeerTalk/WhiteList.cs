@@ -20,6 +20,6 @@ public class WhiteList<T> : ConcurrentBag<T>, IPolicy<T>
     /// <inheritdoc />
     public bool IsAllowed(T target)
     {
-        return this.IsEmpty || this.Contains(target);
+        return IsEmpty || this.Contains(target);
     }
 }

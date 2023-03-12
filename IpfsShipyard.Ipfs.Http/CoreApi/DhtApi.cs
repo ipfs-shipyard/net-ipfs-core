@@ -11,22 +11,22 @@ namespace IpfsShipyard.Ipfs.Http.CoreApi
 {
     class DhtApi : IDhtApi
     {
-        private IpfsClient ipfs;
+        private IpfsClient _ipfs;
 
         internal DhtApi(IpfsClient ipfs)
         {
-            this.ipfs = ipfs;
+            _ipfs = ipfs;
         }
 
         public Task<Peer> FindPeerAsync(MultiHash id, CancellationToken cancel = default(CancellationToken))
         {
-            return ipfs.IdAsync(id, cancel);
+            return _ipfs.IdAsync(id, cancel);
         }
 
         public async Task<IEnumerable<Peer>> FindProvidersAsync(Cid id, int limit = 20, Action<Peer> providerFound = null, CancellationToken cancel = default(CancellationToken))
         {
             // TODO: providerFound action
-            var stream = await ipfs.PostDownloadAsync("dht/findprovs", cancel, id, $"num-providers={limit}");
+            var stream = await _ipfs.PostDownloadAsync("dht/findprovs", cancel, id, $"num-providers={limit}");
             return ProviderFromStream(stream, limit);
         }
 

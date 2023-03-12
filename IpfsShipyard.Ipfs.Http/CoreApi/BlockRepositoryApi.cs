@@ -7,31 +7,31 @@ namespace IpfsShipyard.Ipfs.Http.CoreApi
 {
     class BlockRepositoryApi : IBlockRepositoryApi
     {
-        IpfsClient ipfs;
+        IpfsClient _ipfs;
 
         internal BlockRepositoryApi(IpfsClient ipfs)
         {
-            this.ipfs = ipfs;
+            _ipfs = ipfs;
         }
 
         public async Task RemoveGarbageAsync(CancellationToken cancel = default(CancellationToken))
         {
-            await ipfs.DoCommandAsync("repo/gc", cancel);
+            await _ipfs.DoCommandAsync("repo/gc", cancel);
         }
 
         public Task<RepositoryData> StatisticsAsync(CancellationToken cancel = default(CancellationToken))
         {
-            return ipfs.DoCommandAsync<RepositoryData>("repo/stat", cancel);
+            return _ipfs.DoCommandAsync<RepositoryData>("repo/stat", cancel);
         }
 
         public async Task VerifyAsync(CancellationToken cancel = default(CancellationToken))
         {
-            await ipfs.DoCommandAsync("repo/verify", cancel);
+            await _ipfs.DoCommandAsync("repo/verify", cancel);
         }
 
         public async Task<string> VersionAsync(CancellationToken cancel = default(CancellationToken))
         {
-            var json = await ipfs.DoCommandAsync("repo/version", cancel);
+            var json = await _ipfs.DoCommandAsync("repo/version", cancel);
             var info = JObject.Parse(json);
             return (string)info["Version"];
         }

@@ -17,7 +17,7 @@ public class StretchedKey
     /// <summary>
     ///   The nonce.
     /// </summary>
-    public byte[] IV { get; set; }
+    public byte[] Iv { get; set; }
 
     /// <summary>
     ///   The message authentication code.
@@ -92,21 +92,21 @@ public class StretchedKey
         int half = need / 2;
         k1 = new StretchedKey
         {
-            IV = new byte[ivSize],
+            Iv = new byte[ivSize],
             CipherKey = new byte[cipherKeySize],
             MacKey = new byte[hmacKeySize]
         };
-        Buffer.BlockCopy(result, 0, k1.IV, 0, ivSize);
+        Buffer.BlockCopy(result, 0, k1.Iv, 0, ivSize);
         Buffer.BlockCopy(result, ivSize, k1.CipherKey, 0, cipherKeySize);
         Buffer.BlockCopy(result, ivSize + cipherKeySize, k1.MacKey, 0, hmacKeySize);
 
         k2 = new StretchedKey
         {
-            IV = new byte[ivSize],
+            Iv = new byte[ivSize],
             CipherKey = new byte[cipherKeySize],
             MacKey = new byte[hmacKeySize]
         };
-        Buffer.BlockCopy(result, half, k2.IV, 0, ivSize);
+        Buffer.BlockCopy(result, half, k2.Iv, 0, ivSize);
         Buffer.BlockCopy(result, half + ivSize, k2.CipherKey, 0, cipherKeySize);
         Buffer.BlockCopy(result, half + ivSize + cipherKeySize, k2.MacKey, 0, hmacKeySize);
     }

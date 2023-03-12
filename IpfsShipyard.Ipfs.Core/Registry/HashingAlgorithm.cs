@@ -257,7 +257,7 @@ public class HashingAlgorithm
     {
         try
         {
-            return HashingAlgorithm.Names[name];
+            return Names[name];
         }
         catch (KeyNotFoundException)
         {

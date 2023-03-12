@@ -8,21 +8,21 @@ namespace IpfsShipyard.PeerTalk.Tests;
 [TestClass]
 public class AutoDialerTest
 {
-    private Peer peerA = new Peer
+    private Peer _peerA = new Peer
     {
         AgentVersion = "A",
         Id = "QmXK9VBxaXFuuT29AaPUTgW3jBWZ9JgLVZYdMYTHC6LLAH",
         PublicKey = "CAASXjBcMA0GCSqGSIb3DQEBAQUAA0sAMEgCQQCC5r4nQBtnd9qgjnG8fBN5+gnqIeWEIcUFUdCG4su/vrbQ1py8XGKNUBuDjkyTv25Gd3hlrtNJV3eOKZVSL8ePAgMBAAE="
     };
 
-    private Peer peerB = new Peer
+    private Peer _peerB = new Peer
     {
         AgentVersion = "B",
         Id = "QmdpwjdB94eNm2Lcvp9JqoCxswo3AKQqjLuNZyLixmCM1h",
         PublicKey = "CAASXjBcMA0GCSqGSIb3DQEBAQUAA0sAMEgCQQDlTSgVLprWaXfmxDr92DJE1FP0wOexhulPqXSTsNh5ot6j+UiuMgwb0shSPKzLx9AuTolCGhnwpTBYHVhFoBErAgMBAAE="
     };
 
-    private Peer peerC = new Peer
+    private Peer _peerC = new Peer
     {
         AgentVersion = "C",
         Id = "QmTcEBjSTSLjeu2oTiSoBSQQgqH5MADUsemXewn6rThoDT",
@@ -41,11 +41,11 @@ public class AutoDialerTest
     [TestMethod]
     public async Task Connects_OnPeerDiscovered_When_Below_MinConnections()
     {
-        var swarmA = new Swarm { LocalPeer = peerA };
+        var swarmA = new Swarm { LocalPeer = _peerA };
         await swarmA.StartAsync();
         var peerAddress = await swarmA.StartListeningAsync("/ip4/127.0.0.1/tcp/0");
 
-        var swarmB = new Swarm { LocalPeer = peerB };
+        var swarmB = new Swarm { LocalPeer = _peerB };
         await swarmB.StartAsync();
         var peerBAddress = await swarmB.StartListeningAsync("/ip4/127.0.0.1/tcp/0");
 
@@ -75,11 +75,11 @@ public class AutoDialerTest
     [TestMethod]
     public async Task Noop_OnPeerDiscovered_When_NotBelow_MinConnections()
     {
-        var swarmA = new Swarm { LocalPeer = peerA };
+        var swarmA = new Swarm { LocalPeer = _peerA };
         await swarmA.StartAsync();
         var peerAAddress = await swarmA.StartListeningAsync("/ip4/127.0.0.1/tcp/0");
 
-        var swarmB = new Swarm { LocalPeer = peerB };
+        var swarmB = new Swarm { LocalPeer = _peerB };
         await swarmB.StartAsync();
         var peerBAddress = await swarmB.StartListeningAsync("/ip4/127.0.0.1/tcp/0");
 
@@ -110,22 +110,22 @@ public class AutoDialerTest
     [TestMethod]
     public async Task Connects_OnPeerDisconnected_When_Below_MinConnections()
     {
-        var swarmA = new Swarm { LocalPeer = peerA };
+        var swarmA = new Swarm { LocalPeer = _peerA };
         await swarmA.StartAsync();
         var peerAAddress = await swarmA.StartListeningAsync("/ip4/127.0.0.1/tcp/0");
 
-        var swarmB = new Swarm { LocalPeer = peerB };
+        var swarmB = new Swarm { LocalPeer = _peerB };
         await swarmB.StartAsync();
         var peerBAddress = await swarmB.StartListeningAsync("/ip4/127.0.0.1/tcp/0");
 
-        var swarmC = new Swarm { LocalPeer = peerC };
+        var swarmC = new Swarm { LocalPeer = _peerC };
         await swarmC.StartAsync();
         var peerCAddress = await swarmC.StartListeningAsync("/ip4/127.0.0.1/tcp/0");
 
         bool isBConnected = false;
         swarmA.ConnectionEstablished += (s, conn) =>
         {
-            if (conn.RemotePeer == peerB)
+            if (conn.RemotePeer == _peerB)
                 isBConnected = true;
         };
 

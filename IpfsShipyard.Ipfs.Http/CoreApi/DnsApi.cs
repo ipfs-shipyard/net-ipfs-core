@@ -7,16 +7,16 @@ namespace IpfsShipyard.Ipfs.Http.CoreApi
 {
     class DnsApi : IDnsApi
     {
-        private IpfsClient ipfs;
+        private IpfsClient _ipfs;
 
         internal DnsApi(IpfsClient ipfs)
         {
-            this.ipfs = ipfs;
+            _ipfs = ipfs;
         }
 
         public async Task<string> ResolveAsync(string name, bool recursive = false, CancellationToken cancel = default(CancellationToken))
         {
-            var json = await ipfs.DoCommandAsync("dns", cancel,
+            var json = await _ipfs.DoCommandAsync("dns", cancel,
                 name,
                 $"recursive={recursive.ToString().ToLowerInvariant()}");
             var path = (string)(JObject.Parse(json)["Path"]);

@@ -16,11 +16,11 @@ namespace IpfsShipyard.Ipfs.Http
     [DataContract]
     public class MerkleNode : IMerkleNode<IMerkleLink>, IEquatable<MerkleNode>
     {
-        bool hasBlockStats;
-        long blockSize;
-        string name;
-        IEnumerable<IMerkleLink> links;
-        IpfsClient ipfsClient;
+        bool _hasBlockStats;
+        long _blockSize;
+        string _name;
+        IEnumerable<IMerkleLink> _links;
+        IpfsClient _ipfsClient;
 
         /// <summary>
         ///   Creates a new instance of the <see cref="MerkleNode"/> with the specified
@@ -68,26 +68,26 @@ namespace IpfsShipyard.Ipfs.Http
         {
             Id = link.Id;
             Name = link.Name;
-            blockSize = link.Size;
-            hasBlockStats = true;
+            _blockSize = link.Size;
+            _hasBlockStats = true;
         }
 
         internal IpfsClient IpfsClient
         {
             get
             {
-                if (ipfsClient == null)
+                if (_ipfsClient == null)
                 {
                     lock (this)
                     {
-                        ipfsClient = new IpfsClient();
+                        _ipfsClient = new IpfsClient();
                     }
                 }
-                return ipfsClient;
+                return _ipfsClient;
             }
             set
             {
-                ipfsClient = value;
+                _ipfsClient = value;
             }
         }
 
@@ -101,8 +101,8 @@ namespace IpfsShipyard.Ipfs.Http
         [DataMember]
         public string Name
         {
-            get { return name; }
-            set { name = value ?? string.Empty; }
+            get { return _name; }
+            set { _name = value ?? string.Empty; }
         }
 
         /// <summary>
@@ -114,7 +114,7 @@ namespace IpfsShipyard.Ipfs.Http
             get
             {
                 GetBlockStats();
-                return blockSize;
+                return _blockSize;
             }
         }
 
@@ -136,12 +136,12 @@ namespace IpfsShipyard.Ipfs.Http
         {
             get
             {
-                if (links == null)
+                if (_links == null)
                 {
-                    links = IpfsClient.Object.LinksAsync(Id).Result;
+                    _links = IpfsClient.Object.LinksAsync(Id).Result;
                 }
 
-                return links;
+                return _links;
             }
         }
 
@@ -178,13 +178,13 @@ namespace IpfsShipyard.Ipfs.Http
         /// </remarks>
         void GetBlockStats()
         {
-            if (hasBlockStats)
+            if (_hasBlockStats)
                 return;
 
             var stats = IpfsClient.Block.StatAsync(Id).Result;
-            blockSize = stats.Size;
+            _blockSize = stats.Size;
 
-            hasBlockStats = true;
+            _hasBlockStats = true;
         }
 
         /// <inheritdoc />
@@ -197,13 +197,13 @@ namespace IpfsShipyard.Ipfs.Http
         public override bool Equals(object obj)
         {
             var that = obj as MerkleNode;
-            return that != null && this.Id == that.Id;
+            return that != null && Id == that.Id;
         }
 
         /// <inheritdoc />
         public bool Equals(MerkleNode that)
         {
-            return that != null && this.Id == that.Id;
+            return that != null && Id == that.Id;
         }
 
         /// <summary>
@@ -211,9 +211,9 @@ namespace IpfsShipyard.Ipfs.Http
         /// </summary>
         public static bool operator ==(MerkleNode a, MerkleNode b)
         {
-            if (object.ReferenceEquals(a, b)) return true;
-            if (object.ReferenceEquals(a, null)) return false;
-            if (object.ReferenceEquals(b, null)) return false;
+            if (ReferenceEquals(a, b)) return true;
+            if (ReferenceEquals(a, null)) return false;
+            if (ReferenceEquals(b, null)) return false;
 
             return a.Equals(b);
         }
@@ -223,9 +223,9 @@ namespace IpfsShipyard.Ipfs.Http
         /// </summary>
         public static bool operator !=(MerkleNode a, MerkleNode b)
         {
-            if (object.ReferenceEquals(a, b)) return false;
-            if (object.ReferenceEquals(a, null)) return true;
-            if (object.ReferenceEquals(b, null)) return true;
+            if (ReferenceEquals(a, b)) return false;
+            if (ReferenceEquals(a, null)) return true;
+            if (ReferenceEquals(b, null)) return true;
 
             return !a.Equals(b);
         }
