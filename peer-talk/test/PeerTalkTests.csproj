@@ -1,0 +1,45 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+	  <TargetFramework>net7.0</TargetFramework>
+    <IsPackable>false</IsPackable>
+    <DebugType>portable</DebugType>
+    <RootNamespace>PeerTalk</RootNamespace>
+  </PropertyGroup>
+  
+  <PropertyGroup>
+    <!-- https://github.com/tonerdo/coverlet -->
+    <!-- Do not collect by default -->
+    <CollectCoverage>false</CollectCoverage>
+    <CoverletOutputFormat>opencover</CoverletOutputFormat>
+    <!--<Exclude>[xunit.*]*</Exclude>-->
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.4.1" PrivateAssets="all" />
+    <PackageReference Include="MSTest.TestAdapter" Version="3.0.2" PrivateAssets="all" />
+    <PackageReference Include="MSTest.TestFramework" Version="3.0.2" PrivateAssets="all" />
+    <PackageReference Include="coverlet.msbuild" Version="3.2.0" PrivateAssets="all" />
+	  
+  </ItemGroup>
+	
+	<ItemGroup>
+		<Reference Include="Ipfs.Core">
+			<HintPath>..\..\net-ipfs-core\src\bin\Release\net7.0\Ipfs.Core.dll</HintPath>
+		</Reference>
+		<Reference Include="Makaretu.Dns">
+			<HintPath>..\..\net-dns\src\bin\Release\net7.0\Makaretu.Dns.dll</HintPath>
+		</Reference>
+		<Reference Include="Makaretu.Dns.Multicast">
+			<HintPath>..\..\net-mdns\src\bin\Release\net7.0\Makaretu.Dns.Multicast.dll</HintPath>
+		</Reference>
+		<Reference Include="Makaretu.KBucket">
+			<HintPath>..\..\k-bucket\src\bin\Release\net7.0\Makaretu.KBucket.dll</HintPath>
+		</Reference>
+	</ItemGroup>
+	
+  <ItemGroup>
+    <ProjectReference Include="..\src\PeerTalk.csproj" />
+  </ItemGroup>
+
+</Project>

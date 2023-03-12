@@ -1,0 +1,13 @@
+- name: Introduction
+  href: intro.md
+- name: Peer
+  href: peer.md
+  items:
+    - name: Discovery
+      href: disco.md
+    - name: Finding addresses
+      href: dht/findpeer.md
+- name: Private Network
+  href: pnet.md
+- name: Class Reference
+  href: ../api/PeerTalk.yml
