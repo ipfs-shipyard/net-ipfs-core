@@ -185,7 +185,7 @@ public class Substream : Stream
             };
             await header.WriteAsync(Muxer.Channel, cancel).ConfigureAwait(false);
             await Muxer.Channel.WriteVarintAsync(_outStream.Length, cancel).ConfigureAwait(false);
-            await _outStream.CopyToAsync(Muxer.Channel).ConfigureAwait(false);
+            await _outStream.CopyToAsync(Muxer.Channel, cancel).ConfigureAwait(false);
             await Muxer.Channel.FlushAsync(cancel).ConfigureAwait(false);
 
             _outStream.SetLength(0);

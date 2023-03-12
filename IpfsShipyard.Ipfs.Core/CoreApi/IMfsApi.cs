@@ -110,7 +110,7 @@ public interface IMfsApi
     /// <param name="cancel">
     ///   Is used to stop the task.  When cancelled, the <see cref="TaskCanceledException"/> is raised.
     /// </param>
-    Task<string> ReadFileAsync(string path, Int64? offset = null, Int64? count = null, CancellationToken cancel = default);
+    Task<string> ReadFileAsync(string path, long? offset = null, long? count = null, CancellationToken cancel = default);
 
     /// <summary>
     ///   Remove a file or directory or from MFS.

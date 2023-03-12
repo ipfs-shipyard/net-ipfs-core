@@ -107,7 +107,7 @@ public class NotificationServiceTest
             await ns.SubscribeAsync(topic, msg => { ++messageCount; }, cs.Token);
             await ns.SubscribeAsync(topic, msg => { ++messageCount; }, cs.Token);
 
-            await ns.PublishAsync(topic, "");
+            await ns.PublishAsync(topic, "", cs.Token);
             Assert.AreEqual(2, messageCount);
         }
         finally
@@ -128,7 +128,7 @@ public class NotificationServiceTest
             var messageCount = 0;
             await ns.SubscribeAsync(topic, msg => { ++messageCount; throw new(); }, cs.Token);
 
-            await ns.PublishAsync(topic, "");
+            await ns.PublishAsync(topic, "", cs.Token);
             Assert.AreEqual(1, messageCount);
         }
         finally
@@ -150,7 +150,7 @@ public class NotificationServiceTest
             var messageCount = 0;
             await ns.SubscribeAsync(topic, msg => { ++messageCount; }, cs.Token);
 
-            await ns.PublishAsync(topic, "");
+            await ns.PublishAsync(topic, "", cs.Token);
             Assert.AreEqual(1, messageCount);
             Assert.AreEqual(2ul, ns.MesssagesReceived);
             Assert.AreEqual(1ul, ns.DuplicateMesssagesReceived);

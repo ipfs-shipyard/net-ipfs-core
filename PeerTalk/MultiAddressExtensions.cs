@@ -100,7 +100,7 @@ public static class MultiAddressExtensions
         // TODO: Don't use DNS, but use the IPFS Engine DNS resolver.
         // This will not then expose the domain name in plain text.
         // We also, then get to specify if A and/or AAAA records are needed.
-        var addresses = (await Dns.GetHostAddressesAsync(host).ConfigureAwait(false))
+        var addresses = (await Dns.GetHostAddressesAsync(host, cancel).ConfigureAwait(false))
             .Where(a => supportedDnsAddressFamilies.ContainsKey(a.AddressFamily) && (protocolName == "dns" ||
                 (protocolName == "dns4" && a.AddressFamily == AddressFamily.InterNetwork) ||
                 (protocolName == "dns6" && a.AddressFamily == AddressFamily.InterNetworkV6)));

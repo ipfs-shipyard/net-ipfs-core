@@ -52,7 +52,7 @@ public class VarintTest
     [TestMethod]
     public void TooBig_Int32()
     {
-        var bytes = Varint.Encode((long)Int32.MaxValue + 1);
+        var bytes = Varint.Encode((long)int.MaxValue + 1);
         ExceptionAssert.Throws<InvalidDataException>(() => Varint.DecodeInt32(bytes));
     }
 
@@ -99,7 +99,7 @@ public class VarintTest
         var ms = new MemoryStream();
         var cs = new CancellationTokenSource();
         cs.Cancel();
-        ExceptionAssert.Throws<TaskCanceledException>(() => ms.WriteVarintAsync(0, cs.Token).Wait());
+        ExceptionAssert.Throws<TaskCanceledException>(() => ms.WriteVarintAsync(0, cs.Token).Wait(cs.Token));
     }
 
     [TestMethod]
@@ -116,7 +116,7 @@ public class VarintTest
         var ms = new MemoryStream(new byte[] { 0 });
         var cs = new CancellationTokenSource();
         cs.Cancel();
-        ExceptionAssert.Throws<TaskCanceledException>(() => ms.ReadVarint32Async(cs.Token).Wait());
+        ExceptionAssert.Throws<TaskCanceledException>(() => ms.ReadVarint32Async(cs.Token).Wait(cs.Token));
     }
 
     [TestMethod]

@@ -118,7 +118,7 @@ public class TcpTest
             listenerAddress = tcp.Listen("/ip4/127.0.0.1", handler, cs.Token);
             Assert.IsTrue(listenerAddress.Protocols.Any(p => p.Name == "tcp"));
             await using var stream = await tcp.ConnectAsync(listenerAddress, cs.Token);
-            await Task.Delay(50);
+            await Task.Delay(50, cs.Token);
             Assert.IsNotNull(stream);
             Assert.IsTrue(connected);
         }
@@ -144,7 +144,7 @@ public class TcpTest
             var addr = tcp.Listen("/ip4/127.0.0.1", handler, cs.Token);
             Assert.IsTrue(addr.Protocols.Any(p => p.Name == "tcp"));
             await using var stream = await tcp.ConnectAsync(addr, cs.Token);
-            await Task.Delay(50);
+            await Task.Delay(50, cs.Token);
             Assert.IsNotNull(stream);
             Assert.IsTrue(called);
         }
@@ -162,7 +162,7 @@ public class TcpTest
         using var server = new HelloServer();
         await using var stream = await tcp.ConnectAsync(server.Address, cs.Token);
         var bytes = new byte[5];
-        await stream.ReadAsync(bytes, 0, bytes.Length);
+        await stream.ReadAsync(bytes, 0, bytes.Length, cs.Token);
         Assert.AreEqual("hello", Encoding.UTF8.GetString(bytes));
     }
 

@@ -79,7 +79,7 @@ public class FloodRouterTest
 
             var cs = new CancellationTokenSource();
             await ns1.SubscribeAsync(topic, msg => { }, cs.Token);
-            await swarm1.ConnectAsync(_other);
+            await swarm1.ConnectAsync(_other, cs.Token);
 
             var peers = Array.Empty<Peer>();
             var endTime = DateTime.Now.AddSeconds(3);
@@ -87,8 +87,8 @@ public class FloodRouterTest
             {
                 if (DateTime.Now > endTime)
                     Assert.Fail("timeout");
-                await Task.Delay(100);
-                peers = (await ns2.PeersAsync(topic)).ToArray();
+                await Task.Delay(100, cs.Token);
+                peers = (await ns2.PeersAsync(topic, cs.Token)).ToArray();
             }
             CollectionAssert.Contains(peers, _self);
         }
@@ -127,7 +127,7 @@ public class FloodRouterTest
             await swarm2.StartListeningAsync("/ip4/127.0.0.1/tcp/0");
 
             var cs = new CancellationTokenSource();
-            await swarm1.ConnectAsync(_other);
+            await swarm1.ConnectAsync(_other, cs.Token);
             await ns1.SubscribeAsync(topic, msg => { }, cs.Token);
 
             var peers = Array.Empty<Peer>();
@@ -136,8 +136,8 @@ public class FloodRouterTest
             {
                 if (DateTime.Now > endTime)
                     Assert.Fail("timeout");
-                await Task.Delay(100);
-                peers = (await ns2.PeersAsync(topic)).ToArray();
+                await Task.Delay(100, cs.Token);
+                peers = (await ns2.PeersAsync(topic, cs.Token)).ToArray();
             }
             CollectionAssert.Contains(peers, _self);
         }
@@ -176,7 +176,7 @@ public class FloodRouterTest
             await swarm2.StartListeningAsync("/ip4/127.0.0.1/tcp/0");
 
             var cs = new CancellationTokenSource();
-            await swarm1.ConnectAsync(_other);
+            await swarm1.ConnectAsync(_other, cs.Token);
             await ns1.SubscribeAsync(topic, msg => { }, cs.Token);
 
             var peers = Array.Empty<Peer>();
@@ -185,8 +185,8 @@ public class FloodRouterTest
             {
                 if (DateTime.Now > endTime)
                     Assert.Fail("timeout");
-                await Task.Delay(100);
-                peers = (await ns2.PeersAsync(topic)).ToArray();
+                await Task.Delay(100, cs.Token);
+                peers = (await ns2.PeersAsync(topic, cs.Token)).ToArray();
             }
             CollectionAssert.Contains(peers, _self);
 
@@ -197,8 +197,8 @@ public class FloodRouterTest
             {
                 if (DateTime.Now > endTime)
                     Assert.Fail("timeout");
-                await Task.Delay(100);
-                peers = (await ns2.PeersAsync(topic)).ToArray();
+                await Task.Delay(100, cs.Token);
+                peers = (await ns2.PeersAsync(topic, cs.Token)).ToArray();
             }
         }
         finally
@@ -248,8 +248,8 @@ public class FloodRouterTest
             var cs = new CancellationTokenSource();
             await ns2.SubscribeAsync(topic, msg => lastMessage2 = msg, cs.Token);
             await ns3.SubscribeAsync(topic, msg => lastMessage3 = msg, cs.Token);
-            await swarm1.ConnectAsync(_other);
-            await swarm3.ConnectAsync(_other);
+            await swarm1.ConnectAsync(_other, cs.Token);
+            await swarm3.ConnectAsync(_other, cs.Token);
 
             var peers = Array.Empty<Peer>();
             var endTime = DateTime.Now.AddSeconds(3);
@@ -257,18 +257,18 @@ public class FloodRouterTest
             {
                 if (DateTime.Now > endTime)
                     Assert.Fail("timeout");
-                await Task.Delay(100);
-                peers = (await ns2.PeersAsync(topic)).ToArray();
+                await Task.Delay(100, cs.Token);
+                peers = (await ns2.PeersAsync(topic, cs.Token)).ToArray();
             }
             CollectionAssert.Contains(peers, _other1);
 
-            await ns1.PublishAsync(topic, new byte[] { 1 });
+            await ns1.PublishAsync(topic, new byte[] { 1 }, cs.Token);
             endTime = DateTime.Now.AddSeconds(3);
             while (lastMessage2 == null || lastMessage3 == null)
             {
                 if (DateTime.Now > endTime)
                     Assert.Fail("timeout");
-                await Task.Delay(100);
+                await Task.Delay(100, cs.Token);
             }
 
             Assert.IsNotNull(lastMessage2);

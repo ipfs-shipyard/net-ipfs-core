@@ -136,7 +136,7 @@ public class Ping1 : IPeerProtocol, IService
                 var start = DateTime.Now;
                 try
                 {
-                    await stream.WriteAsync(ping, 0, ping.Length).ConfigureAwait(false); ;
+                    await stream.WriteAsync(ping, 0, ping.Length, cancel).ConfigureAwait(false); ;
                     await stream.FlushAsync(cancel).ConfigureAwait(false);
 
                     var response = new byte[PingSize];

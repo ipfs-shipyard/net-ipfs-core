@@ -41,7 +41,7 @@ public class Mplex67 : IPeerProtocol
 
         // Attach muxer to the connection.  It now becomes the message reader.
         connection.MuxerEstablished.SetResult(muxer);
-        await muxer.ProcessRequestsAsync().ConfigureAwait(false);
+        await muxer.ProcessRequestsAsync(cancel).ConfigureAwait(false);
 
         _log.Debug("stop processing from " + connection.RemoteAddress);
     }

@@ -32,7 +32,7 @@ public class MfsWriteOptions
     ///   The default is <b>null</b> and the argument will be omitted.
     ///   If ommitted the offset is zero.
     /// </value>
-    public Int64? Offset { get; set; } = null;
+    public long? Offset { get; set; } = null;
 
     /// <summary>
     ///   Maximum number of bytes to write.
@@ -41,7 +41,7 @@ public class MfsWriteOptions
     ///   The default is <b>null</b> and the argument will be omitted.
     ///   If ommitted, all the data will be written.
     /// </value>
-    public Int64? Count { get; set; } = null;
+    public long? Count { get; set; } = null;
 
     /// <summary>
     ///    Cid version to use.

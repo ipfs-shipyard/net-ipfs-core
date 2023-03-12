@@ -28,7 +28,7 @@ internal class ObjectApi : IObjectApi
     {
         var json = await _ipfs.DoCommandAsync("object/new", cancel, template);
         var hash = (string)JObject.Parse(json)["Hash"];
-        return await GetAsync(hash);
+        return await GetAsync(hash, cancel);
     }
 
     public async Task<DagNode> GetAsync(Cid id, CancellationToken cancel = default)

@@ -64,7 +64,7 @@ namespace IpfsShipyard.PeerTalk.Transports
                 await using (var _ = cancel.Register(() => { socket?.Dispose(); socket = null; }))
                 {
                     var ipaddr = IPAddress.Parse(ip.Value);
-                    await socket.ConnectAsync(ipaddr, port).ConfigureAwait(false);
+                    await socket.ConnectAsync(ipaddr, port, cancel).ConfigureAwait(false);
                 }
 
                 latency = DateTime.Now - start;

@@ -126,9 +126,9 @@ public class Muxer
         {
             var header = new Header { StreamId = streamId, PacketType = PacketType.NewStream };
             var wireName = Encoding.UTF8.GetBytes(name);
-            await header.WriteAsync(Channel).ConfigureAwait(false);
+            await header.WriteAsync(Channel, cancel).ConfigureAwait(false);
             await Channel.WriteVarintAsync(wireName.Length, cancel).ConfigureAwait(false);
-            await Channel.WriteAsync(wireName, 0, wireName.Length).ConfigureAwait(false);
+            await Channel.WriteAsync(wireName, 0, wireName.Length, cancel).ConfigureAwait(false);
             await Channel.FlushAsync(cancel).ConfigureAwait(false);
         }
         return substream;

@@ -537,10 +537,10 @@ public class Swarm : IService, IPolicy<MultiAddress>, IPolicy<Peer>
         var muxer = await connection.MuxerEstablished.Task.ConfigureAwait(false);
 
         // Create a new stream for the peer protocol.
-        var stream = await muxer.CreateStreamAsync(protocol).ConfigureAwait(false);
+        var stream = await muxer.CreateStreamAsync(protocol, cancel).ConfigureAwait(false);
         try
         {
-            await connection.EstablishProtocolAsync("/multistream/", stream).ConfigureAwait(false);
+            await connection.EstablishProtocolAsync("/multistream/", stream, cancel).ConfigureAwait(false);
 
             await Message.WriteAsync(protocol, stream, cancel).ConfigureAwait(false);
             var result = await Message.ReadStringAsync(stream, cancel).ConfigureAwait(false);
@@ -694,7 +694,7 @@ public class Swarm : IService, IPolicy<MultiAddress>, IPolicy<Peer>
         // Are we communicating to a private network?
         if (NetworkProtector != null)
         {
-            connection.Stream = await NetworkProtector.ProtectAsync(connection).ConfigureAwait(false);
+            connection.Stream = await NetworkProtector.ProtectAsync(connection, cancel).ConfigureAwait(false);
         }
 
         return connection;

@@ -587,7 +587,7 @@ public class SwarmTest
         var remoteId = "QmXFX2P5ammdmXQgfqGkfswtEVFsZUJ5KeHRXQYCTdiTAb";
         MultiAddress remoteAddress = $"/ip4/127.0.0.1/tcp/4002/ipfs/{remoteId}";
         var swarm = new Swarm { LocalPeer = _self };
-        swarm.StartAsync().Wait();
+        swarm.StartAsync().Wait(cs.Token);
         try
         {
             ExceptionAssert.Throws<Exception>(() =>
@@ -597,7 +597,7 @@ public class SwarmTest
         }
         finally
         {
-            swarm.StopAsync().Wait();
+            swarm.StopAsync().Wait(cs.Token);
         }
     }
 

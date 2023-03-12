@@ -29,8 +29,8 @@ public class NameApiTest
     {
         var ipfs = TestFixture.Ipfs;
         var cs = new CancellationTokenSource(TimeSpan.FromMinutes(5));
-        var content = await ipfs.FileSystem.AddTextAsync("hello world");
-        var key = await ipfs.Key.CreateAsync("name-publish-test", "rsa", 1024);
+        var content = await ipfs.FileSystem.AddTextAsync("hello world", cancel: cs.Token);
+        var key = await ipfs.Key.CreateAsync("name-publish-test", "rsa", 1024, cs.Token);
         try
         {
             var result = await ipfs.Name.PublishAsync(content.Id, key.Name, cancel: cs.Token);
@@ -40,7 +40,7 @@ public class NameApiTest
         }
         finally
         {
-            await ipfs.Key.RemoveAsync(key.Name);
+            await ipfs.Key.RemoveAsync(key.Name, cs.Token);
         }
     }
 

@@ -14,7 +14,7 @@ public class CancellationTest
         var cs = new CancellationTokenSource(500);
         try
         {
-            await Task.Delay(1000);
+            await Task.Delay(1000, cs.Token);
             var result = await ipfs.IdAsync(cancel: cs.Token);
             Assert.Fail("Did not throw TaskCanceledException");
         }

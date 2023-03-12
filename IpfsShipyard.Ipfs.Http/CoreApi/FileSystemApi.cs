@@ -67,7 +67,7 @@ internal class FileSystemApi : IFileSystemApi
         using (var sr = new StreamReader(response))
         using (var jr = new JsonTextReader(sr) { SupportMultipleContent = true })
         {
-            while (jr.Read())
+            while (await jr.ReadAsync(cancel))
             {
                 var r = await JObject.LoadAsync(jr, cancel);
 
@@ -160,11 +160,11 @@ internal class FileSystemApi : IFileSystemApi
     /// <returns>
     ///   The contents of the <paramref name="path"/> as a <see cref="string"/>.
     /// </returns>
-    public async Task<String> ReadAllTextAsync(string path, CancellationToken cancel = default)
+    public async Task<string> ReadAllTextAsync(string path, CancellationToken cancel = default)
     {
         await using var data = await ReadFileAsync(path, cancel);
         using var text = new StreamReader(data);
-        return await text.ReadToEndAsync();
+        return await text.ReadToEndAsync(cancel);
     }
 
 

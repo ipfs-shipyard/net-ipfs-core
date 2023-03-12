@@ -93,7 +93,7 @@ public class Secio1 : IEncryptionProtocol
             ms.Write(remoteProposal.PublicKey, 0, remoteProposal.PublicKey.Length);
             ms.Write(localProposal.Nonce, 0, localProposal.Nonce.Length);
             ms.Position = 0;
-            oh1 = hasher.ComputeHash(ms);
+            oh1 = await hasher.ComputeHashAsync(ms, cancel);
         }
         using (var hasher = MultiHash.GetHashAlgorithm())
         using (var ms = new MemoryStream())
@@ -101,7 +101,7 @@ public class Secio1 : IEncryptionProtocol
             ms.Write(localProposal.PublicKey, 0, localProposal.PublicKey.Length);
             ms.Write(remoteProposal.Nonce, 0, remoteProposal.Nonce.Length);
             ms.Position = 0;
-            oh2 = hasher.ComputeHash(ms);
+            oh2 = await hasher.ComputeHashAsync(ms, cancel);
         }
         var order = 0;
         for (var i = 0; order == 0 && i < oh1.Length; ++i)

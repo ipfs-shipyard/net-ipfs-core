@@ -28,7 +28,7 @@ public class PubSubApiTest
         try
         {
             await ipfs.PubSub.SubscribeAsync(topic, msg => { }, cs.Token);
-            var peers = ipfs.PubSub.PeersAsync().Result.ToArray();
+            var peers = ipfs.PubSub.PeersAsync(cancel: cs.Token).Result.ToArray();
             Assert.IsTrue(peers.Length > 0);
         }
         finally
@@ -55,7 +55,7 @@ public class PubSubApiTest
         try
         {
             await ipfs.PubSub.SubscribeAsync(topic, msg => { }, cs.Token);
-            var topics = ipfs.PubSub.SubscribedTopicsAsync().Result.ToArray();
+            var topics = ipfs.PubSub.SubscribedTopicsAsync(cs.Token).Result.ToArray();
             Assert.IsTrue(topics.Length > 0);
             CollectionAssert.Contains(topics, topic);
         }
@@ -80,9 +80,9 @@ public class PubSubApiTest
             {
                 Interlocked.Increment(ref _messageCount);
             }, cs.Token);
-            await ipfs.PubSub.PublishAsync(topic, "hello world!");
+            await ipfs.PubSub.PublishAsync(topic, "hello world!", cs.Token);
 
-            await Task.Delay(1000);
+            await Task.Delay(1000, cs.Token);
             Assert.AreEqual(1, _messageCount);
         }
         finally
@@ -107,10 +107,10 @@ public class PubSubApiTest
             }, cs.Token);
             foreach (var msg in messages)
             {
-                await ipfs.PubSub.PublishAsync(topic, msg);
+                await ipfs.PubSub.PublishAsync(topic, msg, cs.Token);
             }
 
-            await Task.Delay(1000);
+            await Task.Delay(1000, cs.Token);
             Assert.AreEqual(messages.Length, _messageCount);
         }
         finally
@@ -137,10 +137,10 @@ public class PubSubApiTest
             await ipfs.PubSub.SubscribeAsync(topic, processMessage, cs.Token);
             foreach (var msg in messages)
             {
-                await ipfs.PubSub.PublishAsync(topic, msg);
+                await ipfs.PubSub.PublishAsync(topic, msg, cs.Token);
             }
 
-            await Task.Delay(1000);
+            await Task.Delay(1000, cs.Token);
             Assert.AreEqual(messages.Length * 2, _messageCount);
         }
         finally
@@ -162,13 +162,13 @@ public class PubSubApiTest
         {
             Interlocked.Increment(ref _messageCount1);
         }, cs.Token);
-        await ipfs.PubSub.PublishAsync(topic, "hello world!");
-        await Task.Delay(1000);
+        await ipfs.PubSub.PublishAsync(topic, "hello world!", cs.Token);
+        await Task.Delay(1000, cs.Token);
         Assert.AreEqual(1, _messageCount1);
 
         cs.Cancel();
-        await ipfs.PubSub.PublishAsync(topic, "hello world!!!");
-        await Task.Delay(1000);
+        await ipfs.PubSub.PublishAsync(topic, "hello world!!!", cs.Token);
+        await Task.Delay(1000, cs.Token);
         Assert.AreEqual(1, _messageCount1);
     }
 
@@ -186,9 +186,9 @@ public class PubSubApiTest
             {
                 messages.Add(msg);
             }, cs.Token);
-            await ipfs.PubSub.PublishAsync(topic, expected);
+            await ipfs.PubSub.PublishAsync(topic, expected, cs.Token);
 
-            await Task.Delay(1000);
+            await Task.Delay(1000, cs.Token);
             Assert.AreEqual(1, messages.Count);
             CollectionAssert.AreEqual(expected, messages[0].DataBytes);
         }
@@ -213,9 +213,9 @@ public class PubSubApiTest
                 messages.Add(msg);
             }, cs.Token);
             var ms = new MemoryStream(expected, false);
-            await ipfs.PubSub.PublishAsync(topic, ms);
+            await ipfs.PubSub.PublishAsync(topic, ms, cs.Token);
 
-            await Task.Delay(1000);
+            await Task.Delay(1000, cs.Token);
             Assert.AreEqual(1, messages.Count);
             CollectionAssert.AreEqual(expected, messages[0].DataBytes);
         }

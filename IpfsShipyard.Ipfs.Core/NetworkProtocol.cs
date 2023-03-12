@@ -186,7 +186,7 @@ public abstract class NetworkProtocol
 
 internal class TcpNetworkProtocol : NetworkProtocol
 {
-    public UInt16 Port { get; set; }
+    public ushort Port { get; set; }
     public override string Name => "tcp";
     public override uint Code => 6;
 
@@ -195,7 +195,7 @@ internal class TcpNetworkProtocol : NetworkProtocol
         base.ReadValue(stream);
         try
         {
-            Port = UInt16.Parse(Value);
+            Port = ushort.Parse(Value);
         }
         catch (Exception e)
         {
@@ -205,12 +205,12 @@ internal class TcpNetworkProtocol : NetworkProtocol
     public override void ReadValue(CodedInputStream stream)
     {
         var bytes = stream.ReadSomeBytes(2);
-        Port = (UInt16) IPAddress.NetworkToHostOrder(BitConverter.ToInt16(bytes, 0));
+        Port = (ushort) IPAddress.NetworkToHostOrder(BitConverter.ToInt16(bytes, 0));
         Value = Port.ToString(CultureInfo.InvariantCulture);
     }
     public override void WriteValue(CodedOutputStream stream)
     {
-        var bytes = BitConverter.GetBytes(IPAddress.HostToNetworkOrder((Int16)Port));
+        var bytes = BitConverter.GetBytes(IPAddress.HostToNetworkOrder((short)Port));
         stream.WriteSomeBytes(bytes);
     }
 }
@@ -343,7 +343,7 @@ internal class IpfsNetworkProtocol : P2PNetworkProtocol
 internal class OnionNetworkProtocol : NetworkProtocol
 {
     public byte[] Address { get; private set; }
-    public UInt16 Port { get; private set; }
+    public ushort Port { get; private set; }
     public override string Name => "onion";
     public override uint Code => 444;
 
@@ -357,7 +357,7 @@ internal class OnionNetworkProtocol : NetworkProtocol
             throw new FormatException($"'{Value}' is not a valid onion address.");
         try
         {
-            Port = UInt16.Parse(parts[1]);
+            Port = ushort.Parse(parts[1]);
         }
         catch (Exception e)
         {
@@ -371,13 +371,13 @@ internal class OnionNetworkProtocol : NetworkProtocol
     {
         Address = stream.ReadSomeBytes(10);
         var bytes = stream.ReadSomeBytes(2);
-        Port = (UInt16)IPAddress.NetworkToHostOrder(BitConverter.ToInt16(bytes, 0));
+        Port = (ushort)IPAddress.NetworkToHostOrder(BitConverter.ToInt16(bytes, 0));
         Value = Address.ToBase32().ToLowerInvariant() + ":" + Port.ToString(CultureInfo.InvariantCulture);
     }
     public override void WriteValue(CodedOutputStream stream)
     {
         stream.WriteSomeBytes(Address);
-        var bytes = BitConverter.GetBytes(IPAddress.HostToNetworkOrder((Int16)Port));
+        var bytes = BitConverter.GetBytes(IPAddress.HostToNetworkOrder((short)Port));
         stream.WriteSomeBytes(bytes);
     }
 }
@@ -537,7 +537,7 @@ internal class Dns6NetworkProtocol : DomainNameNetworkProtocol
 
 internal class IpcidrNetworkProtocol : NetworkProtocol
 {
-    public UInt16 RoutingPrefix { get; set; }
+    public ushort RoutingPrefix { get; set; }
     public override string Name => "ipcidr";
 
     // TODO: https://github.com/multiformats/multiaddr/issues/60
@@ -548,7 +548,7 @@ internal class IpcidrNetworkProtocol : NetworkProtocol
         base.ReadValue(stream);
         try
         {
-            RoutingPrefix = UInt16.Parse(Value);
+            RoutingPrefix = ushort.Parse(Value);
         }
         catch (Exception e)
         {
@@ -558,12 +558,12 @@ internal class IpcidrNetworkProtocol : NetworkProtocol
     public override void ReadValue(CodedInputStream stream)
     {
         var bytes = stream.ReadSomeBytes(2);
-        RoutingPrefix = (UInt16)IPAddress.NetworkToHostOrder(BitConverter.ToInt16(bytes, 0));
+        RoutingPrefix = (ushort)IPAddress.NetworkToHostOrder(BitConverter.ToInt16(bytes, 0));
         Value = RoutingPrefix.ToString(CultureInfo.InvariantCulture);
     }
     public override void WriteValue(CodedOutputStream stream)
     {
-        var bytes = BitConverter.GetBytes(IPAddress.HostToNetworkOrder((Int16)RoutingPrefix));
+        var bytes = BitConverter.GetBytes(IPAddress.HostToNetworkOrder((short)RoutingPrefix));
         stream.WriteSomeBytes(bytes);
     }
 }

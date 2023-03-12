@@ -220,8 +220,8 @@ public class Secio1Stream : Stream
         _stream.WriteByte((byte)(length >> 16));
         _stream.WriteByte((byte)(length >> 8));
         _stream.WriteByte((byte)length);
-        await _stream.WriteAsync(data, 0, data.Length);
-        await _stream.WriteAsync(mac, 0, mac.Length);
+        await _stream.WriteAsync(data, 0, data.Length, cancel);
+        await _stream.WriteAsync(mac, 0, mac.Length, cancel);
         await _stream.FlushAsync(cancel).ConfigureAwait(false);
 
         _outStream.SetLength(0);

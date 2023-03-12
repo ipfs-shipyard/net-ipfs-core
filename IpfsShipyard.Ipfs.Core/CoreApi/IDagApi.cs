@@ -116,7 +116,7 @@ public interface IDagApi
     ///   the data's <see cref="Cid"/>.
     /// </returns>
     Task<Cid> PutAsync(
-        Object data,
+        object data,
         string contentType = "dag-cbor",
         string multiHash = MultiHash.DefaultAlgorithmName,
         string encoding = MultiBase.DefaultAlgorithmName,

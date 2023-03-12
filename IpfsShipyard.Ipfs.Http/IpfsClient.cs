@@ -275,7 +275,7 @@ public partial class IpfsClient : ICoreApi
 
         using var response = await Api().PostAsync(url, null, cancel);
         await ThrowOnErrorAsync(response);
-        var body = await response.Content.ReadAsStringAsync();
+        var body = await response.Content.ReadAsStringAsync(cancel);
 
         return body;
     }
@@ -299,7 +299,7 @@ public partial class IpfsClient : ICoreApi
     {
         using var response = await Api().PostAsync(url, new MultipartFormDataContent { { content, "\"file\"" } }, cancel);
         await ThrowOnErrorAsync(response);
-        var body = await response.Content.ReadAsStringAsync();
+        var body = await response.Content.ReadAsStringAsync(cancel);
     }
 
 
@@ -370,7 +370,7 @@ public partial class IpfsClient : ICoreApi
 
         await ThrowOnErrorAsync(response);
 
-        return await response.Content.ReadAsStreamAsync();
+        return await response.Content.ReadAsStreamAsync(cancel);
     }
 
     /// <summary>
@@ -403,7 +403,7 @@ public partial class IpfsClient : ICoreApi
         var response = await Api().GetAsync(url, HttpCompletionOption.ResponseHeadersRead, cancel);
         await ThrowOnErrorAsync(response);
 
-        return await response.Content.ReadAsStreamAsync();
+        return await response.Content.ReadAsStreamAsync(cancel);
     }
 
     /// <summary>
@@ -436,7 +436,7 @@ public partial class IpfsClient : ICoreApi
         var response = await Api().GetAsync(url, HttpCompletionOption.ResponseHeadersRead, cancel);
         await ThrowOnErrorAsync(response);
 
-        return await response.Content.ReadAsByteArrayAsync();
+        return await response.Content.ReadAsByteArrayAsync(cancel);
     }
 
     /// <summary>
@@ -467,7 +467,7 @@ public partial class IpfsClient : ICoreApi
     /// <exception cref="HttpRequestException">
     ///   When the IPFS server indicates an error.
     /// </exception>
-    public async Task<String> UploadAsync(string command, CancellationToken cancel, Stream data, string name, params string[] options)
+    public async Task<string> UploadAsync(string command, CancellationToken cancel, Stream data, string name, params string[] options)
     {
         var content = new MultipartFormDataContent();
         var streamContent = new StreamContent(data);
@@ -480,7 +480,7 @@ public partial class IpfsClient : ICoreApi
 
         using var response = await Api().PostAsync(url, content, cancel);
         await ThrowOnErrorAsync(response);
-        var json = await response.Content.ReadAsStringAsync();
+        var json = await response.Content.ReadAsStringAsync(cancel);
 
         return json;
     }
@@ -526,13 +526,13 @@ public partial class IpfsClient : ICoreApi
         var response = await Api().PostAsync(url, content, cancel);
         await ThrowOnErrorAsync(response);
 
-        return await response.Content.ReadAsStreamAsync();
+        return await response.Content.ReadAsStreamAsync(cancel);
     }
 
     /// <summary>
     ///  TODO
     /// </summary>
-    public async Task<String> UploadAsync(string command, CancellationToken cancel, byte[] data, params string[] options)
+    public async Task<string> UploadAsync(string command, CancellationToken cancel, byte[] data, params string[] options)
     {
         var content = new MultipartFormDataContent();
         var streamContent = new ByteArrayContent(data);
@@ -545,7 +545,7 @@ public partial class IpfsClient : ICoreApi
         using var response = await Api().PostAsync(url, content, cancel);
         await ThrowOnErrorAsync(response);
 
-        var json = await response.Content.ReadAsStringAsync();
+        var json = await response.Content.ReadAsStringAsync(cancel);
 
         return json;
     }

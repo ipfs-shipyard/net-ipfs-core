@@ -94,10 +94,10 @@ internal class DatagramStream : Stream
             _receiveBuffer.Position = 0;
             _receiveBuffer.SetLength(0);
             var size = _socket.Receive(_datagram);
-            await _receiveBuffer.WriteAsync(_datagram, 0, size);
+            await _receiveBuffer.WriteAsync(_datagram, 0, size, cancellationToken);
             _receiveBuffer.Position = 0;
         }
-        return _receiveBuffer.Read(buffer, offset, count);
+        return await _receiveBuffer.ReadAsync(buffer, offset, count, cancellationToken);
     }
 
     public override long Seek(long offset, SeekOrigin origin)

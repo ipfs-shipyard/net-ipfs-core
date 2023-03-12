@@ -42,7 +42,7 @@ public class Udp : IPeerTransport
         try
         {
             log.Debug("connecting to " + address);
-            await socket.ConnectAsync(ip.Value, port).ConfigureAwait(false);
+            await socket.ConnectAsync(ip.Value, port, cancel).ConfigureAwait(false);
             log.Debug("connected " + address);
         }
         catch (Exception) when (cancel.IsCancellationRequested)

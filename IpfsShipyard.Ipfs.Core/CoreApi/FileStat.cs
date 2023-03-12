@@ -16,12 +16,12 @@ public class FileStatResult
     /// <summary>
     ///   The serialised size (in bytes) of the linked node.
     /// </summary>
-    public Int64 Size { get; set; }
+    public long Size { get; set; }
 
     /// <summary>
     ///   Size of object and its references.
     /// </summary>
-    public Int64 CumulativeSize { get; set; }
+    public long CumulativeSize { get; set; }
 
     /// <summary>
     ///   Determines if the node is a directory (folder).
@@ -52,7 +52,7 @@ public class FileStatWithLocalityResult : FileStatResult
     /// <summary>
     ///   The serialised size (in bytes) of the linked node that is local.
     /// </summary>
-    public Int64 SizeLocal { get; set; }
+    public long SizeLocal { get; set; }
 
     /// <summary>
     ///   Reflection of the parameter is-local.

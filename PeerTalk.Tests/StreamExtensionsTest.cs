@@ -37,7 +37,7 @@ public class StreamExtensionsTest
         {
             ExceptionAssert.Throws<EndOfStreamException>(() =>
             {
-                ms.ReadExactAsync(actual, 0, actual.Length, cancel.Token).Wait();
+                ms.ReadExactAsync(actual, 0, actual.Length, cancel.Token).Wait(cancel.Token);
             });
         }
     }
@@ -59,7 +59,7 @@ public class StreamExtensionsTest
         {
             ExceptionAssert.Throws<TaskCanceledException>(() =>
             {
-                ms.ReadExactAsync(actual, 0, actual.Length, cancel.Token).Wait();
+                ms.ReadExactAsync(actual, 0, actual.Length, cancel.Token).Wait(cancel.Token);
             });
         }
     }

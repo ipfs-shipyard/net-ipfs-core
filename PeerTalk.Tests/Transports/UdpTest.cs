@@ -67,7 +67,7 @@ public class UdpTest
             var listenerAddress = udp.Listen("/ip4/127.0.0.1", handler, cs.Token);
             Assert.IsTrue(listenerAddress.Protocols.Any(p => p.Name == "udp"));
             await using var stream = await udp.ConnectAsync(listenerAddress, cs.Token);
-            await Task.Delay(50);
+            await Task.Delay(50, cs.Token);
             Assert.IsNotNull(stream);
             Assert.IsTrue(connected);
         }

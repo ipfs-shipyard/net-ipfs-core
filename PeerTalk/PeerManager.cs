@@ -145,7 +145,7 @@ public class PeerManager : IService
         {
             try
             {
-                await Task.Delay(InitialBackoff);
+                await Task.Delay(InitialBackoff, cancellation);
                 var now = DateTime.Now;
                 await DeadPeers.Values
                     .Where(p => p.NextAttempt < now)

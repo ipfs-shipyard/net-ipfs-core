@@ -61,7 +61,7 @@ internal class DhtApi : IDhtApi
 
             var r = JObject.Parse(json);
             var id = (string)r["ID"];
-            if (id != String.Empty)
+            if (id != string.Empty)
             {
                 ++n;
                 yield return new() { Id = new(id) };
