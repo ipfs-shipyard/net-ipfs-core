@@ -1,34 +1,33 @@
 ﻿using System;
 using System.Security.Cryptography;
 
-namespace IpfsShipyard.Ipfs.Core.Cryptography
+namespace IpfsShipyard.Ipfs.Core.Cryptography;
+
+class IdentityHash : HashAlgorithm
 {
-    class IdentityHash : HashAlgorithm
+    byte[] digest;
+
+    public override void Initialize()
     {
-        byte[] digest;
+    }
 
-        public override void Initialize()
+    protected override void HashCore(byte[] array, int ibStart, int cbSize)
+    {
+        if (digest == null)
         {
+            digest = new byte[cbSize];
+            Buffer.BlockCopy(array, ibStart, digest, 0, cbSize);
+            return;
         }
 
-        protected override void HashCore(byte[] array, int ibStart, int cbSize)
-        {
-            if (digest == null)
-            {
-                digest = new byte[cbSize];
-                Buffer.BlockCopy(array, ibStart, digest, 0, cbSize);
-                return;
-            }
+        var buffer = new byte[digest.Length + cbSize];
+        Buffer.BlockCopy(digest, 0, buffer, digest.Length, digest.Length);
+        Buffer.BlockCopy(array, ibStart, digest, digest.Length, cbSize);
+        digest = buffer;
+    }
 
-            var buffer = new byte[digest.Length + cbSize];
-            Buffer.BlockCopy(digest, 0, buffer, digest.Length, digest.Length);
-            Buffer.BlockCopy(array, ibStart, digest, digest.Length, cbSize);
-            digest = buffer;
-        }
-
-        protected override byte[] HashFinal()
-        {
-            return digest;
-        }
+    protected override byte[] HashFinal()
+    {
+        return digest;
     }
 }

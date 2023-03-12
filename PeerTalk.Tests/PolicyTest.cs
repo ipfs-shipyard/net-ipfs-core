@@ -1,22 +1,21 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace IpfsShipyard.PeerTalk.Tests
-{
-    [TestClass]
-    public class PolicyTest
-    {
-        [TestMethod]
-        public void Always()
-        {
-            var policy = new PolicyAlways<string>();
-            Assert.IsTrue(policy.IsAllowed("foo"));
-        }
+namespace IpfsShipyard.PeerTalk.Tests;
 
-        [TestMethod]
-        public void Never()
-        {
-            var policy = new PolicyNever<string>();
-            Assert.IsFalse(policy.IsAllowed("foo"));
-        }
+[TestClass]
+public class PolicyTest
+{
+    [TestMethod]
+    public void Always()
+    {
+        var policy = new PolicyAlways<string>();
+        Assert.IsTrue(policy.IsAllowed("foo"));
+    }
+
+    [TestMethod]
+    public void Never()
+    {
+        var policy = new PolicyNever<string>();
+        Assert.IsFalse(policy.IsAllowed("foo"));
     }
 }

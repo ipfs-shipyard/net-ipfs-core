@@ -17,34 +17,33 @@ message Exchange
 }
 */
 
-namespace IpfsShipyard.PeerTalk.SecureCommunication
+namespace IpfsShipyard.PeerTalk.SecureCommunication;
+
+[ProtoContract]
+class Secio1Propose
 {
-    [ProtoContract]
-    class Secio1Propose
-    {
-        [ProtoMember(1)]
-        public byte[] Nonce;
+    [ProtoMember(1)]
+    public byte[] Nonce;
 
-        [ProtoMember(2)]
-        public byte[] PublicKey;
+    [ProtoMember(2)]
+    public byte[] PublicKey;
 
-        [ProtoMember(3)]
-        public string Exchanges;
+    [ProtoMember(3)]
+    public string Exchanges;
 
-        [ProtoMember(4)]
-        public string Ciphers;
+    [ProtoMember(4)]
+    public string Ciphers;
 
-        [ProtoMember(5)]
-        public string Hashes;
-    }
+    [ProtoMember(5)]
+    public string Hashes;
+}
 
-    [ProtoContract]
-    class Secio1Exchange
-    {
-        [ProtoMember(1)]
-        public byte[] EPublicKey;
+[ProtoContract]
+class Secio1Exchange
+{
+    [ProtoMember(1)]
+    public byte[] EPublicKey;
 
-        [ProtoMember(2)]
-        public byte[] Signature;
-    }
+    [ProtoMember(2)]
+    public byte[] Signature;
 }

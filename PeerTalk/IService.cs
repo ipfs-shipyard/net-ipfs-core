@@ -1,20 +1,19 @@
 ﻿using System.Threading.Tasks;
 
-namespace IpfsShipyard.PeerTalk
+namespace IpfsShipyard.PeerTalk;
+
+/// <summary>
+///   A service is async and can be started and stopped.
+/// </summary>
+public interface IService
 {
     /// <summary>
-    ///   A service is async and can be started and stopped.
+    ///   Start the service.
     /// </summary>
-    public interface IService
-    {
-        /// <summary>
-        ///   Start the service.
-        /// </summary>
-        Task StartAsync();
+    Task StartAsync();
 
-        /// <summary>
-        ///   Stop the service.
-        /// </summary>
-        Task StopAsync();
-    }
+    /// <summary>
+    ///   Stop the service.
+    /// </summary>
+    Task StopAsync();
 }

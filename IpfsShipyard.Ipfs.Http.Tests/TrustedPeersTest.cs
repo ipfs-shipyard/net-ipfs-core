@@ -2,36 +2,36 @@
 using IpfsShipyard.Ipfs.Core;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace IpfsShipyard.Ipfs.Http.Tests
+namespace IpfsShipyard.Ipfs.Http.Tests;
+
+public partial class IpfsClientTest
 {
-    public partial class IpfsClientTest
+    private MultiAddress newTrustedPeer = new MultiAddress("/ip4/25.196.147.100/tcp/4001/ipfs/QmaMqSwWShsPg2RbredZtoneFjXhim7AQkqbLxib45Lx4S");
+
+    [TestMethod]
+    public void Trusted_Peers_List()
     {
-        private MultiAddress newTrustedPeer = new MultiAddress("/ip4/25.196.147.100/tcp/4001/ipfs/QmaMqSwWShsPg2RbredZtoneFjXhim7AQkqbLxib45Lx4S");
+        var ipfs = TestFixture.Ipfs;
+        Assert.IsNotNull(ipfs.TrustedPeers);
+        Assert.IsTrue(ipfs.TrustedPeers.Count > 0);
+    }
 
-        [TestMethod]
-        public void Trusted_Peers_List()
-        {
-            var ipfs = TestFixture.Ipfs;
-            Assert.IsNotNull(ipfs.TrustedPeers);
-            Assert.IsTrue(ipfs.TrustedPeers.Count > 0);
-        }
+    [TestMethod]
+    public void Trusted_Peers_Add_Remove()
+    {
+        var ipfs = TestFixture.Ipfs;
+        Assert.IsFalse(ipfs.TrustedPeers.Contains(newTrustedPeer));
 
-        [TestMethod]
-        public void Trusted_Peers_Add_Remove()
-        {
-            var ipfs = TestFixture.Ipfs;
-            Assert.IsFalse(ipfs.TrustedPeers.Contains(newTrustedPeer));
+        ipfs.TrustedPeers.Add(newTrustedPeer);
+        Assert.IsTrue(ipfs.TrustedPeers.Contains(newTrustedPeer));
 
-            ipfs.TrustedPeers.Add(newTrustedPeer);
-            Assert.IsTrue(ipfs.TrustedPeers.Contains(newTrustedPeer));
+        ipfs.TrustedPeers.Remove(newTrustedPeer);
+        Assert.IsFalse(ipfs.TrustedPeers.Contains(newTrustedPeer));
+    }
 
-            ipfs.TrustedPeers.Remove(newTrustedPeer);
-            Assert.IsFalse(ipfs.TrustedPeers.Contains(newTrustedPeer));
-        }
-
-        // js-ipfs does NOT check IPFS addresses.
-        // And this bad addr eventually breaks the server.
-        // https://github.com/ipfs/js-ipfs/issues/1066
+    // js-ipfs does NOT check IPFS addresses.
+    // And this bad addr eventually breaks the server.
+    // https://github.com/ipfs/js-ipfs/issues/1066
 #if false
         [TestMethod]
         public void Trusted_Peers_Add_Missing_Peer_ID()
@@ -42,33 +42,32 @@ namespace IpfsShipyard.Ipfs.Http.Tests
         }
 #endif
 
-        [TestMethod]
-        public void Trusted_Peers_Clear()
-        {
-            var ipfs = TestFixture.Ipfs;
-            var original = Enumerable.ToArray<MultiAddress>(ipfs.TrustedPeers);
+    [TestMethod]
+    public void Trusted_Peers_Clear()
+    {
+        var ipfs = TestFixture.Ipfs;
+        var original = Enumerable.ToArray<MultiAddress>(ipfs.TrustedPeers);
 
-            ipfs.TrustedPeers.Clear();
-            Assert.AreEqual<int>(0, ipfs.TrustedPeers.Count);
+        ipfs.TrustedPeers.Clear();
+        Assert.AreEqual<int>(0, ipfs.TrustedPeers.Count);
 
-            foreach (var a in original)
-                ipfs.TrustedPeers.Add(a);
-        }
+        foreach (var a in original)
+            ipfs.TrustedPeers.Add(a);
+    }
 
-        [TestMethod]
-        public void Trusted_Peers_Add_Default_Nodes()
-        {
-            var ipfs = TestFixture.Ipfs;
-            var original = Enumerable.ToArray<MultiAddress>(ipfs.TrustedPeers);
+    [TestMethod]
+    public void Trusted_Peers_Add_Default_Nodes()
+    {
+        var ipfs = TestFixture.Ipfs;
+        var original = Enumerable.ToArray<MultiAddress>(ipfs.TrustedPeers);
 
-            ipfs.TrustedPeers.Clear();
-            Assert.AreEqual<int>(0, ipfs.TrustedPeers.Count);
-            ipfs.TrustedPeers.AddDefaultNodes();
-            Assert.AreNotEqual<int>(0, ipfs.TrustedPeers.Count);
+        ipfs.TrustedPeers.Clear();
+        Assert.AreEqual<int>(0, ipfs.TrustedPeers.Count);
+        ipfs.TrustedPeers.AddDefaultNodes();
+        Assert.AreNotEqual<int>(0, ipfs.TrustedPeers.Count);
 
-            ipfs.TrustedPeers.Clear();
-            foreach (var a in original)
-                ipfs.TrustedPeers.Add(a);
-        }
+        ipfs.TrustedPeers.Clear();
+        foreach (var a in original)
+            ipfs.TrustedPeers.Add(a);
     }
 }

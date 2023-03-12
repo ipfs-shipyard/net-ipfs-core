@@ -1,34 +1,33 @@
-﻿namespace IpfsShipyard.Ipfs.Core.CoreApi
+﻿namespace IpfsShipyard.Ipfs.Core.CoreApi;
+
+/// <summary>
+///   Information on a DAG node.
+/// </summary>
+/// <seealso cref="IObjectApi"/>
+public class ObjectStat
 {
     /// <summary>
-    ///   Information on a DAG node.
+    ///   Number of links.
     /// </summary>
-    /// <seealso cref="IObjectApi"/>
-    public class ObjectStat
-    {
-        /// <summary>
-        ///   Number of links.
-        /// </summary>
-        public int LinkCount { get; set; }
+    public int LinkCount { get; set; }
 
-        /// <summary>
-        ///   Size of the links segment.
-        /// </summary>
-        public long LinkSize { get; set; }
+    /// <summary>
+    ///   Size of the links segment.
+    /// </summary>
+    public long LinkSize { get; set; }
 
-        /// <summary>
-        ///   Size of the raw, encoded data.
-        /// </summary>
-        public long BlockSize { get; set; }
+    /// <summary>
+    ///   Size of the raw, encoded data.
+    /// </summary>
+    public long BlockSize { get; set; }
 
-        /// <summary>
-        ///   Siz of the data segment.
-        /// </summary>
-        public long DataSize { get; set; }
+    /// <summary>
+    ///   Siz of the data segment.
+    /// </summary>
+    public long DataSize { get; set; }
 
-        /// <summary>
-        ///   Size of object and its references
-        /// </summary>
-        public long CumulativeSize { get; set; }
-    }
+    /// <summary>
+    ///   Size of object and its references
+    /// </summary>
+    public long CumulativeSize { get; set; }
 }

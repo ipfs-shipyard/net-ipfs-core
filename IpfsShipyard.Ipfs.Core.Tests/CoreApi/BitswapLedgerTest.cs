@@ -1,37 +1,36 @@
 ﻿using IpfsShipyard.Ipfs.Core.CoreApi;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace IpfsShipyard.Ipfs.Core.Tests.CoreApi
+namespace IpfsShipyard.Ipfs.Core.Tests.CoreApi;
+
+[TestClass]
+public class BitswapLedgerTest
 {
-    [TestClass]
-    public class BitswapLedgerTest
+    [TestMethod]
+    public void Defaults()
     {
-        [TestMethod]
-        public void Defaults()
-        {
-            var ledger = new BitswapLedger();
-            Assert.IsNull(ledger.Peer);
-            Assert.AreEqual(0ul, ledger.BlocksExchanged);
-            Assert.AreEqual(0ul, ledger.DataReceived);
-            Assert.AreEqual(0ul, ledger.DataSent);
-            Assert.AreEqual(0f, ledger.DebtRatio);
-            Assert.IsTrue(ledger.IsInDebt);
-        }
+        var ledger = new BitswapLedger();
+        Assert.IsNull(ledger.Peer);
+        Assert.AreEqual(0ul, ledger.BlocksExchanged);
+        Assert.AreEqual(0ul, ledger.DataReceived);
+        Assert.AreEqual(0ul, ledger.DataSent);
+        Assert.AreEqual(0f, ledger.DebtRatio);
+        Assert.IsTrue(ledger.IsInDebt);
+    }
 
-        [TestMethod]
-        public void DebtRatio_Positive()
-        {
-            var ledger = new BitswapLedger { DataSent = 1024 * 1024 };
-            Assert.IsTrue(ledger.DebtRatio >= 1);
-            Assert.IsFalse(ledger.IsInDebt);
-        }
+    [TestMethod]
+    public void DebtRatio_Positive()
+    {
+        var ledger = new BitswapLedger { DataSent = 1024 * 1024 };
+        Assert.IsTrue(ledger.DebtRatio >= 1);
+        Assert.IsFalse(ledger.IsInDebt);
+    }
 
-        [TestMethod]
-        public void DebtRatio_Negative()
-        {
-            var ledger = new BitswapLedger { DataReceived = 1024 * 1024 };
-            Assert.IsTrue(ledger.DebtRatio < 1);
-            Assert.IsTrue(ledger.IsInDebt);
-        }
+    [TestMethod]
+    public void DebtRatio_Negative()
+    {
+        var ledger = new BitswapLedger { DataReceived = 1024 * 1024 };
+        Assert.IsTrue(ledger.DebtRatio < 1);
+        Assert.IsTrue(ledger.IsInDebt);
     }
 }

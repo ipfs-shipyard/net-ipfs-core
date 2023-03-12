@@ -9,158 +9,157 @@
 
 using System;
 
-namespace IpfsShipyard.Ipfs.Core.Cryptography
+namespace IpfsShipyard.Ipfs.Core.Cryptography;
+
+internal abstract class Keccak : System.Security.Cryptography.HashAlgorithm
 {
-    internal abstract class Keccak : System.Security.Cryptography.HashAlgorithm
+
+    #region Implementation
+    public const int KeccakB = 1600;
+    public const int KeccakNumberOfRounds = 24;
+    public const int KeccakLaneSizeInBits = 8 * 8;
+
+    public readonly ulong[] RoundConstants;
+
+    protected ulong[] state;
+    protected byte[] buffer;
+    protected int buffLength;
+    protected int keccakR;
+
+    public int KeccakR
     {
-
-        #region Implementation
-        public const int KeccakB = 1600;
-        public const int KeccakNumberOfRounds = 24;
-        public const int KeccakLaneSizeInBits = 8 * 8;
-
-        public readonly ulong[] RoundConstants;
-
-        protected ulong[] state;
-        protected byte[] buffer;
-        protected int buffLength;
-        protected int keccakR;
-
-        public int KeccakR
+        get
         {
-            get
-            {
-                return keccakR;
-            }
-            protected set
-            {
-                keccakR = value;
-            }
+            return keccakR;
         }
-
-        public int SizeInBytes
+        protected set
         {
-            get
-            {
-                return KeccakR / 8;
-            }
+            keccakR = value;
         }
+    }
 
-        public int HashByteLength
+    public int SizeInBytes
+    {
+        get
         {
-            get
-            {
-                return HashSizeValue / 8;
-            }
+            return KeccakR / 8;
         }
+    }
 
-        public override bool CanReuseTransform
+    public int HashByteLength
+    {
+        get
         {
-            get
-            {
-                return true;
-            }
+            return HashSizeValue / 8;
         }
+    }
 
-        protected Keccak(int hashBitLength)
+    public override bool CanReuseTransform
+    {
+        get
         {
-            if (hashBitLength != 224 && hashBitLength != 256 && hashBitLength != 384 && hashBitLength != 512)
-                throw new ArgumentException("hashBitLength must be 224, 256, 384, or 512", "hashBitLength");
-            Initialize();
-            HashSizeValue = hashBitLength;
-            switch (hashBitLength)
-            {
-                case 224:
-                    KeccakR = 1152;
-                    break;
-                case 256:
-                    KeccakR = 1088;
-                    break;
-                case 384:
-                    KeccakR = 832;
-                    break;
-                case 512:
-                    KeccakR = 576;
-                    break;
-            }
-            RoundConstants = new ulong[]
-            {
-                0x0000000000000001UL,
-                0x0000000000008082UL,
-                0x800000000000808aUL,
-                0x8000000080008000UL,
-                0x000000000000808bUL,
-                0x0000000080000001UL,
-                0x8000000080008081UL,
-                0x8000000000008009UL,
-                0x000000000000008aUL,
-                0x0000000000000088UL,
-                0x0000000080008009UL,
-                0x000000008000000aUL,
-                0x000000008000808bUL,
-                0x800000000000008bUL,
-                0x8000000000008089UL,
-                0x8000000000008003UL,
-                0x8000000000008002UL,
-                0x8000000000000080UL,
-                0x000000000000800aUL,
-                0x800000008000000aUL,
-                0x8000000080008081UL,
-                0x8000000000008080UL,
-                0x0000000080000001UL,
-                0x8000000080008008UL
-            };
+            return true;
         }
+    }
 
-        protected ulong ROL(ulong a, int offset)
+    protected Keccak(int hashBitLength)
+    {
+        if (hashBitLength != 224 && hashBitLength != 256 && hashBitLength != 384 && hashBitLength != 512)
+            throw new ArgumentException("hashBitLength must be 224, 256, 384, or 512", "hashBitLength");
+        Initialize();
+        HashSizeValue = hashBitLength;
+        switch (hashBitLength)
         {
-            return (((a) << ((offset) % KeccakLaneSizeInBits)) ^ ((a) >> (KeccakLaneSizeInBits - ((offset) % KeccakLaneSizeInBits))));
+            case 224:
+                KeccakR = 1152;
+                break;
+            case 256:
+                KeccakR = 1088;
+                break;
+            case 384:
+                KeccakR = 832;
+                break;
+            case 512:
+                KeccakR = 576;
+                break;
         }
-
-        protected void AddToBuffer(byte[] array, ref int offset, ref int count)
+        RoundConstants = new ulong[]
         {
-            int amount = Math.Min(count, buffer.Length - buffLength);
-            Buffer.BlockCopy(array, offset, buffer, buffLength, amount);
-            offset += amount;
-            buffLength += amount;
-            count -= amount;
-        }
+            0x0000000000000001UL,
+            0x0000000000008082UL,
+            0x800000000000808aUL,
+            0x8000000080008000UL,
+            0x000000000000808bUL,
+            0x0000000080000001UL,
+            0x8000000080008081UL,
+            0x8000000000008009UL,
+            0x000000000000008aUL,
+            0x0000000000000088UL,
+            0x0000000080008009UL,
+            0x000000008000000aUL,
+            0x000000008000808bUL,
+            0x800000000000008bUL,
+            0x8000000000008089UL,
+            0x8000000000008003UL,
+            0x8000000000008002UL,
+            0x8000000000000080UL,
+            0x000000000000800aUL,
+            0x800000008000000aUL,
+            0x8000000080008081UL,
+            0x8000000000008080UL,
+            0x0000000080000001UL,
+            0x8000000080008008UL
+        };
+    }
 
-        public override byte[] Hash
+    protected ulong ROL(ulong a, int offset)
+    {
+        return (((a) << ((offset) % KeccakLaneSizeInBits)) ^ ((a) >> (KeccakLaneSizeInBits - ((offset) % KeccakLaneSizeInBits))));
+    }
+
+    protected void AddToBuffer(byte[] array, ref int offset, ref int count)
+    {
+        int amount = Math.Min(count, buffer.Length - buffLength);
+        Buffer.BlockCopy(array, offset, buffer, buffLength, amount);
+        offset += amount;
+        buffLength += amount;
+        count -= amount;
+    }
+
+    public override byte[] Hash
+    {
+        get
         {
-            get
-            {
-                return HashValue;
-            }
+            return HashValue;
         }
+    }
 
-        public override int HashSize
+    public override int HashSize
+    {
+        get
         {
-            get
-            {
-                return HashSizeValue;
-            }
+            return HashSizeValue;
         }
+    }
 
-        #endregion
+    #endregion
 
-        public override void Initialize()
-        {
-            buffLength = 0;
-            state = new ulong[5 * 5];//1600 bits
-            HashValue = null;
-        }
+    public override void Initialize()
+    {
+        buffLength = 0;
+        state = new ulong[5 * 5];//1600 bits
+        HashValue = null;
+    }
 
-        protected override void HashCore(byte[] array, int ibStart, int cbSize)
-        {
-            if (array == null)
-                throw new ArgumentNullException("array");
-            if (ibStart < 0)
-                throw new ArgumentOutOfRangeException("ibStart");
-            if (cbSize > array.Length)
-                throw new ArgumentOutOfRangeException("cbSize");
-            if (ibStart + cbSize > array.Length)
-                throw new ArgumentOutOfRangeException("ibStart or cbSize");
-        }
+    protected override void HashCore(byte[] array, int ibStart, int cbSize)
+    {
+        if (array == null)
+            throw new ArgumentNullException("array");
+        if (ibStart < 0)
+            throw new ArgumentOutOfRangeException("ibStart");
+        if (cbSize > array.Length)
+            throw new ArgumentOutOfRangeException("cbSize");
+        if (ibStart + cbSize > array.Length)
+            throw new ArgumentOutOfRangeException("ibStart or cbSize");
     }
 }

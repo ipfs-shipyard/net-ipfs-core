@@ -2,48 +2,47 @@ using System;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace IpfsShipyard.Ipfs.Core.Tests
+namespace IpfsShipyard.Ipfs.Core.Tests;
+
+/// <summary>
+///   Asserting an <see cref="Exception"/>.
+/// </summary>
+public static class ExceptionAssert
 {
-    /// <summary>
-    ///   Asserting an <see cref="Exception"/>.
-    /// </summary>
-    public static class ExceptionAssert
+
+    public static T Throws<T>(Action action, string expectedMessage = null) where T : Exception
     {
-
-        public static T Throws<T>(Action action, string expectedMessage = null) where T : Exception
+        try
         {
-            try
-            {
-                action();
-            }
-            catch (AggregateException e)
-            {
-                var match = e.InnerExceptions.OfType<T>().FirstOrDefault();
-                if (match != null)
-                {
-                    if (expectedMessage != null)
-                        Assert.AreEqual(expectedMessage, match.Message, "Wrong exception message.");
-                    return match;
-                }
-
-                throw;
-            }
-            catch (T e)
+            action();
+        }
+        catch (AggregateException e)
+        {
+            var match = e.InnerExceptions.OfType<T>().FirstOrDefault();
+            if (match != null)
             {
                 if (expectedMessage != null)
-                    Assert.AreEqual(expectedMessage, e.Message);
-                return e;
+                    Assert.AreEqual(expectedMessage, match.Message, "Wrong exception message.");
+                return match;
             }
-            Assert.Fail("Exception of type {0} should be thrown.", typeof(T));
 
-            //  The compiler doesn't know that Assert.Fail will always throw an exception
-            return null;
+            throw;
         }
-
-        public static Exception Throws(Action action, string expectedMessage = null)
+        catch (T e)
         {
-            return Throws<Exception>(action, expectedMessage);
+            if (expectedMessage != null)
+                Assert.AreEqual(expectedMessage, e.Message);
+            return e;
         }
+        Assert.Fail("Exception of type {0} should be thrown.", typeof(T));
 
+        //  The compiler doesn't know that Assert.Fail will always throw an exception
+        return null;
     }
+
+    public static Exception Throws(Action action, string expectedMessage = null)
+    {
+        return Throws<Exception>(action, expectedMessage);
+    }
+
 }

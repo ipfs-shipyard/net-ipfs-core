@@ -1,48 +1,47 @@
 ﻿using ProtoBuf;
 
-namespace IpfsShipyard.PeerTalk.PubSub
+namespace IpfsShipyard.PeerTalk.PubSub;
+
+/// <summary>
+///   The PubSub message exchanged between peers.
+/// </summary>
+/// <seealso ref="https://github.com/libp2p/specs/blob/master/pubsub/README.md"/>
+[ProtoContract]
+public class PubSubMessage
 {
     /// <summary>
-    ///   The PubSub message exchanged between peers.
+    ///   Sequence of topic subscriptions of the sender.
     /// </summary>
-    /// <seealso ref="https://github.com/libp2p/specs/blob/master/pubsub/README.md"/>
-    [ProtoContract]
-    public class PubSubMessage
-    {
-        /// <summary>
-        ///   Sequence of topic subscriptions of the sender.
-        /// </summary>
-        [ProtoMember(1)]
-        public Subscription[] Subscriptions;
-
-        /// <summary>
-        ///   Sequence of topic messages.
-        /// </summary>
-        [ProtoMember(2)]
-        public PublishedMessage[] PublishedMessages;
-    }
+    [ProtoMember(1)]
+    public Subscription[] Subscriptions;
 
     /// <summary>
-    ///   A peer's subscription to a topic.
+    ///   Sequence of topic messages.
     /// </summary>
-    /// <seealso ref="https://github.com/libp2p/specs/blob/master/pubsub/README.md"/>
-    [ProtoContract]
-    public class Subscription
-    {
-        /// <summary>
-        ///   Determines if the topic is subscribed to.
-        /// </summary>
-        /// <value>
-        ///   <b>true</b> if subscribing; otherwise, <b>false</b> if
-        ///   unsubscribing.
-        /// </value>
-        [ProtoMember(1)]
-        public bool Subscribe;
+    [ProtoMember(2)]
+    public PublishedMessage[] PublishedMessages;
+}
 
-        /// <summary>
-        ///   The topic name/id.
-        /// </summary>
-        [ProtoMember(2)]
-        public string Topic;
-    }
+/// <summary>
+///   A peer's subscription to a topic.
+/// </summary>
+/// <seealso ref="https://github.com/libp2p/specs/blob/master/pubsub/README.md"/>
+[ProtoContract]
+public class Subscription
+{
+    /// <summary>
+    ///   Determines if the topic is subscribed to.
+    /// </summary>
+    /// <value>
+    ///   <b>true</b> if subscribing; otherwise, <b>false</b> if
+    ///   unsubscribing.
+    /// </value>
+    [ProtoMember(1)]
+    public bool Subscribe;
+
+    /// <summary>
+    ///   The topic name/id.
+    /// </summary>
+    [ProtoMember(2)]
+    public string Topic;
 }
