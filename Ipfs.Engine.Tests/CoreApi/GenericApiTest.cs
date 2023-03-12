@@ -2,6 +2,7 @@
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using IpfsShipyard.Ipfs.Core;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Ipfs.Engine.Tests.CoreApi;

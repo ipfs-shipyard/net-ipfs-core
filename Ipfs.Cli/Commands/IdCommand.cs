@@ -1,4 +1,5 @@
-﻿using McMaster.Extensions.CommandLineUtils;
+﻿using IpfsShipyard.Ipfs.Core;
+using McMaster.Extensions.CommandLineUtils;
 using Newtonsoft.Json;
 
 namespace Ipfs.Cli.Commands;

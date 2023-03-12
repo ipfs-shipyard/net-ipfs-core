@@ -1,6 +1,6 @@
 using System.IO;
 using System.Reflection;
-using Ipfs.CoreApi;
+using IpfsShipyard.Ipfs.Core.CoreApi;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;

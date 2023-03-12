@@ -7,8 +7,9 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using ICSharpCode.SharpZipLib.Tar;
-using Ipfs.CoreApi;
 using Ipfs.Engine.UnixFileSystem;
+using IpfsShipyard.Ipfs.Core;
+using IpfsShipyard.Ipfs.Core.CoreApi;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using PeerTalk.Cryptography;
 

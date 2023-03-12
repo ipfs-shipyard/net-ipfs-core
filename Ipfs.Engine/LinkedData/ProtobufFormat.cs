@@ -1,5 +1,6 @@
 ﻿using System.IO;
 using System.Linq;
+using IpfsShipyard.Ipfs.Core;
 using PeterO.Cbor;
 
 namespace Ipfs.Engine.LinkedData;

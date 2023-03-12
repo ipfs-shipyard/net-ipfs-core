@@ -5,7 +5,8 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Common.Logging;
-using Ipfs.CoreApi;
+using IpfsShipyard.Ipfs.Core.CoreApi;
+using IpfsShipyard.Ipfs.Core;
 using PeerTalk;
 
 namespace Ipfs.Engine.BlockExchange;
@@ -91,7 +92,7 @@ public class Bitswap : IService
     /// <summary>
     ///     Statistics on the bitswap component.
     /// </summary>
-    /// <seealso cref="Ipfs.CoreApi.IStatsApi" />
+    /// <seealso cref="IStatsApi" />
     public BitswapData Statistics
     {
         get
@@ -158,7 +159,7 @@ public class Bitswap : IService
     /// <returns>
     ///     Statistics on the bitswap blocks exchanged with the peer.
     /// </returns>
-    /// <seealso cref="Ipfs.CoreApi.IBitswapApi.LedgerAsync(Peer, CancellationToken)" />
+    /// <seealso cref="IBitswapApi.LedgerAsync(Peer, CancellationToken)" />
     public BitswapLedger PeerLedger(Peer peer)
     {
         if (_peerLedgers.TryGetValue(peer, out var ledger))

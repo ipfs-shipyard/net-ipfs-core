@@ -2,7 +2,8 @@
 using System.Threading;
 using System.Threading.Tasks;
 using Common.Logging;
-using Ipfs.CoreApi;
+using IpfsShipyard.Ipfs.Core;
+using IpfsShipyard.Ipfs.Core.CoreApi;
 using PeerTalk;
 
 namespace Ipfs.Engine;

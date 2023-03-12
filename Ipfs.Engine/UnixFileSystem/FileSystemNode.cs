@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using IpfsShipyard.Ipfs.Core;
 
 namespace Ipfs.Engine.UnixFileSystem;
 

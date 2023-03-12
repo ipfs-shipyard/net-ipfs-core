@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using IpfsShipyard.Ipfs.Core;
 
 namespace Ipfs.Engine.BlockExchange;
 

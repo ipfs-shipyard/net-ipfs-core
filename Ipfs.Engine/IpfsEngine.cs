@@ -8,11 +8,12 @@ using System.Security;
 using System.Threading;
 using System.Threading.Tasks;
 using Common.Logging;
-using Ipfs.CoreApi;
+using IpfsShipyard.Ipfs.Core.CoreApi;
 using Ipfs.Engine.BlockExchange;
 using Ipfs.Engine.CoreApi;
 using Ipfs.Engine.Cryptography;
 using Ipfs.Engine.Migration;
+using IpfsShipyard.Ipfs.Core;
 using Makaretu.Dns;
 using Nito.AsyncEx;
 using PeerTalk;
@@ -25,7 +26,7 @@ using PeerTalk.SecureCommunication;
 namespace Ipfs.Engine;
 
 /// <summary>
-///     Implements the <see cref="Ipfs.CoreApi.ICoreApi">Core API</see> which makes it possible to create a decentralised
+///     Implements the <see cref="IpfsShipyard.Ipfs.Core.CoreApi.ICoreApi">Core API</see> which makes it possible to create a decentralised
 ///     and distributed
 ///     application without relying on an "IPFS daemon".
 /// </summary>
@@ -118,7 +119,7 @@ public class IpfsEngine : ICoreApi, IService, IDisposable
     /// </summary>
     /// <returns>
     ///     A task that represents the asynchronous operation. The task's result is
-    ///     a <see cref="Ipfs.Peer" />.
+    ///     a <see cref="Peer" />.
     /// </returns>
     public AsyncLazy<Peer> LocalPeer { get; private set; }
 

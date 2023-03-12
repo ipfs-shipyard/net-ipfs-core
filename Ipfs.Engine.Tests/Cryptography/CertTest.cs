@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using IpfsShipyard.Ipfs.Core;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Org.BouncyCastle.Asn1.X509;
 using Org.BouncyCastle.X509.Extension;

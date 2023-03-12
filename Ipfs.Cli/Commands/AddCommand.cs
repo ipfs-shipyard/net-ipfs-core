@@ -1,4 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using IpfsShipyard.Ipfs.Core;
+using IpfsShipyard.Ipfs.Core.CoreApi;
 using McMaster.Extensions.CommandLineUtils;
 
 namespace Ipfs.Cli.Commands;

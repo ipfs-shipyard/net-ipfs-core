@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Ipfs.Engine.UnixFileSystem;
+using IpfsShipyard.Ipfs.Core;
 using McMaster.Extensions.CommandLineUtils;
 using ProtoBuf;
 

@@ -31,6 +31,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ipfs.Engine.Tests", "Ipfs.E
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ipfs.Server", "Ipfs.Server\Ipfs.Server.csproj", "{2AB1AB8D-89CC-4F81-A812-143D49799F26}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PeerTalk", "PeerTalk\PeerTalk.csproj", "{0D713964-DCE9-4738-8296-676953A210AB}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PeerTalk.Tests", "PeerTalk.Tests\PeerTalk.Tests.csproj", "{309E78EF-8DA2-4F13-A13F-20D63B80DF3C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -69,6 +73,14 @@ Global
 		{2AB1AB8D-89CC-4F81-A812-143D49799F26}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2AB1AB8D-89CC-4F81-A812-143D49799F26}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2AB1AB8D-89CC-4F81-A812-143D49799F26}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0D713964-DCE9-4738-8296-676953A210AB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0D713964-DCE9-4738-8296-676953A210AB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0D713964-DCE9-4738-8296-676953A210AB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0D713964-DCE9-4738-8296-676953A210AB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{309E78EF-8DA2-4F13-A13F-20D63B80DF3C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{309E78EF-8DA2-4F13-A13F-20D63B80DF3C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{309E78EF-8DA2-4F13-A13F-20D63B80DF3C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{309E78EF-8DA2-4F13-A13F-20D63B80DF3C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

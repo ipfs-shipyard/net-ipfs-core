@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.IO.Compression;
 using System.Threading.Tasks.Dataflow;
+using IpfsShipyard.Ipfs.Core;
 using McMaster.Extensions.CommandLineUtils;
 using Nito.AsyncEx;
 

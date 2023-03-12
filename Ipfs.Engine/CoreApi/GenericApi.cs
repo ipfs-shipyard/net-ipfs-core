@@ -4,7 +4,8 @@ using System.Linq;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
-using Ipfs.CoreApi;
+using IpfsShipyard.Ipfs.Core;
+using IpfsShipyard.Ipfs.Core.CoreApi;
 
 namespace Ipfs.Engine.CoreApi;
 
@@ -39,6 +40,16 @@ internal class GenericApi : IGenericApi
     {
         var ping = await _ipfs.PingService;
         return await ping.PingAsync(address, count, cancel);
+    }
+
+    public IAsyncEnumerable<PingResult> Ping(MultiHash peer, int count = 10, CancellationToken cancel = default)
+    {
+        throw new NotImplementedException();
+    }
+
+    public IAsyncEnumerable<PingResult> Ping(MultiAddress address, int count = 10, CancellationToken cancel = default)
+    {
+        throw new NotImplementedException();
     }
 
     public async Task<string> ResolveAsync(string name, bool recursive = true, CancellationToken cancel = default)

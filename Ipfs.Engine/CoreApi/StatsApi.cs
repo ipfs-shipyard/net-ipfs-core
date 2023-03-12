@@ -1,6 +1,6 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
-using Ipfs.CoreApi;
+using IpfsShipyard.Ipfs.Core.CoreApi;
 using PeerTalk;
 
 namespace Ipfs.Engine.CoreApi;

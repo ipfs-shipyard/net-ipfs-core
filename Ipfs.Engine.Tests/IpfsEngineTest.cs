@@ -3,6 +3,7 @@ using System.Linq;
 using System.Security;
 using System.Threading.Tasks;
 using Ipfs.Engine.Cryptography;
+using IpfsShipyard.Ipfs.Core;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Newtonsoft.Json.Linq;
 using PeerTalk.Cryptography;

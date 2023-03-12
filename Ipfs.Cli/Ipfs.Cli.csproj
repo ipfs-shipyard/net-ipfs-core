@@ -44,14 +44,16 @@
 
 	<ItemGroup>
 		<PackageReference Include="Common.Logging" Version="3.4.1" />
-		<PackageReference Include="IpfsShipyard.Ipfs.Http.Client" Version="0.0.6" />
 		<PackageReference Include="McMaster.Extensions.CommandLineUtils" Version="4.0.2" />
+		<PackageReference Include="protobuf-net" Version="3.2.12" />
 		<PackageReference Include="System.Threading.Tasks.Dataflow" Version="7.0.0" />
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\IpfsServer\Ipfs.Server.csproj" />
-		<ProjectReference Include="..\src\Ipfs.Engine.csproj" />
+	  <ProjectReference Include="..\Ipfs.Core\Ipfs.Core.csproj" />
+	  <ProjectReference Include="..\Ipfs.Engine\Ipfs.Engine.csproj" />
+	  <ProjectReference Include="..\Ipfs.Http\Ipfs.Http.csproj" />
+	  <ProjectReference Include="..\Ipfs.Server\Ipfs.Server.csproj" />
 	</ItemGroup>
 
 </Project>

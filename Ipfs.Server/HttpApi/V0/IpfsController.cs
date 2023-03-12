@@ -1,7 +1,8 @@
 ﻿using System.IO;
 using System.Text;
 using System.Threading;
-using Ipfs.CoreApi;
+using IpfsShipyard.Ipfs.Core;
+using IpfsShipyard.Ipfs.Core.CoreApi;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Net.Http.Headers;

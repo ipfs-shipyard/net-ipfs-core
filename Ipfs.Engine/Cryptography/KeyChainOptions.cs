@@ -1,4 +1,6 @@
-﻿namespace Ipfs.Engine.Cryptography;
+﻿using IpfsShipyard.Ipfs.Core.Registry;
+
+namespace Ipfs.Engine.Cryptography;
 
 /// <summary>
 ///     Configuration options for the <see cref="KeyChain" />.
@@ -67,7 +69,7 @@ public class KeyChainDekOptions
     ///     The name of the hashing function.
     /// </summary>
     /// <value>
-    ///     One of the known <see cref="Ipfs.Registry.HashingAlgorithm" /> names. Defaults to "sha2-512".
+    ///     One of the known <see cref="HashingAlgorithm" /> names. Defaults to "sha2-512".
     /// </value>
     public string Hash { get; set; } = "sha2-512";
 }

@@ -1,11 +1,10 @@
 ﻿using System.Reflection;
 using Common.Logging;
 using Common.Logging.Configuration;
-using Common.Logging.Simple;
 using Ipfs.Cli.Commands;
-using IpfsShipyard.Ipfs.CoreApi;
 using Ipfs.Engine;
-using Ipfs.Http;
+using IpfsShipyard.Ipfs.Core.CoreApi;
+using IpfsShipyard.Ipfs.Http;
 using McMaster.Extensions.CommandLineUtils;
 using Newtonsoft.Json;
 

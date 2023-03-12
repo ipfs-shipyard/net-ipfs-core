@@ -1,6 +1,6 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
-using Ipfs.CoreApi;
+using IpfsShipyard.Ipfs.Core.CoreApi;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace Ipfs.Server.Pages;

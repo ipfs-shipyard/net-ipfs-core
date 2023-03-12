@@ -1,4 +1,6 @@
-﻿namespace Ipfs.Engine.Cryptography;
+﻿using IpfsShipyard.Ipfs.Core;
+
+namespace Ipfs.Engine.Cryptography;
 
 internal class KeyInfo : IKey
 {

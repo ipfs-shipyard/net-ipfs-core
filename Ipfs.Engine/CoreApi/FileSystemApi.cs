@@ -7,8 +7,9 @@ using System.Threading;
 using System.Threading.Tasks;
 using Common.Logging;
 using ICSharpCode.SharpZipLib.Tar;
-using Ipfs.CoreApi;
+using IpfsShipyard.Ipfs.Core.CoreApi;
 using Ipfs.Engine.UnixFileSystem;
+using IpfsShipyard.Ipfs.Core;
 using ProtoBuf;
 
 namespace Ipfs.Engine.CoreApi;

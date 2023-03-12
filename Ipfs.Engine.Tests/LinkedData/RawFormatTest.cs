@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Text;
 using Ipfs.Engine.LinkedData;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 

@@ -16,4 +16,9 @@
 		<PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
 		<PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="7.0.4" PrivateAssets="All" />
 	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\Ipfs.Core\Ipfs.Core.csproj" />
+	  <ProjectReference Include="..\Ipfs.Engine\Ipfs.Engine.csproj" />
+	</ItemGroup>
 </Project>

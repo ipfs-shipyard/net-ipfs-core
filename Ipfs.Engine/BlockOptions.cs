@@ -1,7 +1,7 @@
 ﻿namespace Ipfs.Engine;
 
 /// <summary>
-///     Configuration options for a <see cref="Ipfs.CoreApi.IBlockApi">block service</see>.
+///     Configuration options for a <see cref="IpfsShipyard.Ipfs.Core.CoreApi.IBlockApi">block service</see>.
 /// </summary>
 /// <seealso cref="IpfsEngineOptions" />
 public class BlockOptions
