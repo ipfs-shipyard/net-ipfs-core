@@ -10,7 +10,7 @@ namespace IpfsShipyard.Ipfs.Core;
 ///   and some data (<see cref="IDataBlock.DataBytes"/> 
 ///   or <see cref="IDataBlock.DataStream"/>).
 /// </remarks>
-/// <typeparam name="Link">
+/// <typeparam name="TLink">
 ///   The type of <see cref="IMerkleLink"/> used by this node.
 /// </typeparam>
 /// <seealso href="https://en.wikipedia.org/wiki/Directed_acyclic_graph"/>
@@ -23,7 +23,7 @@ public interface IMerkleNode<out TLink> : IDataBlock
     ///   Links to other nodes.
     /// </summary>
     /// <value>
-    ///   A sequence of <typeparamref name="Link"/>.
+    ///   A sequence of <typeparamref name="TLink"/>.
     /// </value>
     /// <remarks>
     ///   It is never <b>null</b>.
