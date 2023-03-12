@@ -10,8 +10,8 @@ using IpfsShipyard.PeerTalk;
 using ProtoBuf;
 using Semver;
 
-#pragma warning disable 0649 // disable warning about unassinged fields
-#pragma warning disable 0169 // disable warning about unassinged fields
+#pragma warning disable 0649 // disable warning about unassigned fields
+#pragma warning disable 0169 // disable warning about unassigned fields
 
 namespace IpfsShipyard.Ipfs.Engine.BlockExchange;
 

@@ -59,7 +59,7 @@ public class FileStore<TName, TValue>
     private readonly AsyncReaderWriterLock _storeLock = new();
 
     /// <summary>
-    ///     The fully qualififed path to a directory
+    ///     The fully qualified path to a directory
     ///     that stores the name value pairs.
     /// </summary>
     /// <value>

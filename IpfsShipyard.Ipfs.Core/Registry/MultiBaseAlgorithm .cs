@@ -5,7 +5,7 @@ using SimpleBase;
 namespace IpfsShipyard.Ipfs.Core.Registry;
 
 /// <summary>
-///   Metadata and implemetations of an IPFS multi-base algorithm.
+///   Metadata and implementations of an IPFS multi-base algorithm.
 /// </summary>
 /// <remarks>
 ///   IPFS assigns a unique <see cref="Name"/> and <see cref="Code"/> to multi-base algorithm.

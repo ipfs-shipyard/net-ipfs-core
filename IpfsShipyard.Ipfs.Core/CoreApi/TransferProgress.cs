@@ -9,7 +9,7 @@ namespace IpfsShipyard.Ipfs.Core.CoreApi;
 public class TransferProgress
 {
     /// <summary>
-    ///   The name of the item being trasfered.
+    ///   The name of the item being transferred.
     /// </summary>
     /// <value>
     ///   Typically, a relative file path.
@@ -17,7 +17,7 @@ public class TransferProgress
     public string Name;
 
     /// <summary>
-    ///   The cumuative number of bytes transfered for
+    ///   The cumulative number of bytes transferred for
     ///   the <see cref="Name"/>.
     /// </summary>
     public ulong Bytes;

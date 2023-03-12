@@ -568,7 +568,7 @@ public partial class IpfsClient : ICoreApi
 
         if (response.StatusCode == HttpStatusCode.NotFound)
         {
-            var error = "Invalid IPFS command: " + response.RequestMessage.RequestUri;
+            var error = "Invalid IPFS command: " + response.RequestMessage?.RequestUri;
 
             throw new HttpRequestException(error);
         }

@@ -12,7 +12,7 @@ public class FileStatResult
     public Cid Hash { get; set; }
 
     /// <summary>
-    ///   The serialised size (in bytes) of the linked node.
+    ///   The serialized size (in bytes) of the linked node.
     /// </summary>
     public long Size { get; set; }
 
@@ -48,7 +48,7 @@ public class FileStatWithLocalityResult : FileStatResult
     public bool Local { get; set; }
 
     /// <summary>
-    ///   The serialised size (in bytes) of the linked node that is local.
+    ///   The serialized size (in bytes) of the linked node that is local.
     /// </summary>
     public long SizeLocal { get; set; }
 

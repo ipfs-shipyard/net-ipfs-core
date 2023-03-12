@@ -21,8 +21,7 @@ internal class SwarmApi : ISwarmApi
     public async Task<IEnumerable<Peer>> AddressesAsync(CancellationToken cancel = default)
     {
         var json = await _ipfs.DoCommandAsync("swarm/addrs", cancel);
-        return ((JObject)JObject.Parse(json)["Addrs"])
-            .Properties()
+        return ((JObject)JObject.Parse(json)["Addrs"])?.Properties()
             .Select(p => new Peer
             {
                 Id = p.Name,

@@ -60,7 +60,7 @@ public class StatsStream : Stream
     public long BytesWritten => _bytesWritten;
 
     /// <summary>
-    ///   The last time a write or read occured.
+    ///   The last time a write or read occurred.
     /// </summary>
     public DateTime LastUsed => _lastUsed;
 

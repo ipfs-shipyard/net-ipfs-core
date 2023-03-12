@@ -12,7 +12,7 @@ namespace IpfsShipyard.Ipfs.Engine;
 ///     Periodically queries the DHT to discover new peers.
 /// </summary>
 /// <remarks>
-///     A backgroud task is created to query the DHT.  It is designed
+///     A background task is created to query the DHT.  It is designed
 ///     to run often at startup and then less often at time increases.
 /// </remarks>
 public class RandomWalk : IService

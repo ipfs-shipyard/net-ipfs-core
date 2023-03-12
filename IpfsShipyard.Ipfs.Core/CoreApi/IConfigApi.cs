@@ -41,7 +41,7 @@ public interface IConfigApi
     ///   When the <paramref name="key"/> does not exist.
     /// </exception>
     /// <remarks>
-    ///   Keys are case sensistive.
+    ///   Keys are case sensitive.
     /// </remarks>
     Task<JToken> GetAsync(string key, CancellationToken cancel = default);
 

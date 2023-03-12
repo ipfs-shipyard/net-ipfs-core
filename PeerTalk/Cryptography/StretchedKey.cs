@@ -24,12 +24,12 @@ public class StretchedKey
     public byte[] MacKey { get; set; }
 
     /// <summary>
-    ///   The encyption key.
+    ///   The encryption key.
     /// </summary>
     public byte[] CipherKey { get; set; }
 
     /// <summary>
-    ///   Create two streched keys from the shared secret.
+    ///   Create two stretched keys from the shared secret.
     /// </summary>
     /// <remarks>
     ///   The is no spec for this.  Copied https://github.com/libp2p/go-libp2p-crypto/blob/0f79fbebcb64f746a636aba79ece0635ec5919e9/key.go#L183

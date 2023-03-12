@@ -516,7 +516,7 @@ public class Cid : IEquatable<Cid>
     /// <inheritdoc />
     public bool Equals(Cid that)
     {
-        return Encode() == that.Encode();
+        return Encode() == that?.Encode();
     }
 
     /// <summary>

@@ -25,7 +25,7 @@ public class FileSystemNode : IFileSystemNode
     public string Name { get; set; } = string.Empty;
 
     /// <summary>
-    ///     The serialised DAG size.
+    ///     The serialized DAG size.
     /// </summary>
     public long DagSize { get; set; }
 

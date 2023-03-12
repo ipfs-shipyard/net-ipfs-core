@@ -28,7 +28,7 @@ public class MfsWriteOptions
     /// </summary>
     /// <value>
     ///   The default is <b>null</b> and the argument will be omitted.
-    ///   If ommitted the offset is zero.
+    ///   If omitted the offset is zero.
     /// </value>
     public long? Offset { get; set; } = null;
 
@@ -37,7 +37,7 @@ public class MfsWriteOptions
     /// </summary>
     /// <value>
     ///   The default is <b>null</b> and the argument will be omitted.
-    ///   If ommitted, all the data will be written.
+    ///   If omitted, all the data will be written.
     /// </value>
     public long? Count { get; set; } = null;
 

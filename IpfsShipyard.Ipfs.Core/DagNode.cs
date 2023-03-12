@@ -81,7 +81,7 @@ public class DagNode : IMerkleNode<IMerkleLink>
     public Stream DataStream => new MemoryStream(DataBytes, false);
 
     /// <summary>
-    ///   The serialised size in bytes of the node.
+    ///   The serialized size in bytes of the node.
     /// </summary>
     [DataMember]
     public long Size

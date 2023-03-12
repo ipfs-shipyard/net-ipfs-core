@@ -14,7 +14,7 @@ namespace IpfsShipyard.PeerTalk.Cryptography;
 ///   protobuf encoded and are NOT self describing.  The encoding is an
 ///   uncompressed ECPoint; the first byte s a 4 and followed by X and Y co-ordinates.
 ///   <para>
-///   It as assummed that the curve name is known a priori.
+///   It as assumed that the curve name is known a-priori.
 ///   </para>
 /// </remarks>
 public class EphermalKey
@@ -37,13 +37,13 @@ public class EphermalKey
     ///   Create a shared secret between this key and another.
     /// </summary>
     /// <param name="other">
-    ///   Another ephermal key.
+    ///   Another ephemeral key.
     /// </param>
     /// <returns>
     ///   The shared secret as a byte array.
     /// </returns>
     /// <remarks>
-    ///   Uses the ECDH agreement algorithm to generate the shared secet.
+    ///   Uses the ECDH agreement algorithm to generate the shared secret.
     /// </remarks>
     public byte[] GenerateSharedSecret(EphermalKey other)
     {
@@ -54,13 +54,13 @@ public class EphermalKey
     }
 
     /// <summary>
-    ///   Create a public key from the IPFS ephermal encoding.
+    ///   Create a public key from the IPFS ephemeral encoding.
     /// </summary>
     /// <param name="curveName">
     ///   The name of the curve, for example "P-256".
     /// </param>
     /// <param name="bytes">
-    ///   The IPFS encoded ephermal key.
+    ///   The IPFS encoded ephemeral key.
     /// </param>
     public static EphermalKey CreatePublicKeyFromIpfs(string curveName, byte[] bytes)
     {
@@ -76,13 +76,13 @@ public class EphermalKey
     }
 
     /// <summary>
-    ///   Create a new ephermal key on the curve.
+    ///   Create a new ephemeral key on the curve.
     /// </summary>
     /// <param name="curveName">
     ///   The name of the curve, for example "P-256".
     /// </param>
     /// <returns>
-    ///   The new created emphermal key.
+    ///   The new created ephemeral key.
     /// </returns>
     public static EphermalKey Generate(string curveName)
     {

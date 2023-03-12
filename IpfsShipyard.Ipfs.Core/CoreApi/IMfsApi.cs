@@ -55,7 +55,7 @@ public interface IMfsApi
     /// <returns>Collection of <see cref="IFileSystemNode"/>
     /// </returns>
     /// <remarks>
-    ///   Paramter long is ommitted and should always be passed as true in implementation.
+    ///   Parameter long is omitted and should always be passed as true in implementation.
     /// </remarks>
     Task<IEnumerable<IFileSystemNode>> ListAsync(string path, bool? u = null, CancellationToken cancel = default);
 

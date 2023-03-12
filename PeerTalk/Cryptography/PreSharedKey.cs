@@ -67,7 +67,7 @@ public class PreSharedKey
         var algorithm = HashingAlgorithm.GetAlgorithmMetadata(algotithmName);
 
         // shake-128 now generates a hash with a digest size > 16
-        // and should be trucated to the desired size
+        // and should be truncated to the desired size
         return computedHash.Take(algorithm.DigestSize).ToArray();
     }
 

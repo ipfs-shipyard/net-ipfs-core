@@ -383,7 +383,7 @@ public class MultiAddress : IEquatable<MultiAddress>
     /// <inheritdoc />
     public bool Equals(MultiAddress that)
     {
-        if (Protocols.Count != that.Protocols.Count)
+        if (Protocols.Count != that?.Protocols.Count)
             return false;
         for (var i = 0; i < Protocols.Count; ++i)
         {

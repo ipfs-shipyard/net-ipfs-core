@@ -35,7 +35,7 @@ public static class MultiCodec
     /// <remarks>
     ///   If the <b>code</b> does not exist, a new <see cref="Codec"/> is
     ///   registered with the <see cref="Codec.Name"/> "codec-x"; where
-    ///   'x' is the code's decimal represention.
+    ///   'x' is the code's decimal representation.
     /// </remarks>
     public static Codec ReadMultiCodec(this Stream stream)
     {

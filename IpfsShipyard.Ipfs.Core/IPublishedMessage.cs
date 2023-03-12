@@ -7,7 +7,7 @@ namespace IpfsShipyard.Ipfs.Core;
 ///   A published message.
 /// </summary>
 /// <remarks>
-///   The <see cref="IPubSubApi"/> is used to publish and subsribe to a message.
+///   The <see cref="IPubSubApi"/> is used to publish and subscribe to a message.
 /// </remarks>
 public interface IPublishedMessage : IDataBlock
 {

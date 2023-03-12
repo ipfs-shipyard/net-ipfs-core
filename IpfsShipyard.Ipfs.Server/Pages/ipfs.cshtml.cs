@@ -32,7 +32,7 @@ public class IpfsModel : PageModel
     }
 
     /// <summary>
-    ///     The IPFS path to a file or directry.
+    ///     The IPFS path to a file or directory.
     /// </summary>
     [BindProperty(SupportsGet = true)]
     public string Path { get; set; }

@@ -60,7 +60,7 @@ public class MessageDto
     ///     from the <see cref="IPublishedMessage" />.
     /// </summary>
     /// <param name="msg">
-    ///     A pubsub messagee.
+    ///     A pubsub message.
     /// </param>
     public MessageDto(IPublishedMessage msg)
     {

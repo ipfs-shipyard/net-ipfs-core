@@ -20,7 +20,7 @@ public class MigrationManager
 
     /// <summary>
     ///     Creates a new instance of the <see cref="MigrationManager" /> class
-    ///     for the specifed <see cref="IpfsEngine" />.
+    ///     for the specified <see cref="IpfsEngine" />.
     /// </summary>
     public MigrationManager(IpfsEngine ipfs)
     {
@@ -45,7 +45,7 @@ public class MigrationManager
     public int LatestVersion => Migrations.Last().Version;
 
     /// <summary>
-    ///     Gets the current vesion number of the  repository.
+    ///     Gets the current version number of the  repository.
     /// </summary>
     public int CurrentVersion
     {

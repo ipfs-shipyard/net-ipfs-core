@@ -7,7 +7,7 @@ using IpfsShipyard.Ipfs.Core;
 namespace IpfsShipyard.Ipfs.Http;
 
 /// <summary>
-///   The IPFS <see href="https://github.com/ipfs/specs/tree/master/merkledag">MerkleDag</see> is the datastructure at the heart of IPFS. It is an acyclic directed graph whose edges are hashes.
+///   The IPFS <see href="https://github.com/ipfs/specs/tree/master/merkledag">MerkleDag</see> is the data structure at the heart of IPFS. It is an acyclic directed graph whose edges are hashes.
 /// </summary>
 /// <remarks>
 ///   Initially an <b>MerkleNode</b> is just constructed with its Cid.

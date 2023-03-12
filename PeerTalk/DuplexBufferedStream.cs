@@ -1,4 +1,4 @@
-﻿// BufferedStream is not available in Net Stardard 1.4
+﻿// BufferedStream is not available in Net Standard 1.4
 #if !NETSTANDARD14
 
 // Part of JuiceStream: https://juicestream.machinezoo.com

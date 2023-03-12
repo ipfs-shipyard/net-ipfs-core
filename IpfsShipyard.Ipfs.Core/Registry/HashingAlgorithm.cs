@@ -8,7 +8,7 @@ using BC = Org.BouncyCastle.Crypto.Digests;
 namespace IpfsShipyard.Ipfs.Core.Registry;
 
 /// <summary>
-///   Metadata and implemetations of a IPFS hashing algorithms.
+///   Metadata and implementations of a IPFS hashing algorithms.
 /// </summary>
 /// <remarks>
 ///   IPFS assigns a unique <see cref="Name"/> and <see cref="Code"/> to a hashing algorithm. 

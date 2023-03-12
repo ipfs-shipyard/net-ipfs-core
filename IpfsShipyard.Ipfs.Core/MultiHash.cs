@@ -345,7 +345,7 @@ public class MultiHash : IEquatable<MultiHash>
     /// <inheritdoc />
     public bool Equals(MultiHash that)
     {
-        return Algorithm.Code == that.Algorithm.Code
+        return Algorithm.Code == that?.Algorithm.Code
                && Digest.SequenceEqual(that.Digest);
     }
 

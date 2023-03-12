@@ -1,7 +1,7 @@
 ﻿using ProtoBuf;
 
-#pragma warning disable 0649 // disable warning about unassinged fields
-#pragma warning disable 0169 // disable warning about unassinged fields
+#pragma warning disable 0649 // disable warning about unassigned fields
+#pragma warning disable 0169 // disable warning about unassigned fields
 
 namespace IpfsShipyard.Ipfs.Engine.UnixFileSystem;
 
@@ -66,13 +66,13 @@ public record DataMessage
     ///     The type of data.
     /// </summary>
     [ProtoMember(1, IsRequired = true)] public DataType Type;
-#pragma warning disable 0649 // disable warning about unassinged fields
+#pragma warning disable 0649 // disable warning about unassigned fields
     /// <summary>
     ///     NYI
     /// </summary>
     [ProtoMember(5, IsRequired = false)] public ulong? HashType;
 
-#pragma warning disable 0649 // disable warning about unassinged fields
+#pragma warning disable 0649 // disable warning about unassigned fields
     /// <summary>
     ///     NYI
     /// </summary>

@@ -58,7 +58,7 @@ public class Identify1 : IPeerProtocol
     ///   Gets the identity information of the remote peer.
     /// </summary>
     /// <param name="connection">
-    ///   The currenty connection to the remote peer.
+    ///   The current connection to the remote peer.
     /// </param>
     /// <param name="cancel"></param>
     /// <returns></returns>

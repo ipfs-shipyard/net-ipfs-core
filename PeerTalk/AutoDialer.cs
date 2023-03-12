@@ -10,7 +10,7 @@ namespace IpfsShipyard.PeerTalk;
 ///   Maintains a minimum number of peer connections.
 /// </summary>
 /// <remarks>
-///   Listens to the <see cref="Swarm"/> and automically dials a
+///   Listens to the <see cref="Swarm"/> and automatically dials a
 ///   new <see cref="Peer"/> when required.
 /// </remarks>
 public class AutoDialer : IDisposable

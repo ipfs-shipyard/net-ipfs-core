@@ -6,7 +6,7 @@ namespace IpfsShipyard.Ipfs.Engine.LinkedData;
 ///     A specific format for linked data.
 /// </summary>
 /// <remarks>
-///     Allows the conversion between the canonincal form of linked data and its binary
+///     Allows the conversion between the canonical form of linked data and its binary
 ///     representation in a specific format.
 ///     <para>
 ///         The canonical form is a <see cref="CBORObject" />.
@@ -15,7 +15,7 @@ namespace IpfsShipyard.Ipfs.Engine.LinkedData;
 public interface ILinkedDataFormat
 {
     /// <summary>
-    ///     Convert the binary represention into the equivalent canonical form.
+    ///     Convert the binary representation into the equivalent canonical form.
     /// </summary>
     /// <param name="data">
     ///     The linked data encoded in a specific format.

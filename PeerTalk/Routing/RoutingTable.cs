@@ -18,7 +18,7 @@ internal class RoutingPeer : IContact
 }
 
 /// <summary>
-///   A wrapper around k-bucket, to provide easy store and retrival for peers.
+///   A wrapper around k-bucket, to provide easy store and retrieval for peers.
 /// </summary>
 public class RoutingTable
 {

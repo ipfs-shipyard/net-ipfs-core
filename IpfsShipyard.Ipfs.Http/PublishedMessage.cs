@@ -15,7 +15,7 @@ namespace IpfsShipyard.Ipfs.Http;
 ///   A published message.
 /// </summary>
 /// <remarks>
-///   The <see cref="PubSubApi"/> is used to publish and subsribe to a message.
+///   The <see cref="PubSubApi"/> is used to publish and subscribe to a message.
 /// </remarks>
 [DataContract]
 public class PublishedMessage : IPublishedMessage

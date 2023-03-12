@@ -26,7 +26,7 @@ public static class FileSystem
     ///     The source of the cid's data.
     /// </param>
     /// <param name="keyChain">
-    ///     Used to decypt the protected data blocks.
+    ///     Used to decrypt the protected data blocks.
     /// </param>
     /// <param name="cancel">
     ///     Is used to stop the task.  When cancelled, the <see cref="TaskCanceledException" /> is raised.
@@ -37,7 +37,7 @@ public static class FileSystem
     /// </returns>
     /// <remarks>
     ///     The id's <see cref="Cid.ContentType" /> is used to determine how to read
-    ///     the conent.
+    ///     the content.
     /// </remarks>
     public static Task<Stream> CreateReadStreamAsync(
         Cid id,

@@ -37,7 +37,7 @@ public interface IMessageRouter : IService
     ///   The topic of interest or <b>null</b> for all topics.
     /// </param>
     /// <returns>
-    ///   A sequence of <see cref="Peer"/> that are subsribed to the
+    ///   A sequence of <see cref="Peer"/> that are subscribed to the
     ///   <paramref name="topic"/>.
     /// </returns>
     IEnumerable<Peer> InterestedPeers(string topic);

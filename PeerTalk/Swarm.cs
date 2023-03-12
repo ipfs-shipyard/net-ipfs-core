@@ -55,7 +55,7 @@ public class Swarm : IService, IPolicy<MultiAddress>, IPolicy<Peer>
     private Peer _localPeer;
 
     /// <summary>
-    ///   Raised when a listener is establihed.
+    ///   Raised when a listener is established.
     /// </summary>
     /// <remarks>
     ///   Raised when <see cref="StartListeningAsync(MultiAddress)"/>

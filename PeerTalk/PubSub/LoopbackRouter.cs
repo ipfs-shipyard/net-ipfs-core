@@ -13,7 +13,7 @@ namespace IpfsShipyard.PeerTalk.PubSub;
 /// </summary>
 /// <remarks>
 ///   The allows the <see cref="NotificationService"/> to invoke the
-///   local subscribtion handlers.
+///   local subscription handlers.
 /// </remarks>
 public class LoopbackRouter : IMessageRouter
 {

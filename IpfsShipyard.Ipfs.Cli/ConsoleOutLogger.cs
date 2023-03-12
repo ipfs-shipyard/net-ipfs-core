@@ -55,7 +55,7 @@ public class ConsoleOutLogger : AbstractSimpleLogger
     /// </summary>
     /// <param name="logName">The name, usually type name of the calling class, of the logger.</param>
     /// <param name="logLevel">
-    ///     The current logging threshold. Messages recieved that are beneath this threshold will not be
+    ///     The current logging threshold. Messages received that are beneath this threshold will not be
     ///     logged.
     /// </param>
     /// <param name="showLevel">Include the current log level in the log message.</param>

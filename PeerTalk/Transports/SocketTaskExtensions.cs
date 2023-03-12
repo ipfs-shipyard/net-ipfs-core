@@ -20,7 +20,7 @@ internal static class SocketTaskExtensions
     {
         return Task<Socket>.Factory.FromAsync(
             (callback, state) => ((Socket)state).BeginAccept(callback, state),
-            asyncResult => ((Socket)asyncResult.AsyncState).EndAccept(asyncResult),
+            asyncResult => ((Socket)asyncResult.AsyncState)?.EndAccept(asyncResult),
             state: socket);
     }
 
@@ -29,7 +29,7 @@ internal static class SocketTaskExtensions
         const int ReceiveSize = 0;
         return Task<Socket>.Factory.FromAsync(
             (socketForAccept, receiveSize, callback, state) => ((Socket)state).BeginAccept(socketForAccept, receiveSize, callback, state),
-            asyncResult => ((Socket)asyncResult.AsyncState).EndAccept(asyncResult),
+            asyncResult => ((Socket)asyncResult.AsyncState)?.EndAccept(asyncResult),
             acceptSocket,
             ReceiveSize,
             state: socket);
@@ -39,7 +39,7 @@ internal static class SocketTaskExtensions
     {
         return Task.Factory.FromAsync(
             (targetEndPoint, callback, state) => ((Socket)state).BeginConnect(targetEndPoint, callback, state),
-            asyncResult => ((Socket)asyncResult.AsyncState).EndConnect(asyncResult),
+            asyncResult => ((Socket)asyncResult.AsyncState)?.EndConnect(asyncResult),
             remoteEndPoint,
             state: socket);
     }
@@ -48,7 +48,7 @@ internal static class SocketTaskExtensions
     {
         return Task.Factory.FromAsync(
             (targetAddress, targetPort, callback, state) => ((Socket)state).BeginConnect(targetAddress, targetPort, callback, state),
-            asyncResult => ((Socket)asyncResult.AsyncState).EndConnect(asyncResult),
+            asyncResult => ((Socket)asyncResult.AsyncState)?.EndConnect(asyncResult),
             address,
             port,
             state: socket);
@@ -58,7 +58,7 @@ internal static class SocketTaskExtensions
     {
         return Task.Factory.FromAsync(
             (targetAddresses, targetPort, callback, state) => ((Socket)state).BeginConnect(targetAddresses, targetPort, callback, state),
-            asyncResult => ((Socket)asyncResult.AsyncState).EndConnect(asyncResult),
+            asyncResult => ((Socket)asyncResult.AsyncState)?.EndConnect(asyncResult),
             addresses,
             port,
             state: socket);
@@ -68,7 +68,7 @@ internal static class SocketTaskExtensions
     {
         return Task.Factory.FromAsync(
             (targetHost, targetPort, callback, state) => ((Socket)state).BeginConnect(targetHost, targetPort, callback, state),
-            asyncResult => ((Socket)asyncResult.AsyncState).EndConnect(asyncResult),
+            asyncResult => ((Socket)asyncResult.AsyncState)?.EndConnect(asyncResult),
             host,
             port,
             state: socket);
@@ -182,7 +182,7 @@ internal static class SocketTaskExtensions
             asyncResult =>
             {
                 var arguments = (object[])asyncResult.AsyncState;
-                var s = (Socket)arguments[0];
+                var s = (Socket)arguments?[0];
                 var f = (SocketFlags)arguments[1];
                 var e = (EndPoint)arguments[2];
 

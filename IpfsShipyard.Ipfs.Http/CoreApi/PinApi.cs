@@ -21,7 +21,7 @@ internal class PinApi : IPinApi
     {
         var opts = "recursive=" + recursive.ToString().ToLowerInvariant();
         var json = await _ipfs.DoCommandAsync("pin/add", cancel, path, opts);
-        return ((JArray)JObject.Parse(json)["Pins"])
+        return ((JArray)JObject.Parse(json)["Pins"])?
             .Select(p => (Cid)(string)p);
     }
 
@@ -29,7 +29,7 @@ internal class PinApi : IPinApi
     {
         var json = await _ipfs.DoCommandAsync("pin/ls", cancel);
         var keys = (JObject)JObject.Parse(json)["Keys"];
-        return keys
+        return keys?
             .Properties()
             .Select(p => (Cid)p.Name);
     }
@@ -38,7 +38,7 @@ internal class PinApi : IPinApi
     {
         var opts = "recursive=" + recursive.ToString().ToLowerInvariant();
         var json = await _ipfs.DoCommandAsync("pin/rm", cancel, id, opts);
-        return ((JArray)JObject.Parse(json)["Pins"])
+        return ((JArray)JObject.Parse(json)["Pins"])?
             .Select(p => (Cid)(string)p);
     }
 
