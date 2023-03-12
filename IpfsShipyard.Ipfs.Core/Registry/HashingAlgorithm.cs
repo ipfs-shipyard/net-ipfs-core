@@ -81,7 +81,7 @@ public class HashingAlgorithm
     /// <value>
     ///   A unique name.
     /// </value>
-    public string Name { get; private set; }
+    public string Name { get; private init; }
 
     /// <summary>
     ///   The IPFS number assigned to the hashing algorithm.
@@ -89,7 +89,7 @@ public class HashingAlgorithm
     /// <value>
     ///   Valid hash codes at <see href="https://github.com/multiformats/multicodec/blob/master/table.csv">hashtable.csv</see>.
     /// </value>
-    public int Code { get; private set; }
+    public int Code { get; private init; }
 
     /// <summary>
     ///   The size, in bytes, of the digest value.
@@ -98,13 +98,13 @@ public class HashingAlgorithm
     ///   The digest value size in bytes. Zero indicates that the digest
     ///   is non fixed.
     /// </value>
-    public int DigestSize { get; private set; }
+    public int DigestSize { get; private init; }
 
     /// <summary>
     ///   Returns a cryptographic hash algorithm that can compute
     ///   a hash (digest).
     /// </summary>
-    public Func<HashAlgorithm> Hasher { get; private set; }
+    public Func<HashAlgorithm> Hasher { get; private init; }
 
     /// <summary>
     ///   Use <see cref="Register"/> to create a new instance of a <see cref="HashingAlgorithm"/>.

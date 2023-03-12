@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text;
 using SimpleBase;
 
 namespace IpfsShipyard.Ipfs.Core.Registry;
@@ -44,8 +45,8 @@ public class MultiBaseAlgorithm
             bytes => bytes.ToBase64Url(),
             s => s.FromBase64Url());
         Register("base16", 'f',
-            Base16.EncodeLower,
-            Base16.Decode);
+            b => Base16.LowerCase.Encode(b),
+            b => Base16.Decode(b).ToArray());
         Register("base32", 'b',
             bytes => SimpleBase.Base32.Rfc4648.Encode(bytes, false).ToLowerInvariant(),
             s => SimpleBase.Base32.Rfc4648.Decode(s));
@@ -59,8 +60,8 @@ public class MultiBaseAlgorithm
             bytes => SimpleBase.Base32.ExtendedHex.Encode(bytes, true).ToLowerInvariant(),
             s => SimpleBase.Base32.ExtendedHex.Decode(s));
         Register("BASE16", 'F',
-            Base16.EncodeUpper,
-            Base16.Decode);
+            b => Base16.UpperCase.Encode(b),
+            b => Base16.Decode(b).ToArray());
         Register("BASE32", 'B',
             bytes => SimpleBase.Base32.Rfc4648.Encode(bytes, false),
             s => SimpleBase.Base32.Rfc4648.Decode(s));
@@ -91,7 +92,7 @@ public class MultiBaseAlgorithm
     /// <value>
     ///   A unique name.
     /// </value>
-    public string Name { get; private set; }
+    public string Name { get; private init; }
 
     /// <summary>
     ///   The IPFS code assigned to the algorithm.
@@ -99,17 +100,17 @@ public class MultiBaseAlgorithm
     /// <value>
     ///   Valid codes at <see href="https://github.com/multiformats/multibase/blob/master/multibase.csv"/>.
     /// </value>
-    public char Code { get; private set; }
+    public char Code { get; private init; }
 
     /// <summary>
     ///   Returns a function that can return a string from a byte array.
     /// </summary>
-    public Func<byte[], string> Encode { get; private set; }
+    public Func<byte[], string> Encode { get; private init; }
 
     /// <summary>
     ///   Returns a function that can return a byte array from a string.
     /// </summary>
-    public Func<string, byte[]> Decode { get; private set; }
+    public Func<string, byte[]> Decode { get; private init; }
 
     /// <summary>
     ///   Use <see cref="Register"/> to create a new instance of a <see cref="MultiBaseAlgorithm"/>.

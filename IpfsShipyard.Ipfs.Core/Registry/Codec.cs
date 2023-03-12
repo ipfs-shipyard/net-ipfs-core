@@ -62,7 +62,7 @@ public class Codec
     /// <value>
     ///   A unique name.
     /// </value>
-    public string Name { get; private set; }
+    public string Name { get; private init; }
 
     /// <summary>
     ///   The IPFS code assigned to the codec.
@@ -70,7 +70,7 @@ public class Codec
     /// <value>
     ///   Valid codes at <see href="https://github.com/multiformats/multicodec/blob/master/table.csv"/>.
     /// </value>
-    public int Code { get; private set; }
+    public int Code { get; private init; }
 
     /// <summary>
     ///   Use <see cref="Register"/> to create a new instance of a <see cref="Codec"/>.
