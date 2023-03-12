@@ -38,11 +38,9 @@ public static class Varint
     /// </returns>
     public static byte[] Encode(long value)
     {
-        using (var stream = new MemoryStream(64))
-        {
-            stream.WriteVarint(value);
-            return stream.ToArray();
-        }
+        using var stream = new MemoryStream(64);
+        stream.WriteVarint(value);
+        return stream.ToArray();
     }
 
     /// <summary>
@@ -69,11 +67,9 @@ public static class Varint
     /// <returns>The integer value.</returns>
     public static int DecodeInt32 (byte[] bytes, int offset = 0)
     {
-        using (var stream = new MemoryStream(bytes, false))
-        {
-            stream.Position = offset;
-            return stream.ReadVarint32();
-        }
+        using var stream = new MemoryStream(bytes, false);
+        stream.Position = offset;
+        return stream.ReadVarint32();
     }
 
     /// <summary>
@@ -88,11 +84,9 @@ public static class Varint
     /// <returns>The integer value.</returns>
     public static long DecodeInt64(byte[] bytes, int offset = 0)
     {
-        using (var stream = new MemoryStream(bytes, false))
-        {
-            stream.Position = offset;
-            return stream.ReadVarint64();
-        }
+        using var stream = new MemoryStream(bytes, false);
+        stream.Position = offset;
+        return stream.ReadVarint64();
     }
 
     /// <summary>

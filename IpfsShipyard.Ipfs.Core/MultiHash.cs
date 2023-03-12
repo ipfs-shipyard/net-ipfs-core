@@ -140,10 +140,8 @@ public class MultiHash : IEquatable<MultiHash>
     /// <seealso cref="ToArray"/>
     public MultiHash(byte[] buffer)
     {
-        using (var ms = new MemoryStream(buffer, false))
-        {
-            Read(ms);
-        }
+        using var ms = new MemoryStream(buffer, false);
+        Read(ms);
     }
 
     /// <summary>
@@ -219,10 +217,8 @@ public class MultiHash : IEquatable<MultiHash>
     /// <seealso cref="ToBase58"/>
     public MultiHash(string s)
     {
-        using (var ms = new MemoryStream(s.FromBase58(), false))
-        {
-            Read(ms);
-        }
+        using var ms = new MemoryStream(s.FromBase58(), false);
+        Read(ms);
     }
 
     /// <summary>
@@ -282,10 +278,8 @@ public class MultiHash : IEquatable<MultiHash>
     /// </remarks>
     public void Write(Stream stream)
     {
-        using (var cos = new CodedOutputStream(stream, true))
-        {
-            Write(cos);
-        }
+        using var cos = new CodedOutputStream(stream, true);
+        Write(cos);
     }
 
     /// <summary>
@@ -310,10 +304,8 @@ public class MultiHash : IEquatable<MultiHash>
 
     private void Read(Stream stream)
     {
-        using (var cis = new CodedInputStream(stream, true))
-        {
-            Read(cis);
-        }
+        using var cis = new CodedInputStream(stream, true);
+        Read(cis);
     }
 
     private void Read(CodedInputStream stream)
@@ -404,12 +396,10 @@ public class MultiHash : IEquatable<MultiHash>
             return _b58String;
         }
 
-        using (var ms = new MemoryStream())
-        {
-            Write(ms);
-            _b58String = ms.ToArray().ToBase58();
-            return _b58String;
-        }
+        using var ms = new MemoryStream();
+        Write(ms);
+        _b58String = ms.ToArray().ToBase58();
+        return _b58String;
     }
 
     /// <summary>
@@ -434,11 +424,9 @@ public class MultiHash : IEquatable<MultiHash>
     /// </remarks>
     public byte[] ToArray()
     {
-        using (var ms = new MemoryStream())
-        {
-            Write(ms);
-            return ms.ToArray();
-        }
+        using var ms = new MemoryStream();
+        Write(ms);
+        return ms.ToArray();
     }
 
     /// <summary>
@@ -511,10 +499,8 @@ public class MultiHash : IEquatable<MultiHash>
     /// </returns>
     public static MultiHash ComputeHash(byte[] data, string algorithmName = DefaultAlgorithmName)
     {
-        using (var alg = GetHashAlgorithm(algorithmName))
-        {
-            return new(algorithmName, alg.ComputeHash(data));
-        }
+        using var alg = GetHashAlgorithm(algorithmName);
+        return new(algorithmName, alg.ComputeHash(data));
     }
 
     /// <summary>
@@ -531,10 +517,8 @@ public class MultiHash : IEquatable<MultiHash>
     /// </returns>
     public static MultiHash ComputeHash(Stream data, string algorithmName = DefaultAlgorithmName)
     {
-        using (var alg = GetHashAlgorithm(algorithmName))
-        {
-            return new(algorithmName, alg.ComputeHash(data));
-        }
+        using var alg = GetHashAlgorithm(algorithmName);
+        return new(algorithmName, alg.ComputeHash(data));
     }
 
     /// <summary>

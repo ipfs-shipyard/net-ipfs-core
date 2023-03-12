@@ -79,11 +79,9 @@ public class TcpTest
         var data = new byte[4];
 
         var tcp = new Tcp();
-        using (var time = await tcp.ConnectAsync(server[0], cs.Token))
-        {
-            var n = await time.ReadAsync(data, 0, data.Length, cs.Token);
-            Assert.AreEqual(4, n); // sometimes zero!
-        }
+        await using var time = await tcp.ConnectAsync(server[0], cs.Token);
+        var n = await time.ReadAsync(data, 0, data.Length, cs.Token);
+        Assert.AreEqual(4, n); // sometimes zero!
     }
 
     [TestMethod]
@@ -120,12 +118,10 @@ public class TcpTest
         {
             listenerAddress = tcp.Listen("/ip4/127.0.0.1", handler, cs.Token);
             Assert.IsTrue(listenerAddress.Protocols.Any(p => p.Name == "tcp"));
-            using (var stream = await tcp.ConnectAsync(listenerAddress, cs.Token))
-            {
-                await Task.Delay(50);
-                Assert.IsNotNull(stream);
-                Assert.IsTrue(connected);
-            }
+            await using var stream = await tcp.ConnectAsync(listenerAddress, cs.Token);
+            await Task.Delay(50);
+            Assert.IsNotNull(stream);
+            Assert.IsTrue(connected);
         }
         finally
         {
@@ -148,12 +144,10 @@ public class TcpTest
         {
             var addr = tcp.Listen("/ip4/127.0.0.1", handler, cs.Token);
             Assert.IsTrue(addr.Protocols.Any(p => p.Name == "tcp"));
-            using (var stream = await tcp.ConnectAsync(addr, cs.Token))
-            {
-                await Task.Delay(50);
-                Assert.IsNotNull(stream);
-                Assert.IsTrue(called);
-            }
+            await using var stream = await tcp.ConnectAsync(addr, cs.Token);
+            await Task.Delay(50);
+            Assert.IsNotNull(stream);
+            Assert.IsTrue(called);
         }
         finally
         {
@@ -166,13 +160,11 @@ public class TcpTest
     {
         var cs = new CancellationTokenSource(TimeSpan.FromSeconds(30));
         var tcp = new Tcp();
-        using (var server = new HelloServer())
-        using (var stream = await tcp.ConnectAsync(server.Address, cs.Token))
-        {
-            var bytes = new byte[5];
-            await stream.ReadAsync(bytes, 0, bytes.Length);
-            Assert.AreEqual("hello", Encoding.UTF8.GetString(bytes));
-        }
+        using var server = new HelloServer();
+        await using var stream = await tcp.ConnectAsync(server.Address, cs.Token);
+        var bytes = new byte[5];
+        await stream.ReadAsync(bytes, 0, bytes.Length);
+        Assert.AreEqual("hello", Encoding.UTF8.GetString(bytes));
     }
 
     private class HelloServer : IDisposable

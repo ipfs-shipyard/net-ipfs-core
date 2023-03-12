@@ -74,7 +74,7 @@ public class Identify1 : IPeerProtocol
         }
 
         // Read the remote peer identify info.
-        using (var stream = await muxer.CreateStreamAsync("id", cancel).ConfigureAwait(false))
+        await using (var stream = await muxer.CreateStreamAsync("id", cancel).ConfigureAwait(false))
         {
             await connection.EstablishProtocolAsync("/multistream/", stream, cancel).ConfigureAwait(false);
             await connection.EstablishProtocolAsync("/ipfs/id/", stream, cancel).ConfigureAwait(false);

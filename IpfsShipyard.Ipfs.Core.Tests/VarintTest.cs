@@ -80,12 +80,10 @@ public class VarintTest
     [TestMethod]
     public async Task WriteAsync()
     {
-        using (var ms = new MemoryStream())
-        {
-            await ms.WriteVarintAsync(long.MaxValue);
-            ms.Position = 0;
-            Assert.AreEqual(long.MaxValue, await ms.ReadVarint64Async());
-        }
+        using var ms = new MemoryStream();
+        await ms.WriteVarintAsync(long.MaxValue);
+        ms.Position = 0;
+        Assert.AreEqual(long.MaxValue, await ms.ReadVarint64Async());
     }
 
     [TestMethod]
@@ -107,11 +105,9 @@ public class VarintTest
     [TestMethod]
     public async Task ReadAsync()
     {
-        using (var ms = new MemoryStream("ffffffffffffffff7f".ToHexBuffer()))
-        {
-            var v = await ms.ReadVarint64Async();
-            Assert.AreEqual(long.MaxValue, v);
-        }
+        using var ms = new MemoryStream("ffffffffffffffff7f".ToHexBuffer());
+        var v = await ms.ReadVarint64Async();
+        Assert.AreEqual(long.MaxValue, v);
     }
 
     [TestMethod]

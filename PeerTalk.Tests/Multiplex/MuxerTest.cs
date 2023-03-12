@@ -121,8 +121,8 @@ public class MuxerTest
         var channel = new MemoryStream();
         var muxer1 = new Muxer { Channel = channel, Initiator = true };
 
-        using (var foo = await muxer1.CreateStreamAsync("foo"))
-        using (var bar = await muxer1.CreateStreamAsync("bar"))
+        await using (var foo = await muxer1.CreateStreamAsync("foo"))
+        await using (var bar = await muxer1.CreateStreamAsync("bar"))
         {
             // open and close a stream.
         }

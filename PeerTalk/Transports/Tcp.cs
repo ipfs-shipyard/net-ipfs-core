@@ -61,7 +61,7 @@ namespace IpfsShipyard.PeerTalk.Transports
 
                 // Handle cancellation of the connect attempt by disposing
                 // of the socket.  This will force ConnectAsync to return.
-                using (var _ = cancel.Register(() => { socket?.Dispose(); socket = null; }))
+                await using (var _ = cancel.Register(() => { socket?.Dispose(); socket = null; }))
                 {
                     var ipaddr = IPAddress.Parse(ip.Value);
                     await socket.ConnectAsync(ipaddr, port).ConfigureAwait(false);

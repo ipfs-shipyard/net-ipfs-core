@@ -25,11 +25,9 @@ internal class FileSystemApi : IFileSystemApi
 
     public async Task<IFileSystemNode> AddFileAsync(string path, AddFileOptions options = null, CancellationToken cancel = default(CancellationToken))
     {
-        using (var stream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read))
-        {
-            var node = await AddAsync(stream, Path.GetFileName(path), options, cancel);
-            return node;
-        }
+        await using var stream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read);
+        var node = await AddAsync(stream, Path.GetFileName(path), options, cancel);
+        return node;
     }
 
     public Task<IFileSystemNode> AddTextAsync(string text, AddFileOptions options = null, CancellationToken cancel = default(CancellationToken))
@@ -164,11 +162,9 @@ internal class FileSystemApi : IFileSystemApi
     /// </returns>
     public async Task<String> ReadAllTextAsync(string path, CancellationToken cancel = default(CancellationToken))
     {
-        using (var data = await ReadFileAsync(path, cancel))
-        using (var text = new StreamReader(data))
-        {
-            return await text.ReadToEndAsync();
-        }
+        await using var data = await ReadFileAsync(path, cancel);
+        using var text = new StreamReader(data);
+        return await text.ReadToEndAsync();
     }
 
 

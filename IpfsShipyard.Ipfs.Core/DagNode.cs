@@ -215,10 +215,8 @@ public class DagNode : IMerkleNode<IMerkleLink>
     /// </param>
     public void Write(Stream stream)
     {
-        using (var cos = new CodedOutputStream(stream, true))
-        {
-            Write(cos);
-        }
+        using var cos = new CodedOutputStream(stream, true);
+        Write(cos);
     }
 
     /// <summary>
@@ -234,14 +232,12 @@ public class DagNode : IMerkleNode<IMerkleLink>
 
         foreach (var link in Links.Select(l => new DagLink(l)))
         {
-            using (var linkStream = new MemoryStream())
-            {
-                link.Write(linkStream);
-                var msg = linkStream.ToArray();
-                stream.WriteTag(2, WireFormat.WireType.LengthDelimited);
-                stream.WriteLength(msg.Length);
-                stream.WriteSomeBytes(msg);
-            }
+            using var linkStream = new MemoryStream();
+            link.Write(linkStream);
+            var msg = linkStream.ToArray();
+            stream.WriteTag(2, WireFormat.WireType.LengthDelimited);
+            stream.WriteLength(msg.Length);
+            stream.WriteSomeBytes(msg);
         }
             
         if (DataBytes.Length > 0)
@@ -254,10 +250,8 @@ public class DagNode : IMerkleNode<IMerkleLink>
 
     private void Read(Stream stream)
     {
-        using (var cis = new CodedInputStream(stream, true))
-        {
-            Read(cis);
-        }
+        using var cis = new CodedInputStream(stream, true);
+        Read(cis);
     }
 
     private void Read(CodedInputStream stream)
@@ -297,30 +291,24 @@ public class DagNode : IMerkleNode<IMerkleLink>
     /// </returns>
     public byte[] ToArray()
     {
-        using (var ms = new MemoryStream())
-        {
-            Write(ms);
-            return ms.ToArray();
-        }
+        using var ms = new MemoryStream();
+        Write(ms);
+        return ms.ToArray();
     }
 
     private void ComputeHash()
     {
-        using (var ms = new MemoryStream())
-        {
-            Write(ms);
-            _size = ms.Position;
-            ms.Position = 0;
-            _id = MultiHash.ComputeHash(ms, _hashAlgorithm);
-        }
+        using var ms = new MemoryStream();
+        Write(ms);
+        _size = ms.Position;
+        ms.Position = 0;
+        _id = MultiHash.ComputeHash(ms, _hashAlgorithm);
     }
 
     private void ComputeSize()
     {
-        using (var ms = new MemoryStream())
-        {
-            Write(ms);
-            _size = ms.Position;
-        }
+        using var ms = new MemoryStream();
+        Write(ms);
+        _size = ms.Position;
     }
 }

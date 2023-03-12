@@ -268,13 +268,11 @@ public class Cid : IEquatable<Cid>
         }
         else
         {
-            using (var ms = new MemoryStream())
-            {
-                ms.WriteVarint(Version);
-                ms.WriteMultiCodec(ContentType);
-                Hash.Write(ms);
-                _encodedValue = MultiBase.Encode(ms.ToArray(), Encoding);
-            }
+            using var ms = new MemoryStream();
+            ms.WriteVarint(Version);
+            ms.WriteMultiCodec(ContentType);
+            Hash.Write(ms);
+            _encodedValue = MultiBase.Encode(ms.ToArray(), Encoding);
         }
         return _encodedValue;
     }
@@ -303,21 +301,19 @@ public class Cid : IEquatable<Cid>
                 return (Cid)new MultiHash(input);
             }
 
-            using (var ms = new MemoryStream(MultiBase.Decode(input), false))
+            using var ms = new MemoryStream(MultiBase.Decode(input), false);
+            var v = ms.ReadVarint32();
+            if (v != 1)
             {
-                var v = ms.ReadVarint32();
-                if (v != 1)
-                {
-                    throw new InvalidDataException($"Unknown CID version '{v}'.");
-                }
-                return new()
-                {
-                    Version = v,
-                    Encoding = Registry.MultiBaseAlgorithm.Codes[input[0]].Name,
-                    ContentType = ms.ReadMultiCodec().Name,
-                    Hash = new(ms)
-                };
+                throw new InvalidDataException($"Unknown CID version '{v}'.");
             }
+            return new()
+            {
+                Version = v,
+                Encoding = Registry.MultiBaseAlgorithm.Codes[input[0]].Name,
+                ContentType = ms.ReadMultiCodec().Name,
+                Hash = new(ms)
+            };
         }
         catch (Exception e)
         {
@@ -360,19 +356,17 @@ public class Cid : IEquatable<Cid>
     /// </param>
     public void Write(Stream stream)
     {
-        using (var ms = new MemoryStream())
+        using var ms = new MemoryStream();
+        if (Version != 0)
         {
-            if (Version != 0)
-            {
-                ms.WriteVarint(Version);
-                ms.WriteMultiCodec(ContentType);
-            }
-            Hash.Write(ms);
-
-            stream.WriteVarint(ms.Length);
-            ms.Position = 0;
-            ms.CopyTo(stream);
+            ms.WriteVarint(Version);
+            ms.WriteMultiCodec(ContentType);
         }
+        Hash.Write(ms);
+
+        stream.WriteVarint(ms.Length);
+        ms.Position = 0;
+        ms.CopyTo(stream);
     }
 
     /// <summary>
@@ -411,19 +405,17 @@ public class Cid : IEquatable<Cid>
     /// </param>
     public void Write(CodedOutputStream stream)
     {
-        using (var ms = new MemoryStream())
+        using var ms = new MemoryStream();
+        if (Version != 0)
         {
-            if (Version != 0)
-            {
-                ms.WriteVarint(Version);
-                ms.WriteMultiCodec(ContentType);
-            }
-            Hash.Write(ms);
-
-            var bytes = ms.ToArray();
-            stream.WriteLength(bytes.Length);
-            stream.WriteSomeBytes(bytes);
+            ms.WriteVarint(Version);
+            ms.WriteMultiCodec(ContentType);
         }
+        Hash.Write(ms);
+
+        var bytes = ms.ToArray();
+        stream.WriteLength(bytes.Length);
+        stream.WriteSomeBytes(bytes);
     }
 
     /// <summary>
@@ -448,13 +440,11 @@ public class Cid : IEquatable<Cid>
             return cid;
         }
 
-        using (var ms = new MemoryStream(buffer, false))
-        {
-            cid.Version = ms.ReadVarint32();
-            cid.ContentType = ms.ReadMultiCodec().Name;
-            cid.Hash = new(ms);
-            return cid;
-        }
+        using var ms = new MemoryStream(buffer, false);
+        cid.Version = ms.ReadVarint32();
+        cid.ContentType = ms.ReadMultiCodec().Name;
+        cid.Hash = new(ms);
+        return cid;
     }
 
     /// <summary>
@@ -473,13 +463,11 @@ public class Cid : IEquatable<Cid>
             return Hash.ToArray();
         }
 
-        using (var ms = new MemoryStream())
-        {
-            ms.WriteVarint(Version);
-            ms.WriteMultiCodec(ContentType);
-            Hash.Write(ms);
-            return ms.ToArray();
-        }
+        using var ms = new MemoryStream();
+        ms.WriteVarint(Version);
+        ms.WriteMultiCodec(ContentType);
+        Hash.Write(ms);
+        return ms.ToArray();
     }
 
     /// <summary>

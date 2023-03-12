@@ -274,13 +274,11 @@ public partial class IpfsClient : ICoreApi
     {
         var url = BuildCommand(command, arg, options);
 
-        using (var response = await Api().PostAsync(url, null, cancel))
-        {
-            await ThrowOnErrorAsync(response);
-            var body = await response.Content.ReadAsStringAsync();
+        using var response = await Api().PostAsync(url, null, cancel);
+        await ThrowOnErrorAsync(response);
+        var body = await response.Content.ReadAsStringAsync();
 
-            return body;
-        }
+        return body;
     }
 
     internal Task DoCommandAsync(Uri url, byte[] bytes, CancellationToken cancel)
@@ -300,11 +298,9 @@ public partial class IpfsClient : ICoreApi
 
     internal async Task DoCommandAsync(Uri url, HttpContent content, CancellationToken cancel)
     {
-        using (var response = await Api().PostAsync(url, new MultipartFormDataContent { { content, "\"file\"" } }, cancel))
-        {
-            await ThrowOnErrorAsync(response);
-            var body = await response.Content.ReadAsStringAsync();
-        }
+        using var response = await Api().PostAsync(url, new MultipartFormDataContent { { content, "\"file\"" } }, cancel);
+        await ThrowOnErrorAsync(response);
+        var body = await response.Content.ReadAsStringAsync();
     }
 
 
@@ -483,13 +479,11 @@ public partial class IpfsClient : ICoreApi
 
         var url = BuildCommand(command, null, options);
 
-        using (var response = await Api().PostAsync(url, content, cancel))
-        {
-            await ThrowOnErrorAsync(response);
-            var json = await response.Content.ReadAsStringAsync();
+        using var response = await Api().PostAsync(url, content, cancel);
+        await ThrowOnErrorAsync(response);
+        var json = await response.Content.ReadAsStringAsync();
 
-            return json;
-        }
+        return json;
     }
     /// <summary>
     ///   Perform an <see href="https://ipfs.io/docs/api/">IPFS API command</see> that
@@ -549,14 +543,12 @@ public partial class IpfsClient : ICoreApi
 
         var url = BuildCommand(command, null, options);
 
-        using (var response = await Api().PostAsync(url, content, cancel))
-        {
-            await ThrowOnErrorAsync(response);
+        using var response = await Api().PostAsync(url, content, cancel);
+        await ThrowOnErrorAsync(response);
 
-            var json = await response.Content.ReadAsStringAsync();
+        var json = await response.Content.ReadAsStringAsync();
 
-            return json;
-        }
+        return json;
     }
 
     /// <summary>

@@ -276,7 +276,7 @@ public class Dht1 : IPeerProtocol, IService, IPeerRouting, IContentRouting
             {
                 try
                 {
-                    using (var stream = await Swarm.DialAsync(peer, ToString()))
+                    await using (var stream = await Swarm.DialAsync(peer, ToString()))
                     {
                         Serializer.SerializeWithLengthPrefix(stream, message, PrefixStyle.Base128);
                         await stream.FlushAsync();

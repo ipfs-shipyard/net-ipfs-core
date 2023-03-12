@@ -32,9 +32,7 @@ public static class ProtoBufHelper
         var bytes = new byte[length];
         await stream.ReadExactAsync(bytes, 0, length, cancel).ConfigureAwait(false);
 
-        using (var ms = new MemoryStream(bytes, false))
-        {
-            return ProtoBuf.Serializer.Deserialize<T>(ms);
-        }
+        using var ms = new MemoryStream(bytes, false);
+        return ProtoBuf.Serializer.Deserialize<T>(ms);
     }
 }

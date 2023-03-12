@@ -19,17 +19,13 @@ public class FileSystemNode : IFileSystemNode
     {
         get
         {
-            using (var stream = DataStream)
-            {
-                if (DataStream == null)
-                    return null;
+            using var stream = DataStream;
+            if (DataStream == null)
+                return null;
 
-                using (var data = new MemoryStream())
-                {
-                    stream.CopyTo(data);
-                    return data.ToArray();
-                }
-            }
+            using var data = new MemoryStream();
+            stream.CopyTo(data);
+            return data.ToArray();
         }
     }
 

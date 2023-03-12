@@ -67,12 +67,10 @@ public class UdpTest
         {
             listenerAddress = udp.Listen("/ip4/127.0.0.1", handler, cs.Token);
             Assert.IsTrue(listenerAddress.Protocols.Any(p => p.Name == "udp"));
-            using (var stream = await udp.ConnectAsync(listenerAddress, cs.Token))
-            {
-                await Task.Delay(50);
-                Assert.IsNotNull(stream);
-                Assert.IsTrue(connected);
-            }
+            await using var stream = await udp.ConnectAsync(listenerAddress, cs.Token);
+            await Task.Delay(50);
+            Assert.IsNotNull(stream);
+            Assert.IsTrue(connected);
         }
         finally
         {
@@ -90,21 +88,19 @@ public class UdpTest
         ntpData[0] = 0x1B;
 
         var udp = new Udp();
-        using (var time = await udp.ConnectAsync(server[0], cs.Token))
-        {
-            ntpData[0] = 0x1B;
-            await time.WriteAsync(ntpData, 0, ntpData.Length, cs.Token);
-            await time.FlushAsync(cs.Token);
-            await time.ReadAsync(ntpData, 0, ntpData.Length, cs.Token);
-            Assert.AreNotEqual(0x1B, ntpData[0]);
+        await using var time = await udp.ConnectAsync(server[0], cs.Token);
+        ntpData[0] = 0x1B;
+        await time.WriteAsync(ntpData, 0, ntpData.Length, cs.Token);
+        await time.FlushAsync(cs.Token);
+        await time.ReadAsync(ntpData, 0, ntpData.Length, cs.Token);
+        Assert.AreNotEqual(0x1B, ntpData[0]);
 
-            Array.Clear(ntpData, 0, ntpData.Length);
-            ntpData[0] = 0x1B;
-            await time.WriteAsync(ntpData, 0, ntpData.Length, cs.Token);
-            await time.FlushAsync(cs.Token);
-            await time.ReadAsync(ntpData, 0, ntpData.Length, cs.Token);
-            Assert.AreNotEqual(0x1B, ntpData[0]);
-        }
+        Array.Clear(ntpData, 0, ntpData.Length);
+        ntpData[0] = 0x1B;
+        await time.WriteAsync(ntpData, 0, ntpData.Length, cs.Token);
+        await time.FlushAsync(cs.Token);
+        await time.ReadAsync(ntpData, 0, ntpData.Length, cs.Token);
+        Assert.AreNotEqual(0x1B, ntpData[0]);
     }
 
     [TestMethod]
@@ -113,13 +109,11 @@ public class UdpTest
     {
         var cs = new CancellationTokenSource(TimeSpan.FromSeconds(30));
         var udp = new Udp();
-        using (var server = new HelloServer())
-        using (var stream = await udp.ConnectAsync(server.Address, cs.Token))
-        {
-            var bytes = new byte[5];
-            await stream.ReadAsync(bytes, 0, bytes.Length, cs.Token);
-            Assert.AreEqual("hello", Encoding.UTF8.GetString(bytes));
-        }
+        using var server = new HelloServer();
+        await using var stream = await udp.ConnectAsync(server.Address, cs.Token);
+        var bytes = new byte[5];
+        await stream.ReadAsync(bytes, 0, bytes.Length, cs.Token);
+        Assert.AreEqual("hello", Encoding.UTF8.GetString(bytes));
     }
 
     private class HelloServer : IDisposable

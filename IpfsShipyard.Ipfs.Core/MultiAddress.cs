@@ -427,11 +427,9 @@ public class MultiAddress : IEquatable<MultiAddress>
     /// </summary>
     public override string ToString()
     {
-        using (var s = new StringWriter())
-        {
-            Write(s);
-            return s.ToString();
-        }
+        using var s = new StringWriter();
+        Write(s);
+        return s.ToString();
     }
 
     /// <summary>
@@ -445,11 +443,9 @@ public class MultiAddress : IEquatable<MultiAddress>
     /// </remarks>
     public byte[] ToArray()
     {
-        using (var ms = new MemoryStream())
-        {
-            Write(ms);
-            return ms.ToArray();
-        }
+        using var ms = new MemoryStream();
+        Write(ms);
+        return ms.ToArray();
     }
 
     /// <summary>

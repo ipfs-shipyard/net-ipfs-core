@@ -54,12 +54,10 @@ public class FileSystemApiTest
         var ipfs = TestFixture.Ipfs;
         var indata = new MemoryStream(new byte[] { 10, 20, 30 });
         var node = ipfs.FileSystem.AddAsync(indata).Result;
-        using (var outdata = ipfs.FileSystem.ReadFileAsync(node.Id, offset: 1).Result)
-        {
-            Assert.AreEqual<int>(20, outdata.ReadByte());
-            Assert.AreEqual<int>(30, outdata.ReadByte());
-            Assert.AreEqual<int>(-1, outdata.ReadByte());
-        }
+        using var outdata = ipfs.FileSystem.ReadFileAsync(node.Id, offset: 1).Result;
+        Assert.AreEqual<int>(20, outdata.ReadByte());
+        Assert.AreEqual<int>(30, outdata.ReadByte());
+        Assert.AreEqual<int>(-1, outdata.ReadByte());
     }
 
     [TestMethod]
@@ -68,11 +66,9 @@ public class FileSystemApiTest
         var ipfs = TestFixture.Ipfs;
         var indata = new MemoryStream(new byte[] { 10, 20, 30 });
         var node = ipfs.FileSystem.AddAsync(indata).Result;
-        using (var outdata = ipfs.FileSystem.ReadFileAsync(node.Id, offset: 1, count: 1).Result)
-        {
-            Assert.AreEqual<int>(20, outdata.ReadByte());
-            Assert.AreEqual<int>(-1, outdata.ReadByte());
-        }
+        using var outdata = ipfs.FileSystem.ReadFileAsync(node.Id, offset: 1, count: 1).Result;
+        Assert.AreEqual<int>(20, outdata.ReadByte());
+        Assert.AreEqual<int>(-1, outdata.ReadByte());
     }
 
     [TestMethod]
@@ -81,12 +77,10 @@ public class FileSystemApiTest
         var ipfs = TestFixture.Ipfs;
         var indata = new MemoryStream(new byte[] { 10, 20, 30 });
         var node = ipfs.FileSystem.AddAsync(indata).Result;
-        using (var outdata = ipfs.FileSystem.ReadFileAsync(node.Id, offset: 1, count: 2).Result)
-        {
-            Assert.AreEqual<int>(20, outdata.ReadByte());
-            Assert.AreEqual<int>(30, outdata.ReadByte());
-            Assert.AreEqual<int>(-1, outdata.ReadByte());
-        }
+        using var outdata = ipfs.FileSystem.ReadFileAsync(node.Id, offset: 1, count: 2).Result;
+        Assert.AreEqual<int>(20, outdata.ReadByte());
+        Assert.AreEqual<int>(30, outdata.ReadByte());
+        Assert.AreEqual<int>(-1, outdata.ReadByte());
     }
 
     [TestMethod]
@@ -276,18 +270,16 @@ public class FileSystemApiTest
             var dir = ipfs.FileSystem.AddDirectoryAsync(temp, true).Result;
             var dirid = dir.Id.Encode();
 
-            using (var tar = await ipfs.FileSystem.GetAsync(dir.Id))
+            await using var tar = await ipfs.FileSystem.GetAsync(dir.Id);
+            var buffer = new byte[3 * 512];
+            var offset = 0;
+            while (offset < buffer.Length)
             {
-                var buffer = new byte[3 * 512];
-                var offset = 0;
-                while (offset < buffer.Length)
-                {
-                    var n = await tar.ReadAsync(buffer, offset, buffer.Length - offset);
-                    Assert.IsTrue(n > 0);
-                    offset += n;
-                }
-                Assert.AreEqual<int>(-1, tar.ReadByte());
+                var n = await tar.ReadAsync(buffer, offset, buffer.Length - offset);
+                Assert.IsTrue(n > 0);
+                offset += n;
             }
+            Assert.AreEqual<int>(-1, tar.ReadByte());
         }
         finally
         {

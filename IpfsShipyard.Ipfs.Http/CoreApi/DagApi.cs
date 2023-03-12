@@ -27,20 +27,18 @@ internal class DagApi : IDagApi
         bool pin = true,
         CancellationToken cancel = default(CancellationToken))
     {
-        using (var ms = new MemoryStream())
+        using var ms = new MemoryStream();
+        await using (var sw = new StreamWriter(ms, new UTF8Encoding(false), 4096, true) { AutoFlush = true })
+        using (var jw = new JsonTextWriter(sw))
         {
-            using (var sw = new StreamWriter(ms, new UTF8Encoding(false), 4096, true) { AutoFlush = true })
-            using (var jw = new JsonTextWriter(sw))
+            var serializer = new JsonSerializer
             {
-                var serializer = new JsonSerializer
-                {
-                    Culture = CultureInfo.InvariantCulture
-                };
-                serializer.Serialize(jw, data);
-            }
-            ms.Position = 0;
-            return await PutAsync(ms, contentType, multiHash, encoding, pin, cancel);
+                Culture = CultureInfo.InvariantCulture
+            };
+            serializer.Serialize(jw, data);
         }
+        ms.Position = 0;
+        return await PutAsync(ms, contentType, multiHash, encoding, pin, cancel);
     }
 
     public async Task<Cid> PutAsync(
@@ -51,12 +49,10 @@ internal class DagApi : IDagApi
         bool pin = true,
         CancellationToken cancel = default(CancellationToken))
     {
-        using (var ms = new MemoryStream(
-                   Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(data)),
-                   false))
-        {
-            return await PutAsync(ms, contentType, multiHash, encoding, pin, cancel);
-        }
+        using var ms = new MemoryStream(
+            Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(data)),
+            false);
+        return await PutAsync(ms, contentType, multiHash, encoding, pin, cancel);
     }
 
     public async Task<Cid> PutAsync(

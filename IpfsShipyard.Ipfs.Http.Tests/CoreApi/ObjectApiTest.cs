@@ -66,12 +66,10 @@ public class ObjectApiTest
     {
         var adata = "alpha"u8.ToArray();
         var node = await _ipfs.Object.PutAsync(adata);
-        using (var stream = await _ipfs.Object.DataAsync(node.Id))
-        {
-            var bdata = new byte[adata.Length];
-            await stream.ReadAsync(bdata, 0, bdata.Length);
-            CollectionAssert.AreEqual(adata, bdata);
-        }
+        await using var stream = await _ipfs.Object.DataAsync(node.Id);
+        var bdata = new byte[adata.Length];
+        await stream.ReadAsync(bdata, 0, bdata.Length);
+        CollectionAssert.AreEqual(adata, bdata);
     }
 
     [TestMethod]

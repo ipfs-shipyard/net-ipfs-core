@@ -226,7 +226,7 @@ public class FloodRouter : IPeerProtocol, IMessageRouter
     {
         try
         {
-            using (var stream = await Swarm.DialAsync(peer, ToString(), cancel).ConfigureAwait(false))
+            await using (var stream = await Swarm.DialAsync(peer, ToString(), cancel).ConfigureAwait(false))
             {
                 await stream.WriteAsync(message, 0, message.Length, cancel).ConfigureAwait(false);
                 await stream.FlushAsync(cancel).ConfigureAwait(false);

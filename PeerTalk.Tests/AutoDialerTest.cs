@@ -32,10 +32,8 @@ public class AutoDialerTest
     [TestMethod]
     public void Defaults()
     {
-        using (var dialer = new AutoDialer(new()))
-        {
-            Assert.AreEqual(AutoDialer.DefaultMinConnections, dialer.MinConnections);
-        }
+        using var dialer = new AutoDialer(new());
+        Assert.AreEqual(AutoDialer.DefaultMinConnections, dialer.MinConnections);
     }
 
     [TestMethod]
@@ -51,18 +49,16 @@ public class AutoDialerTest
 
         try
         {
-            using (var dialer = new AutoDialer(swarmA))
-            {
-                var other = swarmA.RegisterPeerAddress(peerBAddress);
+            using var dialer = new AutoDialer(swarmA);
+            var other = swarmA.RegisterPeerAddress(peerBAddress);
 
-                // wait for the connection.
-                var endTime = DateTime.Now.AddSeconds(5);
-                while (other.ConnectedAddress == null)
-                {
-                    if (DateTime.Now > endTime)
-                        Assert.Fail("Did not do autodial");
-                    await Task.Delay(100);
-                }
+            // wait for the connection.
+            var endTime = DateTime.Now.AddSeconds(5);
+            while (other.ConnectedAddress == null)
+            {
+                if (DateTime.Now > endTime)
+                    Assert.Fail("Did not do autodial");
+                await Task.Delay(100);
             }
         }
         finally
@@ -85,20 +81,18 @@ public class AutoDialerTest
 
         try
         {
-            using (var dialer = new AutoDialer(swarmA) { MinConnections = 0 })
-            {
-                var other = swarmA.RegisterPeerAddress(peerBAddress);
+            using var dialer = new AutoDialer(swarmA) { MinConnections = 0 };
+            var other = swarmA.RegisterPeerAddress(peerBAddress);
 
-                // wait for the connection.
-                var endTime = DateTime.Now.AddSeconds(3);
-                while (other.ConnectedAddress == null)
-                {
-                    if (DateTime.Now > endTime)
-                        return;
-                    await Task.Delay(100);
-                }
-                Assert.Fail("Autodial should not happen");
+            // wait for the connection.
+            var endTime = DateTime.Now.AddSeconds(3);
+            while (other.ConnectedAddress == null)
+            {
+                if (DateTime.Now > endTime)
+                    return;
+                await Task.Delay(100);
             }
+            Assert.Fail("Autodial should not happen");
         }
         finally
         {
@@ -131,30 +125,28 @@ public class AutoDialerTest
 
         try
         {
-            using (var dialer = new AutoDialer(swarmA) { MinConnections = 1 })
+            using var dialer = new AutoDialer(swarmA) { MinConnections = 1 };
+            var b = swarmA.RegisterPeerAddress(peerBAddress);
+            var c = swarmA.RegisterPeerAddress(peerCAddress);
+
+            // wait for the peer B connection.
+            var endTime = DateTime.Now.AddSeconds(3);
+            while (!isBConnected)
             {
-                var b = swarmA.RegisterPeerAddress(peerBAddress);
-                var c = swarmA.RegisterPeerAddress(peerCAddress);
+                if (DateTime.Now > endTime)
+                    Assert.Fail("Did not do autodial on peer discovered");
+                await Task.Delay(100);
+            }
+            Assert.IsNull(c.ConnectedAddress);
+            await swarmA.DisconnectAsync(peerBAddress);
 
-                // wait for the peer B connection.
-                var endTime = DateTime.Now.AddSeconds(3);
-                while (!isBConnected)
-                {
-                    if (DateTime.Now > endTime)
-                        Assert.Fail("Did not do autodial on peer discovered");
-                    await Task.Delay(100);
-                }
-                Assert.IsNull(c.ConnectedAddress);
-                await swarmA.DisconnectAsync(peerBAddress);
-
-                // wait for the peer C connection.
-                endTime = DateTime.Now.AddSeconds(3);
-                while (c.ConnectedAddress == null)
-                {
-                    if (DateTime.Now > endTime)
-                        Assert.Fail("Did not do autodial on peer disconnected");
-                    await Task.Delay(100);
-                }
+            // wait for the peer C connection.
+            endTime = DateTime.Now.AddSeconds(3);
+            while (c.ConnectedAddress == null)
+            {
+                if (DateTime.Now > endTime)
+                    Assert.Fail("Did not do autodial on peer disconnected");
+                await Task.Delay(100);
             }
         }
         finally

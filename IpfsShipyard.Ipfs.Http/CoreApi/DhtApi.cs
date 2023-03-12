@@ -52,33 +52,31 @@ internal class DhtApi : IDhtApi
 
     private IEnumerable<Peer> ProviderFromStream(Stream stream, int limit = int.MaxValue)
     {
-        using (var sr = new StreamReader(stream))
+        using var sr = new StreamReader(stream);
+        var n = 0;
+        while (!sr.EndOfStream && n < limit)
         {
-            var n = 0;
-            while (!sr.EndOfStream && n < limit)
-            {
-                var json = sr.ReadLine();
+            var json = sr.ReadLine();
 
-                var r = JObject.Parse(json);
-                var id = (string)r["ID"];
-                if (id != String.Empty)
+            var r = JObject.Parse(json);
+            var id = (string)r["ID"];
+            if (id != String.Empty)
+            {
+                ++n;
+                yield return new() { Id = new(id) };
+            }
+            else
+            {
+                var responses = (JArray)r["Responses"];
+                if (responses != null)
                 {
-                    ++n;
-                    yield return new() { Id = new(id) };
-                }
-                else
-                {
-                    var responses = (JArray)r["Responses"];
-                    if (responses != null)
+                    foreach (var response in responses)
                     {
-                        foreach (var response in responses)
+                        var rid = (string)response["ID"];
+                        if (rid != String.Empty)
                         {
-                            var rid = (string)response["ID"];
-                            if (rid != String.Empty)
-                            {
-                                ++n;
-                                yield return new() { Id = new(rid) };
-                            }
+                            ++n;
+                            yield return new() { Id = new(rid) };
                         }
                     }
                 }

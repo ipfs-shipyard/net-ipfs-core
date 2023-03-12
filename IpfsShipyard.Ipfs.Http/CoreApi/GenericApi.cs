@@ -40,20 +40,18 @@ public partial class IpfsClient : IGenericApi
 
     private IEnumerable<PingResult> PingResultFromStream(Stream stream)
     {
-        using (var sr = new StreamReader(stream))
+        using var sr = new StreamReader(stream);
+        while (!sr.EndOfStream)
         {
-            while (!sr.EndOfStream)
-            {
-                var json = sr.ReadLine();
+            var json = sr.ReadLine();
 
-                var r = JObject.Parse(json);
-                yield return new()
-                {
-                    Success = (bool)r["Success"],
-                    Text = (string)r["Text"],
-                    Time = TimeSpan.FromTicks((long)((long)r["Time"] * TicksPerNanosecond))
-                };
-            }
+            var r = JObject.Parse(json);
+            yield return new()
+            {
+                Success = (bool)r["Success"],
+                Text = (string)r["Text"],
+                Time = TimeSpan.FromTicks((long)((long)r["Time"] * TicksPerNanosecond))
+            };
         }
     }
 

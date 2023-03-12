@@ -12,12 +12,10 @@ public class StreamExtensionsTest
     public async Task ReadAsync()
     {
         var expected = new byte[] { 1, 2, 3, 4 };
-        using (var ms = new MemoryStream(expected))
-        {
-            var actual = new byte[expected.Length];
-            await ms.ReadExactAsync(actual, 0, actual.Length);
-            CollectionAssert.AreEqual(expected, actual);
-        }
+        using var ms = new MemoryStream(expected);
+        var actual = new byte[expected.Length];
+        await ms.ReadExactAsync(actual, 0, actual.Length);
+        CollectionAssert.AreEqual(expected, actual);
     }
 
     [TestMethod]

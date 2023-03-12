@@ -79,10 +79,8 @@ public class DagLink : IMerkleLink
     /// </param>
     public void Write(Stream stream)
     {
-        using (var cos = new CodedOutputStream(stream, true))
-        {
-            Write(cos);
-        }
+        using var cos = new CodedOutputStream(stream, true);
+        Write(cos);
     }
 
     /// <summary>
@@ -111,10 +109,8 @@ public class DagLink : IMerkleLink
 
     private void Read(Stream stream)
     {
-        using (var cis = new CodedInputStream(stream, true))
-        {
-            Read(cis);
-        }
+        using var cis = new CodedInputStream(stream, true);
+        Read(cis);
     }
 
     private void Read(CodedInputStream stream)
@@ -147,11 +143,9 @@ public class DagLink : IMerkleLink
     /// </returns>
     public byte[] ToArray()
     {
-        using (var ms = new MemoryStream())
-        {
-            Write(ms);
-            return ms.ToArray();
-        }
+        using var ms = new MemoryStream();
+        Write(ms);
+        return ms.ToArray();
     }
 
 }

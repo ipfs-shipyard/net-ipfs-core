@@ -1090,7 +1090,7 @@ public class SwarmTest
         await swarm.StartAsync();
         try
         {
-            using var stream = await swarm.DialAsync(peerB, "/ipfs/id/1.0.0");
+            await using var stream = await swarm.DialAsync(peerB, "/ipfs/id/1.0.0");
             {
                 Assert.IsNotNull(stream);
                 Assert.IsTrue(stream.CanRead);

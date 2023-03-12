@@ -31,79 +31,67 @@ public class ContentRouterTest
     [TestMethod]
     public void Add()
     {
-        using (var router = new ContentRouter())
-        {
-            router.Add(_cid1, _self.Id);
+        using var router = new ContentRouter();
+        router.Add(_cid1, _self.Id);
 
-            var providers = router.Get(_cid1);
-            Assert.AreEqual(1, providers.Count());
-            Assert.AreEqual(_self.Id, providers.First());
-        }
+        var providers = router.Get(_cid1);
+        Assert.AreEqual(1, providers.Count());
+        Assert.AreEqual(_self.Id, providers.First());
     }
 
     [TestMethod]
     public void Add_Duplicate()
     {
-        using (var router = new ContentRouter())
-        {
-            router.Add(_cid1, _self.Id);
-            router.Add(_cid1, _self.Id);
+        using var router = new ContentRouter();
+        router.Add(_cid1, _self.Id);
+        router.Add(_cid1, _self.Id);
 
-            var providers = router.Get(_cid1);
-            Assert.AreEqual(1, providers.Count());
-            Assert.AreEqual(_self.Id, providers.First());
-        }
+        var providers = router.Get(_cid1);
+        Assert.AreEqual(1, providers.Count());
+        Assert.AreEqual(_self.Id, providers.First());
     }
 
     [TestMethod]
     public void Add_MultipleProviders()
     {
-        using (var router = new ContentRouter())
-        {
-            router.Add(_cid1, _self.Id);
-            router.Add(_cid1, _other.Id);
+        using var router = new ContentRouter();
+        router.Add(_cid1, _self.Id);
+        router.Add(_cid1, _other.Id);
 
-            var providers = router.Get(_cid1).ToArray();
-            Assert.AreEqual(2, providers.Length);
-            CollectionAssert.Contains(providers, _self.Id);
-            CollectionAssert.Contains(providers, _other.Id);
-        }
+        var providers = router.Get(_cid1).ToArray();
+        Assert.AreEqual(2, providers.Length);
+        CollectionAssert.Contains(providers, _self.Id);
+        CollectionAssert.Contains(providers, _other.Id);
     }
 
     [TestMethod]
     public void Get_NonexistentCid()
     {
-        using (var router = new ContentRouter())
-        {
-            var providers = router.Get(_cid1);
-            Assert.AreEqual(0, providers.Count());
-        }
+        using var router = new ContentRouter();
+        var providers = router.Get(_cid1);
+        Assert.AreEqual(0, providers.Count());
     }
 
     [TestMethod]
     public void Get_Expired()
     {
-        using (var router = new ContentRouter())
-        {
-            router.Add(_cid1, _self.Id, DateTime.MinValue);
+        using var router = new ContentRouter();
+        router.Add(_cid1, _self.Id, DateTime.MinValue);
 
-            var providers = router.Get(_cid1);
-            Assert.AreEqual(0, providers.Count());
-        }
+        var providers = router.Get(_cid1);
+        Assert.AreEqual(0, providers.Count());
     }
 
     [TestMethod]
     public void Get_NotExpired()
     {
-        using (var router = new ContentRouter())
-        {
-            router.Add(_cid1, _self.Id, DateTime.MinValue);
-            var providers = router.Get(_cid1);
-            Assert.AreEqual(0, providers.Count());
+        using var router = new ContentRouter();
+        router.Add(_cid1, _self.Id, DateTime.MinValue);
+        var providers = router.Get(_cid1);
+        Assert.AreEqual(0, providers.Count());
 
-            router.Add(_cid1, _self.Id, DateTime.MaxValue - router.ProviderTtl);
-            providers = router.Get(_cid1);
-            Assert.AreEqual(1, providers.Count());
-        }
+        router.Add(_cid1, _self.Id, DateTime.MaxValue - router.ProviderTtl);
+        providers = router.Get(_cid1);
+        Assert.AreEqual(1, providers.Count());
     }
 }

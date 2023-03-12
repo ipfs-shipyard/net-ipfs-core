@@ -489,12 +489,10 @@ public class Swarm : IService, IPolicy<MultiAddress>, IPolicy<Peer>
         // Use a current connection attempt to the peer or create a new one.
         try
         {
-            using (var cts = CancellationTokenSource.CreateLinkedTokenSource(_swarmCancellation.Token, cancel))
-            {
-                return await _pendingConnections
-                    .GetOrAdd(peer, (_) => new(() => DialAsync(peer, peer.Addresses, cts.Token)))
-                    .ConfigureAwait(false);
-            }
+            using var cts = CancellationTokenSource.CreateLinkedTokenSource(_swarmCancellation.Token, cancel);
+            return await _pendingConnections
+                .GetOrAdd(peer, (_) => new(() => DialAsync(peer, peer.Addresses, cts.Token)))
+                .ConfigureAwait(false);
         }
         catch (Exception)
         {
@@ -603,14 +601,12 @@ public class Swarm : IService, IPolicy<MultiAddress>, IPolicy<Peer>
         PeerConnection connection = null;
         try
         {
-            using (var timeout = new CancellationTokenSource(TransportConnectionTimeout))
-            using (var cts = CancellationTokenSource.CreateLinkedTokenSource(timeout.Token, cancel))
-            {
-                var attempts = possibleAddresses
-                    .Select(a => DialAsync(remote, a, cts.Token));
-                connection = await TaskHelper.WhenAnyResultAsync(attempts, cts.Token).ConfigureAwait(false);
-                cts.Cancel(); // stop other dialing tasks.
-            }
+            using var timeout = new CancellationTokenSource(TransportConnectionTimeout);
+            using var cts = CancellationTokenSource.CreateLinkedTokenSource(timeout.Token, cancel);
+            var attempts = possibleAddresses
+                .Select(a => DialAsync(remote, a, cts.Token));
+            connection = await TaskHelper.WhenAnyResultAsync(attempts, cts.Token).ConfigureAwait(false);
+            cts.Cancel(); // stop other dialing tasks.
         }
         catch (Exception e)
         {

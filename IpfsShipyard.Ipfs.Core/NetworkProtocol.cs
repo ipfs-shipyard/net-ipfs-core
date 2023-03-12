@@ -175,13 +175,11 @@ public abstract class NetworkProtocol
     /// </summary>
     public override string ToString()
     {
-        using (var s = new StringWriter())
-        {
-            s.Write('/');
-            s.Write(Name);
-            WriteValue(s);
-            return s.ToString();
-        }
+        using var s = new StringWriter();
+        s.Write('/');
+        s.Write(Name);
+        WriteValue(s);
+        return s.ToString();
     }
 
 }

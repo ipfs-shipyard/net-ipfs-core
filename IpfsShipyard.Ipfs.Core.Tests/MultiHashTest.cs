@@ -445,11 +445,9 @@ public class MultiHashTest
         {
             if (v.Ignore) continue;
             var bytes = Encoding.UTF8.GetBytes(v.Input);
-            using (var ms = new MemoryStream(bytes, false))
-            {
-                var mh = MultiHash.ComputeHash(ms, v.Algorithm);
-                Assert.AreEqual(v.Output, mh.ToArray().ToHexString(), v.Algorithm);
-            }
+            using var ms = new MemoryStream(bytes, false);
+            var mh = MultiHash.ComputeHash(ms, v.Algorithm);
+            Assert.AreEqual(v.Output, mh.ToArray().ToHexString(), v.Algorithm);
         }
     }
 

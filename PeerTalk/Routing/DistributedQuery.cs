@@ -177,7 +177,7 @@ public class DistributedQuery<T> where T : class
             {
                 using (var timeout = new CancellationTokenSource(askTime))
                 using (var cts = CancellationTokenSource.CreateLinkedTokenSource(timeout.Token, _runningQuery.Token))
-                using (var stream = await Dht.Swarm.DialAsync(peer, Dht.ToString(), cts.Token).ConfigureAwait(false))
+                await using (var stream = await Dht.Swarm.DialAsync(peer, Dht.ToString(), cts.Token).ConfigureAwait(false))
                 {
                     // Send the KAD query and get a response.
                     Serializer.SerializeWithLengthPrefix(stream, _queryMessage, PrefixStyle.Base128);
