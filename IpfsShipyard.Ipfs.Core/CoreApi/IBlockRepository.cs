@@ -18,7 +18,7 @@ public interface IBlockRepositoryApi
     /// <returns>
     ///   TODO: not sure what this should return.
     /// </returns>
-    Task RemoveGarbageAsync(CancellationToken cancel = default(CancellationToken));
+    Task RemoveGarbageAsync(CancellationToken cancel = default);
 
     /// <summary>
     ///   Get statistics on the repository.
@@ -33,7 +33,7 @@ public interface IBlockRepositoryApi
     /// <remarks>
     ///   Same as <see cref="IStatsApi.RepositoryAsync(CancellationToken)"/>.
     /// </remarks>
-    Task<RepositoryData> StatisticsAsync(CancellationToken cancel = default(CancellationToken));
+    Task<RepositoryData> StatisticsAsync(CancellationToken cancel = default);
 
     /// <summary>
     ///   Verify all blocks in repo are not corrupted.
@@ -44,7 +44,7 @@ public interface IBlockRepositoryApi
     /// <returns>
     ///   TODO: not sure what this should return.
     /// </returns>
-    Task VerifyAsync(CancellationToken cancel = default(CancellationToken));
+    Task VerifyAsync(CancellationToken cancel = default);
 
     /// <summary>
     ///   Gets the version number of the repo.
@@ -56,5 +56,5 @@ public interface IBlockRepositoryApi
     ///   A task that represents the asynchronous operation. The task's result is
     ///   the version number of the data block repository.
     /// </returns>
-    Task<string> VersionAsync(CancellationToken cancel = default(CancellationToken));
+    Task<string> VersionAsync(CancellationToken cancel = default);
 }

@@ -110,8 +110,7 @@ public static class HexString
         for (int i = 0, j = 0; i < n; i += 2, j++)
         {
             var hex = s.Substring(i, 2);
-            byte value;
-            if (!HexBytes.TryGetValue(hex, out value))
+            if (!HexBytes.TryGetValue(hex, out var value))
                 throw new InvalidDataException($"'{hex}' is not a valid hexadecimal byte.");
             buffer[j] = value;
         }

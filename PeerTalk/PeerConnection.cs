@@ -118,12 +118,9 @@ public class PeerConnection : IDisposable
     /// </param>
     public void AddProtocols(IEnumerable<IPeerProtocol> protocols)
     {
-        foreach (var protocol in protocols)
+        foreach (var protocol in protocols.Where(protocol => protocol != null))
         {
-            if (protocol != null)
-            {
-                Protocols.Add(protocol.ToString(), protocol.ProcessMessageAsync);
-            }
+            Protocols.Add(protocol.ToString(), protocol.ProcessMessageAsync);
         }
     }
 
@@ -242,7 +239,7 @@ public class PeerConnection : IDisposable
     {
         var protocols = ProtocolRegistry.Protocols.Keys
             .Where(k => k == name || k.StartsWith(name))
-            .Select(k => VersionedName.Parse(k))
+            .Select(VersionedName.Parse)
             .OrderByDescending(vn => vn)
             .Select(vn => vn.ToString());
         foreach (var protocol in protocols)
@@ -332,7 +329,7 @@ public class PeerConnection : IDisposable
 
     #region IDisposable Support
 
-    private bool _disposedValue = false; // To detect redundant calls
+    private bool _disposedValue; // To detect redundant calls
 
     /// <summary>
     ///   Signals that the connection is closed (disposed).

@@ -200,17 +200,12 @@ namespace IpfsShipyard.PeerTalk.Transports
                 while (!cancel.IsCancellationRequested)
                 {
                     var conn = socket.Accept();
-                    if (conn == null)
-                    {
-                        log.Warn("Null socket from Accept");
-                        continue;
-                    }
                     MultiAddress remote = null;
                     if (conn.RemoteEndPoint is IPEndPoint endPoint)
                     {
                         var s = new StringBuilder();
                         s.Append(endPoint.AddressFamily == AddressFamily.InterNetwork ? "/ip4/" : "/ip6/");
-                        s.Append(endPoint.Address.ToString());
+                        s.Append(endPoint.Address);
                         s.Append("/tcp/");
                         s.Append(endPoint.Port);
                         remote = new(s.ToString());

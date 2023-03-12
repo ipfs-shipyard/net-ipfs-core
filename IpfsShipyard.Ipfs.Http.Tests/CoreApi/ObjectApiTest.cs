@@ -1,5 +1,4 @@
 ﻿using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using IpfsShipyard.Ipfs.Core;
@@ -40,10 +39,10 @@ public class ObjectApiTest
         var x = await _ipfs.Object.PutAsync(beta);
         var node = await _ipfs.Object.GetAsync(x.Id);
         CollectionAssert.AreEqual(beta.DataBytes, node.DataBytes);
-        Assert.AreEqual(beta.Links.Count(), Enumerable.Count<IMerkleLink>(node.Links));
-        Assert.AreEqual(beta.Links.First().Id, Enumerable.First<IMerkleLink>(node.Links).Id);
-        Assert.AreEqual(beta.Links.First().Name, Enumerable.First<IMerkleLink>(node.Links).Name);
-        Assert.AreEqual(beta.Links.First().Size, Enumerable.First<IMerkleLink>(node.Links).Size);
+        Assert.AreEqual(beta.Links.Count(), node.Links.Count());
+        Assert.AreEqual(beta.Links.First().Id, node.Links.First().Id);
+        Assert.AreEqual(beta.Links.First().Name, node.Links.First().Name);
+        Assert.AreEqual(beta.Links.First().Size, node.Links.First().Size);
     }
 
     [TestMethod]
@@ -55,10 +54,10 @@ public class ObjectApiTest
         var beta = await _ipfs.Object.PutAsync(bdata, new[] { alpha.ToLink() });
         var node = await _ipfs.Object.GetAsync(beta.Id);
         CollectionAssert.AreEqual(beta.DataBytes, node.DataBytes);
-        Assert.AreEqual(Enumerable.Count<IMerkleLink>(beta.Links), Enumerable.Count<IMerkleLink>(node.Links));
-        Assert.AreEqual(Enumerable.First<IMerkleLink>(beta.Links).Id, Enumerable.First<IMerkleLink>(node.Links).Id);
-        Assert.AreEqual(Enumerable.First<IMerkleLink>(beta.Links).Name, Enumerable.First<IMerkleLink>(node.Links).Name);
-        Assert.AreEqual(Enumerable.First<IMerkleLink>(beta.Links).Size, Enumerable.First<IMerkleLink>(node.Links).Size);
+        Assert.AreEqual(beta.Links.Count(), node.Links.Count());
+        Assert.AreEqual(beta.Links.First().Id, node.Links.First().Id);
+        Assert.AreEqual(beta.Links.First().Name, node.Links.First().Name);
+        Assert.AreEqual(beta.Links.First().Size, node.Links.First().Size);
     }
 
     [TestMethod]
@@ -80,10 +79,10 @@ public class ObjectApiTest
         var alpha = new DagNode(adata);
         var beta = await _ipfs.Object.PutAsync(bdata, new[] { alpha.ToLink() });
         var links = await _ipfs.Object.LinksAsync(beta.Id);
-        Assert.AreEqual(Enumerable.Count<IMerkleLink>(beta.Links), Enumerable.Count<IMerkleLink>(links));
-        Assert.AreEqual(Enumerable.First<IMerkleLink>(beta.Links).Id, Enumerable.First<IMerkleLink>(links).Id);
-        Assert.AreEqual(Enumerable.First<IMerkleLink>(beta.Links).Name, Enumerable.First<IMerkleLink>(links).Name);
-        Assert.AreEqual(Enumerable.First<IMerkleLink>(beta.Links).Size, Enumerable.First<IMerkleLink>(links).Size);
+        Assert.AreEqual(beta.Links.Count(), links.Count());
+        Assert.AreEqual(beta.Links.First().Id, links.First().Id);
+        Assert.AreEqual(beta.Links.First().Name, links.First().Name);
+        Assert.AreEqual(beta.Links.First().Size, links.First().Size);
     }
 
     [TestMethod]
@@ -95,11 +94,11 @@ public class ObjectApiTest
         var node1 = await _ipfs.Object.PutAsync(data1,
             new[] { node2.ToLink("some-link") });
         var info = await _ipfs.Object.StatAsync(node1.Id);
-        Assert.AreEqual<int>(1, info.LinkCount);
-        Assert.AreEqual<long>(64, info.BlockSize);
-        Assert.AreEqual<long>(53, info.LinkSize);
-        Assert.AreEqual<long>(11, info.DataSize);
-        Assert.AreEqual<long>(77, info.CumulativeSize);
+        Assert.AreEqual(1, info.LinkCount);
+        Assert.AreEqual(64, info.BlockSize);
+        Assert.AreEqual(53, info.LinkSize);
+        Assert.AreEqual(11, info.DataSize);
+        Assert.AreEqual(77, info.CumulativeSize);
     }
 
     [TestMethod]
@@ -116,7 +115,6 @@ public class ObjectApiTest
         }
         catch (TaskCanceledException)
         {
-            return;
         }
     }
 

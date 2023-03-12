@@ -18,7 +18,7 @@ public class SwarmApiTest
         {
             Assert.IsNotNull(peer.Id);
             Assert.IsNotNull(peer.Addresses);
-            Assert.AreNotEqual(0, Enumerable.Count<MultiAddress>(peer.Addresses));
+            Assert.AreNotEqual(0, peer.Addresses.Count());
         }
     }
 
@@ -27,7 +27,7 @@ public class SwarmApiTest
     {
         var ipfs = TestFixture.Ipfs;
         var peers = await ipfs.Swarm.PeersAsync();
-        Assert.AreNotEqual(0, Enumerable.Count<Peer>(peers));
+        Assert.AreNotEqual(0, peers.Count());
         foreach (var peer in peers)
         {
             Assert.IsNotNull(peer.Id);
@@ -40,7 +40,7 @@ public class SwarmApiTest
     {
         var ipfs = TestFixture.Ipfs;
         var peers = await ipfs.Swarm.PeersAsync();
-        await Task.WhenAll(Enumerable.Where<Peer>(peers, p => p.Latency != TimeSpan.Zero)
+        await Task.WhenAll(peers.Where(p => p.Latency != TimeSpan.Zero)
             .OrderBy(p => p.Latency)
             .Take(1)
             .Select(async p =>
@@ -58,7 +58,7 @@ public class SwarmApiTest
 
         // Sometimes we cannot connect to a specific peer.  This
         // tests that a connection can be made to at least one peer.
-        foreach (var peer in Enumerable.Take<Peer>(peers, 2))
+        foreach (var peer in peers.Take(2))
         {
             try
             {
@@ -81,19 +81,19 @@ public class SwarmApiTest
         var somewhere = new MultiAddress("/ip4/192.127.0.0/ipcidr/16");
         var filter = await ipfs.Swarm.AddAddressFilterAsync(somewhere, true);
         Assert.IsNotNull(filter);
-        Assert.AreEqual<MultiAddress>(somewhere, filter);
+        Assert.AreEqual(somewhere, filter);
         var filters = await ipfs.Swarm.ListAddressFiltersAsync();
-        Assert.IsTrue(Enumerable.Any<MultiAddress>(filters, a => a == somewhere));
+        Assert.IsTrue(filters.Any(a => a == somewhere));
         filters = await ipfs.Swarm.ListAddressFiltersAsync(true);
-        Assert.IsTrue(Enumerable.Any<MultiAddress>(filters, a => a == somewhere));
+        Assert.IsTrue(filters.Any(a => a == somewhere));
 
         filter = await ipfs.Swarm.RemoveAddressFilterAsync(somewhere, true);
         Assert.IsNotNull(filter);
-        Assert.AreEqual<MultiAddress>(somewhere, filter);
+        Assert.AreEqual(somewhere, filter);
         filters = await ipfs.Swarm.ListAddressFiltersAsync();
-        Assert.IsFalse(Enumerable.Any<MultiAddress>(filters, a => a == somewhere));
+        Assert.IsFalse(filters.Any(a => a == somewhere));
         filters = await ipfs.Swarm.ListAddressFiltersAsync(true);
-        Assert.IsFalse(Enumerable.Any<MultiAddress>(filters, a => a == somewhere));
+        Assert.IsFalse(filters.Any(a => a == somewhere));
     }
 
     [TestMethod]

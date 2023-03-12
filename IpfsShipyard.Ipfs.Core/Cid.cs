@@ -2,6 +2,7 @@
 using System.IO;
 using System.Text;
 using Google.Protobuf;
+using IpfsShipyard.Ipfs.Core.Registry;
 using Newtonsoft.Json;
 
 namespace IpfsShipyard.Ipfs.Core;
@@ -298,7 +299,7 @@ public class Cid : IEquatable<Cid>
             // SHA2-256 MultiHash is CID v0.
             if (input.Length == 46 && input.StartsWith("Qm"))
             {
-                return (Cid)new MultiHash(input);
+                return new MultiHash(input);
             }
 
             using var ms = new MemoryStream(MultiBase.Decode(input), false);
@@ -310,7 +311,7 @@ public class Cid : IEquatable<Cid>
             return new()
             {
                 Version = v,
-                Encoding = Registry.MultiBaseAlgorithm.Codes[input[0]].Name,
+                Encoding = MultiBaseAlgorithm.Codes[input[0]].Name,
                 ContentType = ms.ReadMultiCodec().Name,
                 Hash = new(ms)
             };
@@ -509,9 +510,7 @@ public class Cid : IEquatable<Cid>
     public override bool Equals(object obj)
     {
         var that = obj as Cid;
-        return (that == null)
-            ? false
-            : Encode() == that.Encode();
+        return that != null && Encode() == that.Encode();
     }
 
     /// <inheritdoc />

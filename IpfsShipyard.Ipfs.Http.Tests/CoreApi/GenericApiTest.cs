@@ -1,7 +1,6 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
 using IpfsShipyard.Ipfs.Core;
-using IpfsShipyard.Ipfs.Core.CoreApi;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace IpfsShipyard.Ipfs.Http.Tests.CoreApi;
@@ -50,7 +49,7 @@ public class GenericApiTest
         MultiHash peer = "QmSoLMeWqB7YGVLJN3pNLQpmmEk35v6wYtsMGLzSr5QBU3";
         var actual = await ipfs.Generic.PingAsync(peer, count: 1);
         Assert.IsNotNull(actual);
-        Assert.AreNotEqual(0, Enumerable.Count<PingResult>(actual));
+        Assert.AreNotEqual(0, actual.Count());
     }
 
     [TestMethod]
@@ -60,6 +59,6 @@ public class GenericApiTest
         MultiAddress addr = "/ip4/104.236.179.241/tcp/4001/ipfs/QmSoLPppuBtQSGwKDZT2M73ULpjvfd3aZ6ha4oFGL1KrGM";
         var actual = await ipfs.Generic.PingAsync(addr, count: 1);
         Assert.IsNotNull(actual);
-        Assert.AreNotEqual(0, Enumerable.Count<PingResult>(actual));
+        Assert.AreNotEqual(0, actual.Count());
     }
 }

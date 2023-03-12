@@ -8,9 +8,11 @@ public class BlackListTest
     [TestMethod]
     public void Allowed()
     {
-        var policy = new BlackList<string>();
-        policy.Add("c");
-        policy.Add("d");
+        var policy = new BlackList<string>
+        {
+            "c",
+            "d"
+        };
         Assert.IsTrue(policy.IsAllowed("a"));
         Assert.IsTrue(policy.IsAllowed("b"));
         Assert.IsFalse(policy.IsAllowed("c"));

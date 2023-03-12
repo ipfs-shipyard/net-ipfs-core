@@ -82,9 +82,9 @@ public class MultiAddressTest
         Assert.AreEqual(a0, a1);
         Assert.AreNotEqual(a0, b);
 
-        Assert.AreEqual<MultiAddress>(a0, a0);
-        Assert.AreEqual<MultiAddress>(a0, a1);
-        Assert.AreNotEqual<MultiAddress>(a0, b);
+        Assert.AreEqual(a0, a0);
+        Assert.AreEqual(a0, a1);
+        Assert.AreNotEqual(a0, b);
 
         Assert.AreEqual(a0.GetHashCode(), a0.GetHashCode());
         Assert.AreEqual(a0.GetHashCode(), a1.GetHashCode());
@@ -120,7 +120,7 @@ public class MultiAddressTest
     [TestMethod]
     public void Bad_Onion_MultiAdress()
     {
-        var badCases = new string[]
+        var badCases = new[]
         {
             "/onion/9imaq4ygg2iegci7:80",
             "/onion/aaimaq4ygg2iegci7:80",
@@ -170,13 +170,13 @@ public class MultiAddressTest
             ma0.Write(ms);
             ms.Position = 0;
             var ma1 = new MultiAddress(ms);
-            Assert.AreEqual<MultiAddress>(ma0, ma1);
+            Assert.AreEqual(ma0, ma1);
 
             var ma2 = new MultiAddress(ma0.ToString());
-            Assert.AreEqual<MultiAddress>(ma0, ma2);
+            Assert.AreEqual(ma0, ma2);
 
             var ma3 = new MultiAddress(ma0.ToArray());
-            Assert.AreEqual<MultiAddress>(ma0, ma3);
+            Assert.AreEqual(ma0, ma3);
         }
     }
 
@@ -320,7 +320,7 @@ public class MultiAddressTest
     {
         var a = new MultiAddress("/ip6/fe80::7573:b0a8:46b0:0bad/tcp/4009");
         var json = JsonConvert.SerializeObject(a);
-        Assert.AreEqual($"\"{a.ToString()}\"", json);
+        Assert.AreEqual($"\"{a}\"", json);
         var b = JsonConvert.DeserializeObject<MultiAddress>(json);
         Assert.AreEqual(a.ToString(), b.ToString());
 

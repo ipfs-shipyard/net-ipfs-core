@@ -377,9 +377,7 @@ public class MultiAddress : IEquatable<MultiAddress>
     public override bool Equals(object obj)
     {
         var that = obj as MultiAddress;
-        return (that == null)
-            ? false
-            : Equals(that);
+        return that != null && Equals(that);
     }
 
     /// <inheritdoc />

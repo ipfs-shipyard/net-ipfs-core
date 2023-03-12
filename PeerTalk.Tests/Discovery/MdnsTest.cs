@@ -3,7 +3,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using IpfsShipyard.Ipfs.Core;
 using IpfsShipyard.PeerTalk.Discovery;
-using Makaretu.Dns;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace IpfsShipyard.PeerTalk.Tests.Discovery;

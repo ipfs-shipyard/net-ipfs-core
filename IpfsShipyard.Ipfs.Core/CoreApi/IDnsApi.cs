@@ -46,6 +46,6 @@ public interface IDnsApi
     Task<string> ResolveAsync(
         string name,
         bool recursive = false,
-        CancellationToken cancel = default(CancellationToken)
+        CancellationToken cancel = default
     );
 }

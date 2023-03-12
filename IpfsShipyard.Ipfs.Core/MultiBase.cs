@@ -63,7 +63,7 @@ public static class MultiBase
     {
         if (bytes == null)
         {
-            throw new ArgumentNullException("bytes");
+            throw new ArgumentNullException(nameof(bytes));
         }
 
         var alg = GetAlgorithm(algorithmName);
@@ -87,7 +87,7 @@ public static class MultiBase
     {
         if (string.IsNullOrWhiteSpace(s))
         {
-            throw new ArgumentNullException("s");
+            throw new ArgumentNullException(nameof(s));
         }
 
         MultiBaseAlgorithm.Codes.TryGetValue(s[0], out var alg);

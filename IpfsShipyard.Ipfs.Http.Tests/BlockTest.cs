@@ -5,7 +5,7 @@ namespace IpfsShipyard.Ipfs.Http.Tests;
 [TestClass]
 public class BlockTest
 {
-    private readonly byte[] _someBytes = new byte[] { 1, 2, 3 };
+    private readonly byte[] _someBytes = { 1, 2, 3 };
 
     [TestMethod]
     public void DataBytes()

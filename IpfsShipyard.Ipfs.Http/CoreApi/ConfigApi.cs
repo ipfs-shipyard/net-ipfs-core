@@ -16,32 +16,30 @@ internal class ConfigApi : IConfigApi
         _ipfs = ipfs;
     }
 
-    public async Task<JObject> GetAsync(CancellationToken cancel = default(CancellationToken))
+    public async Task<JObject> GetAsync(CancellationToken cancel = default)
     {
         var json = await _ipfs.DoCommandAsync("config/show", cancel);
         return JObject.Parse(json);
     }
 
-    public async Task<JToken> GetAsync(string key, CancellationToken cancel = default(CancellationToken))
+    public async Task<JToken> GetAsync(string key, CancellationToken cancel = default)
     {
         var json = await _ipfs.DoCommandAsync("config", cancel, key);
         var r = JObject.Parse(json);
         return r["Value"];
     }
 
-    public async Task SetAsync(string key, string value, CancellationToken cancel = default(CancellationToken))
+    public async Task SetAsync(string key, string value, CancellationToken cancel = default)
     {
         var _ = await _ipfs.DoCommandAsync("config", cancel, key, "arg=" + value);
-        return;
     }
 
-    public async Task SetAsync(string key, JToken value, CancellationToken cancel = default(CancellationToken))
+    public async Task SetAsync(string key, JToken value, CancellationToken cancel = default)
     {
         var _ = await _ipfs.DoCommandAsync("config", cancel,
             key,
             "arg=" + value.ToString(Formatting.None),
             "json=true");
-        return;
     }
 
     public async Task ReplaceAsync(JObject config)

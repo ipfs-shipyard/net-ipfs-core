@@ -8,10 +8,11 @@
  */
 
 using System;
+using System.Security.Cryptography;
 
 namespace IpfsShipyard.Ipfs.Core.Cryptography;
 
-internal abstract class Keccak : System.Security.Cryptography.HashAlgorithm
+internal abstract class Keccak : HashAlgorithm
 {
 
     #region Implementation
@@ -41,7 +42,7 @@ internal abstract class Keccak : System.Security.Cryptography.HashAlgorithm
     protected Keccak(int hashBitLength)
     {
         if (hashBitLength != 224 && hashBitLength != 256 && hashBitLength != 384 && hashBitLength != 512)
-            throw new ArgumentException("hashBitLength must be 224, 256, 384, or 512", "hashBitLength");
+            throw new ArgumentException("hashBitLength must be 224, 256, 384, or 512", nameof(hashBitLength));
         Initialize();
         HashSizeValue = hashBitLength;
         switch (hashBitLength)
@@ -59,7 +60,7 @@ internal abstract class Keccak : System.Security.Cryptography.HashAlgorithm
                 KeccakR = 576;
                 break;
         }
-        RoundConstants = new ulong[]
+        RoundConstants = new[]
         {
             0x0000000000000001UL,
             0x0000000000008082UL,
@@ -90,7 +91,7 @@ internal abstract class Keccak : System.Security.Cryptography.HashAlgorithm
 
     protected ulong Rol(ulong a, int offset)
     {
-        return (((a) << ((offset) % KeccakLaneSizeInBits)) ^ ((a) >> (KeccakLaneSizeInBits - ((offset) % KeccakLaneSizeInBits))));
+        return (a << (offset % KeccakLaneSizeInBits)) ^ (a >> (KeccakLaneSizeInBits - offset % KeccakLaneSizeInBits));
     }
 
     protected void AddToBuffer(byte[] array, ref int offset, ref int count)
@@ -118,11 +119,11 @@ internal abstract class Keccak : System.Security.Cryptography.HashAlgorithm
     protected override void HashCore(byte[] array, int ibStart, int cbSize)
     {
         if (array == null)
-            throw new ArgumentNullException("array");
+            throw new ArgumentNullException(nameof(array));
         if (ibStart < 0)
-            throw new ArgumentOutOfRangeException("ibStart");
+            throw new ArgumentOutOfRangeException(nameof(ibStart));
         if (cbSize > array.Length)
-            throw new ArgumentOutOfRangeException("cbSize");
+            throw new ArgumentOutOfRangeException(nameof(cbSize));
         if (ibStart + cbSize > array.Length)
             throw new ArgumentOutOfRangeException("ibStart or cbSize");
     }

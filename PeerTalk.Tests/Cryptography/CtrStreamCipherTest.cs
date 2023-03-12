@@ -1,5 +1,4 @@
-﻿using System.Text;
-using IpfsShipyard.Ipfs.Core;
+﻿using IpfsShipyard.Ipfs.Core;
 using IpfsShipyard.PeerTalk.Cryptography;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Org.BouncyCastle.Crypto.Engines;
@@ -20,7 +19,7 @@ public class CtrStreamCipherTest
         var p = new ParametersWithIV(new KeyParameter(key), iv);
         encrypt.Init(true, p);
 
-        var plain = new byte[] { (byte)'a' };
+        var plain = new[] { (byte)'a' };
         var actual = new byte[plain.Length];
 
         var expected = new byte[] { 0xbd };

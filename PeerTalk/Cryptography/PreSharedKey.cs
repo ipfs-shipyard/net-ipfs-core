@@ -2,7 +2,6 @@
 using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
-using System.Text;
 using IpfsShipyard.Ipfs.Core;
 using IpfsShipyard.Ipfs.Core.Registry;
 using Org.BouncyCastle.Crypto.Engines;

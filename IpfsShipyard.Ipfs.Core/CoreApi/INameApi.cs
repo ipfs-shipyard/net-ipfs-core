@@ -43,7 +43,7 @@ public interface INameApi
         bool resolve = true,
         string key = "self",
         TimeSpan? lifetime = null,
-        CancellationToken cancel = default(CancellationToken)
+        CancellationToken cancel = default
     );
 
     /// <summary>
@@ -69,7 +69,7 @@ public interface INameApi
         Cid id,
         string key = "self",
         TimeSpan? lifetime = null,
-        CancellationToken cancel = default(CancellationToken)
+        CancellationToken cancel = default
     );
 
     /// <summary>
@@ -96,6 +96,6 @@ public interface INameApi
         string name,
         bool recursive = false,
         bool nocache = false,
-        CancellationToken cancel = default(CancellationToken)
+        CancellationToken cancel = default
     );
 }

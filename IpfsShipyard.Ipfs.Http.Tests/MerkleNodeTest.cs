@@ -7,7 +7,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace IpfsShipyard.Ipfs.Http.Tests;
 
 [TestClass]
-public partial class MerkleNodeTest
+public class MerkleNodeTest
 {
     private const string IpfsInfo = "QmVtU7ths96fMgZ8YSZAbKghyieq7AjxNdcqyVzxTt3qVe";
 
@@ -92,10 +92,10 @@ public partial class MerkleNodeTest
         Assert.AreNotEqual(a0, b);
         Assert.AreNotEqual(a0, null);
 
-        Assert.AreEqual<MerkleNode>(a0, a0);
-        Assert.AreEqual<MerkleNode>(a0, a1);
-        Assert.AreNotEqual<MerkleNode>(a0, b);
-        Assert.AreNotEqual<MerkleNode>(a0, null);
+        Assert.AreEqual(a0, a0);
+        Assert.AreEqual(a0, a1);
+        Assert.AreNotEqual(a0, b);
+        Assert.AreNotEqual(a0, null);
 
         Assert.AreEqual(a0.GetHashCode(), a0.GetHashCode());
         Assert.AreEqual(a0.GetHashCode(), a1.GetHashCode());

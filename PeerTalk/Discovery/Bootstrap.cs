@@ -50,7 +50,6 @@ public class Bootstrap : IPeerDiscovery
             catch (Exception e)
             {
                 log.Error(e);
-                continue; // silently ignore
             }
         }
 

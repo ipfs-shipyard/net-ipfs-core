@@ -19,41 +19,41 @@ internal class ObjectApi : IObjectApi
         _ipfs = ipfs;
     }
 
-    public Task<DagNode> NewDirectoryAsync(CancellationToken cancel = default(CancellationToken))
+    public Task<DagNode> NewDirectoryAsync(CancellationToken cancel = default)
     {
         return NewAsync("unixfs-dir", cancel);
     }
 
-    public async Task<DagNode> NewAsync(string template = null, CancellationToken cancel = default(CancellationToken))
+    public async Task<DagNode> NewAsync(string template = null, CancellationToken cancel = default)
     {
         var json = await _ipfs.DoCommandAsync("object/new", cancel, template);
-        var hash = (string)(JObject.Parse(json)["Hash"]);
+        var hash = (string)JObject.Parse(json)["Hash"];
         return await GetAsync(hash);
     }
 
-    public async Task<DagNode> GetAsync(Cid id, CancellationToken cancel = default(CancellationToken))
+    public async Task<DagNode> GetAsync(Cid id, CancellationToken cancel = default)
     {
         var json = await _ipfs.DoCommandAsync("object/get", cancel, id);
         return GetDagFromJson(json);
     }
 
-    public Task<DagNode> PutAsync(byte[] data, IEnumerable<IMerkleLink> links = null, CancellationToken cancel = default(CancellationToken))
+    public Task<DagNode> PutAsync(byte[] data, IEnumerable<IMerkleLink> links = null, CancellationToken cancel = default)
     {
         return PutAsync(new(data, links), cancel);
     }
 
-    public async Task<DagNode> PutAsync(DagNode node, CancellationToken cancel = default(CancellationToken))
+    public async Task<DagNode> PutAsync(DagNode node, CancellationToken cancel = default)
     {
         var json = await _ipfs.UploadAsync("object/put", cancel, node.ToArray(), "inputenc=protobuf");
         return node;
     }
 
-    public Task<Stream> DataAsync(Cid id, CancellationToken cancel = default(CancellationToken))
+    public Task<Stream> DataAsync(Cid id, CancellationToken cancel = default)
     {
         return _ipfs.PostDownloadAsync("object/data", cancel, id);
     }
 
-    public async Task<IEnumerable<IMerkleLink>> LinksAsync(Cid id, CancellationToken cancel = default(CancellationToken))
+    public async Task<IEnumerable<IMerkleLink>> LinksAsync(Cid id, CancellationToken cancel = default)
     {
         var json = await _ipfs.DoCommandAsync("object/links", cancel, id);
         return GetDagFromJson(json).Links;
@@ -76,7 +76,7 @@ internal class ObjectApi : IObjectApi
         return new(data, links);
     }
 
-    public async Task<ObjectStat> StatAsync(Cid id, CancellationToken cancel = default(CancellationToken))
+    public async Task<ObjectStat> StatAsync(Cid id, CancellationToken cancel = default)
     {
         var json = await _ipfs.DoCommandAsync("object/stat", cancel, id);
         var r = JObject.Parse(json);

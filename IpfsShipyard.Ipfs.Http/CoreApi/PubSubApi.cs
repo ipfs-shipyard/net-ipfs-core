@@ -25,7 +25,7 @@ internal class PubSubApi : IPubSubApi
     {
         var json = await _ipfs.DoCommandAsync("pubsub/ls", cancel);
         var result = JObject.Parse(json);
-        if (result["Strings"] is not JArray strings) return new string[0];
+        if (result["Strings"] is not JArray strings) return Array.Empty<string>();
         return strings.Select(s => (string)s);
     }
 

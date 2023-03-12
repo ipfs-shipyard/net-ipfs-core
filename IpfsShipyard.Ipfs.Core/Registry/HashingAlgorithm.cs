@@ -32,7 +32,7 @@ namespace IpfsShipyard.Ipfs.Core.Registry;
 ///   This is used to inline a small amount of data into a <see cref="Cid"/>.
 ///   </para>
 ///   <para>
-///     Use <see cref="Register(string, int, int, Func{HashAlgorithm})"/> to add a new
+///     Use <see cref="Register(string, int, int, Func{System.Security.Cryptography.HashAlgorithm})"/> to add a new
 ///     hashing algorithm.
 ///   </para>
 /// </remarks>
@@ -47,9 +47,9 @@ public class HashingAlgorithm
     /// <seealso href="https://github.com/multiformats/multicodec/blob/master/table.csv"/>
     static HashingAlgorithm()
     {
-        Register("sha1", 0x11, 20, () => SHA1.Create());
-        Register("sha2-256", 0x12, 32, () => SHA256.Create());
-        Register("sha2-512", 0x13, 64, () => SHA512.Create());
+        Register("sha1", 0x11, 20, SHA1.Create);
+        Register("sha2-256", 0x12, 32, SHA256.Create);
+        Register("sha2-512", 0x13, 64, SHA512.Create);
         Register("dbl-sha2-256", 0x56, 32, () => new DoubleSha256());
         Register("keccak-224", 0x1A, 224 / 8, () => new KeccakManaged(224));
         Register("keccak-256", 0x1B, 256 / 8, () => new KeccakManaged(256));
@@ -70,7 +70,7 @@ public class HashingAlgorithm
         Register("blake2s-224", 0xb25c, 224 / 8, () => new BouncyDigest(new BC.Blake2sDigest(224)));
         Register("blake2s-256", 0xb260, 256 / 8, () => new BouncyDigest(new BC.Blake2sDigest(256)));
         Register("md4", 0xd4, 128 / 8, () => new BouncyDigest(new BC.MD4Digest()));
-        Register("md5", 0xd5, 128 / 8, () => MD5.Create());
+        Register("md5", 0xd5, 128 / 8, MD5.Create);
         Register("identity", 0, 0, () => new IdentityHash());
         RegisterAlias("id", "identity");
     }
@@ -143,7 +143,7 @@ public class HashingAlgorithm
     public static HashingAlgorithm Register(string name, int code, int digestSize, Func<HashAlgorithm> hasher = null)
     {
         if (string.IsNullOrWhiteSpace(name))
-            throw new ArgumentNullException("name");
+            throw new ArgumentNullException(nameof(name));
         if (Names.ContainsKey(name))
             throw new ArgumentException($"The IPFS hashing algorithm '{name}' is already defined.");
         if (Codes.ContainsKey(code))
@@ -178,12 +178,12 @@ public class HashingAlgorithm
     public static HashingAlgorithm RegisterAlias(string alias, string name)
     {
         if (string.IsNullOrWhiteSpace(alias))
-            throw new ArgumentNullException("alias");
+            throw new ArgumentNullException(nameof(alias));
         if (Names.ContainsKey(alias))
             throw new ArgumentException(
                 $"The IPFS hashing algorithm '{alias}' is already defined and cannot be used as an alias.");
         if (string.IsNullOrWhiteSpace(name))
-            throw new ArgumentNullException("name");
+            throw new ArgumentNullException(nameof(name));
         if (!Names.TryGetValue(name, out var existing))
             throw new ArgumentException($"The IPFS hashing algorithm '{name}' is not defined.");
 

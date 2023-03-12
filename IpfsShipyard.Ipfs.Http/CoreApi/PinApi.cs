@@ -17,7 +17,7 @@ internal class PinApi : IPinApi
         _ipfs = ipfs;
     }
 
-    public async Task<IEnumerable<Cid>> AddAsync(string path, bool recursive = true, CancellationToken cancel = default(CancellationToken))
+    public async Task<IEnumerable<Cid>> AddAsync(string path, bool recursive = true, CancellationToken cancel = default)
     {
         var opts = "recursive=" + recursive.ToString().ToLowerInvariant();
         var json = await _ipfs.DoCommandAsync("pin/add", cancel, path, opts);
@@ -25,16 +25,16 @@ internal class PinApi : IPinApi
             .Select(p => (Cid)(string)p);
     }
 
-    public async Task<IEnumerable<Cid>> ListAsync(CancellationToken cancel = default(CancellationToken))
+    public async Task<IEnumerable<Cid>> ListAsync(CancellationToken cancel = default)
     {
         var json = await _ipfs.DoCommandAsync("pin/ls", cancel);
-        var keys = (JObject)(JObject.Parse(json)["Keys"]);
+        var keys = (JObject)JObject.Parse(json)["Keys"];
         return keys
             .Properties()
             .Select(p => (Cid)p.Name);
     }
 
-    public async Task<IEnumerable<Cid>> RemoveAsync(Cid id, bool recursive = true, CancellationToken cancel = default(CancellationToken))
+    public async Task<IEnumerable<Cid>> RemoveAsync(Cid id, bool recursive = true, CancellationToken cancel = default)
     {
         var opts = "recursive=" + recursive.ToString().ToLowerInvariant();
         var json = await _ipfs.DoCommandAsync("pin/rm", cancel, id, opts);

@@ -73,7 +73,7 @@ public static class MultiAddressExtensions
 
         // HTTP
         var i = multiaddress.Protocols.FindIndex(ma => ma.Name == "http");
-        if (i >= 0 && !multiaddress.Protocols.Any(p => p.Name == "tcp"))
+        if (i >= 0 && multiaddress.Protocols.All(p => p.Name != "tcp"))
         {
             multiaddress = multiaddress.Clone();
             multiaddress.Protocols.InsertRange(i + 1, http.Protocols);
@@ -81,7 +81,7 @@ public static class MultiAddressExtensions
 
         // HTTPS
         i = multiaddress.Protocols.FindIndex(ma => ma.Name == "https");
-        if (i >= 0 && !multiaddress.Protocols.Any(p => p.Name == "tcp"))
+        if (i >= 0 && multiaddress.Protocols.All(p => p.Name != "tcp"))
         {
             multiaddress = multiaddress.Clone();
             multiaddress.Protocols.InsertRange(i + 1, https.Protocols);
@@ -106,7 +106,7 @@ public static class MultiAddressExtensions
                 (protocolName == "dns6" && a.AddressFamily == AddressFamily.InterNetworkV6)));
         foreach (var addr in addresses)
         {
-            var ma0 = new MultiAddress(supportedDnsAddressFamilies[addr.AddressFamily] + addr.ToString());
+            var ma0 = new MultiAddress(supportedDnsAddressFamilies[addr.AddressFamily] + addr);
             var ma1 = multiaddress.Clone();
             ma1.Protocols[i] = ma0.Protocols[0];
             list.Add(ma1);

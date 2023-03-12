@@ -225,7 +225,7 @@ public class SwarmTest
         var swarmB = new Swarm { LocalPeer = peerB };
         await swarmB.StartAsync();
         var peerBAddress = await swarmB.StartListeningAsync("/ip4/127.0.0.1/tcp/0");
-        Assert.IsTrue(peerB.Addresses.Count() > 0);
+        Assert.IsTrue(peerB.Addresses.Any());
 
         var swarm = new Swarm { LocalPeer = _self };
         await swarm.StartAsync();
@@ -333,7 +333,7 @@ public class SwarmTest
         await swarmB.StartAsync();
         var peerBAddress = await swarmB.StartListeningAsync("/ip4/0.0.0.0/tcp/0");
         var peerBPort = peerBAddress.Protocols[1].Value;
-        Assert.IsTrue(peerB.Addresses.Count() > 0);
+        Assert.IsTrue(peerB.Addresses.Any());
 
         var swarm = new Swarm { LocalPeer = _self };
         await swarm.StartAsync();
@@ -425,7 +425,7 @@ public class SwarmTest
         var swarmB = new Swarm { LocalPeer = peerB };
         await swarmB.StartAsync();
         var peerBAddress = await swarmB.StartListeningAsync("/ip4/127.0.0.1/tcp/0");
-        Assert.IsTrue(peerB.Addresses.Count() > 0);
+        Assert.IsTrue(peerB.Addresses.Any());
 
         var swarm = new Swarm { LocalPeer = _self };
         await swarm.StartAsync();
@@ -752,13 +752,13 @@ public class SwarmTest
         try
         {
             await swarm.StartListeningAsync(addr);
-            Assert.IsTrue(peer.Addresses.Count() > 0);
+            Assert.IsTrue(peer.Addresses.Any());
 
             await swarm.StopListeningAsync(addr);
             Assert.AreEqual(0, peer.Addresses.Count());
 
             await swarm.StartListeningAsync(addr);
-            Assert.IsTrue(peer.Addresses.Count() > 0);
+            Assert.IsTrue(peer.Addresses.Any());
 
             await swarm.StopListeningAsync(addr);
             Assert.AreEqual(0, peer.Addresses.Count());
@@ -785,13 +785,13 @@ public class SwarmTest
         {
             await swarm.StartAsync();
             await swarm.StartListeningAsync(addr);
-            Assert.IsTrue(peer.Addresses.Count() > 0);
+            Assert.IsTrue(peer.Addresses.Any());
             await swarm.StopAsync();
             Assert.AreEqual(0, peer.Addresses.Count());
 
             await swarm.StartAsync();
             await swarm.StartListeningAsync(addr);
-            Assert.IsTrue(peer.Addresses.Count() > 0);
+            Assert.IsTrue(peer.Addresses.Any());
             await swarm.StopAsync();
             Assert.AreEqual(0, peer.Addresses.Count());
         }
@@ -1150,7 +1150,7 @@ public class SwarmTest
         var swarmB = new Swarm { LocalPeer = peerB, NetworkProtector = new OpenNetwork() };
         await swarmB.StartAsync();
         var peerBAddress = await swarmB.StartListeningAsync("/ip4/127.0.0.1/tcp/0");
-        Assert.IsTrue(peerB.Addresses.Count() > 0);
+        Assert.IsTrue(peerB.Addresses.Any());
 
         var swarm = new Swarm { LocalPeer = _self, NetworkProtector = new OpenNetwork() };
         await swarm.StartAsync();
@@ -1228,7 +1228,7 @@ internal class OpenNetwork : INetworkProtector
 {
     public static int Count;
 
-    public Task<Stream> ProtectAsync(PeerConnection connection, CancellationToken cancel = default(CancellationToken))
+    public Task<Stream> ProtectAsync(PeerConnection connection, CancellationToken cancel = default)
     {
         Interlocked.Increment(ref Count);
         return Task.FromResult(connection.Stream);

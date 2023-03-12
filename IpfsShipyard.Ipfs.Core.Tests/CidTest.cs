@@ -282,9 +282,9 @@ public class CidTest
         Assert.AreEqual(a0, a1);
         Assert.AreNotEqual(a0, b);
 
-        Assert.AreEqual<Cid>(a0, a0);
-        Assert.AreEqual<Cid>(a0, a1);
-        Assert.AreNotEqual<Cid>(a0, b);
+        Assert.AreEqual(a0, a0);
+        Assert.AreEqual(a0, a1);
+        Assert.AreNotEqual(a0, b);
 
         Assert.AreEqual(a0.GetHashCode(), a0.GetHashCode());
         Assert.AreEqual(a0.GetHashCode(), a1.GetHashCode());

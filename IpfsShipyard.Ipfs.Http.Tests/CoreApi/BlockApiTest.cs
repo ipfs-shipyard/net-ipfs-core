@@ -1,9 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using IpfsShipyard.Ipfs.Core;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace IpfsShipyard.Ipfs.Http.Tests.CoreApi;
@@ -22,7 +20,7 @@ public class BlockApiTest
         Assert.AreEqual(_id, (string)cid);
 
         var data = _ipfs.Block.GetAsync(cid).Result;
-        Assert.AreEqual<long>(_blob.Length, data.Size);
+        Assert.AreEqual(_blob.Length, data.Size);
         CollectionAssert.AreEqual(_blob, data.DataBytes);
     }
 
@@ -33,7 +31,7 @@ public class BlockApiTest
         Assert.AreEqual("bafkreiaxnnnb7qz2focittuqq3ya25q7rcv3bqynnczfzako47346wosmu", (string)cid);
 
         var data = _ipfs.Block.GetAsync(cid).Result;
-        Assert.AreEqual<long>(_blob.Length, data.Size);
+        Assert.AreEqual(_blob.Length, data.Size);
         CollectionAssert.AreEqual(_blob, data.DataBytes);
     }
 
@@ -44,7 +42,7 @@ public class BlockApiTest
         Assert.AreEqual("bafkrgqelljziv4qfg5mefz36m2y3h6voaralnw6lwb4f53xcnrf4mlsykkn7vt6eno547tw5ygcz62kxrle45wnbmpbofo5tvu57jvuaf7k7e", (string)cid);
 
         var data = _ipfs.Block.GetAsync(cid).Result;
-        Assert.AreEqual<long>(_blob.Length, data.Size);
+        Assert.AreEqual(_blob.Length, data.Size);
         CollectionAssert.AreEqual(_blob, data.DataBytes);
     }
 
@@ -54,12 +52,12 @@ public class BlockApiTest
         var data1 = new byte[] { 23, 24, 127 };
         var cid1 = _ipfs.Block.PutAsync(data1, contentType: "raw", pin: true).Result;
         var pins = _ipfs.Pin.ListAsync().Result;
-        Assert.IsTrue(Enumerable.Any<Cid>(pins, pin => pin == cid1));
+        Assert.IsTrue(pins.Any(pin => pin == cid1));
 
         var data2 = new byte[] { 123, 124, 27 };
         var cid2 = _ipfs.Block.PutAsync(data2, contentType: "raw", pin: false).Result;
         pins = _ipfs.Pin.ListAsync().Result;
-        Assert.IsFalse(Enumerable.Any<Cid>(pins, pin => pin == cid2));
+        Assert.IsFalse(pins.Any(pin => pin == cid2));
     }
 
     [TestMethod]
@@ -69,7 +67,7 @@ public class BlockApiTest
         Assert.AreEqual(_id, (string)cid);
 
         var data = _ipfs.Block.GetAsync(cid).Result;
-        Assert.AreEqual<long>(_blob.Length, data.Size);
+        Assert.AreEqual(_blob.Length, data.Size);
         CollectionAssert.AreEqual(_blob, data.DataBytes);
     }
 
@@ -80,7 +78,7 @@ public class BlockApiTest
         Assert.AreEqual("bafkreiaxnnnb7qz2focittuqq3ya25q7rcv3bqynnczfzako47346wosmu", (string)cid);
 
         var data = _ipfs.Block.GetAsync(cid).Result;
-        Assert.AreEqual<long>(_blob.Length, data.Size);
+        Assert.AreEqual(_blob.Length, data.Size);
         CollectionAssert.AreEqual(_blob, data.DataBytes);
     }
 
@@ -91,7 +89,7 @@ public class BlockApiTest
         Assert.AreEqual("bafkrgqelljziv4qfg5mefz36m2y3h6voaralnw6lwb4f53xcnrf4mlsykkn7vt6eno547tw5ygcz62kxrle45wnbmpbofo5tvu57jvuaf7k7e", (string)cid);
 
         var data = _ipfs.Block.GetAsync(cid).Result;
-        Assert.AreEqual<long>(_blob.Length, data.Size);
+        Assert.AreEqual(_blob.Length, data.Size);
         CollectionAssert.AreEqual(_blob, data.DataBytes);
     }
 
@@ -101,12 +99,12 @@ public class BlockApiTest
         var data1 = new MemoryStream(new byte[] { 23, 24, 127 });
         var cid1 = _ipfs.Block.PutAsync(data1, contentType: "raw", pin: true).Result;
         var pins = _ipfs.Pin.ListAsync().Result;
-        Assert.IsTrue(Enumerable.Any<Cid>(pins, pin => pin == cid1));
+        Assert.IsTrue(pins.Any(pin => pin == cid1));
 
         var data2 = new MemoryStream(new byte[] { 123, 124, 27 });
         var cid2 = _ipfs.Block.PutAsync(data2, contentType: "raw", pin: false).Result;
         pins = _ipfs.Pin.ListAsync().Result;
-        Assert.IsFalse(Enumerable.Any<Cid>(pins, pin => pin == cid2));
+        Assert.IsFalse(pins.Any(pin => pin == cid2));
     }
 
     [TestMethod]
@@ -127,7 +125,7 @@ public class BlockApiTest
         var _ = _ipfs.Block.PutAsync(_blob).Result;
         var info = _ipfs.Block.StatAsync(_id).Result;
         Assert.AreEqual(_id, (string)info.Id);
-        Assert.AreEqual<long>(5, info.Size);
+        Assert.AreEqual(5, info.Size);
     }
 
     [TestMethod]

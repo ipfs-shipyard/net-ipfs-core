@@ -18,8 +18,8 @@ namespace IpfsShipyard.Ipfs.Core;
 /// </remarks>
 public static class Duration
 {
-    private const double TicksPerNanosecond = (double)TimeSpan.TicksPerMillisecond * 0.000001;
-    private const double TicksPerMicrosecond = (double)TimeSpan.TicksPerMillisecond * 0.001;
+    private const double TicksPerNanosecond = TimeSpan.TicksPerMillisecond * 0.000001;
+    private const double TicksPerMicrosecond = TimeSpan.TicksPerMillisecond * 0.001;
 
     /// <summary>
     ///   Converts the string representation of an IPFS duration
@@ -156,8 +156,8 @@ public static class Duration
         Stringify(duration.Minutes, "m", s);
         Stringify(duration.Seconds, "s", s);
         Stringify(duration.Milliseconds, "ms", s);
-        Stringify((long)((double)duration.Ticks / TicksPerMicrosecond) % 1000, "us", s);
-        Stringify((long)((double)duration.Ticks / TicksPerNanosecond) % 1000, "ns", s);
+        Stringify((long)(duration.Ticks / TicksPerMicrosecond) % 1000, "us", s);
+        Stringify((long)(duration.Ticks / TicksPerNanosecond) % 1000, "ns", s);
 
         return s.ToString();
     }

@@ -16,7 +16,7 @@ public class ConfigApiTest
     {
         var ipfs = TestFixture.Ipfs;
         var config = ipfs.Config.GetAsync().Result;
-        StringAssert.StartsWith(Extensions.Value<string>(config["Addresses"]["API"]), ApiAddress);
+        StringAssert.StartsWith(config["Addresses"]["API"].Value<string>(), ApiAddress);
     }
 
     [TestMethod]
@@ -24,7 +24,7 @@ public class ConfigApiTest
     {
         var ipfs = TestFixture.Ipfs;
         var api = ipfs.Config.GetAsync("Addresses.API").Result;
-        StringAssert.StartsWith(Extensions.Value<string>(api), ApiAddress);
+        StringAssert.StartsWith(api.Value<string>(), ApiAddress);
     }
 
     [TestMethod]
@@ -32,8 +32,8 @@ public class ConfigApiTest
     {
         var ipfs = TestFixture.Ipfs;
         var addresses = ipfs.Config.GetAsync("Addresses").Result;
-        StringAssert.StartsWith(Extensions.Value<string>(addresses["API"]), ApiAddress);
-        StringAssert.StartsWith(Extensions.Value<string>(addresses["Gateway"]), GatewayAddress);
+        StringAssert.StartsWith(addresses["API"].Value<string>(), ApiAddress);
+        StringAssert.StartsWith(addresses["Gateway"].Value<string>(), GatewayAddress);
     }
 
     [TestMethod]
@@ -41,7 +41,7 @@ public class ConfigApiTest
     {
         var ipfs = TestFixture.Ipfs;
         var api = ipfs.Config.GetAsync("Addresses.API").Result;
-        StringAssert.StartsWith(Extensions.Value<string>(api), ApiAddress);
+        StringAssert.StartsWith(api.Value<string>(), ApiAddress);
 
         ExceptionAssert.Throws<Exception>(() => { var x = ipfs.Config.GetAsync("Addresses.api").Result; });
     }
@@ -53,7 +53,7 @@ public class ConfigApiTest
         const string value = "foobar";
         var ipfs = TestFixture.Ipfs;
         ipfs.Config.SetAsync(key, value).Wait();
-        Assert.AreEqual<JToken>(value, ipfs.Config.GetAsync(key).Result);
+        Assert.AreEqual(value, ipfs.Config.GetAsync(key).Result);
     }
 
     [TestMethod]
@@ -63,7 +63,7 @@ public class ConfigApiTest
         var value = JToken.Parse("['http://example.io']");
         var ipfs = TestFixture.Ipfs;
         ipfs.Config.SetAsync(key, value).Wait();
-        Assert.AreEqual<JToken>("http://example.io", ipfs.Config.GetAsync(key).Result[0]);
+        Assert.AreEqual("http://example.io", ipfs.Config.GetAsync(key).Result[0]);
     }
 
     [TestMethod]

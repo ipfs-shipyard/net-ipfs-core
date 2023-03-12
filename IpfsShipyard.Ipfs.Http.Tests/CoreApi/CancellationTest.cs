@@ -20,7 +20,6 @@ public class CancellationTest
         }
         catch (TaskCanceledException)
         {
-            return;
         }
     }
 }

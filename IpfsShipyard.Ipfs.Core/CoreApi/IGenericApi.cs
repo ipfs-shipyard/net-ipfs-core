@@ -24,7 +24,7 @@ public interface IGenericApi
     ///    A task that represents the asynchronous operation. The task's value is
     ///    the <see cref="Peer"/> information.
     /// </returns>
-    Task<Peer> IdAsync(MultiHash peer = null, CancellationToken cancel = default(CancellationToken));
+    Task<Peer> IdAsync(MultiHash peer = null, CancellationToken cancel = default);
 
     /// <summary>
     ///   Get the version information.
@@ -33,7 +33,7 @@ public interface IGenericApi
     ///    A task that represents the asynchronous operation. The task's value is
     ///    a <see cref="Dictionary{TKey, TValue}"/> of values.
     /// </returns>
-    Task<Dictionary<string, string>> VersionAsync(CancellationToken cancel = default(CancellationToken));
+    Task<Dictionary<string, string>> VersionAsync(CancellationToken cancel = default);
 
     /// <summary>
     ///   Stop the IPFS peer.
@@ -66,7 +66,7 @@ public interface IGenericApi
     Task<string> ResolveAsync(
         string name,
         bool recursive = true,
-        CancellationToken cancel = default(CancellationToken)
+        CancellationToken cancel = default
     );
 
     /// <summary>
@@ -88,7 +88,7 @@ public interface IGenericApi
     Task<IEnumerable<PingResult>> PingAsync(
         MultiHash peer,
         int count = 10,
-        CancellationToken cancel = default(CancellationToken)
+        CancellationToken cancel = default
     );
 
     /// <summary>
@@ -110,7 +110,7 @@ public interface IGenericApi
     Task<IEnumerable<PingResult>> PingAsync(
         MultiAddress address,
         int count = 10,
-        CancellationToken cancel = default(CancellationToken)
+        CancellationToken cancel = default
     );
 
     /// <summary>

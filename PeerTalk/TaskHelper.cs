@@ -48,7 +48,7 @@ public static class TaskHelper
             }
             if (winner.IsFaulted)
             {
-                if (winner.Exception is AggregateException ae)
+                if (winner.Exception is { } ae)
                 {
                     exceptions.AddRange(ae.InnerExceptions);
                 }
@@ -97,6 +97,6 @@ public static class TaskHelper
                 .Create(source)
                 .GetPartitions(maxDoP)
                 .AsParallel()
-                .Select(p => AwaitPartition(p)));
+                .Select(AwaitPartition));
     }
 }

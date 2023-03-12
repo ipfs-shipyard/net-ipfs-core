@@ -5,7 +5,7 @@ using System;
 
 namespace IpfsShipyard.Ipfs.Core.Cryptography;
 
-internal partial class KeccakManaged : Keccak
+internal class KeccakManaged : Keccak
 {
     public KeccakManaged(int hashBitLength)
         : base(hashBitLength)
@@ -65,11 +65,6 @@ internal partial class KeccakManaged : Keccak
     {
         while (--laneCount >= 0)
             state[laneCount] ^= inb[laneCount];
-        ulong aba, abe, abi, abo, abu;
-        ulong aga, age, agi, ago, agu;
-        ulong aka, ake, aki, ako, aku;
-        ulong ama, ame, ami, amo, amu;
-        ulong asa, ase, asi, aso, asu;
         ulong bCa, bCe, bCi, bCo, bCu;
         ulong da, de, di, @do, du;
         ulong eba, ebe, ebi, ebo, ebu;
@@ -80,31 +75,31 @@ internal partial class KeccakManaged : Keccak
         var round = laneCount;
 
         //copyFromState(A, state)
-        aba = state[0];
-        abe = state[1];
-        abi = state[2];
-        abo = state[3];
-        abu = state[4];
-        aga = state[5];
-        age = state[6];
-        agi = state[7];
-        ago = state[8];
-        agu = state[9];
-        aka = state[10];
-        ake = state[11];
-        aki = state[12];
-        ako = state[13];
-        aku = state[14];
-        ama = state[15];
-        ame = state[16];
-        ami = state[17];
-        amo = state[18];
-        amu = state[19];
-        asa = state[20];
-        ase = state[21];
-        asi = state[22];
-        aso = state[23];
-        asu = state[24];
+        var aba = state[0];
+        var abe = state[1];
+        var abi = state[2];
+        var abo = state[3];
+        var abu = state[4];
+        var aga = state[5];
+        var age = state[6];
+        var agi = state[7];
+        var ago = state[8];
+        var agu = state[9];
+        var aka = state[10];
+        var ake = state[11];
+        var aki = state[12];
+        var ako = state[13];
+        var aku = state[14];
+        var ama = state[15];
+        var ame = state[16];
+        var ami = state[17];
+        var amo = state[18];
+        var amu = state[19];
+        var asa = state[20];
+        var ase = state[21];
+        var asi = state[22];
+        var aso = state[23];
+        var asu = state[24];
 
         for (round = 0; round < KeccakNumberOfRounds; round += 2)
         {
@@ -132,12 +127,12 @@ internal partial class KeccakManaged : Keccak
             bCo = Rol(amo, 21);
             asu ^= du;
             bCu = Rol(asu, 14);
-            eba = bCa ^ ((~bCe) & bCi);
+            eba = bCa ^ (~bCe & bCi);
             eba ^= RoundConstants[round];
-            ebe = bCe ^ ((~bCi) & bCo);
-            ebi = bCi ^ ((~bCo) & bCu);
-            ebo = bCo ^ ((~bCu) & bCa);
-            ebu = bCu ^ ((~bCa) & bCe);
+            ebe = bCe ^ (~bCi & bCo);
+            ebi = bCi ^ (~bCo & bCu);
+            ebo = bCo ^ (~bCu & bCa);
+            ebu = bCu ^ (~bCa & bCe);
 
             abo ^= @do;
             bCa = Rol(abo, 28);
@@ -149,11 +144,11 @@ internal partial class KeccakManaged : Keccak
             bCo = Rol(ame, 45);
             asi ^= di;
             bCu = Rol(asi, 61);
-            ega = bCa ^ ((~bCe) & bCi);
-            ege = bCe ^ ((~bCi) & bCo);
-            egi = bCi ^ ((~bCo) & bCu);
-            ego = bCo ^ ((~bCu) & bCa);
-            egu = bCu ^ ((~bCa) & bCe);
+            ega = bCa ^ (~bCe & bCi);
+            ege = bCe ^ (~bCi & bCo);
+            egi = bCi ^ (~bCo & bCu);
+            ego = bCo ^ (~bCu & bCa);
+            egu = bCu ^ (~bCa & bCe);
 
             abe ^= de;
             bCa = Rol(abe, 1);
@@ -165,11 +160,11 @@ internal partial class KeccakManaged : Keccak
             bCo = Rol(amu, 8);
             asa ^= da;
             bCu = Rol(asa, 18);
-            eka = bCa ^ ((~bCe) & bCi);
-            eke = bCe ^ ((~bCi) & bCo);
-            eki = bCi ^ ((~bCo) & bCu);
-            eko = bCo ^ ((~bCu) & bCa);
-            eku = bCu ^ ((~bCa) & bCe);
+            eka = bCa ^ (~bCe & bCi);
+            eke = bCe ^ (~bCi & bCo);
+            eki = bCi ^ (~bCo & bCu);
+            eko = bCo ^ (~bCu & bCa);
+            eku = bCu ^ (~bCa & bCe);
 
             abu ^= du;
             bCa = Rol(abu, 27);
@@ -181,11 +176,11 @@ internal partial class KeccakManaged : Keccak
             bCo = Rol(ami, 15);
             aso ^= @do;
             bCu = Rol(aso, 56);
-            ema = bCa ^ ((~bCe) & bCi);
-            eme = bCe ^ ((~bCi) & bCo);
-            emi = bCi ^ ((~bCo) & bCu);
-            emo = bCo ^ ((~bCu) & bCa);
-            emu = bCu ^ ((~bCa) & bCe);
+            ema = bCa ^ (~bCe & bCi);
+            eme = bCe ^ (~bCi & bCo);
+            emi = bCi ^ (~bCo & bCu);
+            emo = bCo ^ (~bCu & bCa);
+            emu = bCu ^ (~bCa & bCe);
 
             abi ^= di;
             bCa = Rol(abi, 62);
@@ -197,11 +192,11 @@ internal partial class KeccakManaged : Keccak
             bCo = Rol(ama, 41);
             ase ^= de;
             bCu = Rol(ase, 2);
-            esa = bCa ^ ((~bCe) & bCi);
-            ese = bCe ^ ((~bCi) & bCo);
-            esi = bCi ^ ((~bCo) & bCu);
-            eso = bCo ^ ((~bCu) & bCa);
-            esu = bCu ^ ((~bCa) & bCe);
+            esa = bCa ^ (~bCe & bCi);
+            ese = bCe ^ (~bCi & bCo);
+            esi = bCi ^ (~bCo & bCu);
+            eso = bCo ^ (~bCu & bCa);
+            esu = bCu ^ (~bCa & bCe);
 
             //    prepareTheta
             bCa = eba ^ ega ^ eka ^ ema ^ esa;
@@ -227,12 +222,12 @@ internal partial class KeccakManaged : Keccak
             bCo = Rol(emo, 21);
             esu ^= du;
             bCu = Rol(esu, 14);
-            aba = bCa ^ ((~bCe) & bCi);
+            aba = bCa ^ (~bCe & bCi);
             aba ^= RoundConstants[round + 1];
-            abe = bCe ^ ((~bCi) & bCo);
-            abi = bCi ^ ((~bCo) & bCu);
-            abo = bCo ^ ((~bCu) & bCa);
-            abu = bCu ^ ((~bCa) & bCe);
+            abe = bCe ^ (~bCi & bCo);
+            abi = bCi ^ (~bCo & bCu);
+            abo = bCo ^ (~bCu & bCa);
+            abu = bCu ^ (~bCa & bCe);
 
             ebo ^= @do;
             bCa = Rol(ebo, 28);
@@ -244,11 +239,11 @@ internal partial class KeccakManaged : Keccak
             bCo = Rol(eme, 45);
             esi ^= di;
             bCu = Rol(esi, 61);
-            aga = bCa ^ ((~bCe) & bCi);
-            age = bCe ^ ((~bCi) & bCo);
-            agi = bCi ^ ((~bCo) & bCu);
-            ago = bCo ^ ((~bCu) & bCa);
-            agu = bCu ^ ((~bCa) & bCe);
+            aga = bCa ^ (~bCe & bCi);
+            age = bCe ^ (~bCi & bCo);
+            agi = bCi ^ (~bCo & bCu);
+            ago = bCo ^ (~bCu & bCa);
+            agu = bCu ^ (~bCa & bCe);
 
             ebe ^= de;
             bCa = Rol(ebe, 1);
@@ -260,11 +255,11 @@ internal partial class KeccakManaged : Keccak
             bCo = Rol(emu, 8);
             esa ^= da;
             bCu = Rol(esa, 18);
-            aka = bCa ^ ((~bCe) & bCi);
-            ake = bCe ^ ((~bCi) & bCo);
-            aki = bCi ^ ((~bCo) & bCu);
-            ako = bCo ^ ((~bCu) & bCa);
-            aku = bCu ^ ((~bCa) & bCe);
+            aka = bCa ^ (~bCe & bCi);
+            ake = bCe ^ (~bCi & bCo);
+            aki = bCi ^ (~bCo & bCu);
+            ako = bCo ^ (~bCu & bCa);
+            aku = bCu ^ (~bCa & bCe);
 
             ebu ^= du;
             bCa = Rol(ebu, 27);
@@ -276,11 +271,11 @@ internal partial class KeccakManaged : Keccak
             bCo = Rol(emi, 15);
             eso ^= @do;
             bCu = Rol(eso, 56);
-            ama = bCa ^ ((~bCe) & bCi);
-            ame = bCe ^ ((~bCi) & bCo);
-            ami = bCi ^ ((~bCo) & bCu);
-            amo = bCo ^ ((~bCu) & bCa);
-            amu = bCu ^ ((~bCa) & bCe);
+            ama = bCa ^ (~bCe & bCi);
+            ame = bCe ^ (~bCi & bCo);
+            ami = bCi ^ (~bCo & bCu);
+            amo = bCo ^ (~bCu & bCa);
+            amu = bCu ^ (~bCa & bCe);
 
             ebi ^= di;
             bCa = Rol(ebi, 62);
@@ -292,11 +287,11 @@ internal partial class KeccakManaged : Keccak
             bCo = Rol(ema, 41);
             ese ^= de;
             bCu = Rol(ese, 2);
-            asa = bCa ^ ((~bCe) & bCi);
-            ase = bCe ^ ((~bCi) & bCo);
-            asi = bCi ^ ((~bCo) & bCu);
-            aso = bCo ^ ((~bCu) & bCa);
-            asu = bCu ^ ((~bCa) & bCe);
+            asa = bCa ^ (~bCe & bCi);
+            ase = bCe ^ (~bCi & bCo);
+            asi = bCi ^ (~bCo & bCu);
+            aso = bCo ^ (~bCu & bCa);
+            asu = bCu ^ (~bCa & bCe);
         }
 
         //copyToState(state, A)

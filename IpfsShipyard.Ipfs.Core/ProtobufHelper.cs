@@ -9,7 +9,7 @@ internal static class ProtobufHelper
     private static readonly MethodInfo _writeRawBytes = typeof(CodedOutputStream)
         .GetMethods(BindingFlags.NonPublic | BindingFlags.Instance)
         .Single(m =>
-            m.Name == "WriteRawBytes" && m.GetParameters().Count() == 1
+            m.Name == "WriteRawBytes" && m.GetParameters().Length == 1
         );
 
     private static readonly MethodInfo _readRawBytes = typeof(CodedInputStream)

@@ -23,19 +23,19 @@ internal class FileSystemApi : IFileSystemApi
         _emptyFolder = new(() => ipfs.Object.NewDirectoryAsync().Result);
     }
 
-    public async Task<IFileSystemNode> AddFileAsync(string path, AddFileOptions options = null, CancellationToken cancel = default(CancellationToken))
+    public async Task<IFileSystemNode> AddFileAsync(string path, AddFileOptions options = null, CancellationToken cancel = default)
     {
         await using var stream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read);
         var node = await AddAsync(stream, Path.GetFileName(path), options, cancel);
         return node;
     }
 
-    public Task<IFileSystemNode> AddTextAsync(string text, AddFileOptions options = null, CancellationToken cancel = default(CancellationToken))
+    public Task<IFileSystemNode> AddTextAsync(string text, AddFileOptions options = null, CancellationToken cancel = default)
     {
         return AddAsync(new MemoryStream(Encoding.UTF8.GetBytes(text), false), "", options, cancel);
     }
 
-    public async Task<IFileSystemNode> AddAsync(Stream stream, string name = "", AddFileOptions options = null, CancellationToken cancel = default(CancellationToken))
+    public async Task<IFileSystemNode> AddAsync(Stream stream, string name = "", AddFileOptions options = null, CancellationToken cancel = default)
     {
         options ??= new();
         var opts = new List<string>();
@@ -100,7 +100,7 @@ internal class FileSystemApi : IFileSystemApi
         return fsn;
     }
 
-    public async Task<IFileSystemNode> AddDirectoryAsync(string path, bool recursive = true, AddFileOptions options = null, CancellationToken cancel = default(CancellationToken))
+    public async Task<IFileSystemNode> AddDirectoryAsync(string path, bool recursive = true, AddFileOptions options = null, CancellationToken cancel = default)
     {
         options ??= new();
         options.Wrap = false;
@@ -114,7 +114,7 @@ internal class FileSystemApi : IFileSystemApi
         {
             var folders = Directory
                 .EnumerateDirectories(path)
-                .Select(dir => AddDirectoryAsync(dir, recursive, options, cancel));
+                .Select(dir => AddDirectoryAsync(dir, true, options, cancel));
             files = files.Union(folders);
         }
 
@@ -160,7 +160,7 @@ internal class FileSystemApi : IFileSystemApi
     /// <returns>
     ///   The contents of the <paramref name="path"/> as a <see cref="string"/>.
     /// </returns>
-    public async Task<String> ReadAllTextAsync(string path, CancellationToken cancel = default(CancellationToken))
+    public async Task<String> ReadAllTextAsync(string path, CancellationToken cancel = default)
     {
         await using var data = await ReadFileAsync(path, cancel);
         using var text = new StreamReader(data);
@@ -181,12 +181,12 @@ internal class FileSystemApi : IFileSystemApi
     /// <returns>
     ///   A <see cref="Stream"/> to the file contents.
     /// </returns>
-    public Task<Stream> ReadFileAsync(string path, CancellationToken cancel = default(CancellationToken))
+    public Task<Stream> ReadFileAsync(string path, CancellationToken cancel = default)
     {
         return _ipfs.PostDownloadAsync("cat", cancel, path);
     }
 
-    public Task<Stream> ReadFileAsync(string path, long offset, long length = 0, CancellationToken cancel = default(CancellationToken))
+    public Task<Stream> ReadFileAsync(string path, long offset, long length = 0, CancellationToken cancel = default)
     {
         // https://github.com/ipfs/go-ipfs/issues/5380
         if (offset > int.MaxValue)
@@ -216,24 +216,24 @@ internal class FileSystemApi : IFileSystemApi
     ///   Is used to stop the task.  When cancelled, the <see cref="TaskCanceledException"/> is raised.
     /// </param>
     /// <returns></returns>
-    public async Task<IFileSystemNode> ListFileAsync(string path, CancellationToken cancel = default(CancellationToken))
+    public async Task<IFileSystemNode> ListFileAsync(string path, CancellationToken cancel = default)
     {
         var json = await _ipfs.DoCommandAsync("file/ls", cancel, path);
         var r = JObject.Parse(json);
         var hash = (string)r["Arguments"][path];
         var o = (JObject)r["Objects"][hash];
-        var node = new FileSystemNode()
+        var node = new FileSystemNode
         {
             Id = (string)o["Hash"],
             Size = (long)o["Size"],
             IsDirectory = (string)o["Type"] == "Directory",
-            Links = new FileSystemLink[0],
+            Links = Array.Empty<FileSystemLink>(),
             IpfsClient = _ipfs
         };
         if (o["Links"] is JArray links)
         {
             node.Links = links
-                .Select(l => new FileSystemLink()
+                .Select(l => new FileSystemLink
                 {
                     Name = (string)l["Name"],
                     Id = (string)l["Hash"],
@@ -245,7 +245,7 @@ internal class FileSystemApi : IFileSystemApi
         return node;
     }
 
-    public Task<Stream> GetAsync(string path, bool compress = false, CancellationToken cancel = default(CancellationToken))
+    public Task<Stream> GetAsync(string path, bool compress = false, CancellationToken cancel = default)
     {
         return _ipfs.PostDownloadAsync("get", cancel, path, $"compress={compress}");
     }

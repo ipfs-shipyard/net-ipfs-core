@@ -2,7 +2,6 @@
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using IpfsShipyard.Ipfs.Core;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace IpfsShipyard.Ipfs.Http.Tests.CoreApi;
@@ -27,7 +26,7 @@ public class DhtApiTest
         var ipfs = TestFixture.Ipfs;
         var cts = new CancellationTokenSource(TimeSpan.FromMinutes(2));
         var providers = await ipfs.Dht.FindProvidersAsync(HelloWorldId, 1, cancel: cts.Token);
-        Assert.AreNotEqual(0, Enumerable.Count<Peer>(providers));
+        Assert.AreNotEqual(0, providers.Count());
     }
 
 }

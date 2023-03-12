@@ -28,7 +28,7 @@ public interface IPinApi
     ///   A task that represents the asynchronous operation. The task's value
     ///   is a sequence of <see cref="Cid"/> that were pinned.
     /// </returns>
-    Task<IEnumerable<Cid>> AddAsync(string path, bool recursive = true, CancellationToken cancel = default(CancellationToken));
+    Task<IEnumerable<Cid>> AddAsync(string path, bool recursive = true, CancellationToken cancel = default);
 
     /// <summary>
     ///   List all the objects pinned to local storage.
@@ -40,7 +40,7 @@ public interface IPinApi
     ///   A task that represents the asynchronous operation. The task's value
     ///   is a sequence of <see cref="Cid"/>.
     /// </returns>
-    Task<IEnumerable<Cid>> ListAsync(CancellationToken cancel = default(CancellationToken));
+    Task<IEnumerable<Cid>> ListAsync(CancellationToken cancel = default);
 
     /// <summary>
     ///   Unpin an object.
@@ -59,6 +59,6 @@ public interface IPinApi
     ///   A task that represents the asynchronous operation. The task's value
     ///   is a sequence of <see cref="Cid"/> that were unpinned.
     /// </returns>
-    Task<IEnumerable<Cid>> RemoveAsync(Cid id, bool recursive = true, CancellationToken cancel = default(CancellationToken));
+    Task<IEnumerable<Cid>> RemoveAsync(Cid id, bool recursive = true, CancellationToken cancel = default);
 
 }

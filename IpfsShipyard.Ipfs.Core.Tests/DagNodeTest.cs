@@ -1,5 +1,4 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using System.Linq;
 using System.Text;
 using Google.Protobuf;
@@ -235,13 +234,12 @@ public class DagNodeTest
         CollectionAssert.AreEqual(a.DataBytes, b.DataBytes);
         CollectionAssert.AreEqual(a.ToArray(), b.ToArray());
         Assert.AreEqual(a.Links.Count(), b.Links.Count());
-        a.Links.Zip(b.Links, (first, second) =>
+        foreach (var (first, second) in a.Links.Zip(b.Links))
         {
             Assert.AreEqual(first.Id, second.Id);
             Assert.AreEqual(first.Name, second.Name);
             Assert.AreEqual(first.Size, second.Size);
-            return first;
-        }).ToArray();
+        }
 
         using (var first = a.DataStream)
         using (var second = b.DataStream)

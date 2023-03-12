@@ -28,7 +28,7 @@ public interface IMfsApi
     /// <param name="cancel">
     ///   Is used to stop the task.  When cancelled, the <see cref="TaskCanceledException"/> is raised.
     /// </param>
-    Task CopyAsync(string sourceMfsPathOrCid, string destMfsPath, bool? parents = null, CancellationToken cancel = default(CancellationToken));
+    Task CopyAsync(string sourceMfsPathOrCid, string destMfsPath, bool? parents = null, CancellationToken cancel = default);
 
     /// <summary>
     ///   Flush a given path's data to disk.
@@ -42,7 +42,7 @@ public interface IMfsApi
     /// <returns>
     ///   <see cref="Cid"/> of the flushed path.
     /// </returns>
-    Task<Cid> FlushAsync(string path = null, CancellationToken cancel = default(CancellationToken));
+    Task<Cid> FlushAsync(string path = null, CancellationToken cancel = default);
 
     /// <summary>
     ///   List directories in the local mutable namespace.
@@ -58,7 +58,7 @@ public interface IMfsApi
     /// <remarks>
     ///   Paramter long is ommitted and should always be passed as true in implementation.
     /// </remarks>
-    Task<IEnumerable<IFileSystemNode>> ListAsync(string path, bool? u = null, CancellationToken cancel = default(CancellationToken));
+    Task<IEnumerable<IFileSystemNode>> ListAsync(string path, bool? u = null, CancellationToken cancel = default);
 
     /// <summary>
     ///   Make directories in the local mutable namespace.
@@ -79,7 +79,7 @@ public interface IMfsApi
     /// <param name="cancel">
     ///   Is used to stop the task.  When cancelled, the <see cref="TaskCanceledException"/> is raised.
     /// </param>
-    Task MakeDirectoryAsync(string path, bool? parents = null, int? cidVersion = null, string multiHash = null, CancellationToken cancel = default(CancellationToken));
+    Task MakeDirectoryAsync(string path, bool? parents = null, int? cidVersion = null, string multiHash = null, CancellationToken cancel = default);
 
     /// <summary>
     ///    Move file or directory to another path in MFS.
@@ -93,7 +93,7 @@ public interface IMfsApi
     /// <param name="cancel">
     ///   Is used to stop the task.  When cancelled, the <see cref="TaskCanceledException"/> is raised.
     /// </param>
-    Task MoveAsync(string sourceMfsPath, string destMfsPath, CancellationToken cancel = default(CancellationToken));
+    Task MoveAsync(string sourceMfsPath, string destMfsPath, CancellationToken cancel = default);
 
     /// <summary>
     ///   Read a file from MFS.
@@ -110,7 +110,7 @@ public interface IMfsApi
     /// <param name="cancel">
     ///   Is used to stop the task.  When cancelled, the <see cref="TaskCanceledException"/> is raised.
     /// </param>
-    Task<string> ReadFileAsync(string path, Int64? offset = null, Int64? count = null, CancellationToken cancel = default(CancellationToken));
+    Task<string> ReadFileAsync(string path, Int64? offset = null, Int64? count = null, CancellationToken cancel = default);
 
     /// <summary>
     ///   Remove a file or directory or from MFS.
@@ -127,7 +127,7 @@ public interface IMfsApi
     /// <param name="cancel">
     ///   Is used to stop the task.  When cancelled, the <see cref="TaskCanceledException"/> is raised.
     /// </param>
-    Task RemoveAsync(string path, bool? recursive = null, bool? force = null, CancellationToken cancel = default(CancellationToken));
+    Task RemoveAsync(string path, bool? recursive = null, bool? force = null, CancellationToken cancel = default);
 
     /// <summary>
     ///   Get file or directory status info.
@@ -141,7 +141,7 @@ public interface IMfsApi
     /// <returns>
     ///   <see cref="FileStatResult"/> information about the path.
     /// </returns>
-    Task<FileStatResult> StatAsync(string path, CancellationToken cancel = default(CancellationToken));
+    Task<FileStatResult> StatAsync(string path, CancellationToken cancel = default);
 
     /// <summary>
     ///   Get file or directory status info including information about locality of data.
@@ -159,7 +159,7 @@ public interface IMfsApi
     ///   <see cref="FileStatWithLocalityResult"/> information about the path including 
     ///   additional information on locality if withLocal=true.
     /// </returns>
-    Task<FileStatWithLocalityResult> StatAsync(string path, bool withLocal, CancellationToken cancel = default(CancellationToken));
+    Task<FileStatWithLocalityResult> StatAsync(string path, bool withLocal, CancellationToken cancel = default);
 
     /// <summary>
     ///   Append to (modify) a text file in MFS.
@@ -213,5 +213,5 @@ public interface IMfsApi
     ///   Is used to stop the task.  When cancelled, the <see cref="TaskCanceledException"/> is raised.
     /// </param>
     /// <seealso cref="MfsWriteOptions"/>
-    Task WriteAsync(string path, Stream data, MfsWriteOptions options, CancellationToken cancel = default(CancellationToken));
+    Task WriteAsync(string path, Stream data, MfsWriteOptions options, CancellationToken cancel = default);
 }

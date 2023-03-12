@@ -503,7 +503,7 @@ internal abstract class DomainNameNetworkProtocol : NetworkProtocol
     public override void WriteValue(TextWriter stream)
     {
         stream.Write('/');
-        stream.Write(DomainName.ToString());
+        stream.Write(DomainName);
     }
     public override void WriteValue(CodedOutputStream stream)
     {

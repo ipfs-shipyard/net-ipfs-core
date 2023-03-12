@@ -16,15 +16,15 @@ public class BootstapApiTest
     {
         var addr = await _ipfs.Bootstrap.AddAsync(_somewhere);
         Assert.IsNotNull(addr);
-        Assert.AreEqual<MultiAddress>(_somewhere, addr);
+        Assert.AreEqual(_somewhere, addr);
         var addrs = await _ipfs.Bootstrap.ListAsync();
-        Assert.IsTrue(Enumerable.Any<MultiAddress>(addrs, a => a == _somewhere));
+        Assert.IsTrue(addrs.Any(a => a == _somewhere));
 
         addr = await _ipfs.Bootstrap.RemoveAsync(_somewhere);
         Assert.IsNotNull(addr);
-        Assert.AreEqual<MultiAddress>(_somewhere, addr);
+        Assert.AreEqual(_somewhere, addr);
         addrs = await _ipfs.Bootstrap.ListAsync();
-        Assert.IsFalse(Enumerable.Any<MultiAddress>(addrs, a => a == _somewhere));
+        Assert.IsFalse(addrs.Any(a => a == _somewhere));
     }
 
     [TestMethod]
@@ -32,7 +32,7 @@ public class BootstapApiTest
     {
         var addrs = await _ipfs.Bootstrap.ListAsync();
         Assert.IsNotNull(addrs);
-        Assert.AreNotEqual(0, Enumerable.Count<MultiAddress>(addrs));
+        Assert.AreNotEqual(0, addrs.Count());
     }
 
     [TestMethod]
@@ -41,7 +41,7 @@ public class BootstapApiTest
         var original = await _ipfs.Bootstrap.ListAsync();
         await _ipfs.Bootstrap.RemoveAllAsync();
         var addrs = await _ipfs.Bootstrap.ListAsync();
-        Assert.AreEqual(0, Enumerable.Count<MultiAddress>(addrs));
+        Assert.AreEqual(0, addrs.Count());
         foreach (var addr in original)
         {
             await _ipfs.Bootstrap.AddAsync(addr);
@@ -57,7 +57,7 @@ public class BootstapApiTest
         {
             await _ipfs.Bootstrap.AddDefaultsAsync();
             var addrs = await _ipfs.Bootstrap.ListAsync();
-            Assert.AreNotEqual(0, Enumerable.Count<MultiAddress>(addrs));
+            Assert.AreNotEqual(0, addrs.Count());
         }
         finally
         {

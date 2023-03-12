@@ -63,8 +63,8 @@ public class AutoDialerTest
         }
         finally
         {
-            await swarmA?.StopAsync();
-            await swarmB?.StopAsync();
+            await swarmA.StopAsync();
+            await swarmB.StopAsync();
         }
     }
 
@@ -96,8 +96,8 @@ public class AutoDialerTest
         }
         finally
         {
-            await swarmA?.StopAsync();
-            await swarmB?.StopAsync();
+            await swarmA.StopAsync();
+            await swarmB.StopAsync();
         }
     }
 
@@ -151,9 +151,9 @@ public class AutoDialerTest
         }
         finally
         {
-            await swarmA?.StopAsync();
-            await swarmB?.StopAsync();
-            await swarmC?.StopAsync();
+            await swarmA.StopAsync();
+            await swarmB.StopAsync();
+            await swarmC.StopAsync();
         }
     }
 }

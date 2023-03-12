@@ -18,7 +18,7 @@ internal class BlockApi : IBlockApi
         _ipfs = ipfs;
     }
 
-    public async Task<IDataBlock> GetAsync(Cid id, CancellationToken cancel = default(CancellationToken))
+    public async Task<IDataBlock> GetAsync(Cid id, CancellationToken cancel = default)
     {
         var data = await _ipfs.DownloadBytesAsync("block/get", cancel, id);
         return new Block
@@ -34,7 +34,7 @@ internal class BlockApi : IBlockApi
         string multiHash = MultiHash.DefaultAlgorithmName,
         string encoding = MultiBase.DefaultAlgorithmName,
         bool pin = false,
-        CancellationToken cancel = default(CancellationToken))
+        CancellationToken cancel = default)
     {
         var options = new List<string>();
         if (multiHash != MultiHash.DefaultAlgorithmName ||
@@ -63,7 +63,7 @@ internal class BlockApi : IBlockApi
         string multiHash = MultiHash.DefaultAlgorithmName,
         string encoding = MultiBase.DefaultAlgorithmName,
         bool pin = false,
-        CancellationToken cancel = default(CancellationToken))
+        CancellationToken cancel = default)
     {
         var options = new List<string>();
         if (multiHash != MultiHash.DefaultAlgorithmName ||
@@ -86,7 +86,7 @@ internal class BlockApi : IBlockApi
         return cid;
     }
 
-    public async Task<IDataBlock> StatAsync(Cid id, CancellationToken cancel = default(CancellationToken))
+    public async Task<IDataBlock> StatAsync(Cid id, CancellationToken cancel = default)
     {
         var json = await _ipfs.DoCommandAsync("block/stat", cancel, id);
         var info = JObject.Parse(json);
@@ -97,7 +97,7 @@ internal class BlockApi : IBlockApi
         };
     }
 
-    public async Task<Cid> RemoveAsync(Cid id, bool ignoreNonexistent = false, CancellationToken cancel = default(CancellationToken))
+    public async Task<Cid> RemoveAsync(Cid id, bool ignoreNonexistent = false, CancellationToken cancel = default)
     {
         var json = await _ipfs.DoCommandAsync("block/rm", cancel, id, "force=" + ignoreNonexistent.ToString().ToLowerInvariant());
         if (json.Length == 0)
@@ -106,7 +106,7 @@ internal class BlockApi : IBlockApi
         var error = (string)result["Error"];
         if (error != null)
             throw new HttpRequestException(error);
-        return (Cid)(string)result["Hash"];
+        return (string)result["Hash"];
     }
 
 }

@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using IpfsShipyard.Ipfs.Core;
 using IpfsShipyard.Ipfs.Core.CoreApi;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -27,7 +26,7 @@ public class FileSystemApiTest
         var ipfs = TestFixture.Ipfs;
         var node = ipfs.FileSystem.AddTextAsync("hello world").Result;
         var text = ipfs.FileSystem.ReadAllTextAsync(node.Id).Result;
-        Assert.AreEqual<string>("hello world", text);
+        Assert.AreEqual("hello world", text);
     }
 
     [TestMethod]
@@ -40,7 +39,7 @@ public class FileSystemApiTest
             var ipfs = TestFixture.Ipfs;
             var result = ipfs.FileSystem.AddFileAsync(path).Result;
             Assert.AreEqual("Qmf412jQZiuVUtdgnB36FXFX7xg5V6KEbSJ4dpQuhkLyfD", (string)result.Id);
-            Assert.AreEqual(0, Enumerable.Count<IFileSystemLink>(result.Links));
+            Assert.AreEqual(0, result.Links.Count());
         }
         finally
         {
@@ -55,9 +54,9 @@ public class FileSystemApiTest
         var indata = new MemoryStream(new byte[] { 10, 20, 30 });
         var node = ipfs.FileSystem.AddAsync(indata).Result;
         using var outdata = ipfs.FileSystem.ReadFileAsync(node.Id, offset: 1).Result;
-        Assert.AreEqual<int>(20, outdata.ReadByte());
-        Assert.AreEqual<int>(30, outdata.ReadByte());
-        Assert.AreEqual<int>(-1, outdata.ReadByte());
+        Assert.AreEqual(20, outdata.ReadByte());
+        Assert.AreEqual(30, outdata.ReadByte());
+        Assert.AreEqual(-1, outdata.ReadByte());
     }
 
     [TestMethod]
@@ -67,8 +66,8 @@ public class FileSystemApiTest
         var indata = new MemoryStream(new byte[] { 10, 20, 30 });
         var node = ipfs.FileSystem.AddAsync(indata).Result;
         using var outdata = ipfs.FileSystem.ReadFileAsync(node.Id, offset: 1, count: 1).Result;
-        Assert.AreEqual<int>(20, outdata.ReadByte());
-        Assert.AreEqual<int>(-1, outdata.ReadByte());
+        Assert.AreEqual(20, outdata.ReadByte());
+        Assert.AreEqual(-1, outdata.ReadByte());
     }
 
     [TestMethod]
@@ -78,9 +77,9 @@ public class FileSystemApiTest
         var indata = new MemoryStream(new byte[] { 10, 20, 30 });
         var node = ipfs.FileSystem.AddAsync(indata).Result;
         using var outdata = ipfs.FileSystem.ReadFileAsync(node.Id, offset: 1, count: 2).Result;
-        Assert.AreEqual<int>(20, outdata.ReadByte());
-        Assert.AreEqual<int>(30, outdata.ReadByte());
-        Assert.AreEqual<int>(-1, outdata.ReadByte());
+        Assert.AreEqual(20, outdata.ReadByte());
+        Assert.AreEqual(30, outdata.ReadByte());
+        Assert.AreEqual(-1, outdata.ReadByte());
     }
 
     [TestMethod]
@@ -91,7 +90,7 @@ public class FileSystemApiTest
         var options = new AddFileOptions { Pin = false };
         var node = ipfs.FileSystem.AddAsync(data, "", options).Result;
         var pins = ipfs.Pin.ListAsync().Result;
-        Assert.IsFalse(Enumerable.Any<Cid>(pins, pin => pin == node.Id));
+        Assert.IsFalse(pins.Any(pin => pin == node.Id));
     }
 
     [TestMethod]
@@ -108,10 +107,10 @@ public class FileSystemApiTest
             };
             var node = await ipfs.FileSystem.AddFileAsync(path, options);
             Assert.AreEqual("QmNxvA5bwvPGgMXbmtyhxA1cKFdvQXnsGnZLCGor3AzYxJ", (string)node.Id);
-            Assert.AreEqual<bool>(true, node.IsDirectory);
-            Assert.AreEqual(1, Enumerable.Count<IFileSystemLink>(node.Links));
-            Assert.AreEqual("hello.txt", Enumerable.First<IFileSystemLink>(node.Links).Name);
-            Assert.AreEqual("Qmf412jQZiuVUtdgnB36FXFX7xg5V6KEbSJ4dpQuhkLyfD", (string)Enumerable.First<IFileSystemLink>(node.Links).Id);
+            Assert.AreEqual(true, node.IsDirectory);
+            Assert.AreEqual(1, node.Links.Count());
+            Assert.AreEqual("hello.txt", node.Links.First().Name);
+            Assert.AreEqual("Qmf412jQZiuVUtdgnB36FXFX7xg5V6KEbSJ4dpQuhkLyfD", (string)node.Links.First().Id);
         }
         finally
         {
@@ -125,14 +124,14 @@ public class FileSystemApiTest
         var ipfs = TestFixture.Ipfs;
         var options = new AddFileOptions
         {
-            ChunkSize = 3
+            ChunkSize = 3,
+            Pin = true
         };
-        options.Pin = true;
         var node = await ipfs.FileSystem.AddTextAsync("hello world", options);
         Assert.AreEqual("QmVVZXWrYzATQdsKWM4knbuH5dgHFmrRqW3nJfDgdWrBjn", (string)node.Id);
-        Assert.AreEqual<bool>(false, node.IsDirectory);
+        Assert.AreEqual(false, node.IsDirectory);
 
-        var links = Enumerable.ToArray<IMerkleLink>((await ipfs.Object.LinksAsync(node.Id)));
+        var links = (await ipfs.Object.LinksAsync(node.Id)).ToArray();
         Assert.AreEqual(4, links.Length);
         Assert.AreEqual("QmevnC4UDUWzJYAQtUSQw4ekUdqDqwcKothjcobE7byeb6", (string)links[0].Id);
         Assert.AreEqual("QmTdBogNFkzUTSnEBQkWzJfQoiWbckLrTFVDHFRKFf6dcN", (string)links[1].Id);
@@ -140,7 +139,7 @@ public class FileSystemApiTest
         Assert.AreEqual("QmXh5UucsqF8XXM8UYQK9fHXsthSEfi78kewr8ttpPaLRE", (string)links[3].Id);
 
         var text = await ipfs.FileSystem.ReadAllTextAsync(node.Id);
-        Assert.AreEqual<string>("hello world", text);
+        Assert.AreEqual("hello world", text);
     }
 
     [TestMethod]
@@ -153,10 +152,10 @@ public class FileSystemApiTest
         };
         var node = await ipfs.FileSystem.AddTextAsync("hello world", options);
         Assert.AreEqual("bafkreifzjut3te2nhyekklss27nh3k72ysco7y32koao5eei66wof36n5e", (string)node.Id);
-        Assert.AreEqual<long>(11, node.Size);
+        Assert.AreEqual(11, node.Size);
 
         var text = await ipfs.FileSystem.ReadAllTextAsync(node.Id);
-        Assert.AreEqual<string>("hello world", text);
+        Assert.AreEqual("hello world", text);
     }
 
     [TestMethod]
@@ -170,9 +169,9 @@ public class FileSystemApiTest
         };
         var node = await ipfs.FileSystem.AddTextAsync("hello world", options);
         Assert.AreEqual("QmUuooB6zEhMmMaBvMhsMaUzar5gs5KwtVSFqG4C1Qhyhs", (string)node.Id);
-        Assert.AreEqual<bool>(false, node.IsDirectory);
+        Assert.AreEqual(false, node.IsDirectory);
 
-        var links = Enumerable.ToArray<IMerkleLink>((await ipfs.Object.LinksAsync(node.Id)));
+        var links = (await ipfs.Object.LinksAsync(node.Id)).ToArray();
         Assert.AreEqual(4, links.Length);
         Assert.AreEqual("bafkreigwvapses57f56cfow5xvoua4yowigpwcz5otqqzk3bpcbbjswowe", (string)links[0].Id);
         Assert.AreEqual("bafkreiew3cvfrp2ijn4qokcp5fqtoknnmr6azhzxovn6b3ruguhoubkm54", (string)links[1].Id);
@@ -180,7 +179,7 @@ public class FileSystemApiTest
         Assert.AreEqual("bafkreihfuch72plvbhdg46lef3n5zwhnrcjgtjywjryyv7ffieyedccchu", (string)links[3].Id);
 
         var text = await ipfs.FileSystem.ReadAllTextAsync(node.Id);
-        Assert.AreEqual<string>("hello world", text);
+        Assert.AreEqual("hello world", text);
     }
 
     [TestMethod]
@@ -193,16 +192,16 @@ public class FileSystemApiTest
             var dir = ipfs.FileSystem.AddDirectoryAsync(temp, false).Result;
             Assert.IsTrue(dir.IsDirectory);
 
-            var files = Enumerable.ToArray<IFileSystemLink>(dir.Links);
+            var files = dir.Links.ToArray();
             Assert.AreEqual(2, files.Length);
             Assert.AreEqual("alpha.txt", files[0].Name);
             Assert.AreEqual("beta.txt", files[1].Name);
 
-            Assert.AreEqual<string>("alpha", ipfs.FileSystem.ReadAllTextAsync(files[0].Id).Result);
-            Assert.AreEqual<string>("beta", ipfs.FileSystem.ReadAllTextAsync(files[1].Id).Result);
+            Assert.AreEqual("alpha", ipfs.FileSystem.ReadAllTextAsync(files[0].Id).Result);
+            Assert.AreEqual("beta", ipfs.FileSystem.ReadAllTextAsync(files[1].Id).Result);
 
-            Assert.AreEqual<string>("alpha", ipfs.FileSystem.ReadAllTextAsync(dir.Id + "/alpha.txt").Result);
-            Assert.AreEqual<string>("beta", ipfs.FileSystem.ReadAllTextAsync(dir.Id + "/beta.txt").Result);
+            Assert.AreEqual("alpha", ipfs.FileSystem.ReadAllTextAsync(dir.Id + "/alpha.txt").Result);
+            Assert.AreEqual("beta", ipfs.FileSystem.ReadAllTextAsync(dir.Id + "/beta.txt").Result);
         }
         finally
         {
@@ -217,10 +216,10 @@ public class FileSystemApiTest
         var temp = MakeTemp();
         try
         {
-            var dir = ipfs.FileSystem.AddDirectoryAsync(temp, true).Result;
+            var dir = ipfs.FileSystem.AddDirectoryAsync(temp).Result;
             Assert.IsTrue(dir.IsDirectory);
 
-            var files = Enumerable.ToArray<IFileSystemLink>(dir.Links);
+            var files = dir.Links.ToArray();
             Assert.AreEqual(3, files.Length);
             Assert.AreEqual("alpha.txt", files[0].Name);
             Assert.AreEqual("beta.txt", files[1].Name);
@@ -251,7 +250,7 @@ public class FileSystemApiTest
                 IpfsClient = ipfs
             };
             Assert.AreEqual("y", Encoding.UTF8.GetString(y.DataBytes));
-            Assert.AreEqual<string>("y", ipfs.FileSystem.ReadAllTextAsync(dir.Id + "/x/y/y.txt").Result);
+            Assert.AreEqual("y", ipfs.FileSystem.ReadAllTextAsync(dir.Id + "/x/y/y.txt").Result);
         }
         finally
         {
@@ -267,7 +266,7 @@ public class FileSystemApiTest
         Directory.CreateDirectory(temp);
         try
         {
-            var dir = ipfs.FileSystem.AddDirectoryAsync(temp, true).Result;
+            var dir = ipfs.FileSystem.AddDirectoryAsync(temp).Result;
             var dirid = dir.Id.Encode();
 
             await using var tar = await ipfs.FileSystem.GetAsync(dir.Id);
@@ -279,7 +278,7 @@ public class FileSystemApiTest
                 Assert.IsTrue(n > 0);
                 offset += n;
             }
-            Assert.AreEqual<int>(-1, tar.ReadByte());
+            Assert.AreEqual(-1, tar.ReadByte());
         }
         finally
         {
@@ -335,7 +334,6 @@ public class FileSystemApiTest
             catch (Exception)
             {
                 Thread.Sleep(1);
-                continue;  // most likely anti-virus is reading a file
             }
         }
     }

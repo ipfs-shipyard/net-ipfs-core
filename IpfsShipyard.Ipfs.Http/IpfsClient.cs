@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Net.Http;
-using System.Net.Http.Headers;
 using System.Reflection;
 using System.Text;
 using System.Threading;
@@ -32,7 +31,7 @@ public partial class IpfsClient : ICoreApi
     private const string UnknownFilename = "unknown";
 
     private static readonly object _safe = new();
-    private static HttpClient _api = null;
+    private static HttpClient _api;
 
     /// <summary>
     ///   The default URL to the IPFS HTTP API server.

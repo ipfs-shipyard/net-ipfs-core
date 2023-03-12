@@ -203,7 +203,7 @@ public class FloodRouter : IPeerProtocol, IMessageRouter
         // Forward the message.
         var forward = new PubSubMessage
         {
-            PublishedMessages = new PublishedMessage[] { message }
+            PublishedMessages = new[] { message }
         };
 
         return SendAsync(forward, peers, cancel);
@@ -232,7 +232,6 @@ public class FloodRouter : IPeerProtocol, IMessageRouter
                 await stream.FlushAsync(cancel).ConfigureAwait(false);
             }
             log.Debug($"sending message to {peer}");
-            return;
         }
         catch (Exception e)
         {
@@ -269,7 +268,7 @@ public class FloodRouter : IPeerProtocol, IMessageRouter
                     })
                     .ToArray()
             };
-            await SendAsync(hello, new Peer[] { connection.RemotePeer }, CancellationToken.None).ConfigureAwait(false);
+            await SendAsync(hello, new[] { connection.RemotePeer }, CancellationToken.None).ConfigureAwait(false);
         }
         catch (Exception e)
         {

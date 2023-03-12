@@ -25,7 +25,7 @@ public class ContentRouter : IDisposable
         /// <summary>
         ///   The peer ID of the provider.
         /// </summary>
-        public MultiHash PeerId { get; set; }
+        public MultiHash PeerId { get; init; }
     }
 
     private readonly ConcurrentDictionary<string, List<ProviderInfo>> _content = new();
@@ -78,7 +78,7 @@ public class ContentRouter : IDisposable
 
         _content.AddOrUpdate(
             Key(cid),
-            (_) => new() { pi },
+            _ => new() { pi },
             (_, providers) =>
             {
                 var existing = providers

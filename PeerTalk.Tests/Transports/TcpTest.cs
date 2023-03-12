@@ -89,12 +89,11 @@ public class TcpTest
     {
         var tcp = new Tcp();
         var cs = new CancellationTokenSource();
-        MultiAddress listenerAddress = null;
         Action<Stream, MultiAddress, MultiAddress> handler = (stream, local, remote) =>
         {
             Assert.Fail("handler should not be called");
         };
-        listenerAddress = tcp.Listen("/ip4/127.0.0.1", handler, cs.Token);
+        var listenerAddress = tcp.Listen("/ip4/127.0.0.1", handler, cs.Token);
         Assert.IsTrue(listenerAddress.Protocols.Any(p => p.Name == "tcp"));
         cs.Cancel();
     }

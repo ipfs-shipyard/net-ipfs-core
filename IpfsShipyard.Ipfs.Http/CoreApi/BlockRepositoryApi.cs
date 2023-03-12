@@ -14,22 +14,22 @@ internal class BlockRepositoryApi : IBlockRepositoryApi
         _ipfs = ipfs;
     }
 
-    public async Task RemoveGarbageAsync(CancellationToken cancel = default(CancellationToken))
+    public async Task RemoveGarbageAsync(CancellationToken cancel = default)
     {
         await _ipfs.DoCommandAsync("repo/gc", cancel);
     }
 
-    public Task<RepositoryData> StatisticsAsync(CancellationToken cancel = default(CancellationToken))
+    public Task<RepositoryData> StatisticsAsync(CancellationToken cancel = default)
     {
         return _ipfs.DoCommandAsync<RepositoryData>("repo/stat", cancel);
     }
 
-    public async Task VerifyAsync(CancellationToken cancel = default(CancellationToken))
+    public async Task VerifyAsync(CancellationToken cancel = default)
     {
         await _ipfs.DoCommandAsync("repo/verify", cancel);
     }
 
-    public async Task<string> VersionAsync(CancellationToken cancel = default(CancellationToken))
+    public async Task<string> VersionAsync(CancellationToken cancel = default)
     {
         var json = await _ipfs.DoCommandAsync("repo/version", cancel);
         var info = JObject.Parse(json);

@@ -84,7 +84,7 @@ public class CtrStreamCipher : IStreamCipher
     public void Reset()
     {
         _byteCount = 0;
-        Arrays.Fill(_counter, (byte)0);
+        Arrays.Fill(_counter, 0);
         Array.Copy(_iv, 0, _counter, 0, _iv.Length);
         _cipher.Reset();
     }

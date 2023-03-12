@@ -29,8 +29,8 @@ public class NotificationServiceTest
         await ns.StartAsync();
         try
         {
-            var a = ns.CreateMessage("topic", new byte[0]);
-            var b = ns.CreateMessage("topic", new byte[0]);
+            var a = ns.CreateMessage("topic", Array.Empty<byte>());
+            var b = ns.CreateMessage("topic", Array.Empty<byte>());
             Assert.IsTrue(b.MessageId.CompareTo(a.MessageId) > 0);
         }
         finally
@@ -75,18 +75,18 @@ public class NotificationServiceTest
             await ns.SubscribeAsync(topicB, msg => { }, csB.Token);
 
             var topics = (await ns.SubscribedTopicsAsync()).ToArray();
-            Assert.AreEqual(2, topics.Count());
+            Assert.AreEqual(2, topics.Length);
             CollectionAssert.Contains(topics, topicA);
             CollectionAssert.Contains(topics, topicB);
 
             csA.Cancel();
             topics = (await ns.SubscribedTopicsAsync()).ToArray();
-            Assert.AreEqual(1, topics.Count());
+            Assert.AreEqual(1, topics.Length);
             CollectionAssert.Contains(topics, topicB);
 
             csB.Cancel();
             topics = (await ns.SubscribedTopicsAsync()).ToArray();
-            Assert.AreEqual(0, topics.Count());
+            Assert.AreEqual(0, topics.Length);
         }
         finally
         {
@@ -167,7 +167,7 @@ public class NotificationServiceTest
         var topic1 = Guid.NewGuid().ToString();
         var topic2 = Guid.NewGuid().ToString();
         var ns = new NotificationService { LocalPeer = _self };
-        var router = new FloodRouter() { Swarm = new() };
+        var router = new FloodRouter { Swarm = new() };
         router.RemoteTopics.AddInterest(topic1, _other1);
         router.RemoteTopics.AddInterest(topic2, _other2);
         ns.Routers.Add(router);
@@ -201,7 +201,7 @@ public class NotificationServiceTest
         await ns.StartAsync();
         try
         {
-            var peers = (await ns.PeersAsync(null)).ToArray();
+            var peers = (await ns.PeersAsync()).ToArray();
             Assert.AreEqual(2, peers.Length);
         }
         finally

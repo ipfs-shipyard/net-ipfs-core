@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using IpfsShipyard.Ipfs.Core.Registry;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -47,13 +48,12 @@ public class MultiBaseTest
 
     private class TestVector
     {
-        public string Algorithm { get; set; }
-        public string Input { get; set; }
-        public string Output { get; set; }
+        public string Algorithm { get; init; }
+        public string Input { get; init; }
+        public string Output { get; init; }
     }
 
-    private readonly TestVector[] _testVectors = new TestVector[]
-    {
+    private readonly TestVector[] _testVectors = {
         new()
         {
             Algorithm = "base16",
@@ -225,7 +225,7 @@ public class MultiBaseTest
     [TestMethod]
     public void EmptyData()
     {
-        var empty = new byte[0];
+        var empty = Array.Empty<byte>();
         foreach (var alg in MultiBaseAlgorithm.All)
         {
             var s = MultiBase.Encode(empty, alg.Name);
@@ -236,9 +236,8 @@ public class MultiBaseTest
     [TestMethod]
     public void Invalid_Encoded_String()
     {
-        foreach (var alg in MultiBaseAlgorithm.All)
+        foreach (var bad in MultiBaseAlgorithm.All.Select(alg => alg.Code + "?"))
         {
-            var bad = alg.Code + "?";
             ExceptionAssert.Throws<FormatException>(() => MultiBase.Decode(bad));
         }
     }

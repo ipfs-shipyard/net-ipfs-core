@@ -2,6 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using IpfsShipyard.Ipfs.Core;
+using ProtoBuf;
 
 namespace IpfsShipyard.PeerTalk;
 
@@ -33,6 +34,6 @@ public static class ProtoBufHelper
         await stream.ReadExactAsync(bytes, 0, length, cancel).ConfigureAwait(false);
 
         using var ms = new MemoryStream(bytes, false);
-        return ProtoBuf.Serializer.Deserialize<T>(ms);
+        return Serializer.Deserialize<T>(ms);
     }
 }

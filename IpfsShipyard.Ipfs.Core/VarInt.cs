@@ -162,7 +162,7 @@ public static class Varint
     /// <exception cref="NotSupportedException">
     ///   When <paramref name="value"/> is negative.
     /// </exception>
-    public static async Task WriteVarintAsync(this Stream stream, long value, CancellationToken cancel = default(CancellationToken))
+    public static async Task WriteVarintAsync(this Stream stream, long value, CancellationToken cancel = default)
     {
         if (value < 0)
             throw new NotSupportedException("Negative values are not allowed for a Varint");
@@ -199,7 +199,7 @@ public static class Varint
     /// <exception cref="InvalidDataException">
     ///   When the varint value is greater than <see cref="Int32.MaxValue"/>.
     /// </exception>
-    public static async Task<int> ReadVarint32Async(this Stream stream, CancellationToken cancel = default(CancellationToken))
+    public static async Task<int> ReadVarint32Async(this Stream stream, CancellationToken cancel = default)
     {
         var value = await stream.ReadVarint64Async(cancel).ConfigureAwait(false);
         if (value > int.MaxValue)
@@ -226,7 +226,7 @@ public static class Varint
     ///   A task that represents the asynchronous operation. The task's result
     ///   is the integer value in the <paramref name="stream"/>.
     /// </returns>
-    public static async Task<long> ReadVarint64Async(this Stream stream, CancellationToken cancel = default(CancellationToken))
+    public static async Task<long> ReadVarint64Async(this Stream stream, CancellationToken cancel = default)
     {
         long value = 0;
         var shift = 0;

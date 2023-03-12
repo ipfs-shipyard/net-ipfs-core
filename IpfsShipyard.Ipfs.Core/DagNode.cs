@@ -37,8 +37,8 @@ public class DagNode : IMerkleNode<IMerkleLink>
     /// </param>
     public DagNode(byte[] data, IEnumerable<IMerkleLink> links = null, string hashAlgorithm = MultiHash.DefaultAlgorithmName)
     {
-        DataBytes = data ?? (new byte[0]);
-        Links = (links ?? (new DagLink[0]))
+        DataBytes = data ?? Array.Empty<byte>();
+        Links = (links ?? Array.Empty<DagLink>())
             .OrderBy(link => link.Name ?? "");
         _hashAlgorithm = hashAlgorithm;
     }
@@ -228,7 +228,7 @@ public class DagNode : IMerkleNode<IMerkleLink>
     public void Write(CodedOutputStream stream)
     {
         if (stream == null)
-            throw new ArgumentNullException("stream");
+            throw new ArgumentNullException(nameof(stream));
 
         foreach (var link in Links.Select(l => new DagLink(l)))
         {
@@ -279,7 +279,7 @@ public class DagNode : IMerkleNode<IMerkleLink>
             }
         }
 
-        DataBytes ??= new byte[0];
+        DataBytes ??= Array.Empty<byte>();
         Links = links.ToArray();
     }
 

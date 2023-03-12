@@ -111,7 +111,7 @@ public class Codec
     public static Codec Register(string name, int code)
     {
         if (string.IsNullOrWhiteSpace(name))
-            throw new ArgumentNullException("name");
+            throw new ArgumentNullException(nameof(name));
         if (Names.ContainsKey(name))
             throw new ArgumentException($"The IPFS codec name '{name}' is already defined.");
         if (Codes.ContainsKey(code))

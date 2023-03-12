@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using IpfsShipyard.Ipfs.Core;
@@ -18,34 +19,34 @@ internal class DhtApi : IDhtApi
         _ipfs = ipfs;
     }
 
-    public Task<Peer> FindPeerAsync(MultiHash id, CancellationToken cancel = default(CancellationToken))
+    public Task<Peer> FindPeerAsync(MultiHash id, CancellationToken cancel = default)
     {
         return _ipfs.IdAsync(id, cancel);
     }
 
-    public async Task<IEnumerable<Peer>> FindProvidersAsync(Cid id, int limit = 20, Action<Peer> providerFound = null, CancellationToken cancel = default(CancellationToken))
+    public async Task<IEnumerable<Peer>> FindProvidersAsync(Cid id, int limit = 20, Action<Peer> providerFound = null, CancellationToken cancel = default)
     {
         // TODO: providerFound action
         var stream = await _ipfs.PostDownloadAsync("dht/findprovs", cancel, id, $"num-providers={limit}");
         return ProviderFromStream(stream, limit);
     }
 
-    public Task<byte[]> GetAsync(byte[] key, CancellationToken cancel = default(CancellationToken))
+    public Task<byte[]> GetAsync(byte[] key, CancellationToken cancel = default)
     {
         throw new NotImplementedException();
     }
 
-    public Task ProvideAsync(Cid cid, bool advertise = true, CancellationToken cancel = default(CancellationToken))
+    public Task ProvideAsync(Cid cid, bool advertise = true, CancellationToken cancel = default)
     {
         throw new NotImplementedException();
     }
 
-    public Task PutAsync(byte[] key, out byte[] value, CancellationToken cancel = default(CancellationToken))
+    public Task PutAsync(byte[] key, out byte[] value, CancellationToken cancel = default)
     {
         throw new NotImplementedException();
     }
 
-    public Task<bool> TryGetAsync(byte[] key, out byte[] value, CancellationToken cancel = default(CancellationToken))
+    public Task<bool> TryGetAsync(byte[] key, out byte[] value, CancellationToken cancel = default)
     {
         throw new NotImplementedException();
     }
@@ -70,14 +71,10 @@ internal class DhtApi : IDhtApi
                 var responses = (JArray)r["Responses"];
                 if (responses != null)
                 {
-                    foreach (var response in responses)
+                    foreach (var rid in responses.Select(response => (string)response["ID"]).Where(rid => rid != string.Empty))
                     {
-                        var rid = (string)response["ID"];
-                        if (rid != String.Empty)
-                        {
-                            ++n;
-                            yield return new() { Id = new(rid) };
-                        }
+                        ++n;
+                        yield return new() { Id = new(rid) };
                     }
                 }
             }

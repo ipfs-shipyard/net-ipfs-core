@@ -92,7 +92,7 @@ public class DagLink : IMerkleLink
     public void Write(CodedOutputStream stream)
     {
         if (stream == null)
-            throw new ArgumentNullException("stream");
+            throw new ArgumentNullException(nameof(stream));
 
         stream.WriteTag(1, WireFormat.WireType.LengthDelimited);
         Id.Write(stream);

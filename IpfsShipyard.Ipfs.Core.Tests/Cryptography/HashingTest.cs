@@ -10,13 +10,12 @@ public class HashingTest
 
     private class TestVector
     {
-        public string Algorithm { get; set; }
-        public string Input { get; set; }
-        public string Digest { get; set; }
+        public string Algorithm { get; init; }
+        public string Input { get; init; }
+        public string Digest { get; init; }
     }
 
-    private readonly TestVector[] _testVectors = new TestVector[]
-    {
+    private readonly TestVector[] _testVectors = {
         new()
         {
             Algorithm = "sha1",

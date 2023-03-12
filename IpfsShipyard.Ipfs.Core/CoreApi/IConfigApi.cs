@@ -23,7 +23,7 @@ public interface IConfigApi
     /// <returns>
     ///   A <see cref="JObject"/> containing the configuration.
     /// </returns>
-    Task<JObject> GetAsync(CancellationToken cancel = default(CancellationToken));
+    Task<JObject> GetAsync(CancellationToken cancel = default);
 
     /// <summary>
     ///   Gets the value of a configuration key.
@@ -43,7 +43,7 @@ public interface IConfigApi
     /// <remarks>
     ///   Keys are case sensistive.
     /// </remarks>
-    Task<JToken> GetAsync(string key, CancellationToken cancel = default(CancellationToken));
+    Task<JToken> GetAsync(string key, CancellationToken cancel = default);
 
     /// <summary>
     ///   Adds or replaces a configuration value.
@@ -57,7 +57,7 @@ public interface IConfigApi
     /// <param name="cancel">
     ///   Is used to stop the task.  When cancelled, the <see cref="TaskCanceledException"/> is raised.
     /// </param>
-    Task SetAsync(string key, string value, CancellationToken cancel = default(CancellationToken));
+    Task SetAsync(string key, string value, CancellationToken cancel = default);
 
     /// <summary>
     ///   Adds or replaces a configuration value.
@@ -71,7 +71,7 @@ public interface IConfigApi
     /// <param name="cancel">
     ///   Is used to stop the task.  When cancelled, the <see cref="TaskCanceledException"/> is raised.
     /// </param>
-    Task SetAsync(string key, JToken value, CancellationToken cancel = default(CancellationToken));
+    Task SetAsync(string key, JToken value, CancellationToken cancel = default);
 
     /// <summary>
     ///   Replaces the entire configuration.

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Org.BouncyCastle.Asn1.X9;
 using Org.BouncyCastle.Crypto.Parameters;
 using Org.BouncyCastle.Security;

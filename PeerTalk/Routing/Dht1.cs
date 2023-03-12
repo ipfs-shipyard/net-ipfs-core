@@ -162,7 +162,7 @@ public class Dht1 : IPeerProtocol, IService, IPeerRouting, IContentRouting
 
         // Maybe the swarm knows about it.
         var found = Swarm.KnownPeers.FirstOrDefault(p => p.Id == id);
-        if (found?.Addresses.Count() > 0)
+        if ((found?.Addresses).Any())
             return found;
 
         // Ask our peers for information on the requested peer.
@@ -218,12 +218,9 @@ public class Dht1 : IPeerProtocol, IService, IPeerRouting, IContentRouting
         // Add any providers that we already know about.
         var providers = ContentRouter
             .Get(id)
-            .Select(pid =>
-            {
-                return (pid == Swarm.LocalPeer.Id)
-                    ? Swarm.LocalPeer
-                    : Swarm.RegisterPeer(new() { Id = pid });
-            });
+            .Select(pid => pid == Swarm.LocalPeer.Id
+                ? Swarm.LocalPeer
+                : Swarm.RegisterPeer(new() { Id = pid }));
         foreach (var provider in providers)
         {
             dquery.AddAnswer(provider);
@@ -359,7 +356,7 @@ public class Dht1 : IPeerProtocol, IService, IPeerRouting, IContentRouting
             .Get(cid)
             .Select(pid =>
             {
-                var peer = (pid == Swarm.LocalPeer.Id)
+                var peer = pid == Swarm.LocalPeer.Id
                     ? Swarm.LocalPeer
                     : Swarm.RegisterPeer(new() { Id = pid });
                 return new DhtPeerMessage
@@ -395,7 +392,7 @@ public class Dht1 : IPeerProtocol, IService, IPeerRouting, IContentRouting
             return null;
         }
         var providers = request.ProviderPeers
-            .Select(p => p.TryToPeer(out var peer) ? peer : (Peer)null)
+            .Select(p => p.TryToPeer(out var peer) ? peer : null)
             .Where(p => p != null && p == remotePeer && p.Addresses.Any() && Swarm.IsAllowed(p));
         foreach (var provider in providers)
         {

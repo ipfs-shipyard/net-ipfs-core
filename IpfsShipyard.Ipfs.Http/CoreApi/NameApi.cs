@@ -16,7 +16,7 @@ internal class NameApi : INameApi
         _ipfs = ipfs;
     }
 
-    public async Task<NamedContent> PublishAsync(string path, bool resolve = true, string key = "self", TimeSpan? lifetime = null, CancellationToken cancel = default(CancellationToken))
+    public async Task<NamedContent> PublishAsync(string path, bool resolve = true, string key = "self", TimeSpan? lifetime = null, CancellationToken cancel = default)
     {
         var json = await _ipfs.DoCommandAsync("name/publish", cancel,
             path,
@@ -32,18 +32,18 @@ internal class NameApi : INameApi
         };
     }
 
-    public Task<NamedContent> PublishAsync(Cid id, string key = "self", TimeSpan? lifetime = null, CancellationToken cancel = default(CancellationToken))
+    public Task<NamedContent> PublishAsync(Cid id, string key = "self", TimeSpan? lifetime = null, CancellationToken cancel = default)
     {
         return PublishAsync("/ipfs/" + id.Encode(), false, key, lifetime, cancel);
     }
 
-    public async Task<string> ResolveAsync(string name, bool recursive = false, bool nocache = false, CancellationToken cancel = default(CancellationToken))
+    public async Task<string> ResolveAsync(string name, bool recursive = false, bool nocache = false, CancellationToken cancel = default)
     {
         var json = await _ipfs.DoCommandAsync("name/resolve", cancel,
             name,
             $"recursive={recursive.ToString().ToLowerInvariant()}",
             $"nocache={nocache.ToString().ToLowerInvariant()}");
-        var path = (string)(JObject.Parse(json)["Path"]);
+        var path = (string)JObject.Parse(json)["Path"];
         return path;
     }
 }

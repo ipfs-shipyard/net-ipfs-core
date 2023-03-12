@@ -46,7 +46,7 @@ public class BitswapLedger
     ///   A value less than 1 indicates that we are in debt to the 
     ///   <see cref="Peer"/>.
     /// </value>
-    public float DebtRatio => (float)DataSent / (float)(DataReceived + 1); // +1 is to prevent division by zero
+    public float DebtRatio => DataSent / (float)(DataReceived + 1); // +1 is to prevent division by zero
 
     /// <summary>
     ///   Determines if we owe the <see cref="Peer"/> some blocks.

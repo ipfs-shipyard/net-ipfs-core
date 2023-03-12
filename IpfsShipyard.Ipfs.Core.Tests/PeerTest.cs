@@ -116,9 +116,9 @@ public class PeerTest
         Assert.AreEqual(a0, a1);
         Assert.AreNotEqual(a0, b);
 
-        Assert.AreEqual<Peer>(a0, a0);
-        Assert.AreEqual<Peer>(a0, a1);
-        Assert.AreNotEqual<Peer>(a0, b);
+        Assert.AreEqual(a0, a0);
+        Assert.AreEqual(a0, a1);
+        Assert.AreNotEqual(a0, b);
 
         Assert.AreEqual(a0.GetHashCode(), a0.GetHashCode());
         Assert.AreEqual(a0.GetHashCode(), a1.GetHashCode());

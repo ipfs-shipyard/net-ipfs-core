@@ -112,7 +112,7 @@ public class ConnectionManager
 
         _connections.AddOrUpdate(
             Key(connection.RemotePeer),
-            (_) => new() { connection },
+            _ => new() { connection },
             (_, conns) =>
             {
                 if (!conns.Contains(connection))

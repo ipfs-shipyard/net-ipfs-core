@@ -15,9 +15,11 @@ public class MultiAddressBlackListTest
     [TestMethod]
     public void Allowed()
     {
-        var policy = new MultiAddressBlackList();
-        policy.Add(_a);
-        policy.Add(_b);
+        var policy = new MultiAddressBlackList
+        {
+            _a,
+            _b
+        };
         Assert.IsFalse(policy.IsAllowed(_a));
         Assert.IsFalse(policy.IsAllowed(_a1));
         Assert.IsFalse(policy.IsAllowed(_b));
@@ -28,8 +30,7 @@ public class MultiAddressBlackListTest
     [TestMethod]
     public void Allowed_Alias()
     {
-        var policy = new MultiAddressBlackList();
-        policy.Add(_a);
+        var policy = new MultiAddressBlackList { _a };
         Assert.IsFalse(policy.IsAllowed(_a));
         Assert.IsFalse(policy.IsAllowed(_a1));
         Assert.IsFalse(policy.IsAllowed(_b));

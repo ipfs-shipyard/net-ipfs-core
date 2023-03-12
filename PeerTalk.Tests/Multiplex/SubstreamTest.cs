@@ -118,7 +118,7 @@ public class SubstreamTest
     [TestMethod]
     public void Reading_Empty()
     {
-        var m1 = new byte[0];
+        var m1 = Array.Empty<byte>();
         var stream = new Substream();
         var _ = Task.Run(async () =>
         {
@@ -156,7 +156,7 @@ public class SubstreamTest
 
         ms.Position = 0;
         var header = await Header.ReadAsync(ms);
-        var length = await Varint.ReadVarint32Async(ms);
+        var length = await ms.ReadVarint32Async();
         var payload = new byte[length];
         ms.Read(payload, 0, length);
         Assert.AreEqual(stream.Id, header.StreamId);

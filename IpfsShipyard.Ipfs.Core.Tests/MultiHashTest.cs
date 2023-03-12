@@ -24,9 +24,9 @@ public class MultiHashTest
     [TestMethod]
     public void Unknown_Hash_Name()
     {
-        ExceptionAssert.Throws<ArgumentNullException>(() => new MultiHash(null, new byte[0]));
-        ExceptionAssert.Throws<ArgumentException>(() => new MultiHash("", new byte[0]));
-        ExceptionAssert.Throws<ArgumentException>(() => new MultiHash("md5", new byte[0]));
+        ExceptionAssert.Throws<ArgumentNullException>(() => new MultiHash(null, Array.Empty<byte>()));
+        ExceptionAssert.Throws<ArgumentException>(() => new MultiHash("", Array.Empty<byte>()));
+        ExceptionAssert.Throws<ArgumentException>(() => new MultiHash("md5", Array.Empty<byte>()));
     }
 
     [TestMethod]
@@ -74,7 +74,7 @@ public class MultiHashTest
     public void Invalid_Digest()
     {
         ExceptionAssert.Throws<ArgumentNullException>(() => new MultiHash("sha1", null));
-        ExceptionAssert.Throws<ArgumentException>(() => new MultiHash("sha1", new byte[0]));
+        ExceptionAssert.Throws<ArgumentException>(() => new MultiHash("sha1", Array.Empty<byte>()));
         ExceptionAssert.Throws<ArgumentException>(() => new MultiHash("sha1", new byte[21]));
     }
 
@@ -237,9 +237,9 @@ public class MultiHashTest
         Assert.AreEqual(a0, a1);
         Assert.AreNotEqual(a0, b);
 
-        Assert.AreEqual<MultiHash>(a0, a0);
-        Assert.AreEqual<MultiHash>(a0, a1);
-        Assert.AreNotEqual<MultiHash>(a0, b);
+        Assert.AreEqual(a0, a0);
+        Assert.AreEqual(a0, a1);
+        Assert.AreNotEqual(a0, b);
 
         Assert.AreEqual(a0.GetHashCode(), a0.GetHashCode());
         Assert.AreEqual(a0.GetHashCode(), a1.GetHashCode());
@@ -271,7 +271,7 @@ public class MultiHashTest
         {
             try
             {
-                var mh = MultiHash.ComputeHash(new byte[0], alg.Name);
+                var mh = MultiHash.ComputeHash(Array.Empty<byte>(), alg.Name);
                 Assert.IsNotNull(mh, alg.Name);
                 Assert.AreEqual(alg.Code, mh.Algorithm.Code, alg.Name);
                 Assert.AreEqual(alg.Name, mh.Algorithm.Name, alg.Name);
@@ -289,9 +289,9 @@ public class MultiHashTest
     public void Example()
     {
         var hello = Encoding.UTF8.GetBytes("Hello world");
-        var mh = MultiHash.ComputeHash(hello, "sha2-256");
-        Console.WriteLine($"| hash code | 0x{mh.Algorithm.Code.ToString("x")} |");
-        Console.WriteLine($"| digest length | 0x{mh.Digest.Length.ToString("x")} |");
+        var mh = MultiHash.ComputeHash(hello);
+        Console.WriteLine($"| hash code | 0x{mh.Algorithm.Code:x} |");
+        Console.WriteLine($"| digest length | 0x{mh.Digest.Length:x} |");
         Console.WriteLine($"| digest value | {mh.Digest.ToHexString()} |");
         Console.WriteLine($"| binary | {mh.ToArray().ToHexString()} |");
         Console.WriteLine($"| base 58 | {mh.ToBase58()} |");
@@ -301,14 +301,13 @@ public class MultiHashTest
 
     private class TestVector
     {
-        public string Algorithm { get; set; }
-        public string Input { get; set; }
-        public string Output { get; set; }
+        public string Algorithm { get; init; }
+        public string Input { get; init; }
+        public string Output { get; init; }
         public bool Ignore { get; set; }
     }
 
-    private readonly TestVector[] _testVectors = new TestVector[]
-    {
+    private readonly TestVector[] _testVectors = {
         // From https://github.com/multiformats/js-multihashing-async/blob/master/test/fixtures/encodes.js
         new()
         {
@@ -492,7 +491,7 @@ public class MultiHashTest
     {
         var a = new MultiHash("QmPZ9gcCEpqKTo6aq61g2nXGUhM4iCL3ewB6LDXZCtioEB");
         var json = JsonConvert.SerializeObject(a);
-        Assert.AreEqual($"\"{a.ToString()}\"", json);
+        Assert.AreEqual($"\"{a}\"", json);
         var b = JsonConvert.DeserializeObject<MultiHash>(json);
         Assert.AreEqual(a, b);
 

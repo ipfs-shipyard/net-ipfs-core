@@ -52,7 +52,7 @@ public class MdnsNext : Mdns
             .SelectMany(t => t.Strings)
             .Where(s => s.StartsWith("dnsaddr="))
             .Select(s => s[8..])
-            .Select(s => MultiAddress.TryCreate(s))
+            .Select(MultiAddress.TryCreate)
             .Where(a => a != null);
     }
 

@@ -35,7 +35,7 @@ public class PublishedMessage : IPublishedMessage
         SequenceNumber = Multibase.Decode((string)o["seqno"], out MultibaseEncoding _);
         DataBytes = Multibase.Decode((string)o["data"], out MultibaseEncoding _);
 
-        var topics = (JArray) (o["topicIDs"]);
+        var topics = (JArray) o["topicIDs"];
         Topics = topics.Select(t => Encoding.UTF8.GetString(Multibase.Decode((string)t, out MultibaseEncoding _)));
     }
 

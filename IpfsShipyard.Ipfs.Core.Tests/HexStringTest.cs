@@ -16,7 +16,7 @@ public class HexStringTest
         var upperHex = string.Concat(buffer.Select(b => b.ToString("X2")).ToArray());
 
         Assert.AreEqual(lowerHex, buffer.ToHexString(), "encode default");
-        Assert.AreEqual(lowerHex, buffer.ToHexString("G"), "encode general");
+        Assert.AreEqual(lowerHex, buffer.ToHexString(), "encode general");
         Assert.AreEqual(lowerHex, buffer.ToHexString("x"), "encode lower");
         Assert.AreEqual(upperHex, buffer.ToHexString("X"), "encode upper");
     }
@@ -35,7 +35,7 @@ public class HexStringTest
     [TestMethod]
     public void InvalidFormatSpecifier()
     {
-        ExceptionAssert.Throws<FormatException>(() => HexString.Encode(new byte[0], "..."));
+        ExceptionAssert.Throws<FormatException>(() => HexString.Encode(Array.Empty<byte>(), "..."));
     }
 
     [TestMethod]

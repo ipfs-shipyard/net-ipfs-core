@@ -15,9 +15,11 @@ public class MultiAddressWhiteListTest
     [TestMethod]
     public void Allowed()
     {
-        var policy = new MultiAddressWhiteList();
-        policy.Add(_a);
-        policy.Add(_b);
+        var policy = new MultiAddressWhiteList
+        {
+            _a,
+            _b
+        };
         Assert.IsTrue(policy.IsAllowed(_a));
         Assert.IsTrue(policy.IsAllowed(_a1));
         Assert.IsTrue(policy.IsAllowed(_b));
@@ -28,8 +30,7 @@ public class MultiAddressWhiteListTest
     [TestMethod]
     public void Allowed_Alias()
     {
-        var policy = new MultiAddressWhiteList();
-        policy.Add(_a);
+        var policy = new MultiAddressWhiteList { _a };
         Assert.IsTrue(policy.IsAllowed(_a));
         Assert.IsTrue(policy.IsAllowed(_a1));
         Assert.IsTrue(policy.IsAllowed(_b));

@@ -73,7 +73,7 @@ public class VarintTest
     [TestMethod]
     public void Empty()
     {
-        var bytes = new byte[0];
+        var bytes = Array.Empty<byte>();
         ExceptionAssert.Throws<EndOfStreamException>(() => Varint.DecodeInt64(bytes));
     }
 
@@ -124,7 +124,7 @@ public class VarintTest
     {
         for (long v = 1; v <= 0xFFFFFFFL; v = v << 4)
         {
-            Console.Write($"| {v} (0x{v.ToString("x")}) ");
+            Console.Write($"| {v} (0x{v:x}) ");
             Console.WriteLine($"| {Varint.Encode(v).ToHexString()} |");
         }
     }

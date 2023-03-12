@@ -51,7 +51,7 @@ public interface IDagApi
         string multiHash = MultiHash.DefaultAlgorithmName,
         string encoding = MultiBase.DefaultAlgorithmName,
         bool pin = true,
-        CancellationToken cancel = default(CancellationToken));
+        CancellationToken cancel = default);
 
     /// <summary>
     ///  Put a stream of JSON as an IPLD node.
@@ -86,7 +86,7 @@ public interface IDagApi
         string multiHash = MultiHash.DefaultAlgorithmName,
         string encoding = MultiBase.DefaultAlgorithmName,
         bool pin = true,
-        CancellationToken cancel = default(CancellationToken));
+        CancellationToken cancel = default);
 
     /// <summary>
     ///  Put an object as an IPLD node.
@@ -121,7 +121,7 @@ public interface IDagApi
         string multiHash = MultiHash.DefaultAlgorithmName,
         string encoding = MultiBase.DefaultAlgorithmName,
         bool pin = true,
-        CancellationToken cancel = default(CancellationToken));
+        CancellationToken cancel = default);
 
     /// <summary>
     ///   Get an IPLD node.
@@ -136,7 +136,7 @@ public interface IDagApi
     ///   A task that represents the asynchronous get operation. The task's value
     ///   contains the node's content as JSON.
     /// </returns>
-    Task<JObject> GetAsync(Cid id, CancellationToken cancel = default(CancellationToken));
+    Task<JObject> GetAsync(Cid id, CancellationToken cancel = default);
 
     /// <summary>
     ///   Gets the content of an IPLD node.
@@ -151,7 +151,7 @@ public interface IDagApi
     ///   A task that represents the asynchronous get operation. The task's value
     ///   contains the path's value.
     /// </returns>
-    Task<JToken> GetAsync(string path, CancellationToken cancel = default(CancellationToken));
+    Task<JToken> GetAsync(string path, CancellationToken cancel = default);
 
     /// <summary>
     ///   Get an IPLD node of the specific type.
@@ -169,5 +169,5 @@ public interface IDagApi
     ///   A task that represents the asynchronous get operation. The task's value
     ///   is a new instance of the <typeparamref name="T"/> class.
     /// </returns>
-    Task<T> GetAsync<T>(Cid id, CancellationToken cancel = default(CancellationToken));
+    Task<T> GetAsync<T>(Cid id, CancellationToken cancel = default);
 }

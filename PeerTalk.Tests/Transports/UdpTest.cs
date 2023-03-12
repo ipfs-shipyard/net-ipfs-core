@@ -57,7 +57,6 @@ public class UdpTest
         var udp = new Udp();
         var cs = new CancellationTokenSource(TimeSpan.FromSeconds(30));
         var connected = false;
-        MultiAddress listenerAddress = null;
         Action<Stream, MultiAddress, MultiAddress> handler = (stream, local, remote) =>
         {
             Assert.IsNotNull(stream);
@@ -65,7 +64,7 @@ public class UdpTest
         };
         try
         {
-            listenerAddress = udp.Listen("/ip4/127.0.0.1", handler, cs.Token);
+            var listenerAddress = udp.Listen("/ip4/127.0.0.1", handler, cs.Token);
             Assert.IsTrue(listenerAddress.Protocols.Any(p => p.Name == "udp"));
             await using var stream = await udp.ConnectAsync(listenerAddress, cs.Token);
             await Task.Delay(50);

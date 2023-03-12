@@ -45,7 +45,7 @@ public class DistributedQuery<T> where T : class
     private readonly ConcurrentDictionary<Peer, Peer> _visited = new();
     private readonly ConcurrentDictionary<T, T> _answers = new();
     private DhtMessage _queryMessage;
-    private int _failedConnects = 0;
+    private int _failedConnects;
 
     /// <summary>
     ///   Raised when an answer is obtained.

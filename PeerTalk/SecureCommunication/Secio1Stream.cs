@@ -162,10 +162,10 @@ public class Secio1Stream : Stream
     {
         var lengthBuffer = await ReadPacketBytesAsync(4, cancel).ConfigureAwait(false);
         var length =
-            (int)lengthBuffer[0] << 24 |
-            (int)lengthBuffer[1] << 16 |
-            (int)lengthBuffer[2] << 8 |
-            (int)lengthBuffer[3];
+            lengthBuffer[0] << 24 |
+            lengthBuffer[1] << 16 |
+            lengthBuffer[2] << 8 |
+            lengthBuffer[3];
         if (length <= _outHmac.GetMacSize())
             throw new InvalidDataException($"Invalid secio packet length of {length}.");
 
@@ -219,7 +219,7 @@ public class Secio1Stream : Stream
         _stream.WriteByte((byte)(length >> 24));
         _stream.WriteByte((byte)(length >> 16));
         _stream.WriteByte((byte)(length >> 8));
-        _stream.WriteByte((byte)(length));
+        _stream.WriteByte((byte)length);
         await _stream.WriteAsync(data, 0, data.Length);
         await _stream.WriteAsync(mac, 0, mac.Length);
         await _stream.FlushAsync(cancel).ConfigureAwait(false);

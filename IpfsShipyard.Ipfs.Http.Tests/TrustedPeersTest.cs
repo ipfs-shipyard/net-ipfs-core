@@ -46,10 +46,10 @@ public partial class IpfsClientTest
     public void Trusted_Peers_Clear()
     {
         var ipfs = TestFixture.Ipfs;
-        var original = Enumerable.ToArray<MultiAddress>(ipfs.TrustedPeers);
+        var original = ipfs.TrustedPeers.ToArray();
 
         ipfs.TrustedPeers.Clear();
-        Assert.AreEqual<int>(0, ipfs.TrustedPeers.Count);
+        Assert.AreEqual(0, ipfs.TrustedPeers.Count);
 
         foreach (var a in original)
             ipfs.TrustedPeers.Add(a);
@@ -59,12 +59,12 @@ public partial class IpfsClientTest
     public void Trusted_Peers_Add_Default_Nodes()
     {
         var ipfs = TestFixture.Ipfs;
-        var original = Enumerable.ToArray<MultiAddress>(ipfs.TrustedPeers);
+        var original = ipfs.TrustedPeers.ToArray();
 
         ipfs.TrustedPeers.Clear();
-        Assert.AreEqual<int>(0, ipfs.TrustedPeers.Count);
+        Assert.AreEqual(0, ipfs.TrustedPeers.Count);
         ipfs.TrustedPeers.AddDefaultNodes();
-        Assert.AreNotEqual<int>(0, ipfs.TrustedPeers.Count);
+        Assert.AreNotEqual(0, ipfs.TrustedPeers.Count);
 
         ipfs.TrustedPeers.Clear();
         foreach (var a in original)

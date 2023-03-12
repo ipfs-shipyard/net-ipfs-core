@@ -20,7 +20,6 @@ public class ApiExceptionFilter : ExceptionFilterAttribute
     {
         var statusCode = 500; // Internal Server Error
         var message = context.Exception.Message;
-        string[] details = null;
 
         switch (context.Exception)
         {
@@ -42,7 +41,7 @@ public class ApiExceptionFilter : ExceptionFilterAttribute
                 break;
         }
 
-        details = statusCode switch
+        var details = statusCode switch
         {
             500 => context.Exception.StackTrace?.Split(Environment.NewLine),
             501 => context.Exception.StackTrace?.Split(Environment.NewLine),

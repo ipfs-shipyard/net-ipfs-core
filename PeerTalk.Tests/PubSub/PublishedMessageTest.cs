@@ -19,7 +19,7 @@ public class PublishedMessageTest
     {
         var a = new PublishedMessage
         {
-            Topics = new string[] { "topic" },
+            Topics = new[] { "topic" },
             Sender = _self,
             SequenceNumber = new byte[] { 1, 2, 3, 4, 5, 6, 7, 8},
             DataBytes = new byte[] { 0, 1, 0xfe, 0xff }
@@ -42,14 +42,14 @@ public class PublishedMessageTest
     {
         var a = new PublishedMessage
         {
-            Topics = new string[] { "topic" },
+            Topics = new[] { "topic" },
             Sender = _self,
             SequenceNumber = new byte[] { 1, 2, 3, 4, 5, 6, 7, 8 },
             DataBytes = new byte[] { 0, 1, 0xfe, 0xff }
         };
         var b = new PublishedMessage
         {
-            Topics = new string[] { "topic" },
+            Topics = new[] { "topic" },
             Sender = _other,
             SequenceNumber = new byte[] { 1, 2, 3, 4, 5, 6, 7, 8 },
             DataBytes = new byte[] { 0, 1, 0xfe, 0xff }

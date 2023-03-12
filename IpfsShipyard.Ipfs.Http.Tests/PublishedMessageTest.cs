@@ -7,7 +7,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace IpfsShipyard.Ipfs.Http.Tests;
 
 [TestClass]
-public partial class PublishedMessageTest
+public class PublishedMessageTest
 {
     private const string Json = @"{
             ""from"":""EiDzOYdzT4BE42JXwxVM8Q19w6tx30Bp2N3T7tOH/a2nCw=="",

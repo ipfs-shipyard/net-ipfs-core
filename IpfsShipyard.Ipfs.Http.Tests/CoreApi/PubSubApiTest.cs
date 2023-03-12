@@ -28,7 +28,7 @@ public class PubSubApiTest
         try
         {
             await ipfs.PubSub.SubscribeAsync(topic, msg => { }, cs.Token);
-            var peers = Enumerable.ToArray<Peer>(ipfs.PubSub.PeersAsync().Result);
+            var peers = ipfs.PubSub.PeersAsync().Result.ToArray();
             Assert.IsTrue(peers.Length > 0);
         }
         finally
@@ -42,7 +42,7 @@ public class PubSubApiTest
     {
         var ipfs = TestFixture.Ipfs;
         var topic = "net-ipfs-http-client-test-unknown" + Guid.NewGuid();
-        var peers = Enumerable.ToArray<Peer>(ipfs.PubSub.PeersAsync(topic).Result);
+        var peers = ipfs.PubSub.PeersAsync(topic).Result.ToArray();
         Assert.AreEqual(0, peers.Length);
     }
 
@@ -55,7 +55,7 @@ public class PubSubApiTest
         try
         {
             await ipfs.PubSub.SubscribeAsync(topic, msg => { }, cs.Token);
-            var topics = Enumerable.ToArray<string>(ipfs.PubSub.SubscribedTopicsAsync().Result);
+            var topics = ipfs.PubSub.SubscribedTopicsAsync().Result.ToArray();
             Assert.IsTrue(topics.Length > 0);
             CollectionAssert.Contains(topics, topic);
         }
@@ -65,7 +65,7 @@ public class PubSubApiTest
         }
     }
 
-    private volatile int _messageCount = 0;
+    private volatile int _messageCount;
 
     [TestMethod]
     public async Task Subscribe()
@@ -127,7 +127,7 @@ public class PubSubApiTest
         var ipfs = TestFixture.Ipfs;
         var topic = "net-ipfs-http-client-test-" + Guid.NewGuid();
         var cs = new CancellationTokenSource();
-        Action<IPublishedMessage> processMessage = (msg) =>
+        Action<IPublishedMessage> processMessage = msg =>
         {
             Interlocked.Increment(ref _messageCount);
         };
@@ -149,7 +149,7 @@ public class PubSubApiTest
         }
     }
 
-    private volatile int _messageCount1 = 0;
+    private volatile int _messageCount1;
 
     [TestMethod]
     public async Task Unsubscribe()

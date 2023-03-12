@@ -72,7 +72,7 @@ public class TopicManager
     {
         _topics.AddOrUpdate(
             topic,
-            (_) => new() { peer },
+            _ => new() { peer },
             (_, peers) =>
             {
                 peers.Add(peer);
@@ -94,7 +94,7 @@ public class TopicManager
     {
         _topics.AddOrUpdate(
             topic,
-            (_) => new(),
+            _ => new(),
             (_, list) =>
             {
                 list.Remove(peer);

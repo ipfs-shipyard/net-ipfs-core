@@ -123,7 +123,7 @@ public class NotificationService : IService, IPubSubApi
         }
         return new()
         {
-            Topics = new string[] { topic },
+            Topics = new[] { topic },
             Sender = LocalPeer,
             SequenceNumber = seqno,
             DataBytes = data
@@ -184,7 +184,7 @@ public class NotificationService : IService, IPubSubApi
         cancellationToken.Register(async () =>
         {
             _topicHandlers.TryRemove(topicHandler, out _);
-            if (!_topicHandlers.Values.Any(t => t.Topic == topic))
+            if (_topicHandlers.Values.All(t => t.Topic != topic))
             {
                 await Task.WhenAll(Routers.Select(r => r.LeaveTopicAsync(topic, CancellationToken.None))).ConfigureAwait(false);
             }

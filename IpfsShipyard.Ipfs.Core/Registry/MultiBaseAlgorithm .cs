@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using SimpleBase;
 
 namespace IpfsShipyard.Ipfs.Core.Registry;
 
@@ -37,14 +38,14 @@ public class MultiBaseAlgorithm
             bytes => bytes.ToBase64NoPad(),
             s => s.FromBase64NoPad());
         Register("base64pad", 'M',
-            bytes => Convert.ToBase64String(bytes),
-            s => Convert.FromBase64String(s));
+            Convert.ToBase64String,
+            Convert.FromBase64String);
         Register("base64url", 'u',
             bytes => bytes.ToBase64Url(),
             s => s.FromBase64Url());
         Register("base16", 'f',
-            bytes => SimpleBase.Base16.EncodeLower(bytes),
-            s => SimpleBase.Base16.Decode(s));
+            Base16.EncodeLower,
+            Base16.Decode);
         Register("base32", 'b',
             bytes => SimpleBase.Base32.Rfc4648.Encode(bytes, false).ToLowerInvariant(),
             s => SimpleBase.Base32.Rfc4648.Decode(s));
@@ -58,8 +59,8 @@ public class MultiBaseAlgorithm
             bytes => SimpleBase.Base32.ExtendedHex.Encode(bytes, true).ToLowerInvariant(),
             s => SimpleBase.Base32.ExtendedHex.Decode(s));
         Register("BASE16", 'F',
-            bytes => SimpleBase.Base16.EncodeUpper(bytes),
-            s => SimpleBase.Base16.Decode(s));
+            Base16.EncodeUpper,
+            Base16.Decode);
         Register("BASE32", 'B',
             bytes => SimpleBase.Base32.Rfc4648.Encode(bytes, false),
             s => SimpleBase.Base32.Rfc4648.Decode(s));
@@ -151,7 +152,7 @@ public class MultiBaseAlgorithm
         Func<string, byte[]> decode = null)
     {
         if (string.IsNullOrWhiteSpace(name))
-            throw new ArgumentNullException("name");
+            throw new ArgumentNullException(nameof(name));
         if (Names.ContainsKey(name))
             throw new ArgumentException($"The IPFS multi-base algorithm name '{name}' is already defined.");
         if (Codes.ContainsKey(code))

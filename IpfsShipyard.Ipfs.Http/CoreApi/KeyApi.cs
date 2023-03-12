@@ -37,7 +37,7 @@ internal class KeyApi : IKeyApi
         _ipfs = ipfs;
     }
 
-    public async Task<IKey> CreateAsync(string name, string keyType, int size, CancellationToken cancel = default(CancellationToken))
+    public async Task<IKey> CreateAsync(string name, string keyType, int size, CancellationToken cancel = default)
     {
         return await _ipfs.DoCommandAsync<KeyInfo>("key/gen", cancel,
             name,
@@ -45,10 +45,10 @@ internal class KeyApi : IKeyApi
             $"size={size}");
     }
 
-    public async Task<IEnumerable<IKey>> ListAsync(CancellationToken cancel = default(CancellationToken))
+    public async Task<IEnumerable<IKey>> ListAsync(CancellationToken cancel = default)
     {
         var json = await _ipfs.DoCommandAsync("key/list", cancel, null, "l=true");
-        var keys = (JArray)(JObject.Parse(json)["Keys"]);
+        var keys = (JArray)JObject.Parse(json)["Keys"];
         return keys
             .Select(k => new KeyInfo
             {
@@ -57,7 +57,7 @@ internal class KeyApi : IKeyApi
             });
     }
 
-    public async Task<IKey> RemoveAsync(string name, CancellationToken cancel = default(CancellationToken))
+    public async Task<IKey> RemoveAsync(string name, CancellationToken cancel = default)
     {
         var json = await _ipfs.DoCommandAsync("key/rm", cancel, name);
         var keys = JObject.Parse(json)["Keys"] as JArray;
@@ -71,7 +71,7 @@ internal class KeyApi : IKeyApi
             .First();
     }
 
-    public async Task<IKey> RenameAsync(string oldName, string newName, CancellationToken cancel = default(CancellationToken))
+    public async Task<IKey> RenameAsync(string oldName, string newName, CancellationToken cancel = default)
     {
         var json = await _ipfs.DoCommandAsync("key/rename", cancel, oldName, $"arg={newName}");
         var key = JObject.Parse(json);
@@ -82,12 +82,12 @@ internal class KeyApi : IKeyApi
         };
     }
 
-    public Task<string> ExportAsync(string name, char[] password, CancellationToken cancel = default(CancellationToken))
+    public Task<string> ExportAsync(string name, char[] password, CancellationToken cancel = default)
     {
         throw new NotImplementedException();
     }
 
-    public Task<IKey> ImportAsync(string name, string pem, char[] password = null, CancellationToken cancel = default(CancellationToken))
+    public Task<IKey> ImportAsync(string name, string pem, char[] password = null, CancellationToken cancel = default)
     {
         throw new NotImplementedException();
     }

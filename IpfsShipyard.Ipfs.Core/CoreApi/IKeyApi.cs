@@ -38,7 +38,7 @@ public interface IKeyApi
         string name,
         string keyType,
         int size,
-        CancellationToken cancel = default(CancellationToken));
+        CancellationToken cancel = default);
 
     /// <summary>
     ///   List all the keys.
@@ -50,7 +50,7 @@ public interface IKeyApi
     ///   A task that represents the asynchronous operation. The task's result is
     ///   a sequence of IPFS keys.
     /// </returns>
-    Task<IEnumerable<IKey>> ListAsync(CancellationToken cancel = default(CancellationToken));
+    Task<IEnumerable<IKey>> ListAsync(CancellationToken cancel = default);
 
     /// <summary>
     ///   Delete the specified key.
@@ -65,7 +65,7 @@ public interface IKeyApi
     ///   A task that represents the asynchronous operation. The task's result is
     ///   the key that was deleted.
     /// </returns>
-    Task<IKey> RemoveAsync(string name, CancellationToken cancel = default(CancellationToken));
+    Task<IKey> RemoveAsync(string name, CancellationToken cancel = default);
 
     /// <summary>
     ///   Rename the specified key.
@@ -83,7 +83,7 @@ public interface IKeyApi
     ///   A task that represents the asynchronous operation. The task's result is
     ///   a sequence of IPFS keys that were renamed.
     /// </returns>
-    Task<IKey> RenameAsync(string oldName, string newName, CancellationToken cancel = default(CancellationToken));
+    Task<IKey> RenameAsync(string oldName, string newName, CancellationToken cancel = default);
 
     /// <summary>
     ///   Export a key to a PEM encoded password protected PKCS #8 container.
@@ -101,7 +101,7 @@ public interface IKeyApi
     ///    A task that represents the asynchronous operation. The task's result is
     ///    the password protected PEM string.
     /// </returns>
-    Task<string> ExportAsync(string name, char[] password, CancellationToken cancel = default(CancellationToken));
+    Task<string> ExportAsync(string name, char[] password, CancellationToken cancel = default);
 
     /// <summary>
     ///   Import a key from a PEM encoded password protected PKCS #8 container.
@@ -122,5 +122,5 @@ public interface IKeyApi
     ///    A task that represents the asynchronous operation. The task's result
     ///    is the newly imported key.
     /// </returns>
-    Task<IKey> ImportAsync(string name, string pem, char[] password = null, CancellationToken cancel = default(CancellationToken));
+    Task<IKey> ImportAsync(string name, string pem, char[] password = null, CancellationToken cancel = default);
 }

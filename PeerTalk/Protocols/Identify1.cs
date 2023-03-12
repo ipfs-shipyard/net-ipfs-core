@@ -50,7 +50,7 @@ public class Identify1 : IPeerProtocol
             res.PublicKey = Convert.FromBase64String(peer.PublicKey);
         }
 
-        Serializer.SerializeWithLengthPrefix<Identify>(stream, res, PrefixStyle.Base128);
+        Serializer.SerializeWithLengthPrefix(stream, res, PrefixStyle.Base128);
         await stream.FlushAsync(cancel).ConfigureAwait(false);
     }
 
@@ -122,7 +122,7 @@ public class Identify1 : IPeerProtocol
         if (info.ListenAddresses != null)
         {
             remote.Addresses = info.ListenAddresses
-                .Select(b => MultiAddress.TryCreate(b))
+                .Select(MultiAddress.TryCreate)
                 .Where(a => a != null)
                 .Select(a => a.WithPeerId(remote.Id))
                 .ToList();

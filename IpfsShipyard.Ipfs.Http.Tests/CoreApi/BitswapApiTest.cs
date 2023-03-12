@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using IpfsShipyard.Ipfs.Core;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -24,7 +23,7 @@ public class BitswapApiTest
         {
             await Task.Delay(100);
             var wants = await _ipfs.Bitswap.WantsAsync();
-            if (Enumerable.Contains(wants, block.Id))
+            if (wants.Contains(block.Id))
                 return;
         }
         Assert.Fail("wanted block is missing");
@@ -45,7 +44,7 @@ public class BitswapApiTest
                 Assert.Fail("wanted block is missing");
             await Task.Delay(100);
             var wants = await _ipfs.Bitswap.WantsAsync();
-            if (Enumerable.Contains(wants, block.Id))
+            if (wants.Contains(block.Id))
                 break;
         }
 
@@ -57,7 +56,7 @@ public class BitswapApiTest
                 Assert.Fail("unwanted block is present");
             await Task.Delay(100);
             var wants = await _ipfs.Bitswap.WantsAsync();
-            if (!Enumerable.Contains(wants, block.Id))
+            if (!wants.Contains(block.Id))
                 break;
         }
     }
@@ -68,6 +67,6 @@ public class BitswapApiTest
         var peer = new Peer { Id = "QmSoLMeWqB7YGVLJN3pNLQpmmEk35v6wYtsMGLzSr5QBU3" };
         var ledger = await _ipfs.Bitswap.LedgerAsync(peer);
         Assert.IsNotNull(ledger);
-        Assert.AreEqual<MultiHash>(peer.Id, ledger.Peer.Id);
+        Assert.AreEqual(peer.Id, ledger.Peer.Id);
     }
 }

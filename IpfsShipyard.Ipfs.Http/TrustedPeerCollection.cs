@@ -39,7 +39,7 @@ public class TrustedPeerCollection : ICollection<MultiAddress>
         if (peer == null)
             throw new ArgumentNullException();
 
-        _ipfs.DoCommandAsync("bootstrap/add", default(CancellationToken), peer.ToString()).Wait();
+        _ipfs.DoCommandAsync("bootstrap/add", default, peer.ToString()).Wait();
         _peers = null;
     }
 
@@ -51,7 +51,7 @@ public class TrustedPeerCollection : ICollection<MultiAddress>
     /// </remarks>
     public void AddDefaultNodes()
     {
-        _ipfs.DoCommandAsync("bootstrap/add", default(CancellationToken), null, "default=true").Wait();
+        _ipfs.DoCommandAsync("bootstrap/add", default, null, "default=true").Wait();
         _peers = null;
     }
 
@@ -63,7 +63,7 @@ public class TrustedPeerCollection : ICollection<MultiAddress>
     /// </remarks>
     public void Clear()
     {
-        _ipfs.DoCommandAsync("bootstrap/rm", default(CancellationToken), null, "all=true").Wait();
+        _ipfs.DoCommandAsync("bootstrap/rm", default, null, "all=true").Wait();
         _peers = null;
     }
 
@@ -88,7 +88,7 @@ public class TrustedPeerCollection : ICollection<MultiAddress>
         {
             if (_peers == null)
                 Fetch();
-            return _peers.Count();
+            return _peers.Length;
         }
     }
 
@@ -106,7 +106,7 @@ public class TrustedPeerCollection : ICollection<MultiAddress>
         if (peer == null)
             throw new ArgumentNullException();
 
-        _ipfs.DoCommandAsync("bootstrap/rm", default(CancellationToken), peer.ToString()).Wait();
+        _ipfs.DoCommandAsync("bootstrap/rm", default, peer.ToString()).Wait();
         _peers = null;
         return true;
     }
@@ -127,6 +127,6 @@ public class TrustedPeerCollection : ICollection<MultiAddress>
 
     private void Fetch()
     {
-        _peers = _ipfs.DoCommandAsync<BootstrapListResponse>("bootstrap/list", default(CancellationToken)).Result.Peers;
+        _peers = _ipfs.DoCommandAsync<BootstrapListResponse>("bootstrap/list", default).Result.Peers;
     }
 }

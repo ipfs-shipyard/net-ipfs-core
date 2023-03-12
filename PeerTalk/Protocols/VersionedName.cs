@@ -53,7 +53,7 @@ public class VersionedName : IEquatable<VersionedName>, IComparable<VersionedNam
     public override bool Equals(object obj)
     {
         var that = obj as VersionedName;
-        return (that != null)
+        return that != null
                && Name == that.Name && Version == that.Version;
     }
 

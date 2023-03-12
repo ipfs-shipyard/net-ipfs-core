@@ -8,9 +8,11 @@ public class WhiteListTest
     [TestMethod]
     public void Allowed()
     {
-        var policy = new WhiteList<string>();
-        policy.Add("a");
-        policy.Add("b");
+        var policy = new WhiteList<string>
+        {
+            "a",
+            "b"
+        };
         Assert.IsTrue(policy.IsAllowed("a"));
         Assert.IsTrue(policy.IsAllowed("b"));
         Assert.IsFalse(policy.IsAllowed("c"));

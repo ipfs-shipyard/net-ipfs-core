@@ -26,12 +26,9 @@ internal class IdCommand : CommandBase
         await writer.WriteValueAsync(peer.PublicKey);
         await writer.WritePropertyNameAsync("Adddresses");
         await writer.WriteStartArrayAsync();
-        foreach (var a in peer.Addresses)
+        foreach (var a in peer.Addresses.Where(a => a != null))
         {
-            if (a != null)
-            {
-                await writer.WriteValueAsync(a.ToString());
-            }
+            await writer.WriteValueAsync(a.ToString());
         }
 
         await writer.WriteEndArrayAsync();

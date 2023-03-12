@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using IpfsShipyard.Ipfs.Core;
 using IpfsShipyard.PeerTalk.PubSub;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -108,16 +109,16 @@ public class TopicManagerTest
     {
         var tm = new TopicManager();
         tm.AddInterest("alpha", _a);
-        CollectionAssert.AreEquivalent(new string[] { "alpha" }, tm.GetTopics(_a).ToArray());
-        CollectionAssert.AreEquivalent(new string[0], tm.GetTopics(_b).ToArray());
+        CollectionAssert.AreEquivalent(new[] { "alpha" }, tm.GetTopics(_a).ToArray());
+        CollectionAssert.AreEquivalent(Array.Empty<string>(), tm.GetTopics(_b).ToArray());
 
         tm.AddInterest("beta", _a);
-        CollectionAssert.AreEquivalent(new string[] { "alpha", "beta" }, tm.GetTopics(_a).ToArray());
-        CollectionAssert.AreEquivalent(new string[0], tm.GetTopics(_b).ToArray());
+        CollectionAssert.AreEquivalent(new[] { "alpha", "beta" }, tm.GetTopics(_a).ToArray());
+        CollectionAssert.AreEquivalent(Array.Empty<string>(), tm.GetTopics(_b).ToArray());
 
         tm.AddInterest("beta", _b);
-        CollectionAssert.AreEquivalent(new string[] { "alpha", "beta" }, tm.GetTopics(_a).ToArray());
-        CollectionAssert.AreEquivalent(new string[] { "beta" }, tm.GetTopics(_b).ToArray());
+        CollectionAssert.AreEquivalent(new[] { "alpha", "beta" }, tm.GetTopics(_a).ToArray());
+        CollectionAssert.AreEquivalent(new[] { "beta" }, tm.GetTopics(_b).ToArray());
 
     }
 }

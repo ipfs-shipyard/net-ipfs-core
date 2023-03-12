@@ -37,7 +37,7 @@ public class PreSharedKeyTest
     {
         var psk1 = new PreSharedKey().Generate();
         var s = new StringWriter();
-        psk1.Export(s, "base16");
+        psk1.Export(s);
 
         var psk2 = new PreSharedKey();
         psk2.Import(new StringReader(s.ToString()));
@@ -63,7 +63,7 @@ public class PreSharedKeyTest
         var s1 = new StringWriter();
         var s2 = new StringWriter();
         psk.Export(s1);
-        psk.Export(s2, "base16");
+        psk.Export(s2);
         Assert.AreEqual(s1.ToString(), s2.ToString());
     }
 

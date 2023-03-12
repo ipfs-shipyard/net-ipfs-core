@@ -68,7 +68,7 @@ public class Secio1 : IEncryptionProtocol
         // =============================================================================
         // step 1.1 Identify -- get identity from their key
         var remoteProposal = Serializer.DeserializeWithLengthPrefix<Secio1Propose>(stream, PrefixStyle.Fixed32BigEndian);
-        var ridAlg = (remoteProposal.PublicKey.Length <= 48) ? "identity" : "sha2-256";
+        var ridAlg = remoteProposal.PublicKey.Length <= 48 ? "identity" : "sha2-256";
         var remoteId = MultiHash.ComputeHash(remoteProposal.PublicKey, ridAlg);
         if (remotePeer.Id == null)
         {
@@ -87,7 +87,7 @@ public class Secio1 : IEncryptionProtocol
         //   order := bytes.Compare(oh1, oh2)
         byte[] oh1;
         byte[] oh2;
-        using (var hasher = MultiHash.GetHashAlgorithm("sha2-256"))
+        using (var hasher = MultiHash.GetHashAlgorithm())
         using (var ms = new MemoryStream())
         {
             ms.Write(remoteProposal.PublicKey, 0, remoteProposal.PublicKey.Length);
@@ -95,7 +95,7 @@ public class Secio1 : IEncryptionProtocol
             ms.Position = 0;
             oh1 = hasher.ComputeHash(ms);
         }
-        using (var hasher = MultiHash.GetHashAlgorithm("sha2-256"))
+        using (var hasher = MultiHash.GetHashAlgorithm())
         using (var ms = new MemoryStream())
         {
             ms.Write(localProposal.PublicKey, 0, localProposal.PublicKey.Length);

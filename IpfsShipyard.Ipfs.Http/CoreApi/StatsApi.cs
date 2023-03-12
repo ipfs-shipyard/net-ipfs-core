@@ -16,12 +16,12 @@ internal class StatApi : IStatsApi
         _ipfs = ipfs;
     }
 
-    public Task<BandwidthData> BandwidthAsync(CancellationToken cancel = default(CancellationToken))
+    public Task<BandwidthData> BandwidthAsync(CancellationToken cancel = default)
     {
         return _ipfs.DoCommandAsync<BandwidthData>("stats/bw", cancel);
     }
 
-    public async Task<BitswapData> BitswapAsync(CancellationToken cancel = default(CancellationToken))
+    public async Task<BitswapData> BitswapAsync(CancellationToken cancel = default)
     {
         var json = await _ipfs.DoCommandAsync("stats/bitswap", cancel);
         var stat = JObject.Parse(json);
@@ -39,7 +39,7 @@ internal class StatApi : IStatsApi
         };
     }
 
-    public Task<RepositoryData> RepositoryAsync(CancellationToken cancel = default(CancellationToken))
+    public Task<RepositoryData> RepositoryAsync(CancellationToken cancel = default)
     {
         return _ipfs.DoCommandAsync<RepositoryData>("stats/repo", cancel);
     }

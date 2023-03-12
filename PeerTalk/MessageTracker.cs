@@ -52,7 +52,7 @@ public class MessageTracker
         var seen = false;
         _messages.AddOrUpdate(
             id,
-            (_) => now.Value + Recent,
+            _ => now.Value + Recent,
             (_, __) => { seen = true; return now.Value + Recent; });
 
         return seen;

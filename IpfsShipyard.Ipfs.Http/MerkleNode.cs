@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Serialization;
 using IpfsShipyard.Ipfs.Core;
-using IpfsShipyard.Ipfs.Http.CoreApi;
 
 namespace IpfsShipyard.Ipfs.Http;
 
@@ -33,7 +32,7 @@ public class MerkleNode : IMerkleNode<IMerkleLink>, IEquatable<MerkleNode>
     public MerkleNode(Cid id, string name = null)
     {
         if (id == null)
-            throw new ArgumentNullException("id");
+            throw new ArgumentNullException(nameof(id));
 
         Id = id;
         Name = name;
@@ -50,7 +49,7 @@ public class MerkleNode : IMerkleNode<IMerkleLink>, IEquatable<MerkleNode>
     public MerkleNode(string path, string name = null)
     {
         if (string.IsNullOrWhiteSpace(path))
-            throw new ArgumentNullException("path");
+            throw new ArgumentNullException(nameof(path));
 
         if (path.StartsWith("/ipfs/"))
             path = path[6..];
@@ -90,7 +89,7 @@ public class MerkleNode : IMerkleNode<IMerkleLink>, IEquatable<MerkleNode>
 
     /// <inheritdoc />
     [DataMember]
-    public Cid Id { get; private set; }
+    public Cid Id { get; }
 
     /// <summary>
     ///   The name for the node.  If unknown it is "" (not null).

@@ -19,7 +19,7 @@ public interface IStatsApi
     ///   the current <see cref="BandwidthData"/>.
     /// </returns>
     /// <seealso cref="ISwarmApi"/>
-    Task<BandwidthData> BandwidthAsync(CancellationToken cancel = default(CancellationToken));
+    Task<BandwidthData> BandwidthAsync(CancellationToken cancel = default);
 
     /// <summary>
     ///   Get statistics on the blocks exchanged with other peers.
@@ -32,7 +32,7 @@ public interface IStatsApi
     ///   the current <see cref="BitswapData"/>.
     /// </returns>
     /// <seealso cref="IBitswapApi"/>
-    Task<BitswapData> BitswapAsync(CancellationToken cancel = default(CancellationToken));
+    Task<BitswapData> BitswapAsync(CancellationToken cancel = default);
 
     /// <summary>
     ///   Get statistics on the repository.
@@ -48,5 +48,5 @@ public interface IStatsApi
     ///   Same as <see cref="IBlockRepositoryApi.StatisticsAsync(CancellationToken)"/>.
     /// </remarks>
     /// <seealso cref="IBlockRepositoryApi"/>
-    Task<RepositoryData> RepositoryAsync(CancellationToken cancel = default(CancellationToken));
+    Task<RepositoryData> RepositoryAsync(CancellationToken cancel = default);
 }

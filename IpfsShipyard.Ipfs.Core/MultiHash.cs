@@ -99,9 +99,9 @@ public class MultiHash : IEquatable<MultiHash>
     public MultiHash(string algorithmName, byte[] digest)
     {
         if (algorithmName == null)
-            throw new ArgumentNullException("algorithmName");
+            throw new ArgumentNullException(nameof(algorithmName));
         if (digest == null)
-            throw new ArgumentNullException("digest");
+            throw new ArgumentNullException(nameof(digest));
 
         if (!HashingAlgorithm.Names.TryGetValue(algorithmName, out var a))
         {
@@ -295,7 +295,7 @@ public class MultiHash : IEquatable<MultiHash>
     public void Write(CodedOutputStream stream)
     {
         if (stream == null)
-            throw new ArgumentNullException("stream");
+            throw new ArgumentNullException(nameof(stream));
 
         stream.WriteInt32(Algorithm.Code);
         stream.WriteLength(Digest.Length);
@@ -339,9 +339,7 @@ public class MultiHash : IEquatable<MultiHash>
     public override bool Equals(object obj)
     {
         var that = obj as MultiHash;
-        return (that == null)
-            ? false
-            : Equals(that);
+        return that != null && Equals(that);
     }
 
     /// <inheritdoc />

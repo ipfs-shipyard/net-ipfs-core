@@ -17,13 +17,13 @@ public class NetworkProtocolTest
     [TestMethod]
     public void Register_Name_Already_Exists()
     {
-        ExceptionAssert.Throws<ArgumentException>(() => NetworkProtocol.Register<NameExists>());
+        ExceptionAssert.Throws<ArgumentException>(NetworkProtocol.Register<NameExists>);
     }
 
     [TestMethod]
     public void Register_Code_Already_Exists()
     {
-        ExceptionAssert.Throws<ArgumentException>(() => NetworkProtocol.Register<CodeExists>());
+        ExceptionAssert.Throws<ArgumentException>(NetworkProtocol.Register<CodeExists>);
     }
 
     private class NameExists : NetworkProtocol

@@ -12,6 +12,7 @@ using IpfsShipyard.Ipfs.Core;
 using IpfsShipyard.Ipfs.Core.CoreApi;
 using IpfsShipyard.PeerTalk.Cryptography;
 using IpfsShipyard.PeerTalk.Protocols;
+using IpfsShipyard.PeerTalk.SecureCommunication;
 using IpfsShipyard.PeerTalk.Transports;
 using Nito.AsyncEx;
 
@@ -41,7 +42,7 @@ public class Swarm : IService, IPolicy<MultiAddress>, IPolicy<Peer>
     private readonly List<IPeerProtocol> _protocols = new()
     {
         new Multistream1(),
-        new SecureCommunication.Secio1(),
+        new Secio1(),
         new Identify1(),
         new Mplex67()
     };
@@ -278,7 +279,7 @@ public class Swarm : IService, IPolicy<MultiAddress>, IPolicy<Peer>
 
         var isNew = false;
         var p = _otherPeers.AddOrUpdate(peer.Id.ToBase58(),
-            (_) =>
+            _ =>
             {
                 isNew = true;
                 return peer;
@@ -491,7 +492,7 @@ public class Swarm : IService, IPolicy<MultiAddress>, IPolicy<Peer>
         {
             using var cts = CancellationTokenSource.CreateLinkedTokenSource(_swarmCancellation.Token, cancel);
             return await _pendingConnections
-                .GetOrAdd(peer, (_) => new(() => DialAsync(peer, peer.Addresses, cts.Token)))
+                .GetOrAdd(peer, _ => new(() => DialAsync(peer, peer.Addresses, cts.Token)))
                 .ConfigureAwait(false);
         }
         catch (Exception)
@@ -598,7 +599,7 @@ public class Swarm : IService, IPolicy<MultiAddress>, IPolicy<Peer>
         }
 
         // Try the various addresses in parallel.  The first one to complete wins.
-        PeerConnection connection = null;
+        PeerConnection connection;
         try
         {
             using var timeout = new CancellationTokenSource(TransportConnectionTimeout);
@@ -777,7 +778,7 @@ public class Swarm : IService, IPolicy<MultiAddress>, IPolicy<Peer>
         var result = new MultiAddress($"{address}/ipfs/{LocalPeer.Id}");
 
         // Get the actual IP address(es).
-        IEnumerable<MultiAddress> addresses = new List<MultiAddress>();
+        IEnumerable<MultiAddress> addresses;
         var ips = NetworkInterface.GetAllNetworkInterfaces()
             // It appears that the loopback adapter is not UP on Ubuntu 14.04.5 LTS
             .Where(nic => nic.OperationalStatus == OperationalStatus.Up
@@ -787,33 +788,24 @@ public class Swarm : IService, IPolicy<MultiAddress>, IPolicy<Peer>
         {
             addresses = ips
                 .Where(ip => ip.Address.AddressFamily == AddressFamily.InterNetwork)
-                .Select(ip =>
-                {
-                    return new MultiAddress(result.ToString().Replace("0.0.0.0", ip.Address.ToString()));
-                })
+                .Select(ip => new MultiAddress(result.ToString().Replace("0.0.0.0", ip.Address.ToString())))
                 .ToArray();
         }
         else if (result.ToString().StartsWith("/ip6/::/"))
         {
             addresses = ips
                 .Where(ip => ip.Address.AddressFamily == AddressFamily.InterNetworkV6)
-                .Select(ip =>
-                {
-                    return new MultiAddress(result.ToString().Replace("::", ip.Address.ToString()));
-                })
+                .Select(ip => new MultiAddress(result.ToString().Replace("::", ip.Address.ToString())))
                 .ToArray();
         }
         else
         {
-            addresses = new MultiAddress[] { result };
+            addresses = new[] { result };
         }
         if (!addresses.Any())
         {
             var msg = "Cannot determine address(es) for " + result;
-            foreach (var ip in ips)
-            {
-                msg += " nic-ip: " + ip.Address.ToString();
-            }
+            msg = ips.Aggregate(msg, (current, ip) => current + (" nic-ip: " + ip.Address));
             cancel.Cancel();
             throw new(msg);
         }
@@ -923,7 +915,7 @@ public class Swarm : IService, IPolicy<MultiAddress>, IPolicy<Peer>
             var muxer = await connection.MuxerEstablished.Task;
 
             // Need details on the remote peer.
-            Identify1 identify = null;
+            Identify1 identify;
             lock (_protocols)
             {
                 identify = _protocols.OfType<Identify1>().First();
