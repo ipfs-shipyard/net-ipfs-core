@@ -25,10 +25,10 @@ namespace IpfsShipyard.Ipfs.Http
             public MultiAddress[] Peers { get; set; }
         }
 
-        IpfsClient ipfs;
+        CoreApi.IpfsClient ipfs;
         MultiAddress[] peers;
 
-        internal TrustedPeerCollection(IpfsClient ipfs)
+        internal TrustedPeerCollection(CoreApi.IpfsClient ipfs)
         {
             this.ipfs = ipfs;
         }

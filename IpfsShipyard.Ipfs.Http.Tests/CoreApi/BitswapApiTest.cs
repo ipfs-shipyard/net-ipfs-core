@@ -10,7 +10,7 @@ namespace IpfsShipyard.Ipfs.Http.Tests.CoreApi
     [TestClass]
     public class BitswapApiTest
     {
-        private IpfsClient ipfs = TestFixture.Ipfs;
+        private Http.CoreApi.IpfsClient ipfs = TestFixture.Ipfs;
 
         [TestMethod]
         public async Task Wants()

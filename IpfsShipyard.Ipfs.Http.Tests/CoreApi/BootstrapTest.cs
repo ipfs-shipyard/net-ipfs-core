@@ -8,7 +8,7 @@ namespace IpfsShipyard.Ipfs.Http.Tests.CoreApi
     [TestClass]
     public class BootstapApiTest
     {
-        IpfsClient ipfs = TestFixture.Ipfs;
+        Http.CoreApi.IpfsClient ipfs = TestFixture.Ipfs;
         MultiAddress somewhere = "/ip4/127.0.0.1/tcp/4009/ipfs/QmPv52ekjS75L4JmHpXVeuJ5uX2ecSfSZo88NSyxwA3rAQ";
 
         [TestMethod]

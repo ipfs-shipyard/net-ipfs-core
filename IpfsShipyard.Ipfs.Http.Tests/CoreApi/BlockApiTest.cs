@@ -11,7 +11,7 @@ namespace IpfsShipyard.Ipfs.Http.Tests.CoreApi
     [TestClass]
     public class BlockApiTest
     {
-        private IpfsClient ipfs = TestFixture.Ipfs;
+        private Http.CoreApi.IpfsClient ipfs = TestFixture.Ipfs;
         private string id = "QmPv52ekjS75L4JmHpXVeuJ5uX2ecSfSZo88NSyxwA3rAQ";
         private byte[] blob = Encoding.UTF8.GetBytes("blorb");
 

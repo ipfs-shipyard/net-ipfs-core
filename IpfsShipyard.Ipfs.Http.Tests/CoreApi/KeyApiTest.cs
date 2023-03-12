@@ -12,14 +12,14 @@ namespace IpfsShipyard.Ipfs.Http.Tests.CoreApi
         [TestMethod]
         public void Api_Exists()
         {
-            IpfsClient ipfs = TestFixture.Ipfs;
+            Http.CoreApi.IpfsClient ipfs = TestFixture.Ipfs;
             Assert.IsNotNull(ipfs.Key);
         }
 
         [TestMethod]
         public async Task Self_Key_Exists()
         {
-            IpfsClient ipfs = TestFixture.Ipfs;
+            Http.CoreApi.IpfsClient ipfs = TestFixture.Ipfs;
             var keys = await ipfs.Key.ListAsync();
             var self = Enumerable.Single<IKey>(keys, k => k.Name == "self");
             var me = await ipfs.IdAsync();
@@ -31,7 +31,7 @@ namespace IpfsShipyard.Ipfs.Http.Tests.CoreApi
         public async Task Create_RSA_Key()
         {
             var name = "net-api-test-create";
-            IpfsClient ipfs = TestFixture.Ipfs;
+            Http.CoreApi.IpfsClient ipfs = TestFixture.Ipfs;
             var key = await ipfs.Key.CreateAsync(name, "rsa", 1024);
             try
             {
@@ -54,7 +54,7 @@ namespace IpfsShipyard.Ipfs.Http.Tests.CoreApi
         public async Task Remove_Key()
         {
             var name = "net-api-test-remove";
-            IpfsClient ipfs = TestFixture.Ipfs;
+            Http.CoreApi.IpfsClient ipfs = TestFixture.Ipfs;
             var key = await ipfs.Key.CreateAsync(name, "rsa", 1024);
             var keys = await ipfs.Key.ListAsync();
             var clone = Enumerable.Single<IKey>(keys, k => k.Name == name);
@@ -74,7 +74,7 @@ namespace IpfsShipyard.Ipfs.Http.Tests.CoreApi
         {
             var oname = "net-api-test-rename1";
             var rname = "net-api-test-rename2";
-            IpfsClient ipfs = TestFixture.Ipfs;
+            Http.CoreApi.IpfsClient ipfs = TestFixture.Ipfs;
             var okey = await ipfs.Key.CreateAsync(oname, "rsa", 1024);
             try
             {

@@ -15,7 +15,7 @@ namespace IpfsShipyard.Ipfs.Http.Tests.CoreApi
         [TestMethod]
         public void Api_Exists()
         {
-            IpfsClient ipfs = TestFixture.Ipfs;
+            Http.CoreApi.IpfsClient ipfs = TestFixture.Ipfs;
             Assert.IsNotNull(ipfs.PubSub);
         }
 
