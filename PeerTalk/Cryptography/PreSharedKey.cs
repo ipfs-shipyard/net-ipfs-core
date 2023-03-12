@@ -137,18 +137,11 @@ public class PreSharedKey
     {
         if (text.ReadLine() != CodecName)
             throw new FormatException($"Expected '{CodecName}'.");
-        switch (text.ReadLine())
+        Value = text.ReadLine() switch
         {
-            case "/base16/":
-                Value = text.ReadLine().ToHexBuffer();
-                break;
-
-            case "/base64/":
-                Value = text.ReadLine().FromBase64NoPad();
-                break;
-
-            default:
-                throw new FormatException("Unknown base encoding.");
-        }
+            "/base16/" => text.ReadLine().ToHexBuffer(),
+            "/base64/" => text.ReadLine().FromBase64NoPad(),
+            _ => throw new FormatException("Unknown base encoding.")
+        };
     }
 }

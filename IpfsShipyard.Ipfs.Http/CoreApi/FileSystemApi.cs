@@ -191,14 +191,13 @@ internal class FileSystemApi : IFileSystemApi
         // https://github.com/ipfs/go-ipfs/issues/5380
         if (offset > int.MaxValue)
             throw new NotSupportedException("Only int offsets are currently supported.");
-        switch (length)
+        length = length switch
         {
-            case > int.MaxValue:
-                throw new NotSupportedException("Only int lengths are currently supported.");
-            case 0:
-                length = int.MaxValue; // go-ipfs only accepts int lengths
-                break;
-        }
+            > int.MaxValue => throw new NotSupportedException("Only int lengths are currently supported."),
+            0 => int.MaxValue // go-ipfs only accepts int lengths
+            ,
+            _ => length
+        };
 
         return _ipfs.PostDownloadAsync("cat", cancel, path,
             $"offset={offset}",

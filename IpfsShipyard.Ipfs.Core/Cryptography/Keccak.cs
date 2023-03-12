@@ -45,21 +45,14 @@ internal abstract class Keccak : HashAlgorithm
             throw new ArgumentException("hashBitLength must be 224, 256, 384, or 512", nameof(hashBitLength));
         Initialize();
         HashSizeValue = hashBitLength;
-        switch (hashBitLength)
+        KeccakR = hashBitLength switch
         {
-            case 224:
-                KeccakR = 1152;
-                break;
-            case 256:
-                KeccakR = 1088;
-                break;
-            case 384:
-                KeccakR = 832;
-                break;
-            case 512:
-                KeccakR = 576;
-                break;
-        }
+            224 => 1152,
+            256 => 1088,
+            384 => 832,
+            512 => 576,
+            _ => KeccakR
+        };
         RoundConstants = new[]
         {
             0x0000000000000001UL,
