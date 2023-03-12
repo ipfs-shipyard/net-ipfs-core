@@ -192,80 +192,75 @@ public class Muxer
                 // Process the packet
                 Substreams.TryGetValue(header.StreamId, out var substream);
 
-                if (header.PacketType == PacketType.NewStream)
+                switch (header.PacketType)
                 {
-                    if (substream != null)
-                    {
+                    case PacketType.NewStream when substream != null:
                         log.Warn($"Stream {substream.Id} already exists");
                         continue;
-                    }
-
-                    substream = new()
+                    case PacketType.NewStream:
                     {
-                        Id = header.StreamId,
-                        Name = Encoding.UTF8.GetString(payload),
-                        Muxer = this
-                    };
-
-                    if (!Substreams.TryAdd(substream.Id, substream))
-                    {
-                        // Should not happen.
-                        throw new($"Stream {substream.Id} already exists");
-                    }
-                    SubstreamCreated?.Invoke(this, substream);
-
-                    // Special hack for go-ipfs
-                    if (Receiver && (substream.Id & 1) == 1)
-                    {
-                        log.Debug($"go-hack sending newstream {substream.Id}");
-                        using (await AcquireWriteAccessAsync().ConfigureAwait(false))
+                        substream = new()
                         {
-                            var hdr = new Header
-                            {
-                                StreamId = substream.Id,
-                                PacketType = PacketType.NewStream
-                            };
-                            await hdr.WriteAsync(Channel, cancel).ConfigureAwait(false);
-                            Channel.WriteByte(0); // length
-                            await Channel.FlushAsync(cancel).ConfigureAwait(false);
+                            Id = header.StreamId,
+                            Name = Encoding.UTF8.GetString(payload),
+                            Muxer = this
+                        };
+
+                        if (!Substreams.TryAdd(substream.Id, substream))
+                        {
+                            // Should not happen.
+                            throw new($"Stream {substream.Id} already exists");
                         }
+                        SubstreamCreated?.Invoke(this, substream);
+
+                        // Special hack for go-ipfs
+                        if (Receiver && (substream.Id & 1) == 1)
+                        {
+                            log.Debug($"go-hack sending newstream {substream.Id}");
+                            using (await AcquireWriteAccessAsync().ConfigureAwait(false))
+                            {
+                                var hdr = new Header
+                                {
+                                    StreamId = substream.Id,
+                                    PacketType = PacketType.NewStream
+                                };
+                                await hdr.WriteAsync(Channel, cancel).ConfigureAwait(false);
+                                Channel.WriteByte(0); // length
+                                await Channel.FlushAsync(cancel).ConfigureAwait(false);
+                            }
+                        }
+
+                        break;
                     }
-                }
-                else if (header.PacketType == PacketType.MessageInitiator)
-                {
-                    if (substream == null)
-                    {
+                    case PacketType.MessageInitiator when substream == null:
                         log.Warn($"Message to unknown stream #{header.StreamId}");
                         continue;
-                    }
-                    substream.AddData(payload);
-                }
-                else if (header.PacketType == PacketType.MessageReceiver)
-                {
-                    if (substream == null)
-                    {
+                    case PacketType.MessageInitiator:
+                        substream.AddData(payload);
+                        break;
+                    case PacketType.MessageReceiver when substream == null:
                         log.Warn($"Message to unknown stream #{header.StreamId}");
                         continue;
-                    }
-                    substream.AddData(payload);
-                }
-                else if ((header.PacketType == PacketType.CloseInitiator)
-                         || (header.PacketType == PacketType.CloseReceiver)
-                         || (header.PacketType == PacketType.ResetInitiator)
-                         || (header.PacketType == PacketType.ResetReceiver))
-                {
-                    if (substream == null)
+                    case PacketType.MessageReceiver:
+                        substream.AddData(payload);
+                        break;
+                    case PacketType.CloseInitiator:
+                    case PacketType.CloseReceiver:
+                    case PacketType.ResetInitiator:
+                    case PacketType.ResetReceiver:
                     {
-                        log.Warn($"Reset of unknown stream #{header.StreamId}");
-                        continue;
+                        if (substream == null)
+                        {
+                            log.Warn($"Reset of unknown stream #{header.StreamId}");
+                            continue;
+                        }
+                        substream.NoMoreData();
+                        Substreams.TryRemove(substream.Id, out var _);
+                        SubstreamClosed?.Invoke(this, substream);
+                        break;
                     }
-                    substream.NoMoreData();
-                    Substreams.TryRemove(substream.Id, out var _);
-                    SubstreamClosed?.Invoke(this, substream);
-                }
-                else
-                {
-                    throw new InvalidDataException($"Unknown Muxer packet type '{header.PacketType}'.");
+                    default:
+                        throw new InvalidDataException($"Unknown Muxer packet type '{header.PacketType}'.");
                 }
             }
         }

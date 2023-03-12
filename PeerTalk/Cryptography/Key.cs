@@ -115,22 +115,24 @@ public sealed class Key
             _privateKey = privateKey
         };
 
-        // Get the public key from the private key.
-        if (privateKey is RsaPrivateCrtKeyParameters rsa)
+        switch (privateKey)
         {
-            key._publicKey = new RsaKeyParameters(false, rsa.Modulus, rsa.PublicExponent);
-            key._signingAlgorithmName = RsaSigningAlgorithmName;
-        }
-        else if (privateKey is Ed25519PrivateKeyParameters ed)
-        {
-            key._publicKey = ed.GeneratePublicKey();
-            key._signingAlgorithmName = Ed25519SigningAlgorithmName;
-        }
-        else if (privateKey is ECPrivateKeyParameters ec)
-        {
-            var q = ec.Parameters.G.Multiply(ec.D);
-            key._publicKey = new ECPublicKeyParameters(q, ec.Parameters);
-            key._signingAlgorithmName = EcSigningAlgorithmName;
+            // Get the public key from the private key.
+            case RsaPrivateCrtKeyParameters rsa:
+                key._publicKey = new RsaKeyParameters(false, rsa.Modulus, rsa.PublicExponent);
+                key._signingAlgorithmName = RsaSigningAlgorithmName;
+                break;
+            case Ed25519PrivateKeyParameters ed:
+                key._publicKey = ed.GeneratePublicKey();
+                key._signingAlgorithmName = Ed25519SigningAlgorithmName;
+                break;
+            case ECPrivateKeyParameters ec:
+            {
+                var q = ec.Parameters.G.Multiply(ec.D);
+                key._publicKey = new ECPublicKeyParameters(q, ec.Parameters);
+                key._signingAlgorithmName = EcSigningAlgorithmName;
+                break;
+            }
         }
         if (key._publicKey == null)
             throw new NotSupportedException($"The key type {privateKey.GetType().Name} is not supported.");
