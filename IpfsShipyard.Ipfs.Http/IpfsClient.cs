@@ -48,7 +48,7 @@ namespace IpfsShipyard.Ipfs.Http
             ?? "http://localhost:5001");
 
         /// <summary>
-        ///   Creates a new instance of the <see cref="CoreApi.IpfsClient"/> class and sets the
+        ///   Creates a new instance of the <see cref="IpfsClient"/> class and sets the
         ///   default values.
         /// </summary>
         /// <remarks>
@@ -59,7 +59,7 @@ namespace IpfsShipyard.Ipfs.Http
         {
             ApiUri = DefaultApiUri;
 
-            var assembly = typeof(CoreApi.IpfsClient).GetTypeInfo().Assembly;
+            var assembly = typeof(IpfsClient).GetTypeInfo().Assembly;
             var version = assembly.GetName().Version;
 
             UserAgent = string.Format("{0}/{1}.{2}.{3}", assembly.GetName().Name, version.Major, version.Minor, version.Revision);
@@ -85,7 +85,7 @@ namespace IpfsShipyard.Ipfs.Http
         }
 
         /// <summary>
-        ///   Creates a new instance of the <see cref="CoreApi.IpfsClient"/> class and specifies
+        ///   Creates a new instance of the <see cref="IpfsClient"/> class and specifies
         ///   the <see cref="ApiUri">API host's URL</see>.
         ///   default values
         /// </summary>

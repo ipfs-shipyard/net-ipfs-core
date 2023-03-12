@@ -9,7 +9,7 @@ namespace IpfsShipyard.Ipfs.Http
     [DataContract]
     public class FileSystemNode : IFileSystemNode
     {
-        CoreApi.IpfsClient ipfsClient;
+        IpfsClient ipfsClient;
         IEnumerable<IFileSystemLink> links;
         long? size;
         bool? isDirectory;
@@ -127,7 +127,7 @@ namespace IpfsShipyard.Ipfs.Http
         /// <value>
         ///   Used to fetch additional information on the node.
         /// </value>
-        public CoreApi.IpfsClient IpfsClient
+        public IpfsClient IpfsClient
         {
             get
             {
@@ -135,7 +135,7 @@ namespace IpfsShipyard.Ipfs.Http
                 {
                     lock (this)
                     {
-                        ipfsClient = new CoreApi.IpfsClient();
+                        ipfsClient = new IpfsClient();
                     }
                 }
                 return ipfsClient;

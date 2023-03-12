@@ -11,14 +11,14 @@ namespace IpfsShipyard.Ipfs.Http.Tests.CoreApi
         [TestMethod]
         public void Api_Exists()
         {
-            Http.CoreApi.IpfsClient ipfs = TestFixture.Ipfs;
+            IpfsClient ipfs = TestFixture.Ipfs;
             Assert.IsNotNull(ipfs.Name);
         }
 
         [TestMethod]
         public async Task Resolve()
         {
-            Http.CoreApi.IpfsClient ipfs = TestFixture.Ipfs;
+            IpfsClient ipfs = TestFixture.Ipfs;
             var id = await ipfs.Name.ResolveAsync("ipfs.io", recursive: true);
             StringAssert.StartsWith(id, "/ipfs/");
         }

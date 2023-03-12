@@ -20,7 +20,7 @@ namespace IpfsShipyard.Ipfs.Http
         long blockSize;
         string name;
         IEnumerable<IMerkleLink> links;
-        CoreApi.IpfsClient ipfsClient;
+        IpfsClient ipfsClient;
 
         /// <summary>
         ///   Creates a new instance of the <see cref="MerkleNode"/> with the specified
@@ -72,7 +72,7 @@ namespace IpfsShipyard.Ipfs.Http
             hasBlockStats = true;
         }
 
-        internal CoreApi.IpfsClient IpfsClient
+        internal IpfsClient IpfsClient
         {
             get
             {
@@ -80,7 +80,7 @@ namespace IpfsShipyard.Ipfs.Http
                 {
                     lock (this)
                     {
-                        ipfsClient = new CoreApi.IpfsClient();
+                        ipfsClient = new IpfsClient();
                     }
                 }
                 return ipfsClient;

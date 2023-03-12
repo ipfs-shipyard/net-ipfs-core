@@ -17,14 +17,14 @@ namespace IpfsShipyard.Ipfs.Http.Tests
         [TestMethod]
         public void Can_Create()
         {
-            Http.CoreApi.IpfsClient target = TestFixture.Ipfs;
+            IpfsClient target = TestFixture.Ipfs;
             Assert.IsNotNull(target);
         }
 
         [TestMethod]
         public void Do_Command_Throws_Exception_On_Invalid_Command()
         {
-            Http.CoreApi.IpfsClient target = TestFixture.Ipfs;
+            IpfsClient target = TestFixture.Ipfs;
             object unknown;
             ExceptionAssert.Throws<HttpRequestException>(() => unknown = target.DoCommandAsync("foobar", default(CancellationToken)).Result);
         }
@@ -32,7 +32,7 @@ namespace IpfsShipyard.Ipfs.Http.Tests
         [TestMethod]
         public void Do_Command_Throws_Exception_On_Missing_Argument()
         {
-            Http.CoreApi.IpfsClient target = TestFixture.Ipfs;
+            IpfsClient target = TestFixture.Ipfs;
             object unknown;
             ExceptionAssert.Throws<HttpRequestException>(() => unknown = target.DoCommandAsync("key/gen", default(CancellationToken)).Result);
         }

@@ -14,7 +14,7 @@ namespace IpfsShipyard.Ipfs.Http.Tests.CoreApi
         [TestMethod]
         public void Get_Entire_Config()
         {
-            Http.CoreApi.IpfsClient ipfs = TestFixture.Ipfs;
+            IpfsClient ipfs = TestFixture.Ipfs;
             var config = ipfs.Config.GetAsync().Result;
             StringAssert.StartsWith(Extensions.Value<string>(config["Addresses"]["API"]), apiAddress);
         }
@@ -22,7 +22,7 @@ namespace IpfsShipyard.Ipfs.Http.Tests.CoreApi
         [TestMethod]
         public void Get_Scalar_Key_Value()
         {
-            Http.CoreApi.IpfsClient ipfs = TestFixture.Ipfs;
+            IpfsClient ipfs = TestFixture.Ipfs;
             var api = ipfs.Config.GetAsync("Addresses.API").Result;
             StringAssert.StartsWith(Extensions.Value<string>(api), apiAddress);
         }
@@ -30,7 +30,7 @@ namespace IpfsShipyard.Ipfs.Http.Tests.CoreApi
         [TestMethod]
         public void Get_Object_Key_Value()
         {
-            Http.CoreApi.IpfsClient ipfs = TestFixture.Ipfs;
+            IpfsClient ipfs = TestFixture.Ipfs;
             var addresses = ipfs.Config.GetAsync("Addresses").Result;
             StringAssert.StartsWith(Extensions.Value<string>(addresses["API"]), apiAddress);
             StringAssert.StartsWith(Extensions.Value<string>(addresses["Gateway"]), gatewayAddress);
@@ -39,7 +39,7 @@ namespace IpfsShipyard.Ipfs.Http.Tests.CoreApi
         [TestMethod]
         public void Keys_are_Case_Sensitive()
         {
-            Http.CoreApi.IpfsClient ipfs = TestFixture.Ipfs;
+            IpfsClient ipfs = TestFixture.Ipfs;
             var api = ipfs.Config.GetAsync("Addresses.API").Result;
             StringAssert.StartsWith(Extensions.Value<string>(api), apiAddress);
 
@@ -51,7 +51,7 @@ namespace IpfsShipyard.Ipfs.Http.Tests.CoreApi
         {
             const string key = "foo";
             const string value = "foobar";
-            Http.CoreApi.IpfsClient ipfs = TestFixture.Ipfs;
+            IpfsClient ipfs = TestFixture.Ipfs;
             ipfs.Config.SetAsync(key, value).Wait();
             Assert.AreEqual<JToken>(value, ipfs.Config.GetAsync(key).Result);
         }
@@ -61,7 +61,7 @@ namespace IpfsShipyard.Ipfs.Http.Tests.CoreApi
         {
             const string key = "API.HTTPHeaders.Access-Control-Allow-Origin";
             JToken value = JToken.Parse("['http://example.io']");
-            Http.CoreApi.IpfsClient ipfs = TestFixture.Ipfs;
+            IpfsClient ipfs = TestFixture.Ipfs;
             ipfs.Config.SetAsync(key, value).Wait();
             Assert.AreEqual<JToken>("http://example.io", ipfs.Config.GetAsync(key).Result[0]);
         }
@@ -69,7 +69,7 @@ namespace IpfsShipyard.Ipfs.Http.Tests.CoreApi
         [TestMethod]
         public async Task Replace_Entire_Config()
         {
-            Http.CoreApi.IpfsClient ipfs = TestFixture.Ipfs;
+            IpfsClient ipfs = TestFixture.Ipfs;
             var original = await ipfs.Config.GetAsync();
             try
             {

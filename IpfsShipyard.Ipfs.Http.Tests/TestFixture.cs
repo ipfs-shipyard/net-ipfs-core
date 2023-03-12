@@ -9,6 +9,6 @@
         /// </summary>
         //IpfsClient.DefaultApiUri = new Uri("http://127.0.0.1.:5001");
 
-        public static Http.CoreApi.IpfsClient Ipfs = new Http.CoreApi.IpfsClient();
+        public static IpfsClient Ipfs = new IpfsClient();
     }
 }
