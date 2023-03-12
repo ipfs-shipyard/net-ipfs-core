@@ -6,7 +6,7 @@
 /// <typeparam name="T">
 ///   The type of object that the rule applies to.
 /// </typeparam>
-interface IPolicy<T>
+internal interface IPolicy<T>
 {
     /// <summary>
     ///   Determines if the target passes the rule.

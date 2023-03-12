@@ -17,9 +17,9 @@ namespace IpfsShipyard.Ipfs.Core;
 [DataContract]
 public class DagNode : IMerkleNode<IMerkleLink>
 {
-    Cid _id;
-    string _hashAlgorithm = MultiHash.DefaultAlgorithmName;
-    long? _size;
+    private Cid _id;
+    private string _hashAlgorithm = MultiHash.DefaultAlgorithmName;
+    private long? _size;
 
     /// <summary>
     ///   Create a new instance of a <see cref="DagNode"/> with the specified
@@ -258,7 +258,7 @@ public class DagNode : IMerkleNode<IMerkleLink>
         }
     }
 
-    void Read(Stream stream)
+    private void Read(Stream stream)
     {
         using (var cis = new CodedInputStream(stream, true))
         {
@@ -266,7 +266,7 @@ public class DagNode : IMerkleNode<IMerkleLink>
         }
     }
 
-    void Read(CodedInputStream stream)
+    private void Read(CodedInputStream stream)
     {
         var links = new List<DagLink>();
         bool done = false;
@@ -311,7 +311,7 @@ public class DagNode : IMerkleNode<IMerkleLink>
         }
     }
 
-    void ComputeHash()
+    private void ComputeHash()
     {
         using (var ms = new MemoryStream())
         {
@@ -322,7 +322,7 @@ public class DagNode : IMerkleNode<IMerkleLink>
         }
     }
 
-    void ComputeSize()
+    private void ComputeSize()
     {
         using (var ms = new MemoryStream())
         {

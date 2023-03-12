@@ -11,8 +11,8 @@ namespace IpfsShipyard.Ipfs.Core;
 /// </remarks>
 public class Peer : IEquatable<Peer>
 {
-    static readonly MultiAddress[] _noAddress = new MultiAddress[0];
-    const string Unknown = "unknown/0.0";
+    private static readonly MultiAddress[] _noAddress = new MultiAddress[0];
+    private const string Unknown = "unknown/0.0";
 
     /// <summary>
     ///   Universally unique identifier.

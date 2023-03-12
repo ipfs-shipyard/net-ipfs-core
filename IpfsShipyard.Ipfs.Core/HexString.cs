@@ -17,15 +17,17 @@ namespace IpfsShipyard.Ipfs.Core;
 /// </remarks>
 public static class HexString
 {
-    static readonly string[] LowerCaseHexStrings = 
+    private static readonly string[] LowerCaseHexStrings = 
         Enumerable.Range(byte.MinValue, byte.MaxValue + 1)
             .Select(v => v.ToString("x2"))
             .ToArray();
-    static readonly string[] UpperCaseHexStrings = 
+
+    private static readonly string[] UpperCaseHexStrings = 
         Enumerable.Range(byte.MinValue, byte.MaxValue + 1)
             .Select(v => v.ToString("X2"))
             .ToArray();
-    static readonly Dictionary<string, byte> HexBytes =
+
+    private static readonly Dictionary<string, byte> HexBytes =
         Enumerable.Range(byte.MinValue, byte.MaxValue + 1)
             .SelectMany(v => new [] { 
                 new { Value = v, String = v.ToString("x2") } , 

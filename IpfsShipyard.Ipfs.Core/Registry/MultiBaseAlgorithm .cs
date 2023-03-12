@@ -113,7 +113,7 @@ public class MultiBaseAlgorithm
     /// <summary>
     ///   Use <see cref="Register"/> to create a new instance of a <see cref="MultiBaseAlgorithm"/>.
     /// </summary>
-    MultiBaseAlgorithm()
+    private MultiBaseAlgorithm()
     {
     }
 

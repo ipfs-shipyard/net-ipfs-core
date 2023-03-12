@@ -109,7 +109,7 @@ public class DagLink : IMerkleLink
         stream.WriteInt64(Size);
     }
 
-    void Read(Stream stream)
+    private void Read(Stream stream)
     {
         using (var cis = new CodedInputStream(stream, true))
         {
@@ -117,7 +117,7 @@ public class DagLink : IMerkleLink
         }
     }
 
-    void Read(CodedInputStream stream)
+    private void Read(CodedInputStream stream)
     {
         while (!stream.IsAtEnd)
         {

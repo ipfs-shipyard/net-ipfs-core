@@ -12,7 +12,7 @@ using Newtonsoft.Json.Linq;
 
 namespace IpfsShipyard.Ipfs.Http.CoreApi;
 
-class FileSystemApi : IFileSystemApi
+internal class FileSystemApi : IFileSystemApi
 {
     private readonly IpfsClient _ipfs;
     private readonly Lazy<DagNode> _emptyFolder;

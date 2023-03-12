@@ -9,7 +9,7 @@ using Newtonsoft.Json.Linq;
 
 namespace IpfsShipyard.Ipfs.Http.CoreApi;
 
-class DhtApi : IDhtApi
+internal class DhtApi : IDhtApi
 {
     private readonly IpfsClient _ipfs;
 
@@ -50,7 +50,7 @@ class DhtApi : IDhtApi
         throw new NotImplementedException();
     }
 
-    IEnumerable<Peer> ProviderFromStream(Stream stream, int limit = int.MaxValue)
+    private IEnumerable<Peer> ProviderFromStream(Stream stream, int limit = int.MaxValue)
     {
         using (var sr = new StreamReader(stream))
         {

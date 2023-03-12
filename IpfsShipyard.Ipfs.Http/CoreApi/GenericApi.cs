@@ -38,7 +38,7 @@ public partial class IpfsClient : IGenericApi
         return PingResultFromStream(stream);
     }
 
-    IEnumerable<PingResult> PingResultFromStream(Stream stream)
+    private IEnumerable<PingResult> PingResultFromStream(Stream stream)
     {
         using (var sr = new StreamReader(stream))
         {

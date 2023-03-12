@@ -12,7 +12,7 @@ using Newtonsoft.Json.Linq;
 
 namespace IpfsShipyard.Ipfs.Http.CoreApi;
 
-class PubSubApi : IPubSubApi
+internal class PubSubApi : IPubSubApi
 {
     private readonly IpfsClient _ipfs;
 
@@ -80,7 +80,7 @@ class PubSubApi : IPubSubApi
         _ = Task.Run(() => ProcessMessages(topic, handler, sr, cancellationToken), cancellationToken);
     }
 
-    void ProcessMessages(string topic, Action<PublishedMessage> handler, StreamReader sr, CancellationToken ct)
+    private void ProcessMessages(string topic, Action<PublishedMessage> handler, StreamReader sr, CancellationToken ct)
     {
         // .Net needs a ReadLine(CancellationToken)
         // As a work-around, we register a function to close the stream

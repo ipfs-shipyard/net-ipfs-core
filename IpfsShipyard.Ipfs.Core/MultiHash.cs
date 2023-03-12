@@ -23,7 +23,7 @@ public class MultiHash : IEquatable<MultiHash>
     /// <summary>
     ///   The cached base-58 encoding of the multihash.
     /// </summary>
-    string _b58String;
+    private string _b58String;
 
     /// <summary>
     ///   The default hashing algorithm is "sha2-256".
@@ -310,7 +310,7 @@ public class MultiHash : IEquatable<MultiHash>
         stream.WriteSomeBytes(Digest);
     }
 
-    void Read(Stream stream)
+    private void Read(Stream stream)
     {
         using (var cis = new CodedInputStream(stream, true))
         {
@@ -318,7 +318,7 @@ public class MultiHash : IEquatable<MultiHash>
         }
     }
 
-    void Read(CodedInputStream stream)
+    private void Read(CodedInputStream stream)
     {
         var code = stream.ReadInt32();
         var digestSize = stream.ReadLength();
@@ -488,7 +488,7 @@ public class MultiHash : IEquatable<MultiHash>
         return true;
     }
 
-    void RaiseUnknownHashingAlgorithm(HashingAlgorithm algorithm)
+    private void RaiseUnknownHashingAlgorithm(HashingAlgorithm algorithm)
     {
         var handler = UnknownHashingAlgorithm;
         if (handler != null)
@@ -544,7 +544,7 @@ public class MultiHash : IEquatable<MultiHash>
     /// <remarks>
     ///   The JSON is just a single string value.
     /// </remarks>
-    class Json : JsonConverter
+    private class Json : JsonConverter
     {
         public override bool CanConvert(Type objectType)
         {

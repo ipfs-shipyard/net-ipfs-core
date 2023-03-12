@@ -8,7 +8,7 @@ namespace IpfsShipyard.PeerTalk.Tests;
 [TestClass]
 public class PeerManagerTest
 {
-    readonly Peer _self = new Peer
+    private readonly Peer _self = new Peer
     {
         AgentVersion = "self",
         Id = "QmXK9VBxaXFuuT29AaPUTgW3jBWZ9JgLVZYdMYTHC6LLAH",

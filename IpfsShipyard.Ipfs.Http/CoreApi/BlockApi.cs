@@ -9,9 +9,9 @@ using Newtonsoft.Json.Linq;
 
 namespace IpfsShipyard.Ipfs.Http.CoreApi;
 
-class BlockApi : IBlockApi
+internal class BlockApi : IBlockApi
 {
-    readonly IpfsClient _ipfs;
+    private readonly IpfsClient _ipfs;
 
     internal BlockApi(IpfsClient ipfs)
     {

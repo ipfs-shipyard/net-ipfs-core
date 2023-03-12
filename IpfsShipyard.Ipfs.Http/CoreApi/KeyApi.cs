@@ -9,7 +9,7 @@ using Newtonsoft.Json.Linq;
 
 namespace IpfsShipyard.Ipfs.Http.CoreApi;
 
-class KeyApi : IKeyApi
+internal class KeyApi : IKeyApi
 {
     /// <summary>
     ///   Information about a local key.
@@ -30,7 +30,7 @@ class KeyApi : IKeyApi
 
     }
 
-    readonly IpfsClient _ipfs;
+    private readonly IpfsClient _ipfs;
 
     internal KeyApi(IpfsClient ipfs)
     {

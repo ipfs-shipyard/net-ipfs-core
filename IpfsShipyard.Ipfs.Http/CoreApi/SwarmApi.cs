@@ -9,7 +9,7 @@ using Newtonsoft.Json.Linq;
 
 namespace IpfsShipyard.Ipfs.Http.CoreApi;
 
-class SwarmApi : ISwarmApi
+internal class SwarmApi : ISwarmApi
 {
     private readonly IpfsClient _ipfs;
 

@@ -4,14 +4,15 @@ using Google.Protobuf;
 
 namespace IpfsShipyard.Ipfs.Core;
 
-static class ProtobufHelper
+internal static class ProtobufHelper
 {
-    static readonly MethodInfo _writeRawBytes = typeof(CodedOutputStream)
+    private static readonly MethodInfo _writeRawBytes = typeof(CodedOutputStream)
         .GetMethods(BindingFlags.NonPublic | BindingFlags.Instance)
         .Single(m =>
             m.Name == "WriteRawBytes" && m.GetParameters().Count() == 1
         );
-    static readonly MethodInfo _readRawBytes = typeof(CodedInputStream)
+
+    private static readonly MethodInfo _readRawBytes = typeof(CodedInputStream)
         .GetMethods(BindingFlags.NonPublic | BindingFlags.Instance)
         .Single(m =>
             m.Name == "ReadRawBytes"

@@ -8,8 +8,8 @@ namespace IpfsShipyard.PeerTalk.Tests.PubSub;
 [TestClass]
 public class TopicManagerTest
 {
-    readonly Peer _a = new Peer { Id = "QmXK9VBxaXFuuT29AaPUTgW3jBWZ9JgLVZYdMYTHC6LLAH" };
-    readonly Peer _b = new Peer { Id = "QmaCpDMGvV2BGHeYERUEnRQAwe3N8SzbUtfsmvsqQLuvuJ" };
+    private readonly Peer _a = new Peer { Id = "QmXK9VBxaXFuuT29AaPUTgW3jBWZ9JgLVZYdMYTHC6LLAH" };
+    private readonly Peer _b = new Peer { Id = "QmaCpDMGvV2BGHeYERUEnRQAwe3N8SzbUtfsmvsqQLuvuJ" };
 
     [TestMethod]
     public void Adding()

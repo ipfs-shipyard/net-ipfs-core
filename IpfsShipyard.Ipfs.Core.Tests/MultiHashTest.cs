@@ -298,7 +298,8 @@ public class MultiHashTest
         Console.WriteLine($"| base 32 | {mh.ToBase32()} |");
 
     }
-    class TestVector
+
+    private class TestVector
     {
         public string Algorithm { get; set; }
         public string Input { get; set; }
@@ -306,7 +307,7 @@ public class MultiHashTest
         public bool Ignore { get; set; }
     }
 
-    readonly TestVector[] _testVectors = new TestVector[]
+    private readonly TestVector[] _testVectors = new TestVector[]
     {
         // From https://github.com/multiformats/js-multihashing-async/blob/master/test/fixtures/encodes.js
         new TestVector {

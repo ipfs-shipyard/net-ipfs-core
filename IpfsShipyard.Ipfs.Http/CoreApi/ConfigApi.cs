@@ -7,9 +7,9 @@ using Newtonsoft.Json.Linq;
 
 namespace IpfsShipyard.Ipfs.Http.CoreApi;
 
-class ConfigApi : IConfigApi
+internal class ConfigApi : IConfigApi
 {
-    readonly IpfsClient _ipfs;
+    private readonly IpfsClient _ipfs;
 
     internal ConfigApi(IpfsClient ipfs)
     {

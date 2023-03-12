@@ -20,7 +20,7 @@ message Exchange
 namespace IpfsShipyard.PeerTalk.SecureCommunication;
 
 [ProtoContract]
-class Secio1Propose
+internal class Secio1Propose
 {
     [ProtoMember(1)]
     public byte[] Nonce;
@@ -39,7 +39,7 @@ class Secio1Propose
 }
 
 [ProtoContract]
-class Secio1Exchange
+internal class Secio1Exchange
 {
     [ProtoMember(1)]
     public byte[] EPublicKey;

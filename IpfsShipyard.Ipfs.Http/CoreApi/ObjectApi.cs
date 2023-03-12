@@ -10,7 +10,7 @@ using Newtonsoft.Json.Linq;
 
 namespace IpfsShipyard.Ipfs.Http.CoreApi;
 
-class ObjectApi : IObjectApi
+internal class ObjectApi : IObjectApi
 {
     private readonly IpfsClient _ipfs;
 
@@ -61,7 +61,7 @@ class ObjectApi : IObjectApi
 
     // TOOD: patch sub API
 
-    DagNode GetDagFromJson(string json)
+    private DagNode GetDagFromJson(string json)
     {
         var result = JObject.Parse(json);
         byte[] data = null;

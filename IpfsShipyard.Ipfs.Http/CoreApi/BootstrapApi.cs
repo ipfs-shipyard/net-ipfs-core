@@ -8,9 +8,9 @@ using Newtonsoft.Json.Linq;
 
 namespace IpfsShipyard.Ipfs.Http.CoreApi;
 
-class BootstrapApi : IBootstrapApi
+internal class BootstrapApi : IBootstrapApi
 {
-    readonly IpfsClient _ipfs;
+    private readonly IpfsClient _ipfs;
 
     internal BootstrapApi(IpfsClient ipfs)
     {

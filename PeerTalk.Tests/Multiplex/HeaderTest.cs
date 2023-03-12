@@ -18,7 +18,7 @@ public class HeaderTest
         Roundtrip(Header.MaxStreamId, PacketType.NewStream);
     }
 
-    void Roundtrip(long id, PacketType type)
+    private void Roundtrip(long id, PacketType type)
     {
         var header1 = new Header { StreamId = id, PacketType = type };
         var ms = new MemoryStream();

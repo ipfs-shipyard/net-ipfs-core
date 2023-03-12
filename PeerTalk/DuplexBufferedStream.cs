@@ -17,11 +17,11 @@ namespace IpfsShipyard.PeerTalk
     /// <remarks>
     ///   Copied from <see href="https://bitbucket.org/robertvazan/juicestream/raw/2caa975524900d1b5a76ddd3731c273d5dbb51eb/JuiceStream/DuplexBufferedStream.cs"/>
     /// </remarks>
-    class DuplexBufferedStream : Stream
+    internal class DuplexBufferedStream : Stream
     {
-        readonly Stream _inner;
-        readonly BufferedStream _readBuffer;
-        readonly BufferedStream _writeBuffer;
+        private readonly Stream _inner;
+        private readonly BufferedStream _readBuffer;
+        private readonly BufferedStream _writeBuffer;
 
         public override bool CanRead { get { return _inner.CanRead; } }
         public override bool CanSeek { get { return false; } }

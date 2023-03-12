@@ -31,7 +31,7 @@ public static class MultiBase
     /// <exception cref="KeyNotFoundException">
     ///   When <paramref name="name"/> is not registered.
     /// </exception>
-    static MultiBaseAlgorithm GetAlgorithm(string name)
+    private static MultiBaseAlgorithm GetAlgorithm(string name)
     {
         try
         {

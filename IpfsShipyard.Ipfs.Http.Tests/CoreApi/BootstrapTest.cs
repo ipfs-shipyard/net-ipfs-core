@@ -8,8 +8,8 @@ namespace IpfsShipyard.Ipfs.Http.Tests.CoreApi;
 [TestClass]
 public class BootstapApiTest
 {
-    readonly IpfsClient _ipfs = TestFixture.Ipfs;
-    readonly MultiAddress _somewhere = "/ip4/127.0.0.1/tcp/4009/ipfs/QmPv52ekjS75L4JmHpXVeuJ5uX2ecSfSZo88NSyxwA3rAQ";
+    private readonly IpfsClient _ipfs = TestFixture.Ipfs;
+    private readonly MultiAddress _somewhere = "/ip4/127.0.0.1/tcp/4009/ipfs/QmPv52ekjS75L4JmHpXVeuJ5uX2ecSfSZo88NSyxwA3rAQ";
 
     [TestMethod]
     public async Task Add_Remove()

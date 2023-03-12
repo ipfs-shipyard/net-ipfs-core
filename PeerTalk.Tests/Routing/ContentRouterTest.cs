@@ -9,14 +9,14 @@ namespace IpfsShipyard.PeerTalk.Tests.Routing;
 [TestClass]
 public class ContentRouterTest
 {
-    readonly Peer _self = new Peer
+    private readonly Peer _self = new Peer
     {
         AgentVersion = "self",
         Id = "QmXK9VBxaXFuuT29AaPUTgW3jBWZ9JgLVZYdMYTHC6LLAH",
         PublicKey = "CAASXjBcMA0GCSqGSIb3DQEBAQUAA0sAMEgCQQCC5r4nQBtnd9qgjnG8fBN5+gnqIeWEIcUFUdCG4su/vrbQ1py8XGKNUBuDjkyTv25Gd3hlrtNJV3eOKZVSL8ePAgMBAAE="
     };
 
-    readonly Peer _other = new Peer
+    private readonly Peer _other = new Peer
     {
         AgentVersion = "other",
         Id = "QmdpwjdB94eNm2Lcvp9JqoCxswo3AKQqjLuNZyLixmCM1h",
@@ -26,7 +26,7 @@ public class ContentRouterTest
         }
     };
 
-    readonly Cid _cid1 = "zBunRGrmCGokA1oMESGGTfrtcMFsVA8aEtcNzM54akPWXF97uXCqTjF3GZ9v8YzxHrG66J8QhtPFWwZebRZ2zeUEELu67";
+    private readonly Cid _cid1 = "zBunRGrmCGokA1oMESGGTfrtcMFsVA8aEtcNzM54akPWXF97uXCqTjF3GZ9v8YzxHrG66J8QhtPFWwZebRZ2zeUEELu67";
 
     [TestMethod]
     public void Add()

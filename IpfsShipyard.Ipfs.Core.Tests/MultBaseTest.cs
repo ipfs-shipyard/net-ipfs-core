@@ -45,14 +45,14 @@ public class MultiBaseTest
         ExceptionAssert.Throws<FormatException>(() => MultiBase.Decode("fXX"));
     }
 
-    class TestVector
+    private class TestVector
     {
         public string Algorithm { get; set; }
         public string Input { get; set; }
         public string Output { get; set; }
     }
 
-    readonly TestVector[] _testVectors = new TestVector[]
+    private readonly TestVector[] _testVectors = new TestVector[]
     {
         new TestVector {
             Algorithm = "base16",

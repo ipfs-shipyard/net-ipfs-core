@@ -3,10 +3,10 @@ using System.Security.Cryptography;
 
 namespace IpfsShipyard.Ipfs.Core.Cryptography;
 
-class DoubleSha256 : HashAlgorithm
+internal class DoubleSha256 : HashAlgorithm
 {
-    readonly HashAlgorithm _digest = SHA256.Create();
-    byte[] _round1;
+    private readonly HashAlgorithm _digest = SHA256.Create();
+    private byte[] _round1;
 
     public override void Initialize()
     {

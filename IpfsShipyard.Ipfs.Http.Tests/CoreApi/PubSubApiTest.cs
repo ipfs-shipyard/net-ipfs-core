@@ -65,7 +65,7 @@ public class PubSubApiTest
         }
     }
 
-    volatile int _messageCount = 0;
+    private volatile int _messageCount = 0;
 
     [TestMethod]
     public async Task Subscribe()
@@ -149,7 +149,7 @@ public class PubSubApiTest
         }
     }
 
-    volatile int _messageCount1 = 0;
+    private volatile int _messageCount1 = 0;
 
     [TestMethod]
     public async Task Unsubscribe()

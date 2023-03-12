@@ -109,7 +109,7 @@ public class HashingAlgorithm
     /// <summary>
     ///   Use <see cref="Register"/> to create a new instance of a <see cref="HashingAlgorithm"/>.
     /// </summary>
-    HashingAlgorithm()
+    private HashingAlgorithm()
     {
     }
 

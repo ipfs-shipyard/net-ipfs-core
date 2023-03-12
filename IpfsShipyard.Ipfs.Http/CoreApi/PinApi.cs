@@ -8,7 +8,7 @@ using Newtonsoft.Json.Linq;
 
 namespace IpfsShipyard.Ipfs.Http.CoreApi;
 
-class PinApi : IPinApi
+internal class PinApi : IPinApi
 {
     private readonly IpfsClient _ipfs;
 

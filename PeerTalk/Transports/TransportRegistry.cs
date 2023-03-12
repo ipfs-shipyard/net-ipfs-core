@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace IpfsShipyard.PeerTalk.Transports;
 
-static class TransportRegistry
+internal static class TransportRegistry
 {
     public static Dictionary<string, Func<IPeerTransport>> Transports;
 

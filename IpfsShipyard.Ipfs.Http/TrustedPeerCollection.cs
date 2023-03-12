@@ -20,13 +20,13 @@ namespace IpfsShipyard.Ipfs.Http;
 /// </returns>
 public class TrustedPeerCollection : ICollection<MultiAddress>
 {
-    class BootstrapListResponse
+    private class BootstrapListResponse
     {
         public MultiAddress[] Peers { get; set; }
     }
 
-    readonly IpfsClient _ipfs;
-    MultiAddress[] _peers;
+    private readonly IpfsClient _ipfs;
+    private MultiAddress[] _peers;
 
     internal TrustedPeerCollection(IpfsClient ipfs)
     {
@@ -128,7 +128,7 @@ public class TrustedPeerCollection : ICollection<MultiAddress>
         return _peers.GetEnumerator();
     }
 
-    void Fetch()
+    private void Fetch()
     {
         _peers = _ipfs.DoCommandAsync<BootstrapListResponse>("bootstrap/list", default(CancellationToken)).Result.Peers;
     }

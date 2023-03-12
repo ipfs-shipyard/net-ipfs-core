@@ -5,7 +5,7 @@ using Newtonsoft.Json.Linq;
 
 namespace IpfsShipyard.Ipfs.Http.CoreApi;
 
-class DnsApi : IDnsApi
+internal class DnsApi : IDnsApi
 {
     private readonly IpfsClient _ipfs;
 

@@ -7,7 +7,7 @@ using Newtonsoft.Json.Linq;
 
 namespace IpfsShipyard.Ipfs.Http.CoreApi;
 
-class StatApi : IStatsApi
+internal class StatApi : IStatsApi
 {
     private readonly IpfsClient _ipfs;
 

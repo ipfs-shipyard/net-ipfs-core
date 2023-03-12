@@ -20,8 +20,8 @@ namespace IpfsShipyard.PeerTalk.Cryptography;
 /// </remarks>
 public class EphermalKey
 {
-    ECPublicKeyParameters _publicKey;
-    ECPrivateKeyParameters _privateKey;
+    private ECPublicKeyParameters _publicKey;
+    private ECPrivateKeyParameters _privateKey;
 
     /// <summary>
     ///   Gets the IPFS encoding of the public key.

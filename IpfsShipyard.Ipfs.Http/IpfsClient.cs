@@ -29,10 +29,10 @@ namespace IpfsShipyard.Ipfs.Http;
 /// </remarks>
 public partial class IpfsClient : ICoreApi
 {
-    const string UnknownFilename = "unknown";
+    private const string UnknownFilename = "unknown";
 
-    static readonly object _safe = new object();
-    static HttpClient _api = null;
+    private static readonly object _safe = new object();
+    private static HttpClient _api = null;
 
     /// <summary>
     ///   The default URL to the IPFS HTTP API server.
@@ -171,7 +171,7 @@ public partial class IpfsClient : ICoreApi
     /// <inheritdoc />
     public IKeyApi Key { get; private set; }
 
-    Uri BuildCommand(string command, string arg = null, params string[] options)
+    private Uri BuildCommand(string command, string arg = null, params string[] options)
     {
         var url = "/api/v0/" + command;
         var q = new StringBuilder();
@@ -217,7 +217,7 @@ public partial class IpfsClient : ICoreApi
     /// <remarks>
     ///   Only one client is needed.  Its thread safe.
     /// </remarks>
-    HttpClient Api()
+    private HttpClient Api()
     {
         if (_api == null)
         {
@@ -573,7 +573,7 @@ public partial class IpfsClient : ICoreApi
     /// <remarks>
     ///   The API server returns an JSON error in the form <c>{ "Message": "...", "Code": ... }</c>.
     /// </remarks>
-    async Task<bool> ThrowOnErrorAsync(HttpResponseMessage response)
+    private async Task<bool> ThrowOnErrorAsync(HttpResponseMessage response)
     {
         if (response.IsSuccessStatusCode)
             return true;

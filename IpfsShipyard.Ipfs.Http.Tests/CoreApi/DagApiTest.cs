@@ -7,7 +7,7 @@ namespace IpfsShipyard.Ipfs.Http.Tests.CoreApi;
 [TestClass]
 public class DagApiTest
 {
-    class Name
+    private class Name
     {
         public string First { get; set; }
 

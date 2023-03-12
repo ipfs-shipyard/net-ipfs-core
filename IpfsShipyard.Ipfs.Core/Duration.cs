@@ -18,8 +18,8 @@ namespace IpfsShipyard.Ipfs.Core;
 /// </remarks>
 public static class Duration
 {
-    const double TicksPerNanosecond = (double)TimeSpan.TicksPerMillisecond * 0.000001;
-    const double TicksPerMicrosecond = (double)TimeSpan.TicksPerMillisecond * 0.001;
+    private const double TicksPerNanosecond = (double)TimeSpan.TicksPerMillisecond * 0.000001;
+    private const double TicksPerMicrosecond = (double)TimeSpan.TicksPerMillisecond * 0.001;
 
     /// <summary>
     ///   Converts the string representation of an IPFS duration
@@ -68,7 +68,7 @@ public static class Duration
         return result;
     }
 
-    static TimeSpan ParseComponent(StringReader reader)
+    private static TimeSpan ParseComponent(StringReader reader)
     {
         var value = ParseNumber(reader);
         var unit = ParseUnit(reader);
@@ -95,7 +95,7 @@ public static class Duration
         }
     }
 
-    static double ParseNumber(StringReader reader)
+    private static double ParseNumber(StringReader reader)
     {
         var s = new StringBuilder();
         while (true)
@@ -111,7 +111,7 @@ public static class Duration
         }
     }
 
-    static string ParseUnit(StringReader reader)
+    private static string ParseUnit(StringReader reader)
     {
         var s = new StringBuilder();
         while (true)
@@ -162,7 +162,7 @@ public static class Duration
         return s.ToString();
     }
 
-    static void Stringify(double value, string unit, StringBuilder sb)
+    private static void Stringify(double value, string unit, StringBuilder sb)
     {
         if (value == 0)
             return;

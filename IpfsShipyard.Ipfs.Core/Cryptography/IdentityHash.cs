@@ -3,9 +3,9 @@ using System.Security.Cryptography;
 
 namespace IpfsShipyard.Ipfs.Core.Cryptography;
 
-class IdentityHash : HashAlgorithm
+internal class IdentityHash : HashAlgorithm
 {
-    byte[] _digest;
+    private byte[] _digest;
 
     public override void Initialize()
     {

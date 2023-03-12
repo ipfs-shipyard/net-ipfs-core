@@ -9,10 +9,10 @@ namespace IpfsShipyard.Ipfs.Http;
 [DataContract]
 public class FileSystemNode : IFileSystemNode
 {
-    IpfsClient _ipfsClient;
-    IEnumerable<IFileSystemLink> _links;
-    long? _size;
-    bool? _isDirectory;
+    private IpfsClient _ipfsClient;
+    private IEnumerable<IFileSystemLink> _links;
+    private long? _size;
+    private bool? _isDirectory;
 
     /// <inheritdoc />
     public byte[] DataBytes
@@ -146,7 +146,7 @@ public class FileSystemNode : IFileSystemNode
         }
     }
 
-    void GetInfo()
+    private void GetInfo()
     {
         var node = IpfsClient.FileSystem.ListFileAsync(Id).Result;
         IsDirectory = node.IsDirectory;

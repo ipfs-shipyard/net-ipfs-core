@@ -8,7 +8,7 @@ namespace IpfsShipyard.Ipfs.Http;
 [DataContract]
 public class Block : IDataBlock
 {
-    long? _size;
+    private long? _size;
 
     /// <inheritdoc />
     [DataMember]

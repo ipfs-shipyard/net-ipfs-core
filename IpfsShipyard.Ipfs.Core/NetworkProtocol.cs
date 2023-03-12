@@ -186,7 +186,7 @@ public abstract class NetworkProtocol
 
 }
 
-class TcpNetworkProtocol : NetworkProtocol
+internal class TcpNetworkProtocol : NetworkProtocol
 {
     public UInt16 Port { get; set; }
     public override string Name => "tcp";
@@ -217,25 +217,25 @@ class TcpNetworkProtocol : NetworkProtocol
     }
 }
 
-class UdpNetworkProtocol : TcpNetworkProtocol
+internal class UdpNetworkProtocol : TcpNetworkProtocol
 {
     public override string Name => "udp";
     public override uint Code => 273;
 }
 
-class DccpNetworkProtocol : TcpNetworkProtocol
+internal class DccpNetworkProtocol : TcpNetworkProtocol
 {
     public override string Name => "dccp";
     public override uint Code => 33;
 }
 
-class SctpNetworkProtocol : TcpNetworkProtocol
+internal class SctpNetworkProtocol : TcpNetworkProtocol
 {
     public override string Name => "sctp";
     public override uint Code => 132;
 }
 
-abstract class IpNetworkProtocol : NetworkProtocol
+internal abstract class IpNetworkProtocol : NetworkProtocol
 {
     public IPAddress Address { get; set; }
     public override void ReadValue(TextReader stream)
@@ -267,9 +267,9 @@ abstract class IpNetworkProtocol : NetworkProtocol
     }
 }
 
-class Ipv4NetworkProtocol : IpNetworkProtocol
+internal class Ipv4NetworkProtocol : IpNetworkProtocol
 {
-    static readonly int _addressSize = IPAddress.Any.GetAddressBytes().Length;
+    private static readonly int _addressSize = IPAddress.Any.GetAddressBytes().Length;
 
     public override string Name => "ip4";
     public override uint Code => 4;
@@ -289,9 +289,9 @@ class Ipv4NetworkProtocol : IpNetworkProtocol
 
 }
 
-class Ipv6NetworkProtocol : IpNetworkProtocol
+internal class Ipv6NetworkProtocol : IpNetworkProtocol
 {
-    static readonly int _addressSize = IPAddress.IPv6Any.GetAddressBytes().Length;
+    private static readonly int _addressSize = IPAddress.IPv6Any.GetAddressBytes().Length;
 
     public override string Name => "ip6";
     public override uint Code => 41;
@@ -310,7 +310,7 @@ class Ipv6NetworkProtocol : IpNetworkProtocol
     }
 }
 
-class P2PNetworkProtocol : NetworkProtocol
+internal class P2PNetworkProtocol : NetworkProtocol
 {
     public MultiHash MultiHash { get; private set; }
     public override string Name => "p2p";
@@ -337,12 +337,12 @@ class P2PNetworkProtocol : NetworkProtocol
     }
 }
 
-class IpfsNetworkProtocol : P2PNetworkProtocol
+internal class IpfsNetworkProtocol : P2PNetworkProtocol
 {
     public override string Name => "ipfs";
 }
 
-class OnionNetworkProtocol : NetworkProtocol
+internal class OnionNetworkProtocol : NetworkProtocol
 {
     public byte[] Address { get; private set; }
     public UInt16 Port { get; private set; }
@@ -384,7 +384,7 @@ class OnionNetworkProtocol : NetworkProtocol
     }
 }
 
-abstract class ValuelessNetworkProtocol : NetworkProtocol
+internal abstract class ValuelessNetworkProtocol : NetworkProtocol
 {
     public override void ReadValue(CodedInputStream stream)
     {
@@ -400,25 +400,25 @@ abstract class ValuelessNetworkProtocol : NetworkProtocol
     }
 }
 
-class QuicNetworkProtocol : ValuelessNetworkProtocol
+internal class QuicNetworkProtocol : ValuelessNetworkProtocol
 {
     public override string Name => "quic";
     public override uint Code => 460;
 }
 
-class QuicV1NetworkProtocol : ValuelessNetworkProtocol
+internal class QuicV1NetworkProtocol : ValuelessNetworkProtocol
 {
     public override string Name => "quic-v1";
     public override uint Code => 465;
 }
 
-class WebTransportNetworkProtocol : ValuelessNetworkProtocol
+internal class WebTransportNetworkProtocol : ValuelessNetworkProtocol
 {
     public override string Name => "webtransport";
     public override uint Code => 461;
 }
 
-class CertHashNetworkProtocol : NetworkProtocol
+internal class CertHashNetworkProtocol : NetworkProtocol
 {
     public override string Name => "certhash";
     public override uint Code => 466;
@@ -434,61 +434,61 @@ class CertHashNetworkProtocol : NetworkProtocol
     }
 }
 
-class HttpNetworkProtocol : ValuelessNetworkProtocol
+internal class HttpNetworkProtocol : ValuelessNetworkProtocol
 {
     public override string Name => "http";
     public override uint Code => 480;
 }
 
-class HttpsNetworkProtocol : ValuelessNetworkProtocol
+internal class HttpsNetworkProtocol : ValuelessNetworkProtocol
 {
     public override string Name => "https";
     public override uint Code => 443;
 }
 
-class WsNetworkProtocol : ValuelessNetworkProtocol
+internal class WsNetworkProtocol : ValuelessNetworkProtocol
 {
     public override string Name => "ws";
     public override uint Code => 477;
 }
 
-class WssNetworkProtocol : ValuelessNetworkProtocol
+internal class WssNetworkProtocol : ValuelessNetworkProtocol
 {
     public override string Name => "wss";
     public override uint Code => 478;
 }
 
-class Libp2PWebrtcStarNetworkProtocol : ValuelessNetworkProtocol
+internal class Libp2PWebrtcStarNetworkProtocol : ValuelessNetworkProtocol
 {
     public override string Name => "libp2p-webrtc-star";
     public override uint Code => 275;
 }
 
-class Libp2PWebrtcDirectNetworkProtocol : ValuelessNetworkProtocol
+internal class Libp2PWebrtcDirectNetworkProtocol : ValuelessNetworkProtocol
 {
     public override string Name => "libp2p-webrtc-direct";
     public override uint Code => 276;
 }
 
-class UdtNetworkProtocol : ValuelessNetworkProtocol
+internal class UdtNetworkProtocol : ValuelessNetworkProtocol
 {
     public override string Name => "udt";
     public override uint Code => 301;
 }
 
-class UtpNetworkProtocol : ValuelessNetworkProtocol
+internal class UtpNetworkProtocol : ValuelessNetworkProtocol
 {
     public override string Name => "utp";
     public override uint Code => 302;
 }
 
-class P2PCircuitNetworkProtocol : ValuelessNetworkProtocol
+internal class P2PCircuitNetworkProtocol : ValuelessNetworkProtocol
 {
     public override string Name => "p2p-circuit";
     public override uint Code => 290;
 }
 
-abstract class DomainNameNetworkProtocol : NetworkProtocol
+internal abstract class DomainNameNetworkProtocol : NetworkProtocol
 {
     public string DomainName { get; set; }
     public override void ReadValue(TextReader stream)
@@ -513,31 +513,31 @@ abstract class DomainNameNetworkProtocol : NetworkProtocol
     }
 }
 
-class DnsNetworkProtocol : DomainNameNetworkProtocol
+internal class DnsNetworkProtocol : DomainNameNetworkProtocol
 {
     public override string Name => "dns";
     public override uint Code => 53;
 }
 
-class DnsAddrNetworkProtocol : DomainNameNetworkProtocol
+internal class DnsAddrNetworkProtocol : DomainNameNetworkProtocol
 {
     public override string Name => "dnsaddr";
     public override uint Code => 56;
 }
 
-class Dns4NetworkProtocol : DomainNameNetworkProtocol
+internal class Dns4NetworkProtocol : DomainNameNetworkProtocol
 {
     public override string Name => "dns4";
     public override uint Code => 54;
 }
 
-class Dns6NetworkProtocol : DomainNameNetworkProtocol
+internal class Dns6NetworkProtocol : DomainNameNetworkProtocol
 {
     public override string Name => "dns6";
     public override uint Code => 55;
 }
 
-class IpcidrNetworkProtocol : NetworkProtocol
+internal class IpcidrNetworkProtocol : NetworkProtocol
 {
     public UInt16 RoutingPrefix { get; set; }
     public override string Name => "ipcidr";

@@ -331,7 +331,7 @@ public class FileSystemApiTest
         }
     }
 
-    void DeleteTemp(string temp)
+    private void DeleteTemp(string temp)
     {
         while (true)
         {
@@ -348,7 +348,7 @@ public class FileSystemApiTest
         }
     }
 
-    string MakeTemp()
+    private string MakeTemp()
     {
         var temp = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
         var x = Path.Combine(temp, "x");

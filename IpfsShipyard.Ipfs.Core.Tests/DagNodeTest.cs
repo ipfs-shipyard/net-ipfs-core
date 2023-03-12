@@ -226,7 +226,7 @@ public class DagNodeTest
         RoundtripTest(b);
     }
 
-    void RoundtripTest(DagNode a)
+    private void RoundtripTest(DagNode a)
     {
         var ms = new MemoryStream();
         a.Write(ms);

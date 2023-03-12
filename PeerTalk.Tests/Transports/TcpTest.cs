@@ -175,9 +175,9 @@ public class TcpTest
         }
     }
 
-    class HelloServer : IDisposable
+    private class HelloServer : IDisposable
     {
-        readonly CancellationTokenSource _cs = new CancellationTokenSource(TimeSpan.FromSeconds(30));
+        private readonly CancellationTokenSource _cs = new CancellationTokenSource(TimeSpan.FromSeconds(30));
 
         public HelloServer()
         {
@@ -192,7 +192,7 @@ public class TcpTest
             _cs.Cancel();
         }
 
-        void Handler(Stream stream, MultiAddress local, MultiAddress remote)
+        private void Handler(Stream stream, MultiAddress local, MultiAddress remote)
         {
             var msg = Encoding.UTF8.GetBytes("hello");
             stream.Write(msg, 0, msg.Length);

@@ -10,7 +10,7 @@ using Newtonsoft.Json.Linq;
 
 namespace IpfsShipyard.Ipfs.Http.CoreApi;
 
-class DagApi : IDagApi
+internal class DagApi : IDagApi
 {
     private readonly IpfsClient _ipfs;
 

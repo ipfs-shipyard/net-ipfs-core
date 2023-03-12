@@ -75,7 +75,7 @@ public class Codec
     /// <summary>
     ///   Use <see cref="Register"/> to create a new instance of a <see cref="Codec"/>.
     /// </summary>
-    Codec()
+    private Codec()
     {
     }
 

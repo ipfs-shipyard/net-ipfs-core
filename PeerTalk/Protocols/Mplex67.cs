@@ -13,7 +13,7 @@ namespace IpfsShipyard.PeerTalk.Protocols;
 /// <seealso href="https://github.com/libp2p/mplex"/>
 public class Mplex67 : IPeerProtocol
 {
-    static readonly ILog _log = LogManager.GetLogger(typeof(Mplex67));
+    private static readonly ILog _log = LogManager.GetLogger(typeof(Mplex67));
 
     /// <inheritdoc />
     public string Name { get; } = "mplex";

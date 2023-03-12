@@ -291,7 +291,7 @@ public class MultiAddress : IEquatable<MultiAddress>
     /// <remarks>
     ///   The binary representation is a sequence of <see cref="NetworkProtocol">network protocols</see>.
     /// </remarks>
-    void Read(Stream stream)
+    private void Read(Stream stream)
     {
         Read(new CodedInputStream(stream, true));
     }
@@ -305,7 +305,7 @@ public class MultiAddress : IEquatable<MultiAddress>
     /// <remarks>
     ///   The binary representation is a sequence of <see cref="NetworkProtocol">network protocols</see>.
     /// </remarks>
-    void Read(CodedInputStream stream)
+    private void Read(CodedInputStream stream)
     {
         Protocols.Clear();
         do
@@ -328,7 +328,7 @@ public class MultiAddress : IEquatable<MultiAddress>
     /// <remarks>
     ///   The string representation is a sequence of <see cref="NetworkProtocol">network protocols</see>.
     /// </remarks>
-    void Read(TextReader stream)
+    private void Read(TextReader stream)
     {
         if (stream.Read() != '/')
         {
@@ -512,7 +512,7 @@ public class MultiAddress : IEquatable<MultiAddress>
     /// <remarks>
     ///   The JSON is just a single string value.
     /// </remarks>
-    class Json : JsonConverter
+    private class Json : JsonConverter
     {
         public override bool CanConvert(Type objectType)
         {

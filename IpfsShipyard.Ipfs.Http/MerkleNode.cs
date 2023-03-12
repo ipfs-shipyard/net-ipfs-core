@@ -16,11 +16,11 @@ namespace IpfsShipyard.Ipfs.Http;
 [DataContract]
 public class MerkleNode : IMerkleNode<IMerkleLink>, IEquatable<MerkleNode>
 {
-    bool _hasBlockStats;
-    long _blockSize;
-    string _name;
-    IEnumerable<IMerkleLink> _links;
-    IpfsClient _ipfsClient;
+    private bool _hasBlockStats;
+    private long _blockSize;
+    private string _name;
+    private IEnumerable<IMerkleLink> _links;
+    private IpfsClient _ipfsClient;
 
     /// <summary>
     ///   Creates a new instance of the <see cref="MerkleNode"/> with the specified
@@ -176,7 +176,7 @@ public class MerkleNode : IMerkleNode<IMerkleLink>, IEquatable<MerkleNode>
     /// <remarks>
     ///   The object stats include the block stats.
     /// </remarks>
-    void GetBlockStats()
+    private void GetBlockStats()
     {
         if (_hasBlockStats)
             return;

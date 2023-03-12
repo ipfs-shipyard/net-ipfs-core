@@ -30,11 +30,11 @@ public class Cid : IEquatable<Cid>
     /// </summary>
     public const string DefaultContentType = "dag-pb";
 
-    string _encodedValue;
-    int _version;
-    string _encoding = MultiBase.DefaultAlgorithmName;
-    string _contentType = DefaultContentType;
-    MultiHash _hash;
+    private string _encodedValue;
+    private int _version;
+    private string _encoding = MultiBase.DefaultAlgorithmName;
+    private string _contentType = DefaultContentType;
+    private MultiHash _hash;
  
     /// <summary>
     ///   Throws if a property cannot be set.
@@ -46,7 +46,7 @@ public class Cid : IEquatable<Cid>
     ///   Once <see cref="Encode"/> is invoked, the CID's properties
     ///   cannot be set.
     /// </remarks>
-    void EnsureMutable()
+    private void EnsureMutable()
     {
         if (_encodedValue != null)
         {
