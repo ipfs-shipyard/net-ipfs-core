@@ -1,9 +1,7 @@
-﻿using Ipfs.CoreApi;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
+using IpfsShipyard.Ipfs.Core.CoreApi;
 
-namespace Ipfs
+namespace IpfsShipyard.Ipfs.Core
 {
     /// <summary>
     ///   A published message.

@@ -1,13 +1,11 @@
-﻿using Google.Protobuf;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.Serialization;
-using System.Text;
-using System.Threading.Tasks;
+using Google.Protobuf;
 
-namespace Ipfs
+namespace IpfsShipyard.Ipfs.Core
 {
     /// <summary>
     ///   A node in the IPFS Merkle DAG.

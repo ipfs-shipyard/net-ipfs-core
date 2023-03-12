@@ -1,6 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace Ipfs.Http
+namespace IpfsShipyard.Ipfs.Http
 {
     [TestClass]
     public class BlockTest

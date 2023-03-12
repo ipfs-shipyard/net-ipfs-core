@@ -1,12 +1,10 @@
-﻿using Google.Protobuf;
-using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.IO;
-using System.Runtime.Serialization;
 using System.Text;
+using Google.Protobuf;
+using Newtonsoft.Json;
 
-namespace Ipfs
+namespace IpfsShipyard.Ipfs.Core
 {
     /// <summary>
     ///  Identifies some content, e.g. a Content ID.

@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Ipfs.Registry;
 using Google.Protobuf;
+using IpfsShipyard.Ipfs.Core.Registry;
 
-namespace Ipfs
+namespace IpfsShipyard.Ipfs.Core
 {
     /// <summary>
     ///   Wraps other formats with a tiny bit of self-description.

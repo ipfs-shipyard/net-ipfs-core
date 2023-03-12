@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Ipfs
+﻿namespace IpfsShipyard.Ipfs.Core
 {
     /// <summary>
     ///   A Directed Acyclic Graph (DAG) for IPFS file system node.

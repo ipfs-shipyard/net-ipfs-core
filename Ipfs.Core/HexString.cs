@@ -1,10 +1,10 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
-using System.IO;
 
-namespace Ipfs
+namespace IpfsShipyard.Ipfs.Core
 {
     /// <summary>
     ///   A codec for <see href="https://en.wikipedia.org/wiki/Hexadecimal">Hexadecimal</see>.

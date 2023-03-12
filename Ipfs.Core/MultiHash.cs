@@ -1,15 +1,13 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
 using System.IO;
+using System.Linq;
 using System.Security.Cryptography;
 using Google.Protobuf;
-using Ipfs.Registry;
+using IpfsShipyard.Ipfs.Core.Registry;
 using Newtonsoft.Json;
 
-namespace Ipfs
+namespace IpfsShipyard.Ipfs.Core
 {
     /// <summary> 
     ///   A protocol for differentiating outputs from various well-established cryptographic hash functions, 

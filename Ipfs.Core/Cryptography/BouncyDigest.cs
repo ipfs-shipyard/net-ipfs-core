@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Ipfs.Cryptography
+﻿namespace IpfsShipyard.Ipfs.Core.Cryptography
 {
     /// <summary>
     ///   Thin wrapper around bouncy castle digests.

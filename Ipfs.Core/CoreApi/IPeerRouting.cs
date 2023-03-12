@@ -1,8 +1,7 @@
-﻿using System;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
 
-namespace Ipfs.CoreApi
+namespace IpfsShipyard.Ipfs.Core.CoreApi
 {
     /// <summary>
     ///    Find information about a peer.

@@ -1,13 +1,15 @@
-﻿using Newtonsoft.Json.Linq;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.Text;
+using IpfsShipyard.Ipfs.Core;
+using IpfsShipyard.Ipfs.Http.CoreApi;
 using Multiformats.Base;
+using Newtonsoft.Json.Linq;
 
-namespace Ipfs.Http
+namespace IpfsShipyard.Ipfs.Http
 {
     /// <summary>
     ///   A published message.

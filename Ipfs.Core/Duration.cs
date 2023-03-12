@@ -1,10 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Text;
 
-namespace Ipfs
+namespace IpfsShipyard.Ipfs.Core
 {
     /// <summary>
     ///   Parsing and stringifying of a <see cref="TimeSpan"/> according to IPFS.

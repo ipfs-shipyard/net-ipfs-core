@@ -1,8 +1,9 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
+using IpfsShipyard.Ipfs.Core;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace Ipfs.Http
+namespace IpfsShipyard.Ipfs.Http.CoreApi
 {
     [TestClass]
     public class BootstapApiTest

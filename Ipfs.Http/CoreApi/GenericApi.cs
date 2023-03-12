@@ -1,13 +1,14 @@
-﻿using Ipfs.CoreApi;
-using Newtonsoft.Json.Linq;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
+using IpfsShipyard.Ipfs.Core;
+using IpfsShipyard.Ipfs.Core.CoreApi;
+using Newtonsoft.Json.Linq;
 
-namespace Ipfs.Http
+namespace IpfsShipyard.Ipfs.Http
 {
     public partial class IpfsClient : IGenericApi
     {

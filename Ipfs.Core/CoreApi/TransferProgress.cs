@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
-namespace Ipfs.CoreApi
+namespace IpfsShipyard.Ipfs.Core.CoreApi
 {
     /// <summary>
     ///   Reports the <see cref="IProgress{T}">progress</see> of

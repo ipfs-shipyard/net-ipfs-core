@@ -1,11 +1,10 @@
-using Ipfs.Registry;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
+using IpfsShipyard.Ipfs.Core.Registry;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace Ipfs
+namespace IpfsShipyard.Ipfs.Core.Tests
 {
     [TestClass]
     public class MultiBaseTest

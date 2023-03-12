@@ -1,9 +1,8 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
+﻿using System;
 using System.IO;
-using System.Linq;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace Ipfs.Http
+namespace IpfsShipyard.Ipfs.Http
 {
     [TestClass]
     public partial class PublishedMessageTest

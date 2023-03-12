@@ -1,8 +1,7 @@
-﻿using System.Linq;
-using System.Text;
+﻿using System.Text;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace Ipfs
+namespace IpfsShipyard.Ipfs.Core.Tests
 {
     [TestClass]
     public class Base32EncodeTests

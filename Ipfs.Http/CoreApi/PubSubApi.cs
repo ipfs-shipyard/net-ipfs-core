@@ -1,21 +1,22 @@
-﻿using Ipfs.CoreApi;
-using Newtonsoft.Json.Linq;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using IpfsShipyard.Ipfs.Core;
+using IpfsShipyard.Ipfs.Core.CoreApi;
 using Multiformats.Base;
+using Newtonsoft.Json.Linq;
 
-namespace Ipfs.Http
+namespace IpfsShipyard.Ipfs.Http.CoreApi
 {
     class PubSubApi : IPubSubApi
     {
-        private IpfsClient ipfs;
+        private Http.IpfsClient ipfs;
 
-        internal PubSubApi(IpfsClient ipfs)
+        internal PubSubApi(Http.IpfsClient ipfs)
         {
             this.ipfs = ipfs;
         }

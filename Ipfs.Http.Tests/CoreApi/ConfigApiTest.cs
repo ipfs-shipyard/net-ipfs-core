@@ -1,9 +1,9 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Newtonsoft.Json.Linq;
-using System;
+﻿using System;
 using System.Threading.Tasks;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Newtonsoft.Json.Linq;
 
-namespace Ipfs.Http
+namespace IpfsShipyard.Ipfs.Http.CoreApi
 {
     [TestClass]
     public class ConfigApiTest

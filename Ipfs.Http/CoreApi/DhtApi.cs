@@ -1,18 +1,19 @@
-﻿using Ipfs.CoreApi;
-using Newtonsoft.Json.Linq;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
+using IpfsShipyard.Ipfs.Core;
+using IpfsShipyard.Ipfs.Core.CoreApi;
+using Newtonsoft.Json.Linq;
 
-namespace Ipfs.Http
+namespace IpfsShipyard.Ipfs.Http.CoreApi
 {
     class DhtApi : IDhtApi
     {
-        private IpfsClient ipfs;
+        private Http.IpfsClient ipfs;
 
-        internal DhtApi(IpfsClient ipfs)
+        internal DhtApi(Http.IpfsClient ipfs)
         {
             this.ipfs = ipfs;
         }

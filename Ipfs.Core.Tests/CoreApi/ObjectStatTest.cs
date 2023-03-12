@@ -1,9 +1,7 @@
-﻿using System;
-using System.Linq;
-using System.Text;
+﻿using IpfsShipyard.Ipfs.Core.CoreApi;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace Ipfs.CoreApi
+namespace IpfsShipyard.Ipfs.Core.Tests.CoreApi
 {
     [TestClass]
     public class ObjectStatTest

@@ -1,4 +1,4 @@
-﻿namespace Ipfs.Http
+﻿namespace IpfsShipyard.Ipfs.Http
 {
     public static class TestFixture
     {

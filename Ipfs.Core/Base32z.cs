@@ -1,9 +1,6 @@
 ﻿using SimpleBase;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
-namespace Ipfs
+namespace IpfsShipyard.Ipfs.Core
 {
     /// <summary>
     ///   Base32 encoding designed to be easier for human use and more compact.

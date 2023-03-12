@@ -1,15 +1,15 @@
-﻿using Ipfs.CoreApi;
-using Newtonsoft.Json.Linq;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
+using IpfsShipyard.Ipfs.Core.CoreApi;
+using Newtonsoft.Json.Linq;
 
-namespace Ipfs.Http
+namespace IpfsShipyard.Ipfs.Http.CoreApi
 {
     class BlockRepositoryApi : IBlockRepositoryApi
     {
-        IpfsClient ipfs;
+        Http.IpfsClient ipfs;
 
-        internal BlockRepositoryApi(IpfsClient ipfs)
+        internal BlockRepositoryApi(Http.IpfsClient ipfs)
         {
             this.ipfs = ipfs;
         }

@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Security.Cryptography;
-using System.Text;
 
-namespace Ipfs.Cryptography
+namespace IpfsShipyard.Ipfs.Core.Cryptography
 {
     class DoubleSha256 : HashAlgorithm
     {

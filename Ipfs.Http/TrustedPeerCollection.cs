@@ -3,8 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
+using IpfsShipyard.Ipfs.Core;
 
-namespace Ipfs.Http
+namespace IpfsShipyard.Ipfs.Http
 {
     /// <summary>
     ///   A list of trusted peers.

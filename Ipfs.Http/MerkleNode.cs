@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Serialization;
+using IpfsShipyard.Ipfs.Core;
+using IpfsShipyard.Ipfs.Http.CoreApi;
 
-namespace Ipfs.Http
+namespace IpfsShipyard.Ipfs.Http
 {
     /// <summary>
     ///   The IPFS <see href="https://github.com/ipfs/specs/tree/master/merkledag">MerkleDag</see> is the datastructure at the heart of IPFS. It is an acyclic directed graph whose edges are hashes.

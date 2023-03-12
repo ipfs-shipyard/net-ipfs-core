@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
-using Ipfs.Cryptography;
 using System.Security.Cryptography;
+using IpfsShipyard.Ipfs.Core.Cryptography;
 using BC = Org.BouncyCastle.Crypto.Digests;
 
 
-namespace Ipfs.Registry
+namespace IpfsShipyard.Ipfs.Core.Registry
 {
     /// <summary>
     ///   Metadata and implemetations of a IPFS hashing algorithms.

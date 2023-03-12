@@ -1,22 +1,23 @@
-﻿using Ipfs.CoreApi;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using IpfsShipyard.Ipfs.Core;
+using IpfsShipyard.Ipfs.Core.CoreApi;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
-namespace Ipfs.Http
+namespace IpfsShipyard.Ipfs.Http.CoreApi
 {
     class FileSystemApi : IFileSystemApi
     {
-        private IpfsClient ipfs;
+        private Http.IpfsClient ipfs;
         private Lazy<DagNode> emptyFolder;
 
-        internal FileSystemApi(IpfsClient ipfs)
+        internal FileSystemApi(Http.IpfsClient ipfs)
         {
             this.ipfs = ipfs;
             this.emptyFolder = new Lazy<DagNode>(() => ipfs.Object.NewDirectoryAsync().Result);

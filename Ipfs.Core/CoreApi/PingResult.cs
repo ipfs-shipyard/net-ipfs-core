@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
-namespace Ipfs.CoreApi
+namespace IpfsShipyard.Ipfs.Core.CoreApi
 {
     /// <summary>
     ///   The result from sending a <see cref="IGenericApi.PingAsync(MultiHash, int, System.Threading.CancellationToken)"/>.

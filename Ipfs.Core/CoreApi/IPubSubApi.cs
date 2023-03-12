@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Ipfs.CoreApi
+namespace IpfsShipyard.Ipfs.Core.CoreApi
 {
     /// <summary>
     ///   Allows you to publish messages to a given topic, and also to

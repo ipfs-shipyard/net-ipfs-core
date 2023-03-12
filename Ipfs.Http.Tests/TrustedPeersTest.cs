@@ -1,7 +1,8 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System.Linq;
+﻿using System.Linq;
+using IpfsShipyard.Ipfs.Core;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace Ipfs.Http
+namespace IpfsShipyard.Ipfs.Http
 {
     public partial class IpfsClientTest
     {

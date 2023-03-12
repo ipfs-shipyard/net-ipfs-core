@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Ipfs
+﻿namespace IpfsShipyard.Ipfs.Core
 {
     /// <summary>
     ///   Content that has an associated name.

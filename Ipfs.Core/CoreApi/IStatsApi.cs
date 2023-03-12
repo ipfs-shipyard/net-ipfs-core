@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
 
-namespace Ipfs.CoreApi
+namespace IpfsShipyard.Ipfs.Core.CoreApi
 {
     /// <summary>
     ///   Get statistics/diagnostics for the various core components.

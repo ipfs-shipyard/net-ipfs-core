@@ -3,7 +3,7 @@
 
 using System;
 
-namespace Ipfs.Cryptography
+namespace IpfsShipyard.Ipfs.Core.Cryptography
 {
     internal partial class KeccakManaged : Keccak
     {

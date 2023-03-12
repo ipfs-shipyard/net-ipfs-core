@@ -1,15 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.Globalization;
 using System.IO;
 using System.Net;
 using System.Net.Sockets;
 using Google.Protobuf;
-using System.Globalization;
-using Org.BouncyCastle.Asn1.IsisMtt.Ocsp;
 
-namespace Ipfs
+namespace IpfsShipyard.Ipfs.Core
 {
     /// <summary>
     ///   Metadata on an IPFS network address protocol.

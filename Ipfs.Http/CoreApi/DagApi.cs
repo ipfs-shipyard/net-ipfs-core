@@ -1,19 +1,20 @@
-﻿using Ipfs.CoreApi;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using System.Globalization;
+﻿using System.Globalization;
 using System.IO;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using IpfsShipyard.Ipfs.Core;
+using IpfsShipyard.Ipfs.Core.CoreApi;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
-namespace Ipfs.Http
+namespace IpfsShipyard.Ipfs.Http.CoreApi
 {
     class DagApi : IDagApi
     {
-        private IpfsClient ipfs;
+        private Http.IpfsClient ipfs;
 
-        internal DagApi(IpfsClient ipfs)
+        internal DagApi(Http.IpfsClient ipfs)
         {
             this.ipfs = ipfs;
         }

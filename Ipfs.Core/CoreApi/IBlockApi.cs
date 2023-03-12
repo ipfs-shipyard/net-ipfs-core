@@ -1,9 +1,8 @@
-﻿
-using System.IO;
+﻿using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Ipfs.CoreApi
+namespace IpfsShipyard.Ipfs.Core.CoreApi
 {
 
     /// <summary>

@@ -1,14 +1,14 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.IO;
-using Google.Protobuf;
-using Newtonsoft.Json;
+using System.Linq;
 using System.Net;
 using System.Net.Sockets;
+using System.Text;
+using Google.Protobuf;
+using Newtonsoft.Json;
 
-namespace Ipfs
+namespace IpfsShipyard.Ipfs.Core
 {
     /// <summary>
     ///   A set of steps describing how to build up a connection.

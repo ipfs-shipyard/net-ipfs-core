@@ -6,7 +6,7 @@
 
     <IsPackable>false</IsPackable>
     <DebugType>portable</DebugType>
-    <RootNamespace>Ipfs</RootNamespace>
+    <RootNamespace>IpfsShipyard.Ipfs.Core.Tests</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
@@ -16,7 +16,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\src\IpfsCore.csproj" />
+    <ProjectReference Include="..\Ipfs.Core\Ipfs.Core.csproj" />
   </ItemGroup>
+
 
 </Project>

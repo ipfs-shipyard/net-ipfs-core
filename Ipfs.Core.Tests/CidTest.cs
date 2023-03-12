@@ -1,13 +1,12 @@
 ﻿using System;
-using System.Text;
 using System.Collections.Generic;
-using System.Linq;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.IO;
+using System.Text;
 using Google.Protobuf;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Newtonsoft.Json;
 
-namespace Ipfs
+namespace IpfsShipyard.Ipfs.Core.Tests
 {
     [TestClass]
     public class CidTest

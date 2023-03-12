@@ -1,6 +1,4 @@
-﻿using Ipfs.CoreApi;
-using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Net;
@@ -10,8 +8,13 @@ using System.Reflection;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using IpfsShipyard.Ipfs.Core;
+using IpfsShipyard.Ipfs.Core.CoreApi;
+using IpfsShipyard.Ipfs.Http.CoreApi;
+using Newtonsoft.Json;
 
-namespace Ipfs.Http
+// ReSharper disable once CheckNamespace
+namespace IpfsShipyard.Ipfs.Http
 {
     /// <summary>
     ///   A client that allows access to the InterPlanetary File System (IPFS).

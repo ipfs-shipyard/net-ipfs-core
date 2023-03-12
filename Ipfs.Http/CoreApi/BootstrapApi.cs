@@ -1,17 +1,18 @@
-﻿using Ipfs.CoreApi;
-using Newtonsoft.Json.Linq;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using IpfsShipyard.Ipfs.Core;
+using IpfsShipyard.Ipfs.Core.CoreApi;
+using Newtonsoft.Json.Linq;
 
-namespace Ipfs.Http
+namespace IpfsShipyard.Ipfs.Http.CoreApi
 {
     class BootstrapApi : IBootstrapApi
     {
-        IpfsClient ipfs;
+        Http.IpfsClient ipfs;
 
-        internal BootstrapApi(IpfsClient ipfs)
+        internal BootstrapApi(Http.IpfsClient ipfs)
         {
             this.ipfs = ipfs;
         }

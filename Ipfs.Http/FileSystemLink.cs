@@ -1,4 +1,6 @@
-﻿namespace Ipfs.Http
+﻿using IpfsShipyard.Ipfs.Core;
+
+namespace IpfsShipyard.Ipfs.Http
 {
     /// <summary>
     ///     A link to another file system node in IPFS.

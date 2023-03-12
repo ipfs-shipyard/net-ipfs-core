@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFrameworks>netstandard2.0</TargetFrameworks>
     <AssemblyName>IpfsShipyard.Ipfs.Http.Client</AssemblyName>
-    <RootNamespace>Ipfs.Http</RootNamespace>
+    <RootNamespace>IpfsShipyard.Ipfs.Http</RootNamespace>
     <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>
     <DebugType>full</DebugType>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
@@ -46,10 +46,13 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="IpfsShipyard.Ipfs.Core" Version="0.0.4" />
     <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
     <PackageReference Include="Multiformats.Base" Version="2.0.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Ipfs.Core\Ipfs.Core.csproj" />
   </ItemGroup>
 
 </Project>

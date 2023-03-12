@@ -1,11 +1,9 @@
 ﻿using System;
-using System.Text;
-using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System.IO;
 
-namespace Ipfs
+namespace IpfsShipyard.Ipfs.Core.Tests
 {
     [TestClass]
     public class HexStringTest

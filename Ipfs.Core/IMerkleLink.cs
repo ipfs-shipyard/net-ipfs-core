@@ -1,5 +1,5 @@
 ﻿
-namespace Ipfs
+namespace IpfsShipyard.Ipfs.Core
 {
 
     /// <summary>

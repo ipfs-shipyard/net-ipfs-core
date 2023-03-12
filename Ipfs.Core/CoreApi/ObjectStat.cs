@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Ipfs.CoreApi
+﻿namespace IpfsShipyard.Ipfs.Core.CoreApi
 {
     /// <summary>
     ///   Information on a DAG node.

@@ -1,17 +1,18 @@
-﻿using Ipfs.CoreApi;
-using Newtonsoft.Json.Linq;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using IpfsShipyard.Ipfs.Core;
+using IpfsShipyard.Ipfs.Core.CoreApi;
+using Newtonsoft.Json.Linq;
 
-namespace Ipfs.Http
+namespace IpfsShipyard.Ipfs.Http.CoreApi
 {
 
     class StatApi : IStatsApi
     {
-        private IpfsClient ipfs;
+        private Http.IpfsClient ipfs;
 
-        internal StatApi(IpfsClient ipfs)
+        internal StatApi(Http.IpfsClient ipfs)
         {
             this.ipfs = ipfs;
         }

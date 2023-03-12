@@ -1,7 +1,8 @@
 ﻿using System.IO;
 using System.Runtime.Serialization;
+using IpfsShipyard.Ipfs.Core;
 
-namespace Ipfs.Http
+namespace IpfsShipyard.Ipfs.Http
 {
     /// <inheritdoc />
     [DataContract]

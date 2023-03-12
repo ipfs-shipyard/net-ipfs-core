@@ -1,13 +1,8 @@
-﻿using Ipfs;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.IO;
+﻿using System.IO;
 using Google.Protobuf;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace Ipfs
+namespace IpfsShipyard.Ipfs.Core.Tests
 {
     [TestClass]
     public class DagLinkTest

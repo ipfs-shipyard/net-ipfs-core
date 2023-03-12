@@ -1,8 +1,8 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
+﻿using System;
 using System.Linq;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace Ipfs.Http
+namespace IpfsShipyard.Ipfs.Http
 {
     /// <summary>
     ///   Asserting an <see cref="Exception"/>.

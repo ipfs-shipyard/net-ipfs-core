@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 
-namespace Ipfs.Registry
+namespace IpfsShipyard.Ipfs.Core.Registry
 {
     /// <summary>
     ///   Metadata for IPFS multi-codec.
