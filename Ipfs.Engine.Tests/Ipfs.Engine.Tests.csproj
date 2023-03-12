@@ -21,10 +21,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\src\Ipfs.Engine.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
     <None Update="starx2.mp4">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
