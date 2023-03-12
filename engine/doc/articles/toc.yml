@@ -1,0 +1,70 @@
+- name: Introduction
+  href: intro.md
+  items:
+    - name: Getting Started
+      href: intro-start.md
+    - name: Accessing IPFS
+      href: intro-ipfs.md
+    - name: Questions
+      href: questions.md
+    - name: IPFS command line
+      href: csipfs.md
+- name: Features
+  href: core-api.md
+- name: File System
+  href: filesystem.md
+  items:
+    - name: CID only
+      href: fs/cid-only.md
+    - name: Encryption
+      href: fs/encryption.md
+    - name: Raw Leaves
+      href: fs/raw.md
+    - name: Wrapping
+      href: fs/wrap.md
+    - name: Format
+      href: fs/format.md
+- name: Message System
+  href: pubsub.md
+  items:
+    - name: Encrypting
+      href: pubsub/encrypt.md
+    - name: Signing
+      href: pubsub/sign.md
+    - name: Duplicate Message
+      href: pubsub/dupmsg.md
+- name: Repository
+  href: repository.md
+  items:
+    - name: Blocks
+      href: repo/block.md
+    - name: Configuration
+      href: repo/config.md
+    - name: Keys
+      href: repo/key.md
+    - name: Pins
+      href: repo/pin.md
+    - name: Garbage Collection
+      href: repo/gc.md
+- name: Peer
+  href: peer.md
+  items:
+    - name: Bootstrap
+      href: bootstrap.md
+    - name: Local
+      href: local-peer.md
+- name: Peer Discovery
+  href: disco.md
+- name: Private Network 
+  href: pnet.md
+- name: Asymmetric key 
+  href: key.md
+- name: Asynchronous I/O
+  href: async.md
+  items:
+    - name: Cancellation
+      href: cancellation.md
+- name: Environment variables
+  href: envvars.md
+- name: Class Reference
+  href: ../api/Ipfs.Engine.yml
