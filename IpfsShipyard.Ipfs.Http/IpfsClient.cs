@@ -192,9 +192,9 @@ public partial class IpfsClient : ICoreApi
             }
             else
             {
-                q.Append(option.Substring(0, i));
+                q.Append(option[..i]);
                 q.Append('=');
-                q.Append(WebUtility.UrlEncode(option.Substring(i + 1)));
+                q.Append(WebUtility.UrlEncode(option[(i + 1)..]));
             }
         }
 

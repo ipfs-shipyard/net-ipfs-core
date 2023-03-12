@@ -53,7 +53,7 @@ public class MerkleNode : IMerkleNode<IMerkleLink>, IEquatable<MerkleNode>
             throw new ArgumentNullException("path");
 
         if (path.StartsWith("/ipfs/"))
-            path = path.Substring(6);
+            path = path[6..];
 
         Id = Cid.Decode(path);
         Name = name;
