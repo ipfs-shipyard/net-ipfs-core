@@ -6,10 +6,13 @@
 // This was copied and pasted from
 // https://searchcode.com/file/115739853/mcs/class/Facades/System.Net.Sockets/SocketTaskExtensions.cs
 
+using System;
 using System.Collections.Generic;
+using System.Net;
+using System.Net.Sockets;
 using System.Threading.Tasks;
 
-namespace System.Net.Sockets
+namespace PeerTalk.Transports
 {
     internal static class SocketTaskExtensions
     {
