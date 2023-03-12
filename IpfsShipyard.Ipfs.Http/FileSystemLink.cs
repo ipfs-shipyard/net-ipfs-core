@@ -1,19 +1,18 @@
 ﻿using IpfsShipyard.Ipfs.Core;
 
-namespace IpfsShipyard.Ipfs.Http
+namespace IpfsShipyard.Ipfs.Http;
+
+/// <summary>
+///     A link to another file system node in IPFS.
+/// </summary>
+public class FileSystemLink : IFileSystemLink
 {
-    /// <summary>
-    ///     A link to another file system node in IPFS.
-    /// </summary>
-    public class FileSystemLink : IFileSystemLink
-    {
-        /// <inheritdoc />
-        public string Name { get; set; }
+    /// <inheritdoc />
+    public string Name { get; set; }
 
-        /// <inheritdoc />
-        public Cid Id { get; set; }
+    /// <inheritdoc />
+    public Cid Id { get; set; }
 
-        /// <inheritdoc />
-        public long Size { get; set; }
-    }
+    /// <inheritdoc />
+    public long Size { get; set; }
 }

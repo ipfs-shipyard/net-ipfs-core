@@ -2,49 +2,47 @@
 using System.Runtime.Serialization;
 using IpfsShipyard.Ipfs.Core;
 
-namespace IpfsShipyard.Ipfs.Http
+namespace IpfsShipyard.Ipfs.Http;
+
+/// <inheritdoc />
+[DataContract]
+public class Block : IDataBlock
 {
+    long? _size;
+
     /// <inheritdoc />
-    [DataContract]
-    public class Block : IDataBlock
+    [DataMember]
+    public Cid Id { get; set; }
+
+    /// <inheritdoc />
+    [DataMember]
+    public byte[] DataBytes { get; set; }
+
+    /// <inheritdoc />
+    public Stream DataStream
     {
-        long? _size;
-
-        /// <inheritdoc />
-        [DataMember]
-        public Cid Id { get; set; }
-
-        /// <inheritdoc />
-        [DataMember]
-        public byte[] DataBytes { get; set; }
-
-        /// <inheritdoc />
-        public Stream DataStream
+        get
         {
-            get
-            {
-                return new MemoryStream(DataBytes, false);
-            }
+            return new MemoryStream(DataBytes, false);
         }
+    }
 
-        /// <inheritdoc />
-        [DataMember]
-        public long Size
+    /// <inheritdoc />
+    [DataMember]
+    public long Size
+    {
+        get
         {
-            get
+            if (_size.HasValue)
             {
-                if (_size.HasValue)
-                {
-                    return _size.Value;
-                }
-                return DataBytes.Length;
+                return _size.Value;
             }
-            set
-            {
-                _size = value;
-            }
+            return DataBytes.Length;
         }
-
+        set
+        {
+            _size = value;
+        }
     }
 
 }

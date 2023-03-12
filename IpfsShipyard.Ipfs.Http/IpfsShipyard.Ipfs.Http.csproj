@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.0</TargetFrameworks>
+    <TargetFrameworks>net7.0</TargetFrameworks>
     <AssemblyName>IpfsShipyard.Ipfs.Http</AssemblyName>
     <RootNamespace>IpfsShipyard.Ipfs.Http</RootNamespace>
     <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>

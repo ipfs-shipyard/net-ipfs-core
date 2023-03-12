@@ -7,78 +7,77 @@ using IpfsShipyard.Ipfs.Core;
 using IpfsShipyard.Ipfs.Core.CoreApi;
 using Newtonsoft.Json.Linq;
 
-namespace IpfsShipyard.Ipfs.Http.CoreApi
+namespace IpfsShipyard.Ipfs.Http.CoreApi;
+
+class DhtApi : IDhtApi
 {
-    class DhtApi : IDhtApi
+    private IpfsClient _ipfs;
+
+    internal DhtApi(IpfsClient ipfs)
     {
-        private IpfsClient _ipfs;
+        _ipfs = ipfs;
+    }
 
-        internal DhtApi(IpfsClient ipfs)
-        {
-            _ipfs = ipfs;
-        }
+    public Task<Peer> FindPeerAsync(MultiHash id, CancellationToken cancel = default(CancellationToken))
+    {
+        return _ipfs.IdAsync(id, cancel);
+    }
 
-        public Task<Peer> FindPeerAsync(MultiHash id, CancellationToken cancel = default(CancellationToken))
-        {
-            return _ipfs.IdAsync(id, cancel);
-        }
+    public async Task<IEnumerable<Peer>> FindProvidersAsync(Cid id, int limit = 20, Action<Peer> providerFound = null, CancellationToken cancel = default(CancellationToken))
+    {
+        // TODO: providerFound action
+        var stream = await _ipfs.PostDownloadAsync("dht/findprovs", cancel, id, $"num-providers={limit}");
+        return ProviderFromStream(stream, limit);
+    }
 
-        public async Task<IEnumerable<Peer>> FindProvidersAsync(Cid id, int limit = 20, Action<Peer> providerFound = null, CancellationToken cancel = default(CancellationToken))
-        {
-            // TODO: providerFound action
-            var stream = await _ipfs.PostDownloadAsync("dht/findprovs", cancel, id, $"num-providers={limit}");
-            return ProviderFromStream(stream, limit);
-        }
+    public Task<byte[]> GetAsync(byte[] key, CancellationToken cancel = default(CancellationToken))
+    {
+        throw new NotImplementedException();
+    }
 
-        public Task<byte[]> GetAsync(byte[] key, CancellationToken cancel = default(CancellationToken))
-        {
-            throw new NotImplementedException();
-        }
+    public Task ProvideAsync(Cid cid, bool advertise = true, CancellationToken cancel = default(CancellationToken))
+    {
+        throw new NotImplementedException();
+    }
 
-        public Task ProvideAsync(Cid cid, bool advertise = true, CancellationToken cancel = default(CancellationToken))
-        {
-            throw new NotImplementedException();
-        }
+    public Task PutAsync(byte[] key, out byte[] value, CancellationToken cancel = default(CancellationToken))
+    {
+        throw new NotImplementedException();
+    }
 
-        public Task PutAsync(byte[] key, out byte[] value, CancellationToken cancel = default(CancellationToken))
-        {
-            throw new NotImplementedException();
-        }
+    public Task<bool> TryGetAsync(byte[] key, out byte[] value, CancellationToken cancel = default(CancellationToken))
+    {
+        throw new NotImplementedException();
+    }
 
-        public Task<bool> TryGetAsync(byte[] key, out byte[] value, CancellationToken cancel = default(CancellationToken))
+    IEnumerable<Peer> ProviderFromStream(Stream stream, int limit = int.MaxValue)
+    {
+        using (var sr = new StreamReader(stream))
         {
-            throw new NotImplementedException();
-        }
-
-        IEnumerable<Peer> ProviderFromStream(Stream stream, int limit = int.MaxValue)
-        {
-            using (var sr = new StreamReader(stream))
+            var n = 0;
+            while (!sr.EndOfStream && n < limit)
             {
-                var n = 0;
-                while (!sr.EndOfStream && n < limit)
-                {
-                    var json = sr.ReadLine();
+                var json = sr.ReadLine();
 
-                    var r = JObject.Parse(json);
-                    var id = (string)r["ID"];
-                    if (id != String.Empty)
+                var r = JObject.Parse(json);
+                var id = (string)r["ID"];
+                if (id != String.Empty)
+                {
+                    ++n;
+                    yield return new Peer { Id = new MultiHash(id) };
+                }
+                else
+                {
+                    var responses = (JArray)r["Responses"];
+                    if (responses != null)
                     {
-                        ++n;
-                        yield return new Peer { Id = new MultiHash(id) };
-                    }
-                    else
-                    {
-                        var responses = (JArray)r["Responses"];
-                        if (responses != null)
+                        foreach (var response in responses)
                         {
-                            foreach (var response in responses)
+                            var rid = (string)response["ID"];
+                            if (rid != String.Empty)
                             {
-                                var rid = (string)response["ID"];
-                                if (rid != String.Empty)
-                                {
-                                    ++n;
-                                    yield return new Peer { Id = new MultiHash(rid) };
-                                }
+                                ++n;
+                                yield return new Peer { Id = new MultiHash(rid) };
                             }
                         }
                     }
@@ -86,5 +85,4 @@ namespace IpfsShipyard.Ipfs.Http.CoreApi
             }
         }
     }
-
 }
