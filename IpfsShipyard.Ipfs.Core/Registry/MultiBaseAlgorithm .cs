@@ -153,13 +153,13 @@ public class MultiBaseAlgorithm
         if (string.IsNullOrWhiteSpace(name))
             throw new ArgumentNullException("name");
         if (Names.ContainsKey(name))
-            throw new ArgumentException(string.Format("The IPFS multi-base algorithm name '{0}' is already defined.", name));
+            throw new ArgumentException($"The IPFS multi-base algorithm name '{name}' is already defined.");
         if (Codes.ContainsKey(code))
-            throw new ArgumentException(string.Format("The IPFS multi-base algorithm code '{0}' is already defined.", code));
-        encode ??= _ => throw new NotImplementedException(string.Format("The IPFS encode multi-base algorithm '{0}' is not implemented.",
-            name));
-        decode ??= _ => throw new NotImplementedException(string.Format("The IPFS decode multi-base algorithm '{0}' is not implemented.",
-            name));
+            throw new ArgumentException($"The IPFS multi-base algorithm code '{code}' is already defined.");
+        encode ??= _ => throw new NotImplementedException(
+            $"The IPFS encode multi-base algorithm '{name}' is not implemented.");
+        decode ??= _ => throw new NotImplementedException(
+            $"The IPFS decode multi-base algorithm '{name}' is not implemented.");
 
         var a = new MultiBaseAlgorithm
         {

@@ -62,7 +62,7 @@ public partial class IpfsClient : ICoreApi
         var assembly = typeof(IpfsClient).GetTypeInfo().Assembly;
         var version = assembly.GetName().Version;
 
-        UserAgent = string.Format("{0}/{1}.{2}.{3}", assembly.GetName().Name, version.Major, version.Minor, version.Revision);
+        UserAgent = $"{assembly.GetName().Name}/{version.Major}.{version.Minor}.{version.Revision}";
         TrustedPeers = new(this);
 
         Bootstrap = new BootstrapApi(this);

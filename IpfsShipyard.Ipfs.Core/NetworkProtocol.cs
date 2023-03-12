@@ -66,9 +66,9 @@ public abstract class NetworkProtocol
         var protocol = new T();
 
         if (Names.ContainsKey(protocol.Name))
-            throw new ArgumentException(string.Format("The IPFS network protocol '{0}' is already defined.", protocol.Name));
+            throw new ArgumentException($"The IPFS network protocol '{protocol.Name}' is already defined.");
         if (Codes.ContainsKey(protocol.Code))
-            throw new ArgumentException(string.Format("The IPFS network protocol code ({0}) is already defined.", protocol.Code));
+            throw new ArgumentException($"The IPFS network protocol code ({protocol.Code}) is already defined.");
 
         Names.Add(protocol.Name, typeof(T));
         Codes.Add(protocol.Code, typeof(T));
@@ -85,9 +85,9 @@ public abstract class NetworkProtocol
         var protocol = new T();
 
         if (Names.ContainsKey(protocol.Name))
-            throw new ArgumentException(string.Format("The IPFS network protocol '{0}' is already defined.", protocol.Name));
+            throw new ArgumentException($"The IPFS network protocol '{protocol.Name}' is already defined.");
         if (!Codes.ContainsKey(protocol.Code))
-            throw new ArgumentException(string.Format("The IPFS network protocol code ({0}) is not defined.", protocol.Code));
+            throw new ArgumentException($"The IPFS network protocol code ({protocol.Code}) is not defined.");
 
         Names.Add(protocol.Name, typeof(T));
     }
@@ -201,7 +201,7 @@ internal class TcpNetworkProtocol : NetworkProtocol
         }
         catch (Exception e)
         {
-            throw new FormatException(string.Format("'{0}' is not a valid port number.", Value), e);
+            throw new FormatException($"'{Value}' is not a valid port number.", e);
         }
     }
     public override void ReadValue(CodedInputStream stream)
@@ -278,7 +278,7 @@ internal class Ipv4NetworkProtocol : IpNetworkProtocol
     {
         base.ReadValue(stream);
         if (Address.AddressFamily != AddressFamily.InterNetwork)
-            throw new FormatException(string.Format("'{0}' is not a valid IPv4 address.", Value));
+            throw new FormatException($"'{Value}' is not a valid IPv4 address.");
     }
     public override void ReadValue(CodedInputStream stream)
     {
@@ -300,7 +300,7 @@ internal class Ipv6NetworkProtocol : IpNetworkProtocol
     {
         base.ReadValue(stream);
         if (Address.AddressFamily != AddressFamily.InterNetworkV6)
-            throw new FormatException(string.Format("'{0}' is not a valid IPv6 address.", Value));
+            throw new FormatException($"'{Value}' is not a valid IPv6 address.");
     }
     public override void ReadValue(CodedInputStream stream)
     {
@@ -354,19 +354,19 @@ internal class OnionNetworkProtocol : NetworkProtocol
         base.ReadValue(stream);
         var parts = Value.Split(':');
         if (parts.Length != 2)
-            throw new FormatException(string.Format("'{0}' is not a valid onion address, missing the port number.", Value));
+            throw new FormatException($"'{Value}' is not a valid onion address, missing the port number.");
         if (parts[0].Length != 16)
-            throw new FormatException(string.Format("'{0}' is not a valid onion address.", Value));
+            throw new FormatException($"'{Value}' is not a valid onion address.");
         try
         {
             Port = UInt16.Parse(parts[1]);
         }
         catch (Exception e)
         {
-            throw new FormatException(string.Format("'{0}' is not a valid onion address, invalid port number.", Value), e);
+            throw new FormatException($"'{Value}' is not a valid onion address, invalid port number.", e);
         }
         if (Port < 1)
-            throw new FormatException(string.Format("'{0}' is not a valid onion address, invalid port number.", Value));
+            throw new FormatException($"'{Value}' is not a valid onion address, invalid port number.");
         Address = parts[0].ToUpperInvariant().FromBase32();
     }
     public override void ReadValue(CodedInputStream stream)
@@ -554,7 +554,7 @@ internal class IpcidrNetworkProtocol : NetworkProtocol
         }
         catch (Exception e)
         {
-            throw new FormatException(string.Format("'{0}' is not a valid routing prefix.", Value), e);
+            throw new FormatException($"'{Value}' is not a valid routing prefix.", e);
         }
     }
     public override void ReadValue(CodedInputStream stream)

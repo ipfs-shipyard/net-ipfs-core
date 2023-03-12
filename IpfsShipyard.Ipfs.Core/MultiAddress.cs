@@ -312,7 +312,7 @@ public class MultiAddress : IEquatable<MultiAddress>
         {
             var code = (uint)stream.ReadInt64();
             if (!NetworkProtocol.Codes.TryGetValue(code, out var protocolType))
-                throw new InvalidDataException(string.Format("The IPFS network protocol code '{0}' is unknown.", code));
+                throw new InvalidDataException($"The IPFS network protocol code '{code}' is unknown.");
             var p = (NetworkProtocol)Activator.CreateInstance(protocolType);
             p.ReadValue(stream);
             Protocols.Add(p);

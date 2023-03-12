@@ -63,7 +63,7 @@ public static class HexString
                 hexStrings = UpperCaseHexStrings;
                 break;
             default:
-                throw new FormatException(string.Format("Invalid HexString format '{0}', only 'G', 'x' or 'X' are allowed.", format));
+                throw new FormatException($"Invalid HexString format '{format}', only 'G', 'x' or 'X' are allowed.");
         }
 
         var s = new StringBuilder(buffer.Length * 2);
@@ -112,7 +112,7 @@ public static class HexString
             var hex = s.Substring(i, 2);
             byte value;
             if (!HexBytes.TryGetValue(hex, out value))
-                throw new InvalidDataException(string.Format("'{0}' is not a valid hexadecimal byte.", hex));
+                throw new InvalidDataException($"'{hex}' is not a valid hexadecimal byte.");
             buffer[j] = value;
         }
 

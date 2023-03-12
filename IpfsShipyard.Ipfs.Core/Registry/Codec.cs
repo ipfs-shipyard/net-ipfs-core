@@ -113,9 +113,9 @@ public class Codec
         if (string.IsNullOrWhiteSpace(name))
             throw new ArgumentNullException("name");
         if (Names.ContainsKey(name))
-            throw new ArgumentException(string.Format("The IPFS codec name '{0}' is already defined.", name));
+            throw new ArgumentException($"The IPFS codec name '{name}' is already defined.");
         if (Codes.ContainsKey(code))
-            throw new ArgumentException(string.Format("The IPFS codec code '{0}' is already defined.", code));
+            throw new ArgumentException($"The IPFS codec code '{code}' is already defined.");
 
         var a = new Codec
         {

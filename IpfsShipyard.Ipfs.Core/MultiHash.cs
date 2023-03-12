@@ -105,12 +105,13 @@ public class MultiHash : IEquatable<MultiHash>
 
         if (!HashingAlgorithm.Names.TryGetValue(algorithmName, out var a))
         {
-            throw new ArgumentException(string.Format("The IPFS hashing algorithm '{0}' is unknown.", algorithmName));
+            throw new ArgumentException($"The IPFS hashing algorithm '{algorithmName}' is unknown.");
         }
         Algorithm = a;
 
         if (Algorithm.DigestSize != 0 && Algorithm.DigestSize != digest.Length)
-            throw new ArgumentException(string.Format("The digest size for '{0}' is {1} bytes, not {2}.", algorithmName, Algorithm.DigestSize, digest.Length));
+            throw new ArgumentException(
+                $"The digest size for '{algorithmName}' is {Algorithm.DigestSize} bytes, not {digest.Length}.");
         Digest = digest;
     }
 
@@ -329,7 +330,8 @@ public class MultiHash : IEquatable<MultiHash>
         }
         else if (Algorithm.DigestSize != 0 && digestSize != Algorithm.DigestSize)
         {
-            throw new InvalidDataException(string.Format("The digest size {0} is wrong for {1}; it should be {2}.", digestSize, Algorithm.Name, Algorithm.DigestSize));
+            throw new InvalidDataException(
+                $"The digest size {digestSize} is wrong for {Algorithm.Name}; it should be {Algorithm.DigestSize}.");
         }
 
         Digest = stream.ReadSomeBytes(digestSize);

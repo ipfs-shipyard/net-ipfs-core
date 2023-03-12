@@ -145,10 +145,10 @@ public class HashingAlgorithm
         if (string.IsNullOrWhiteSpace(name))
             throw new ArgumentNullException("name");
         if (Names.ContainsKey(name))
-            throw new ArgumentException(string.Format("The IPFS hashing algorithm '{0}' is already defined.", name));
+            throw new ArgumentException($"The IPFS hashing algorithm '{name}' is already defined.");
         if (Codes.ContainsKey(code))
-            throw new ArgumentException(string.Format("The IPFS hashing algorithm code 0x{0:x2} is already defined.", code));
-        hasher ??= () => throw new NotImplementedException(string.Format("The IPFS hashing algorithm '{0}' is not implemented.", name));
+            throw new ArgumentException($"The IPFS hashing algorithm code 0x{code:x2} is already defined.");
+        hasher ??= () => throw new NotImplementedException($"The IPFS hashing algorithm '{name}' is not implemented.");
 
         var a = new HashingAlgorithm
         {
@@ -180,11 +180,12 @@ public class HashingAlgorithm
         if (string.IsNullOrWhiteSpace(alias))
             throw new ArgumentNullException("alias");
         if (Names.ContainsKey(alias))
-            throw new ArgumentException(string.Format("The IPFS hashing algorithm '{0}' is already defined and cannot be used as an alias.", alias));
+            throw new ArgumentException(
+                $"The IPFS hashing algorithm '{alias}' is already defined and cannot be used as an alias.");
         if (string.IsNullOrWhiteSpace(name))
             throw new ArgumentNullException("name");
         if (!Names.TryGetValue(name, out var existing))
-            throw new ArgumentException(string.Format("The IPFS hashing algorithm '{0}' is not defined.", name));
+            throw new ArgumentException($"The IPFS hashing algorithm '{name}' is not defined.");
 
         var a = new HashingAlgorithm
         {
