@@ -60,26 +60,11 @@
 		<PackageReference Include="System.Threading.Tasks.Dataflow" Version="7.0.0" />
 		<PackageReference Include="Portable.BouncyCastle" Version="1.9.0" />
 		<PackageReference Include="IPNetwork2" Version="2.6.548" />
-	</ItemGroup>
-	<ItemGroup>
 		<PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1" PrivateAssets="All" />
 		<PackageReference Include="Microsoft.VisualStudio.Threading.Analyzers" Version="17.4.27" PrivateAssets="All" />
 	</ItemGroup>
-	<ItemGroup>
-	  <ProjectReference Include="..\Ipfs.Core\Ipfs.Core.csproj" />
-	</ItemGroup>
-
 
 	<ItemGroup>
-		<Reference Include="Makaretu.Dns">
-			<HintPath>..\..\net-dns\src\bin\Release\net7.0\Makaretu.Dns.dll</HintPath>
-		</Reference>
-		<Reference Include="Makaretu.Dns.Multicast">
-			<HintPath>..\..\net-mdns\src\bin\Release\net7.0\Makaretu.Dns.Multicast.dll</HintPath>
-		</Reference>
-		<Reference Include="Makaretu.KBucket">
-			<HintPath>..\..\k-bucket\src\bin\Release\net7.0\Makaretu.KBucket.dll</HintPath>
-		</Reference>
+	  <ProjectReference Include="..\IpfsShipyard.Ipfs.Core\IpfsShipyard.Ipfs.Core.csproj" />
 	</ItemGroup>
-
 </Project>

@@ -24,20 +24,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Ipfs.Core\Ipfs.Core.csproj" />
+    <ProjectReference Include="..\IpfsShipyard.Ipfs.Core\IpfsShipyard.Ipfs.Core.csproj" />
     <ProjectReference Include="..\PeerTalk\PeerTalk.csproj" />
   </ItemGroup>
-	
-	<ItemGroup>
-		<Reference Include="Makaretu.Dns">
-			<HintPath>..\..\net-dns\src\bin\Release\net7.0\Makaretu.Dns.dll</HintPath>
-		</Reference>
-		<Reference Include="Makaretu.Dns.Multicast">
-			<HintPath>..\..\net-mdns\src\bin\Release\net7.0\Makaretu.Dns.Multicast.dll</HintPath>
-		</Reference>
-		<Reference Include="Makaretu.KBucket">
-			<HintPath>..\..\k-bucket\src\bin\Release\net7.0\Makaretu.KBucket.dll</HintPath>
-		</Reference>
-	</ItemGroup>
-
 </Project>
