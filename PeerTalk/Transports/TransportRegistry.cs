@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace PeerTalk.Transports
+namespace IpfsShipyard.PeerTalk.Transports
 {
     static class TransportRegistry
     {

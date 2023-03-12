@@ -10,8 +10,8 @@ using ICSharpCode.SharpZipLib.Tar;
 using IpfsShipyard.Ipfs.Core;
 using IpfsShipyard.Ipfs.Core.CoreApi;
 using IpfsShipyard.Ipfs.Engine.UnixFileSystem;
+using IpfsShipyard.PeerTalk.Cryptography;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using PeerTalk.Cryptography;
 
 namespace IpfsShipyard.Ipfs.Engine.Tests.CoreApi;
 

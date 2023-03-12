@@ -1,10 +1,10 @@
 ﻿using System.IO;
 using System.Threading.Tasks;
+using IpfsShipyard.PeerTalk.Cryptography;
+using IpfsShipyard.PeerTalk.SecureCommunication;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using PeerTalk.Cryptography;
-using PeerTalk.SecureCommunication;
 
-namespace PeerTalk.Tests.SecureCommunication
+namespace IpfsShipyard.PeerTalk.Tests.SecureCommunication
 {
     [TestClass]
     public class Psk1ProtectorTest

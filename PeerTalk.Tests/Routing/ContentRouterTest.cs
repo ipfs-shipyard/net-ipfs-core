@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Linq;
 using IpfsShipyard.Ipfs.Core;
+using IpfsShipyard.PeerTalk.Routing;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using PeerTalk.Routing;
 
-namespace PeerTalk.Tests.Routing
+namespace IpfsShipyard.PeerTalk.Tests.Routing
 {
     
     [TestClass]

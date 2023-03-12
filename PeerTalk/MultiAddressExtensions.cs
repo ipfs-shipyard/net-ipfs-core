@@ -6,7 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using IpfsShipyard.Ipfs.Core;
 
-namespace PeerTalk
+namespace IpfsShipyard.PeerTalk
 {
     /// <summary>
     ///   Extensions to <see cref="MultiAddress"/>.

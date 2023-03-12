@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using IpfsShipyard.PeerTalk.Protocols;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using PeerTalk.Protocols;
 
-namespace PeerTalk.Tests.Protocols
+namespace IpfsShipyard.PeerTalk.Tests.Protocols
 {
     [TestClass]
     public class VersionedNameTest

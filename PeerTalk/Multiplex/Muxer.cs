@@ -10,7 +10,7 @@ using Common.Logging;
 using IpfsShipyard.Ipfs.Core;
 using Nito.AsyncEx;
 
-namespace PeerTalk.Multiplex
+namespace IpfsShipyard.PeerTalk.Multiplex
 {
     /// <summary>
     ///   Supports multiple protocols over a single channel (stream).

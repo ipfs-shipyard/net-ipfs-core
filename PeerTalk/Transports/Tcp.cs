@@ -9,14 +9,13 @@ using System.Threading;
 using System.Threading.Tasks;
 using Common.Logging;
 using IpfsShipyard.Ipfs.Core;
-
 #if !NET5_0_OR_GREATER
 
 using JuiceStream;
 
 #endif
 
-namespace PeerTalk.Transports
+namespace IpfsShipyard.PeerTalk.Transports
 {
     /// <summary>
     ///   Establishes a duplex stream between two peers

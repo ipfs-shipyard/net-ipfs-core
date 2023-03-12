@@ -1,9 +1,9 @@
 ﻿using System.IO;
 using System.Threading.Tasks;
+using IpfsShipyard.PeerTalk.Protocols;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using PeerTalk.Protocols;
 
-namespace PeerTalk.Tests.Protocols
+namespace IpfsShipyard.PeerTalk.Tests.Protocols
 {
     [TestClass]
     public class MessageTest

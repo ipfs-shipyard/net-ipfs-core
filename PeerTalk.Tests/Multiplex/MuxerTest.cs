@@ -5,10 +5,10 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using IpfsShipyard.Ipfs.Core;
+using IpfsShipyard.PeerTalk.Multiplex;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using PeerTalk.Multiplex;
 
-namespace PeerTalk.Tests.Multiplex
+namespace IpfsShipyard.PeerTalk.Tests.Multiplex
 {
     [TestClass]
     public class MuxerTest

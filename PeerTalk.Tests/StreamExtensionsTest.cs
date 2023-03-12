@@ -3,7 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace PeerTalk.Tests
+namespace IpfsShipyard.PeerTalk.Tests
 {
     [TestClass]
     public class StreamExtensionsTest

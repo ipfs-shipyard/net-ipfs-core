@@ -5,7 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using IpfsShipyard.Ipfs.Core;
 
-namespace PeerTalk.PubSub
+namespace IpfsShipyard.PeerTalk.PubSub
 {
     /// <summary>
     ///   A message router that always raises <see cref="MessageReceived"/>

@@ -10,12 +10,12 @@ using System.Threading.Tasks;
 using Common.Logging;
 using IpfsShipyard.Ipfs.Core;
 using IpfsShipyard.Ipfs.Core.CoreApi;
+using IpfsShipyard.PeerTalk.Cryptography;
+using IpfsShipyard.PeerTalk.Protocols;
+using IpfsShipyard.PeerTalk.Transports;
 using Nito.AsyncEx;
-using PeerTalk.Cryptography;
-using PeerTalk.Protocols;
-using PeerTalk.Transports;
 
-namespace PeerTalk
+namespace IpfsShipyard.PeerTalk
 {
     /// <summary>
     ///   Manages communication with other peers.

@@ -1,11 +1,11 @@
-﻿using Org.BouncyCastle.Asn1.X9;
+﻿using System;
+using System.Collections.Generic;
+using Org.BouncyCastle.Asn1.X9;
 using Org.BouncyCastle.Crypto.Parameters;
 using Org.BouncyCastle.Security;
 using Org.BouncyCastle.Utilities;
-using System;
-using System.Collections.Generic;
 
-namespace PeerTalk.Cryptography
+namespace IpfsShipyard.PeerTalk.Cryptography
 {
     /// <summary>
     ///   A short term key on a curve.

@@ -1,4 +1,4 @@
-﻿namespace PeerTalk
+﻿namespace IpfsShipyard.PeerTalk
 {
     /// <summary>
     ///   A base for defining a policy.

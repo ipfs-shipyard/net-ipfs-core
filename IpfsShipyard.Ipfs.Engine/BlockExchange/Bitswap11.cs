@@ -6,7 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Common.Logging;
 using IpfsShipyard.Ipfs.Core;
-using PeerTalk;
+using IpfsShipyard.PeerTalk;
 using ProtoBuf;
 using Semver;
 

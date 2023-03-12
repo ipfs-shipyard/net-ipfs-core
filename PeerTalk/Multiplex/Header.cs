@@ -3,7 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using IpfsShipyard.Ipfs.Core;
 
-namespace PeerTalk.Multiplex
+namespace IpfsShipyard.PeerTalk.Multiplex
 {
     /// <summary>
     ///   The header of a multiplex message.

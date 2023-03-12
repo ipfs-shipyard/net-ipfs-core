@@ -1,17 +1,17 @@
-﻿using Common.Logging;
-using PeerTalk.Protocols;
-using ProtoBuf;
-using Semver;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Common.Logging;
 using IpfsShipyard.Ipfs.Core;
 using IpfsShipyard.Ipfs.Core.CoreApi;
+using IpfsShipyard.PeerTalk.Protocols;
+using ProtoBuf;
+using Semver;
 
-namespace PeerTalk.Routing
+namespace IpfsShipyard.PeerTalk.Routing
 {
     /// <summary>
     ///   DHT Protocol version 1.0

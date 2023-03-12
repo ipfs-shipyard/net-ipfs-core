@@ -4,7 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using IpfsShipyard.Ipfs.Core;
 
-namespace PeerTalk.Transports
+namespace IpfsShipyard.PeerTalk.Transports
 {
     /// <summary>
     ///   Establishes a duplex stream between two peers

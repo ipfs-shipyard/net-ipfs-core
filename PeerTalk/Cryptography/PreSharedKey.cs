@@ -8,7 +8,7 @@ using IpfsShipyard.Ipfs.Core.Registry;
 using Org.BouncyCastle.Crypto.Engines;
 using Org.BouncyCastle.Crypto.Parameters;
 
-namespace PeerTalk.Cryptography
+namespace IpfsShipyard.PeerTalk.Cryptography
 {
     /// <summary>
     ///   A secret (symmetric) key shared among some entities.

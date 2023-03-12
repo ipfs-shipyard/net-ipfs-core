@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using IpfsShipyard.Ipfs.Core;
 
-namespace PeerTalk.PubSub
+namespace IpfsShipyard.PeerTalk.PubSub
 {
     /// <summary>
     ///   Maintains the sequence of peer's that are interested in a topic.

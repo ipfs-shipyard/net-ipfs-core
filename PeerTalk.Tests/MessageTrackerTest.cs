@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace PeerTalk.Tests
+namespace IpfsShipyard.PeerTalk.Tests
 {
     [TestClass]
     public class MessageTrackerTest

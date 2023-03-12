@@ -1,10 +1,10 @@
-﻿using Org.BouncyCastle.Security;
-using Org.BouncyCastle.Crypto.Macs;
-using System;
+﻿using System;
 using System.Text;
+using Org.BouncyCastle.Crypto.Macs;
 using Org.BouncyCastle.Crypto.Parameters;
+using Org.BouncyCastle.Security;
 
-namespace PeerTalk.Cryptography
+namespace IpfsShipyard.PeerTalk.Cryptography
 {
     /// <summary>
     ///   Symmetric keys for SECIO.

@@ -4,7 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using IpfsShipyard.Ipfs.Core.CoreApi;
 
-namespace PeerTalk
+namespace IpfsShipyard.PeerTalk
 {
     /// <summary>
     ///   A simple wrapper around another stream that records statistics.

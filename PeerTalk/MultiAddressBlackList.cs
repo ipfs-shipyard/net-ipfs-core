@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using IpfsShipyard.Ipfs.Core;
 
-namespace PeerTalk
+namespace IpfsShipyard.PeerTalk
 {
     /// <summary>
     ///   A collection of filters that are not approved.

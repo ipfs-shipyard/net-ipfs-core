@@ -1,11 +1,11 @@
-﻿using Org.BouncyCastle.Crypto;
+﻿using System;
+using System.IO;
+using Org.BouncyCastle.Crypto;
 using Org.BouncyCastle.Crypto.Parameters;
 using Org.BouncyCastle.Security;
 using ProtoBuf;
-using System;
-using System.IO;
 
-namespace PeerTalk.Cryptography
+namespace IpfsShipyard.PeerTalk.Cryptography
 {
     /// <summary>
     ///   An asymmetric key.

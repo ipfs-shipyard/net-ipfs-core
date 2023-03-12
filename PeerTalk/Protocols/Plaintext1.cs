@@ -1,9 +1,9 @@
-﻿using Semver;
-using System.IO;
+﻿using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
+using Semver;
 
-namespace PeerTalk.Protocols
+namespace IpfsShipyard.PeerTalk.Protocols
 {
     /// <summary>
     ///   TODO

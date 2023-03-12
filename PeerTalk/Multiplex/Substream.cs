@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using System.Threading.Tasks.Dataflow;
 using IpfsShipyard.Ipfs.Core;
 
-namespace PeerTalk.Multiplex
+namespace IpfsShipyard.PeerTalk.Multiplex
 {
     /// <summary>
     ///   A duplex substream used by the <see cref="Muxer"/>.

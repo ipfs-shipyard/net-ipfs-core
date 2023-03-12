@@ -12,7 +12,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.Threading.Tasks;
 
-namespace PeerTalk.Transports
+namespace IpfsShipyard.PeerTalk.Transports
 {
     internal static class SocketTaskExtensions
     {

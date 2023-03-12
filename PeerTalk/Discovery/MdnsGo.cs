@@ -1,4 +1,4 @@
-﻿namespace PeerTalk.Discovery
+﻿namespace IpfsShipyard.PeerTalk.Discovery
 {
     /// <summary>
     ///   Discovers peers using Multicast DNS according to

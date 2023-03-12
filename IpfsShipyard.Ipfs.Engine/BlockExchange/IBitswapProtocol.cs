@@ -2,7 +2,7 @@
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
-using PeerTalk.Protocols;
+using IpfsShipyard.PeerTalk.Protocols;
 
 namespace IpfsShipyard.Ipfs.Engine.BlockExchange;
 

@@ -1,6 +1,6 @@
 ﻿using ProtoBuf;
 
-namespace PeerTalk.PubSub
+namespace IpfsShipyard.PeerTalk.PubSub
 {
     /// <summary>
     ///   The PubSub message exchanged between peers.

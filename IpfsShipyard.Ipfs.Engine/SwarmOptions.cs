@@ -1,4 +1,4 @@
-﻿using PeerTalk.Cryptography;
+﻿using IpfsShipyard.PeerTalk.Cryptography;
 
 namespace IpfsShipyard.Ipfs.Engine;
 

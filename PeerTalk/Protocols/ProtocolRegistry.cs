@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace PeerTalk.Protocols
+namespace IpfsShipyard.PeerTalk.Protocols
 {
     /// <summary>
     ///   Metadata on <see cref="IPeerProtocol"/>.

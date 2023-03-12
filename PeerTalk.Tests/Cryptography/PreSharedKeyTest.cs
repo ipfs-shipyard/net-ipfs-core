@@ -1,10 +1,10 @@
 ﻿using System;
 using System.IO;
 using IpfsShipyard.Ipfs.Core;
+using IpfsShipyard.PeerTalk.Cryptography;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using PeerTalk.Cryptography;
 
-namespace PeerTalk.Tests.Cryptography
+namespace IpfsShipyard.PeerTalk.Tests.Cryptography
 {
     [TestClass]
     public class PreSharedKeyTest

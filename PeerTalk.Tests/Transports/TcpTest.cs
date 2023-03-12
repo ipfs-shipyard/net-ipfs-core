@@ -6,10 +6,10 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using IpfsShipyard.Ipfs.Core;
+using IpfsShipyard.PeerTalk.Transports;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using PeerTalk.Transports;
 
-namespace PeerTalk.Tests.Transports
+namespace IpfsShipyard.PeerTalk.Tests.Transports
 {
     
     [TestClass]

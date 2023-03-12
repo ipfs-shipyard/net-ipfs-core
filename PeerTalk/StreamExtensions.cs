@@ -3,7 +3,7 @@ using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace PeerTalk
+namespace IpfsShipyard.PeerTalk
 {
     /// <summary>
     /// Stream Extensions

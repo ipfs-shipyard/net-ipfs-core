@@ -7,7 +7,7 @@ using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace PeerTalk
+namespace IpfsShipyard.PeerTalk
 {
     /// <summary>
     /// .NET already has its <c>BufferedStream</c>, but that one will throw unexpected exceptions, especially on <c>NetworkStreams</c>.

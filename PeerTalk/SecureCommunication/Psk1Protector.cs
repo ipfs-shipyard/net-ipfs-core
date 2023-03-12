@@ -1,9 +1,9 @@
-﻿using PeerTalk.Cryptography;
-using System.IO;
+﻿using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
+using IpfsShipyard.PeerTalk.Cryptography;
 
-namespace PeerTalk.SecureCommunication
+namespace IpfsShipyard.PeerTalk.SecureCommunication
 {
     /// <summary>
     ///   Provides access to a private network of peers that

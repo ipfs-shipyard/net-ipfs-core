@@ -17,7 +17,7 @@ message Exchange
 }
 */
 
-namespace PeerTalk.SecureCommunication
+namespace IpfsShipyard.PeerTalk.SecureCommunication
 {
     [ProtoContract]
     class Secio1Propose

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using IpfsShipyard.Ipfs.Core;
 
-namespace PeerTalk.Routing
+namespace IpfsShipyard.PeerTalk.Routing
 {
     /// <summary>
     ///   Manages a list of content that is provided by multiple peers.

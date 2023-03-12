@@ -1,8 +1,8 @@
-﻿using ProtoBuf;
-using System.Linq;
+﻿using System.Linq;
 using IpfsShipyard.Ipfs.Core;
+using ProtoBuf;
 
-namespace PeerTalk.Routing
+namespace IpfsShipyard.PeerTalk.Routing
 {
     // From https://github.com/libp2p/js-libp2p-kad-dht/blob/master/src/message/dht.proto.js\
     // and https://github.com/libp2p/go-libp2p-kad-dht/blob/master/pb/dht.proto

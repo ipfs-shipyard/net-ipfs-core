@@ -14,14 +14,14 @@ using IpfsShipyard.Ipfs.Engine.BlockExchange;
 using IpfsShipyard.Ipfs.Engine.CoreApi;
 using IpfsShipyard.Ipfs.Engine.Cryptography;
 using IpfsShipyard.Ipfs.Engine.Migration;
+using IpfsShipyard.PeerTalk;
+using IpfsShipyard.PeerTalk.Discovery;
+using IpfsShipyard.PeerTalk.Protocols;
+using IpfsShipyard.PeerTalk.PubSub;
+using IpfsShipyard.PeerTalk.Routing;
+using IpfsShipyard.PeerTalk.SecureCommunication;
 using Makaretu.Dns;
 using Nito.AsyncEx;
-using PeerTalk;
-using PeerTalk.Discovery;
-using PeerTalk.Protocols;
-using PeerTalk.PubSub;
-using PeerTalk.Routing;
-using PeerTalk.SecureCommunication;
 
 namespace IpfsShipyard.Ipfs.Engine;
 

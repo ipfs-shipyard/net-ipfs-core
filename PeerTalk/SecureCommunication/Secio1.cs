@@ -1,17 +1,17 @@
-﻿using Common.Logging;
-using Org.BouncyCastle.Security;
-using PeerTalk.Cryptography;
-using PeerTalk.Protocols;
-using ProtoBuf;
-using Semver;
-using System;
+﻿using System;
 using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Common.Logging;
 using IpfsShipyard.Ipfs.Core;
+using IpfsShipyard.PeerTalk.Cryptography;
+using IpfsShipyard.PeerTalk.Protocols;
+using Org.BouncyCastle.Security;
+using ProtoBuf;
+using Semver;
 
-namespace PeerTalk.SecureCommunication
+namespace IpfsShipyard.PeerTalk.SecureCommunication
 {
     /// <summary>
     ///   Creates a secure connection with a peer.

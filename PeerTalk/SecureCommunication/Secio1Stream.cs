@@ -1,16 +1,16 @@
-﻿using Org.BouncyCastle.Crypto;
-using Org.BouncyCastle.Crypto.Macs;
-using Org.BouncyCastle.Crypto.Parameters;
-using Org.BouncyCastle.Security;
-using PeerTalk.Cryptography;
-using System;
+﻿using System;
 using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using IpfsShipyard.PeerTalk.Cryptography;
+using Org.BouncyCastle.Crypto;
 using Org.BouncyCastle.Crypto.Engines;
+using Org.BouncyCastle.Crypto.Macs;
+using Org.BouncyCastle.Crypto.Parameters;
+using Org.BouncyCastle.Security;
 
-namespace PeerTalk.SecureCommunication
+namespace IpfsShipyard.PeerTalk.SecureCommunication
 {
     /// <summary>
     ///   A duplex stream that is encrypted and signed.

@@ -2,11 +2,11 @@
 using System.Threading;
 using System.Threading.Tasks;
 using IpfsShipyard.Ipfs.Core;
+using IpfsShipyard.PeerTalk.Discovery;
 using Makaretu.Dns;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using PeerTalk.Discovery;
 
-namespace PeerTalk.Tests.Discovery
+namespace IpfsShipyard.PeerTalk.Tests.Discovery
 {
 
     [TestClass]

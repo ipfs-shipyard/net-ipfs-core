@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace PeerTalk
+namespace IpfsShipyard.PeerTalk
 {
     /// <summary>
     ///   A service is async and can be started and stopped.

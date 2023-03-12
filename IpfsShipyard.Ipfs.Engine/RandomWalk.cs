@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using Common.Logging;
 using IpfsShipyard.Ipfs.Core;
 using IpfsShipyard.Ipfs.Core.CoreApi;
-using PeerTalk;
+using IpfsShipyard.PeerTalk;
 
 namespace IpfsShipyard.Ipfs.Engine;
 

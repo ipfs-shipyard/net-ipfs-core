@@ -3,10 +3,10 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using IpfsShipyard.Ipfs.Core;
+using IpfsShipyard.PeerTalk.Protocols;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using PeerTalk.Protocols;
 
-namespace PeerTalk.Tests.Protocols
+namespace IpfsShipyard.PeerTalk.Tests.Protocols
 {
     [TestClass]
     public class Identitfy1Test

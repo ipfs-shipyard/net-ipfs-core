@@ -1,7 +1,7 @@
 ﻿using System;
 using IpfsShipyard.Ipfs.Core;
 
-namespace PeerTalk.Discovery
+namespace IpfsShipyard.PeerTalk.Discovery
 {
     /// <summary>
     ///   Describes a service that finds a peer.

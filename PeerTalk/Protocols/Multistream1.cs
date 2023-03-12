@@ -1,11 +1,11 @@
-﻿using Common.Logging;
-using Semver;
-using System;
+﻿using System;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
+using Common.Logging;
+using Semver;
 
-namespace PeerTalk.Protocols
+namespace IpfsShipyard.PeerTalk.Protocols
 {
     /// <summary>
     ///   A protocol to select other protocols.

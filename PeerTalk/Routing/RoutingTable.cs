@@ -3,7 +3,7 @@ using System.Linq;
 using IpfsShipyard.Ipfs.Core;
 using Makaretu.Collections;
 
-namespace PeerTalk.Routing
+namespace IpfsShipyard.PeerTalk.Routing
 {
     internal class RoutingPeer : IContact
     {

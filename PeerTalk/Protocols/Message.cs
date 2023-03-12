@@ -1,11 +1,11 @@
-﻿using Common.Logging;
-using System.IO;
+﻿using System.IO;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Common.Logging;
 using IpfsShipyard.Ipfs.Core;
 
-namespace PeerTalk.Protocols
+namespace IpfsShipyard.PeerTalk.Protocols
 {
     /// <summary>
     ///   A message that is exchanged between peers.

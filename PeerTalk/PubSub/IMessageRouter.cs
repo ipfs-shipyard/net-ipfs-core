@@ -4,7 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using IpfsShipyard.Ipfs.Core;
 
-namespace PeerTalk.PubSub
+namespace IpfsShipyard.PeerTalk.PubSub
 {
     /// <summary>
     ///   Routes pub/sub messages to other peers.

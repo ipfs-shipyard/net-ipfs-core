@@ -2,8 +2,8 @@
 
 	<PropertyGroup>
 		<TargetFramework>net7.0</TargetFramework>
-		<AssemblyName>PeerTalk</AssemblyName>
-		<RootNamespace>PeerTalk</RootNamespace>
+		<AssemblyName>IpfsShipyard.PeerTalk</AssemblyName>
+		<RootNamespace>IpfsShipyard.PeerTalk</RootNamespace>
 		<DocumentationFile>bin\$(Configuration)\$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>
 		<DebugType>portable</DebugType>
 		<TreatWarningsAsErrors>true</TreatWarningsAsErrors>

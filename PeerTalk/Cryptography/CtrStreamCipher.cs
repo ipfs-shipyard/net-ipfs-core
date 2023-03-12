@@ -1,9 +1,9 @@
 ﻿using System;
-using Org.BouncyCastle.Crypto.Parameters;
 using Org.BouncyCastle.Crypto;
+using Org.BouncyCastle.Crypto.Parameters;
 using Org.BouncyCastle.Utilities;
 
-namespace PeerTalk.Cryptography
+namespace IpfsShipyard.PeerTalk.Cryptography
 {
     /// <summary>
     ///   The CTR cipher as a stream.

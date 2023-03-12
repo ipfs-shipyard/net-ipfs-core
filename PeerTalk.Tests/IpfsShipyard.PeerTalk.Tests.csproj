@@ -4,7 +4,7 @@
 	  <TargetFramework>net7.0</TargetFramework>
     <IsPackable>false</IsPackable>
     <DebugType>portable</DebugType>
-    <RootNamespace>PeerTalk.Tests</RootNamespace>
+    <RootNamespace>IpfsShipyard.PeerTalk.Tests</RootNamespace>
   </PropertyGroup>
   
   <PropertyGroup>
@@ -25,6 +25,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\IpfsShipyard.Ipfs.Core\IpfsShipyard.Ipfs.Core.csproj" />
-    <ProjectReference Include="..\PeerTalk\PeerTalk.csproj" />
+    <ProjectReference Include="..\PeerTalk\IpfsShipyard.PeerTalk.csproj" />
   </ItemGroup>
 </Project>

@@ -1,7 +1,7 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using PeerTalk.Cryptography;
+﻿using IpfsShipyard.PeerTalk.Cryptography;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace PeerTalk.Tests.Cryptography
+namespace IpfsShipyard.PeerTalk.Tests.Cryptography
 {
     [TestClass]
     public class EphermalKeyTest

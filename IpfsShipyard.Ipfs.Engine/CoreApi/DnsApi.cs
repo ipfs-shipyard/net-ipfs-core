@@ -3,8 +3,8 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using IpfsShipyard.Ipfs.Core.CoreApi;
+using IpfsShipyard.PeerTalk;
 using Makaretu.Dns;
-using PeerTalk;
 
 namespace IpfsShipyard.Ipfs.Engine.CoreApi;
 

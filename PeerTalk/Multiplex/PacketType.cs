@@ -1,4 +1,4 @@
-﻿namespace PeerTalk.Multiplex
+﻿namespace IpfsShipyard.PeerTalk.Multiplex
 {
     /// <summary>
     ///   The purpose of the multiplex message.

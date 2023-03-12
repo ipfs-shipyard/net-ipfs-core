@@ -5,7 +5,7 @@ using System.Linq;
 using Common.Logging;
 using IpfsShipyard.Ipfs.Core;
 
-namespace PeerTalk
+namespace IpfsShipyard.PeerTalk
 {
     /// <summary>
     ///   Manages the peer connections in a <see cref="Swarm"/>.

@@ -6,7 +6,7 @@ using Common.Logging;
 using IpfsShipyard.Ipfs.Core;
 using Makaretu.Dns;
 
-namespace PeerTalk.Discovery
+namespace IpfsShipyard.PeerTalk.Discovery
 {
     /// <summary>
     ///   Base class to discover peers using Multicast DNS.

@@ -1,17 +1,17 @@
-﻿using Common.Logging;
-using PeerTalk.Protocols;
-using ProtoBuf;
-using Semver;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Common.Logging;
 using IpfsShipyard.Ipfs.Core;
+using IpfsShipyard.PeerTalk.Protocols;
+using ProtoBuf;
+using Semver;
 
-namespace PeerTalk.PubSub
+namespace IpfsShipyard.PeerTalk.PubSub
 {
     /// <summary>
     ///   The original flood sub router.

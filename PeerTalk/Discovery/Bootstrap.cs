@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Common.Logging;
 using IpfsShipyard.Ipfs.Core;
 
-namespace PeerTalk.Discovery
+namespace IpfsShipyard.PeerTalk.Discovery
 {
     /// <summary>
     ///   Discovers the pre-configured peers.

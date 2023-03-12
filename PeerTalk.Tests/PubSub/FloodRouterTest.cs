@@ -3,10 +3,10 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using IpfsShipyard.Ipfs.Core;
+using IpfsShipyard.PeerTalk.PubSub;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using PeerTalk.PubSub;
 
-namespace PeerTalk.Tests.PubSub
+namespace IpfsShipyard.PeerTalk.Tests.PubSub
 {
     
     [TestClass]

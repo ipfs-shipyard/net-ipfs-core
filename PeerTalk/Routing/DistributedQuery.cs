@@ -1,14 +1,14 @@
-﻿using Common.Logging;
-using ProtoBuf;
-using System;
+﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Common.Logging;
 using IpfsShipyard.Ipfs.Core;
+using ProtoBuf;
 
-namespace PeerTalk.Routing
+namespace IpfsShipyard.PeerTalk.Routing
 {
     /// <summary>
     ///   A query that is sent to multiple peers.

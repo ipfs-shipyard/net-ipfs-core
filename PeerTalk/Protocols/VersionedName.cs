@@ -2,7 +2,7 @@
 using System.Linq;
 using Semver;
 
-namespace PeerTalk.Protocols
+namespace IpfsShipyard.PeerTalk.Protocols
 {
     /// <summary>
     ///   A name with a semantic version.

@@ -1,11 +1,11 @@
 ﻿using System.Text;
 using IpfsShipyard.Ipfs.Core;
+using IpfsShipyard.PeerTalk.Cryptography;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Org.BouncyCastle.Crypto.Engines;
 using Org.BouncyCastle.Crypto.Parameters;
-using PeerTalk.Cryptography;
 
-namespace PeerTalk.Tests.Cryptography
+namespace IpfsShipyard.PeerTalk.Tests.Cryptography
 {
     [TestClass]
     public class CtrStreamCipherTest

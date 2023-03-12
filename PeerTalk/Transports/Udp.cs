@@ -1,14 +1,14 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
+using System.Net;
+using System.Net.Sockets;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Net.Sockets;
 using Common.Logging;
-using System.Net;
 using IpfsShipyard.Ipfs.Core;
 
-namespace PeerTalk.Transports
+namespace IpfsShipyard.PeerTalk.Transports
 {
     /// <summary>
     ///   Establishes a duplex stream between two peers

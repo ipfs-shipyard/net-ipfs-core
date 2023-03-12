@@ -3,7 +3,7 @@ using System.Linq;
 using IpfsShipyard.Ipfs.Core;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace PeerTalk.Tests
+namespace IpfsShipyard.PeerTalk.Tests
 {
     [TestClass]
     public class ConnectionManagerTest

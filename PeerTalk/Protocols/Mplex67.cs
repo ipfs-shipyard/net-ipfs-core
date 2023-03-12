@@ -1,11 +1,11 @@
-﻿using Common.Logging;
-using Semver;
-using System.IO;
+﻿using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
-using PeerTalk.Multiplex;
+using Common.Logging;
+using IpfsShipyard.PeerTalk.Multiplex;
+using Semver;
 
-namespace PeerTalk.Protocols
+namespace IpfsShipyard.PeerTalk.Protocols
 {
     /// <summary>
     ///    A Stream Multiplexer protocol.

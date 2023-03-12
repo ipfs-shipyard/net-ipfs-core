@@ -6,11 +6,11 @@ using System.Threading;
 using System.Threading.Tasks;
 using Common.Logging;
 using IpfsShipyard.Ipfs.Core;
-using PeerTalk.Cryptography;
-using PeerTalk.Multiplex;
-using PeerTalk.Protocols;
+using IpfsShipyard.PeerTalk.Cryptography;
+using IpfsShipyard.PeerTalk.Multiplex;
+using IpfsShipyard.PeerTalk.Protocols;
 
-namespace PeerTalk
+namespace IpfsShipyard.PeerTalk
 {
     /// <summary>
     ///   A connection between two peers.

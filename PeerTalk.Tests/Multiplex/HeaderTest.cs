@@ -1,8 +1,8 @@
 ﻿using System.IO;
+using IpfsShipyard.PeerTalk.Multiplex;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using PeerTalk.Multiplex;
 
-namespace PeerTalk.Tests.Multiplex
+namespace IpfsShipyard.PeerTalk.Tests.Multiplex
 {
     [TestClass]
     public class HeaderTest

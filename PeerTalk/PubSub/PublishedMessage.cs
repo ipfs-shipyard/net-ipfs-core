@@ -1,10 +1,10 @@
-﻿using ProtoBuf;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using IpfsShipyard.Ipfs.Core;
+using ProtoBuf;
 
-namespace PeerTalk.PubSub
+namespace IpfsShipyard.PeerTalk.PubSub
 {
     /// <summary>
     ///  A published messaged for a topic(s).

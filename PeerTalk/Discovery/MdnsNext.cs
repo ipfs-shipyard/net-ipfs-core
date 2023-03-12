@@ -4,7 +4,7 @@ using System.Text;
 using IpfsShipyard.Ipfs.Core;
 using Makaretu.Dns;
 
-namespace PeerTalk.Discovery
+namespace IpfsShipyard.PeerTalk.Discovery
 {
     /// <summary>
     ///   Discovers peers using Multicast DNS according to

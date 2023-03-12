@@ -1,14 +1,14 @@
-﻿using Org.BouncyCastle.Crypto;
-using Org.BouncyCastle.Crypto.Parameters;
-using PeerTalk.Cryptography;
-using System;
+﻿using System;
 using System.IO;
+using System.Security.Cryptography;
 using System.Threading;
 using System.Threading.Tasks;
+using IpfsShipyard.PeerTalk.Cryptography;
+using Org.BouncyCastle.Crypto;
 using Org.BouncyCastle.Crypto.Engines;
-using System.Security.Cryptography;
+using Org.BouncyCastle.Crypto.Parameters;
 
-namespace PeerTalk.SecureCommunication
+namespace IpfsShipyard.PeerTalk.SecureCommunication
 {
     /// <summary>
     ///   A duplex stream that is encrypted with a <see cref="PreSharedKey"/>.
