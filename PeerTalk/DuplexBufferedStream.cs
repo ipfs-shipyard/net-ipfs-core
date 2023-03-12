@@ -23,11 +23,13 @@ namespace IpfsShipyard.PeerTalk
         private readonly BufferedStream _readBuffer;
         private readonly BufferedStream _writeBuffer;
 
-        public override bool CanRead { get { return _inner.CanRead; } }
-        public override bool CanSeek { get { return false; } }
-        public override bool CanWrite { get { return _inner.CanWrite; } }
-        public override long Length { get { throw new NotSupportedException(); } }
-        public override long Position { get { throw new NotSupportedException(); } set { throw new NotSupportedException(); } }
+        public override bool CanRead => _inner.CanRead;
+        public override bool CanSeek => false;
+        public override bool CanWrite => _inner.CanWrite;
+        public override long Length => throw new NotSupportedException();
+        public override long Position { get => throw new NotSupportedException();
+            set => throw new NotSupportedException();
+        }
 
         public DuplexBufferedStream(Stream stream)
         {

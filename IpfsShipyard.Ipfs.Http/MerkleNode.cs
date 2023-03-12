@@ -85,10 +85,7 @@ public class MerkleNode : IMerkleNode<IMerkleLink>, IEquatable<MerkleNode>
             }
             return _ipfsClient;
         }
-        set
-        {
-            _ipfsClient = value;
-        }
+        set => _ipfsClient = value;
     }
 
     /// <inheritdoc />
@@ -101,8 +98,8 @@ public class MerkleNode : IMerkleNode<IMerkleLink>, IEquatable<MerkleNode>
     [DataMember]
     public string Name
     {
-        get { return _name; }
-        set { _name = value ?? string.Empty; }
+        get => _name;
+        set => _name = value ?? string.Empty;
     }
 
     /// <summary>
@@ -121,13 +118,7 @@ public class MerkleNode : IMerkleNode<IMerkleLink>, IEquatable<MerkleNode>
     /// <inheritdoc />
     /// <seealso cref="BlockSize"/>
     [DataMember]
-    public long Size
-    {
-        get
-        {
-            return BlockSize;
-        }
-    }
+    public long Size => BlockSize;
 
 
     /// <inheritdoc />
@@ -147,22 +138,10 @@ public class MerkleNode : IMerkleNode<IMerkleLink>, IEquatable<MerkleNode>
 
     /// <inheritdoc />
     [DataMember]
-    public byte[] DataBytes
-    {
-        get
-        {
-            return IpfsClient.Block.GetAsync(Id).Result.DataBytes;
-        }
-    }
+    public byte[] DataBytes => IpfsClient.Block.GetAsync(Id).Result.DataBytes;
 
     /// <inheritdoc />
-    public Stream DataStream
-    {
-        get
-        {
-            return IpfsClient.Block.GetAsync(Id).Result.DataStream;
-        }
-    }
+    public Stream DataStream => IpfsClient.Block.GetAsync(Id).Result.DataStream;
 
     /// <inheritdoc />
     public IMerkleLink ToLink(string name = null)

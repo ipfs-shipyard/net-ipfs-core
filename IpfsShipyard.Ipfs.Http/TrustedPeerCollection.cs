@@ -93,10 +93,7 @@ public class TrustedPeerCollection : ICollection<MultiAddress>
     }
 
     /// <inheritdoc />
-    public bool IsReadOnly
-    {
-        get { return false; }
-    }
+    public bool IsReadOnly => false;
 
     /// <summary>
     ///    Remove the trusted peer.

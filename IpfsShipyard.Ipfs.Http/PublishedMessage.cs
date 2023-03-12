@@ -56,33 +56,19 @@ public class PublishedMessage : IPublishedMessage
     public byte[] DataBytes { get; private set; }
 
     /// <inheritdoc />
-    public Stream DataStream
-    {
-        get
-        {
-            return new MemoryStream(DataBytes, false);
-        }
-    }
+    public Stream DataStream => new MemoryStream(DataBytes, false);
 
     /// <inheritdoc />
     [DataMember]
-    public long Size
-    {
-        get { return DataBytes.Length; }
-    }
+    public long Size => DataBytes.Length;
+
     /// <summary>
     ///   Contents as a string.
     /// </summary>
     /// <value>
     ///   The contents interpreted as a UTF-8 string.
     /// </value>
-    public string DataString
-    {
-        get
-        {
-            return Encoding.UTF8.GetString(DataBytes);
-        }
-    }
+    public string DataString => Encoding.UTF8.GetString(DataBytes);
 
     /// <summary>>
     ///   NOT SUPPORTED.

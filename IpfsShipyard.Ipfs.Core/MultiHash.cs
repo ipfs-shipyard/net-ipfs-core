@@ -267,10 +267,7 @@ public class MultiHash : IEquatable<MultiHash>
     ///   The identity hash is used to inline a small amount of data into a <see cref="Cid"/>.
     ///   When <b>true</b>, the <see cref="Digest"/> is also the content.
     /// </remarks>
-    public bool IsIdentityHash
-    {
-        get { return Algorithm.Code == 0; }
-    }
+    public bool IsIdentityHash => Algorithm.Code == 0;
 
     /// <summary>
     ///   Writes the binary representation of the multihash to the specified <see cref="Stream"/>.

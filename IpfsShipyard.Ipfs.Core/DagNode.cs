@@ -78,13 +78,7 @@ public class DagNode : IMerkleNode<IMerkleLink>
     public byte[] DataBytes { get; private set; }
 
     /// <inheritdoc />
-    public Stream DataStream
-    {
-        get
-        {
-            return new MemoryStream(DataBytes, false);
-        }
-    }
+    public Stream DataStream => new MemoryStream(DataBytes, false);
 
     /// <summary>
     ///   The serialised size in bytes of the node.

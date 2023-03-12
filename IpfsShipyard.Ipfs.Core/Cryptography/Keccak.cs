@@ -28,39 +28,15 @@ internal abstract class Keccak : System.Security.Cryptography.HashAlgorithm
 
     public int KeccakR
     {
-        get
-        {
-            return keccakR;
-        }
-        protected set
-        {
-            keccakR = value;
-        }
+        get => keccakR;
+        protected set => keccakR = value;
     }
 
-    public int SizeInBytes
-    {
-        get
-        {
-            return KeccakR / 8;
-        }
-    }
+    public int SizeInBytes => KeccakR / 8;
 
-    public int HashByteLength
-    {
-        get
-        {
-            return HashSizeValue / 8;
-        }
-    }
+    public int HashByteLength => HashSizeValue / 8;
 
-    public override bool CanReuseTransform
-    {
-        get
-        {
-            return true;
-        }
-    }
+    public override bool CanReuseTransform => true;
 
     protected Keccak(int hashBitLength)
     {
@@ -126,21 +102,9 @@ internal abstract class Keccak : System.Security.Cryptography.HashAlgorithm
         count -= amount;
     }
 
-    public override byte[] Hash
-    {
-        get
-        {
-            return HashValue;
-        }
-    }
+    public override byte[] Hash => HashValue;
 
-    public override int HashSize
-    {
-        get
-        {
-            return HashSizeValue;
-        }
-    }
+    public override int HashSize => HashSizeValue;
 
     #endregion
 

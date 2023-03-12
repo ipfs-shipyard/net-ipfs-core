@@ -35,8 +35,7 @@ public class PreSharedKey
     /// <value>
     ///   The length in bits.
     /// </value>
-    public int Length
-    { get { return Value?.Length * 8 ?? 0; } }
+    public int Length => Value?.Length * 8 ?? 0;
 
     /// <summary>
     ///   Gets an ID for the key.

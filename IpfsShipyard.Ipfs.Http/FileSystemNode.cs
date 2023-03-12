@@ -34,13 +34,7 @@ public class FileSystemNode : IFileSystemNode
     }
 
     /// <inheritdoc />
-    public Stream DataStream
-    {
-        get
-        {
-            return IpfsClient?.FileSystem.ReadFileAsync(Id).Result;
-        }
-    }
+    public Stream DataStream => IpfsClient?.FileSystem.ReadFileAsync(Id).Result;
 
     /// <inheritdoc />
     [DataMember]
@@ -55,10 +49,7 @@ public class FileSystemNode : IFileSystemNode
             if (_links == null) GetInfo();
             return _links;
         }
-        set
-        {
-            _links = value;
-        }
+        set => _links = value;
     }
 
     /// <summary>
@@ -76,10 +67,7 @@ public class FileSystemNode : IFileSystemNode
             if (!_size.HasValue) GetInfo();
             return _size.Value;
         }
-        set
-        {
-            _size = value;
-        }
+        set => _size = value;
     }
 
     /// <summary>
@@ -97,10 +85,7 @@ public class FileSystemNode : IFileSystemNode
             if (!_isDirectory.HasValue) GetInfo();
             return _isDirectory.Value;
         }
-        set
-        {
-            _isDirectory = value;
-        }
+        set => _isDirectory = value;
     }
 
     /// <summary>
@@ -140,10 +125,7 @@ public class FileSystemNode : IFileSystemNode
             }
             return _ipfsClient;
         }
-        set
-        {
-            _ipfsClient = value;
-        }
+        set => _ipfsClient = value;
     }
 
     private void GetInfo()

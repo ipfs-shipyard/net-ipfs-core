@@ -192,9 +192,5 @@ public class MultiBaseAlgorithm
     /// <summary>
     ///   A sequence consisting of all algorithms.
     /// </summary>
-    public static IEnumerable<MultiBaseAlgorithm> All
-    {
-        get { return Names.Values; }
-    }
-
+    public static IEnumerable<MultiBaseAlgorithm> All => Names.Values;
 }

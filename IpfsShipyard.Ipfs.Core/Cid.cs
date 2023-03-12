@@ -78,10 +78,7 @@ public class Cid : IEquatable<Cid>
     /// </remarks>
     public int Version
     {
-        get
-        {
-            return _version;
-        }
+        get => _version;
         set
         {
             EnsureMutable();
@@ -106,10 +103,7 @@ public class Cid : IEquatable<Cid>
     /// <seealso cref="MultiBase"/>
     public string Encoding
     {
-        get
-        {
-            return _encoding;
-        }
+        get => _encoding;
         set
         {
             EnsureMutable();
@@ -134,10 +128,7 @@ public class Cid : IEquatable<Cid>
     /// <seealso cref="MultiCodec"/>
     public string ContentType
     {
-        get
-        {
-            return _contentType;
-        }
+        get => _contentType;
         set
         {
             EnsureMutable();
@@ -166,10 +157,7 @@ public class Cid : IEquatable<Cid>
     /// </remarks>
     public MultiHash Hash
     {
-        get
-        {
-            return _hash;
-        }
+        get => _hash;
         set
         {
             EnsureMutable();

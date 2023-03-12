@@ -28,8 +28,8 @@ public class NetworkProtocolTest
 
     private class NameExists : NetworkProtocol
     {
-        public override string Name { get { return "tcp"; } }
-        public override uint Code { get { return 0x7FFF; } }
+        public override string Name => "tcp";
+        public override uint Code => 0x7FFF;
         public override void ReadValue(CodedInputStream stream) { }
         public override void ReadValue(TextReader stream) { }
         public override void WriteValue(CodedOutputStream stream) { }
@@ -37,8 +37,8 @@ public class NetworkProtocolTest
 
     private class CodeExists : NetworkProtocol
     {
-        public override string Name { get { return "x-tcp"; } }
-        public override uint Code { get { return 6; } }
+        public override string Name => "x-tcp";
+        public override uint Code => 6;
         public override void ReadValue(CodedInputStream stream) { }
         public override void ReadValue(TextReader stream) { }
         public override void WriteValue(CodedOutputStream stream) { }

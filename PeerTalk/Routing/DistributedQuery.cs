@@ -60,13 +60,7 @@ public class DistributedQuery<T> where T : class
     /// <summary>
     ///   The received answers for the query.
     /// </summary>
-    public IEnumerable<T> Answers
-    {
-        get
-        {
-            return _answers.Values;
-        }
-    }
+    public IEnumerable<T> Answers => _answers.Values;
 
     /// <summary>
     ///   The number of answers needed.

@@ -75,7 +75,7 @@ public class Muxer
     /// <seealso cref="Receiver"/>
     public bool Initiator
     {
-        get { return (NextStreamId & 1) == 0; }
+        get => (NextStreamId & 1) == 0;
         set
         {
             if (value != Initiator)
@@ -92,8 +92,8 @@ public class Muxer
     /// <seealso cref="Initiator"/>
     public bool Receiver
     {
-        get { return !Initiator; }
-        set { Initiator = !value; }
+        get => !Initiator;
+        set => Initiator = !value;
     }
 
     /// <summary>

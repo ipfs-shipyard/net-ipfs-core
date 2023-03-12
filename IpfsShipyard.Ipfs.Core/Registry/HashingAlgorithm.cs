@@ -217,10 +217,7 @@ public class HashingAlgorithm
     /// <value>
     ///   The currently registered hashing algorithms.
     /// </value>
-    public static IEnumerable<HashingAlgorithm> All
-    {
-        get { return Names.Values; }
-    }
+    public static IEnumerable<HashingAlgorithm> All => Names.Values;
 
     /// <summary>
     ///   Gets the <see cref="HashAlgorithm"/> with the specified IPFS multi-hash name.

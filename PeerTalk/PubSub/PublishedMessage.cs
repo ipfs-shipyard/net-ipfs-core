@@ -30,14 +30,8 @@ public class PublishedMessage : IPublishedMessage
     [ProtoMember(1)]
     private byte[] From
     {
-        get
-        {
-            return Sender?.Id.ToArray();
-        }
-        set
-        {
-            Sender = new Peer { Id = new MultiHash(value) };
-        }
+        get => Sender?.Id.ToArray();
+        set => Sender = new Peer { Id = new MultiHash(value) };
     }
 
     /// <inheritdoc />
@@ -53,13 +47,7 @@ public class PublishedMessage : IPublishedMessage
     public byte[] DataBytes { get; set; }
 
     /// <inheritdoc />
-    public Stream DataStream
-    {
-        get
-        {
-            return new MemoryStream(DataBytes, false);
-        }
-    }
+    public Stream DataStream => new MemoryStream(DataBytes, false);
 
     /// <summary>>
     ///   NOT SUPPORTED, use <see cref="MessageId"/>.
@@ -85,8 +73,5 @@ public class PublishedMessage : IPublishedMessage
     }
 
     /// <inheritdoc />
-    public long Size
-    {
-        get { return DataBytes.Length; }
-    }
+    public long Size => DataBytes.Length;
 }

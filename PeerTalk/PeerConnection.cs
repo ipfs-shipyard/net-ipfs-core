@@ -68,17 +68,14 @@ public class PeerConnection : IDisposable
     /// <value>
     ///   <b>true</b> if the connection is active.
     /// </value>
-    public bool IsActive
-    {
-        get { return Stream?.CanRead == true && Stream.CanWrite; }
-    }
+    public bool IsActive => Stream?.CanRead == true && Stream.CanWrite;
 
     /// <summary>
     ///   The duplex stream between the two peers.
     /// </summary>
     public Stream Stream
     {
-        get { return _stream; }
+        get => _stream;
         set
         {
             if (value != null && _statsStream == null)

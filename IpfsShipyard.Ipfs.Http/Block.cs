@@ -19,13 +19,7 @@ public class Block : IDataBlock
     public byte[] DataBytes { get; set; }
 
     /// <inheritdoc />
-    public Stream DataStream
-    {
-        get
-        {
-            return new MemoryStream(DataBytes, false);
-        }
-    }
+    public Stream DataStream => new MemoryStream(DataBytes, false);
 
     /// <inheritdoc />
     [DataMember]
@@ -39,10 +33,7 @@ public class Block : IDataBlock
             }
             return DataBytes.Length;
         }
-        set
-        {
-            _size = value;
-        }
+        set => _size = value;
     }
 
 }

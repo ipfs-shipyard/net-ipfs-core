@@ -145,9 +145,5 @@ public class Codec
     /// <value>
     ///   All the registered codecs.
     /// </value>
-    public static IEnumerable<Codec> All
-    {
-        get { return Names.Values; }
-    }
-
+    public static IEnumerable<Codec> All => Names.Values;
 }

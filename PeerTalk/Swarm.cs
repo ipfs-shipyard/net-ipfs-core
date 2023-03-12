@@ -103,7 +103,7 @@ public class Swarm : IService, IPolicy<MultiAddress>, IPolicy<Peer>
     /// <exception cref="ArgumentException"></exception>
     public Peer LocalPeer
     {
-        get { return _localPeer; }
+        get => _localPeer;
         set
         {
             if (value == null)
@@ -202,13 +202,7 @@ public class Swarm : IService, IPolicy<MultiAddress>, IPolicy<Peer>
     ///   <see cref="RegisterPeerAddress">discovered</see>.
     /// </value>
     /// <seealso cref="RegisterPeerAddress"/>
-    public IEnumerable<Peer> KnownPeers
-    {
-        get
-        {
-            return _otherPeers.Values;
-        }
-    }
+    public IEnumerable<Peer> KnownPeers => _otherPeers.Values;
 
     /// <summary>
     ///   Register that a peer's address has been discovered.
