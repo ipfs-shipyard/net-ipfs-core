@@ -329,7 +329,7 @@ public class Swarm : IService, IPolicy<MultiAddress>, IPolicy<Peer>
             throw new ArgumentNullException("peer.ID");
         }
 
-        if (_otherPeers.TryRemove(peer.Id.ToBase58(), out Peer found))
+        if (_otherPeers.TryRemove(peer.Id.ToBase58(), out var found))
         {
             peer = found;
         }
@@ -347,7 +347,7 @@ public class Swarm : IService, IPolicy<MultiAddress>, IPolicy<Peer>
     /// </returns>
     public bool HasPendingConnection(Peer peer)
     {
-        return _pendingConnections.TryGetValue(peer, out AsyncLazy<PeerConnection> _);
+        return _pendingConnections.TryGetValue(peer, out var _);
     }
 
     /// <summary>
@@ -395,7 +395,7 @@ public class Swarm : IService, IPolicy<MultiAddress>, IPolicy<Peer>
 
     private void OnPeerDisconnected(object sender, MultiHash peerId)
     {
-        if (!_otherPeers.TryGetValue(peerId.ToBase58(), out Peer peer))
+        if (!_otherPeers.TryGetValue(peerId.ToBase58(), out var peer))
         {
             peer = new() { Id = peerId };
         }
@@ -481,7 +481,7 @@ public class Swarm : IService, IPolicy<MultiAddress>, IPolicy<Peer>
         peer = RegisterPeer(peer);
 
         // If connected and still open, then use the existing connection.
-        if (Manager.TryGet(peer, out PeerConnection conn))
+        if (Manager.TryGet(peer, out var conn))
         {
             return conn;
         }
@@ -503,7 +503,7 @@ public class Swarm : IService, IPolicy<MultiAddress>, IPolicy<Peer>
         }
         finally
         {
-            _pendingConnections.TryRemove(peer, out AsyncLazy<PeerConnection> _);
+            _pendingConnections.TryRemove(peer, out var _);
         }
     }
 
@@ -666,7 +666,7 @@ public class Swarm : IService, IPolicy<MultiAddress>, IPolicy<Peer>
         foreach (var protocol in addr.Protocols)
         {
             cancel.ThrowIfCancellationRequested();
-            if (TransportRegistry.Transports.TryGetValue(protocol.Name, out Func<IPeerTransport> transport))
+            if (TransportRegistry.Transports.TryGetValue(protocol.Name, out var transport))
             {
                 stream = await transport().ConnectAsync(addr, cancel).ConfigureAwait(false);
                 if (cancel.IsCancellationRequested)
@@ -765,7 +765,7 @@ public class Swarm : IService, IPolicy<MultiAddress>, IPolicy<Peer>
         var didSomething = false;
         foreach (var protocol in address.Protocols)
         {
-            if (TransportRegistry.Transports.TryGetValue(protocol.Name, out Func<IPeerTransport> transport))
+            if (TransportRegistry.Transports.TryGetValue(protocol.Name, out var transport))
             {
                 address = transport().Listen(address, OnRemoteConnect, cancel.Token);
                 _listeners.TryAdd(address, cancel);
@@ -959,7 +959,7 @@ public class Swarm : IService, IPolicy<MultiAddress>, IPolicy<Peer>
         }
         finally
         {
-            _pendingRemoteConnections.TryRemove(remote, out object _);
+            _pendingRemoteConnections.TryRemove(remote, out var _);
         }
     }
 
@@ -1015,7 +1015,7 @@ public class Swarm : IService, IPolicy<MultiAddress>, IPolicy<Peer>
     /// </remarks>
     public async Task StopListeningAsync(MultiAddress address)
     {
-        if (!_listeners.TryRemove(address, out CancellationTokenSource listener))
+        if (!_listeners.TryRemove(address, out var listener))
         {
             return;
         }
@@ -1039,7 +1039,7 @@ public class Swarm : IService, IPolicy<MultiAddress>, IPolicy<Peer>
 
             foreach (var other in others)
             {
-                _listeners.TryRemove(other, out CancellationTokenSource _);
+                _listeners.TryRemove(other, out var _);
             }
 
             // Give some time away, so that cancel can run

@@ -174,10 +174,10 @@ public static class Varint
             throw new NotSupportedException("Negative values are not allowed for a Varint");
 
         var bytes = new byte[10];
-        int i = 0;
+        var i = 0;
         do
         {
-            byte v = (byte)(value & 0x7F);
+            var v = (byte)(value & 0x7F);
             if (value > 0x7F)
                 v |= 0x80;
             bytes[i++] = v;
@@ -235,8 +235,8 @@ public static class Varint
     public static async Task<long> ReadVarint64Async(this Stream stream, CancellationToken cancel = default(CancellationToken))
     {
         long value = 0;
-        int shift = 0;
-        int bytesRead = 0;
+        var shift = 0;
+        var bytesRead = 0;
         var buffer = new byte[1];
         while (true)
         {

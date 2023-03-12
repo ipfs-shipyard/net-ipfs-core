@@ -587,7 +587,7 @@ public partial class IpfsClient : ICoreApi
 
         var body = await response.Content.ReadAsStringAsync();
 
-        string message = body;
+        var message = body;
 
         try
         {

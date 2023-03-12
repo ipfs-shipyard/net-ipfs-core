@@ -31,7 +31,7 @@ public class Dht1Test
     {
         var swarm = new Swarm { LocalPeer = _self };
         var dht = new Dht1 { Swarm = swarm };
-        bool stopped = false;
+        var stopped = false;
         dht.Stopped += (s, e) => { stopped = true;  };
         await dht.StartAsync();
         await dht.StopAsync();
@@ -107,7 +107,7 @@ public class Dht1Test
             };
             var response = dht.ProcessFindNode(request, new());
             Assert.AreEqual(1, response.CloserPeers.Length);
-            var ok = response.CloserPeers[0].TryToPeer(out Peer found);
+            var ok = response.CloserPeers[0].TryToPeer(out var found);
             Assert.IsTrue(ok);
             Assert.AreEqual(_self, found);
         }
@@ -133,7 +133,7 @@ public class Dht1Test
             };
             var response = dht.ProcessFindNode(request, new());
             Assert.AreEqual(1, response.CloserPeers.Length);
-            var ok = response.CloserPeers[0].TryToPeer(out Peer found);
+            var ok = response.CloserPeers[0].TryToPeer(out var found);
             Assert.IsTrue(ok);
             Assert.AreEqual(_other, found);
             CollectionAssert.AreEqual(_other.Addresses.ToArray(), 
@@ -162,7 +162,7 @@ public class Dht1Test
             };
             var response = dht.ProcessFindNode(request, new());
             Assert.AreEqual(1, response.CloserPeers.Length);
-            var ok = response.CloserPeers[0].TryToPeer(out Peer found);
+            var ok = response.CloserPeers[0].TryToPeer(out var found);
             Assert.IsTrue(ok);
             Assert.AreEqual(other, found);
             CollectionAssert.AreEqual(
@@ -295,7 +295,7 @@ public class Dht1Test
             };
             var response = dht.ProcessGetProviders(request, new());
             Assert.AreEqual(1, response.ProviderPeers.Length);
-            response.ProviderPeers[0].TryToPeer(out Peer found);
+            response.ProviderPeers[0].TryToPeer(out var found);
             Assert.AreEqual(_other, found);
             Assert.AreNotEqual(0, found.Addresses.Count());
         }

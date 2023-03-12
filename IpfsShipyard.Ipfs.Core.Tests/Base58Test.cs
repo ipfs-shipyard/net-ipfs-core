@@ -28,9 +28,9 @@ public class Base58Test
     [TestMethod]
     public void Java()
     {
-        String input = "QmPZ9gcCEpqKTo6aq61g2nXGUhM4iCL3ewB6LDXZCtioEB";
-        byte[] output = Base58.Decode(input);
-        String encoded = Base58.Encode(output);
+        var input = "QmPZ9gcCEpqKTo6aq61g2nXGUhM4iCL3ewB6LDXZCtioEB";
+        var output = Base58.Decode(input);
+        var encoded = Base58.Encode(output);
         Assert.AreEqual(input, encoded);
     }
 

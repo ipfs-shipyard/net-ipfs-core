@@ -59,7 +59,7 @@ public class CtrStreamCipher : IStreamCipher
     /// </example>
     public void Init(bool forEncryption, ICipherParameters parameters)
     {
-        ParametersWithIV ivParam = parameters as ParametersWithIV;
+        var ivParam = parameters as ParametersWithIV;
         if (ivParam == null)
             throw new ArgumentException("CTR mode requires ParametersWithIV", nameof(parameters));
 
@@ -68,7 +68,7 @@ public class CtrStreamCipher : IStreamCipher
         if (_blockSize < _iv.Length)
             throw new ArgumentException("CTR mode requires IV no greater than: " + _blockSize + " bytes.");
 
-        int maxCounterSize = Math.Min(8, _blockSize / 2);
+        var maxCounterSize = Math.Min(8, _blockSize / 2);
         if (_blockSize - _iv.Length > maxCounterSize)
             throw new ArgumentException("CTR mode requires IV of at least: " + (_blockSize - maxCounterSize) + " bytes.");
 
@@ -103,9 +103,9 @@ public class CtrStreamCipher : IStreamCipher
             throw new DataLengthException("Input buffer too small");
         }
 
-        int inStart = inOff;
-        int inEnd = inOff + length;
-        int outStart = outOff;
+        var inStart = inOff;
+        var inEnd = inOff + length;
+        var outStart = outOff;
 
         while (inStart < inEnd)
         {
@@ -120,13 +120,13 @@ public class CtrStreamCipher : IStreamCipher
         {
             _cipher.ProcessBlock(_counter, 0, _counterOut, 0);
             // Increment the counter
-            int j = _counter.Length;
+            var j = _counter.Length;
             while (--j >= 0 && ++_counter[j] == 0)
             {
             }
         }
 
-        byte rv = (byte)(_counterOut[_byteCount++] ^ input);
+        var rv = (byte)(_counterOut[_byteCount++] ^ input);
         if (_byteCount == _counterOut.Length)
         {
             _byteCount = 0;

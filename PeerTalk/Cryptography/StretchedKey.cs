@@ -69,7 +69,7 @@ public class StretchedKey
         hmac.BlockUpdate(seed, 0, seed.Length);
         hmac.DoFinal(a, 0);
 
-        int j = 0;
+        var j = 0;
         var result = new byte[need];
         while (j < need)
         {
@@ -89,7 +89,7 @@ public class StretchedKey
             hmac.DoFinal(a, 0);
         }
 
-        int half = need / 2;
+        var half = need / 2;
         k1 = new()
         {
             Iv = new byte[ivSize],

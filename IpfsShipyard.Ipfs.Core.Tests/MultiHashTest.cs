@@ -493,7 +493,7 @@ public class MultiHashTest
     public void JsonSerialization()
     {
         var a = new MultiHash("QmPZ9gcCEpqKTo6aq61g2nXGUhM4iCL3ewB6LDXZCtioEB");
-        string json = JsonConvert.SerializeObject(a);
+        var json = JsonConvert.SerializeObject(a);
         Assert.AreEqual($"\"{a.ToString()}\"", json);
         var b = JsonConvert.DeserializeObject<MultiHash>(json);
         Assert.AreEqual(a, b);

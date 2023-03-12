@@ -15,7 +15,7 @@ public class PubSubApiTest
     [TestMethod]
     public void Api_Exists()
     {
-        IpfsClient ipfs = TestFixture.Ipfs;
+        var ipfs = TestFixture.Ipfs;
         Assert.IsNotNull(ipfs.PubSub);
     }
 

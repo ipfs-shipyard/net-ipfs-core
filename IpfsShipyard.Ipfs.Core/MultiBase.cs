@@ -90,7 +90,7 @@ public static class MultiBase
             throw new ArgumentNullException("s");
         }
 
-        MultiBaseAlgorithm.Codes.TryGetValue(s[0], out MultiBaseAlgorithm alg);
+        MultiBaseAlgorithm.Codes.TryGetValue(s[0], out var alg);
         if (alg == null)
         {
             throw new FormatException($"MultiBase '{s}' is invalid. The code is not registered.");

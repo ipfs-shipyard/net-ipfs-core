@@ -130,7 +130,7 @@ public class Substream : Stream
     /// <inheritdoc />
     public override async Task<int> ReadAsync(byte[] buffer, int offset, int count, CancellationToken cancellationToken)
     {
-        int total = 0;
+        var total = 0;
         while (count > 0 && !_eos)
         {
             // Does the current block have some unread data?

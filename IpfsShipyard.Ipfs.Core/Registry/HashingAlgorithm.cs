@@ -184,7 +184,7 @@ public class HashingAlgorithm
             throw new ArgumentException(string.Format("The IPFS hashing algorithm '{0}' is already defined and cannot be used as an alias.", alias));
         if (string.IsNullOrWhiteSpace(name))
             throw new ArgumentNullException("name");
-        if (!Names.TryGetValue(name, out HashingAlgorithm existing))
+        if (!Names.TryGetValue(name, out var existing))
             throw new ArgumentException(string.Format("The IPFS hashing algorithm '{0}' is not defined.", name));
 
         var a = new HashingAlgorithm

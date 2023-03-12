@@ -103,8 +103,8 @@ public class Secio1 : IEncryptionProtocol
             ms.Position = 0;
             oh2 = hasher.ComputeHash(ms);
         }
-        int order = 0;
-        for (int i = 0; order == 0 && i < oh1.Length; ++i)
+        var order = 0;
+        for (var i = 0; order == 0 && i < oh1.Length; ++i)
         {
             order = oh1[i].CompareTo(oh2[i]);
         }
@@ -165,7 +165,7 @@ public class Secio1 : IEncryptionProtocol
         // =============================================================================
         // step 2.2. Keys -- generate keys for mac + encryption
         var sharedSecret = localEphemeralKey.GenerateSharedSecret(remoteEphemeralKey);
-        StretchedKey.Generate(cipherName, hashName, sharedSecret, out StretchedKey k1, out StretchedKey k2);
+        StretchedKey.Generate(cipherName, hashName, sharedSecret, out var k1, out var k2);
         if (order < 0)
         {
             (k2, k1) = (k1, k2);
@@ -204,7 +204,7 @@ public class Secio1 : IEncryptionProtocol
     private string SelectBest(int order, string local, string remote)
     {
         var first = order < 0 ? remote.Split(',') : local.Split(',');
-        string[] second = order < 0 ? local.Split(',') : remote.Split(',');
+        var second = order < 0 ? local.Split(',') : remote.Split(',');
         return Array.Find(first, f => second.Contains(f));
     }
 }

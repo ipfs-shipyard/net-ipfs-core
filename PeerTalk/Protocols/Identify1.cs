@@ -66,7 +66,7 @@ public class Identify1 : IPeerProtocol
     {
         var muxer = await connection.MuxerEstablished.Task.ConfigureAwait(false);
         log.Debug("Get remote identity");
-        Peer remote = connection.RemotePeer;
+        var remote = connection.RemotePeer;
         if (remote == null)
         {
             remote = new();

@@ -116,7 +116,7 @@ public class PeerManager : IService
     {
         log.DebugFormat("Alive '{0}'.", peer);
 
-        DeadPeers.TryRemove(peer, out DeadPeer _);
+        DeadPeers.TryRemove(peer, out var _);
         Swarm.BlackList.Remove($"/p2p/{peer.Id}");
     }
 

@@ -17,11 +17,11 @@ internal partial class KeccakManaged : Keccak
         base.HashCore(array, ibStart, cbSize);
         if (cbSize == 0)
             return;
-        int sizeInBytes = SizeInBytes;
+        var sizeInBytes = SizeInBytes;
         if (Buffer == null)
             Buffer = new byte[sizeInBytes];
-        int stride = sizeInBytes >> 3;
-        ulong[] utemps = new ulong[stride];
+        var stride = sizeInBytes >> 3;
+        var utemps = new ulong[stride];
         if (BuffLength == sizeInBytes)
             throw new("Unexpected error, the internal buffer is full");
         AddToBuffer(array, ref ibStart, ref cbSize);
@@ -45,8 +45,8 @@ internal partial class KeccakManaged : Keccak
 
     protected override byte[] HashFinal()
     {
-        int sizeInBytes = SizeInBytes;
-        byte[] outb = new byte[HashByteLength];
+        var sizeInBytes = SizeInBytes;
+        var outb = new byte[HashByteLength];
         //    padding
         if (Buffer == null)
             Buffer = new byte[sizeInBytes];
@@ -54,8 +54,8 @@ internal partial class KeccakManaged : Keccak
             Array.Clear(Buffer, BuffLength, sizeInBytes - BuffLength);
         Buffer[BuffLength++] = 1;
         Buffer[sizeInBytes - 1] |= 0x80;
-        int stride = sizeInBytes >> 3;
-        ulong[] utemps = new ulong[stride];
+        var stride = sizeInBytes >> 3;
+        var utemps = new ulong[stride];
         System.Buffer.BlockCopy(Buffer, 0, utemps, 0, sizeInBytes);
         KeccakF(utemps, stride);
         System.Buffer.BlockCopy(state, 0, outb, 0, HashByteLength);
@@ -78,7 +78,7 @@ internal partial class KeccakManaged : Keccak
         ulong eka, eke, eki, eko, eku;
         ulong ema, eme, emi, emo, emu;
         ulong esa, ese, esi, eso, esu;
-        int round = laneCount;
+        var round = laneCount;
 
         //copyFromState(A, state)
         aba = state[0];

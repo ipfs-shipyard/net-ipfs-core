@@ -125,7 +125,7 @@ public class Secio1Stream : Stream
     /// <inheritdoc />
     public override async Task<int> ReadAsync(byte[] buffer, int offset, int count, CancellationToken cancellationToken)
     {
-        int total = 0;
+        var total = 0;
         while (count > 0)
         {
             // Does the current packet have some unread data?
@@ -187,7 +187,7 @@ public class Secio1Stream : Stream
 
     private async Task<byte[]> ReadPacketBytesAsync(int count, CancellationToken cancel)
     {
-        byte[] buffer = new byte[count];
+        var buffer = new byte[count];
         await _stream.ReadExactAsync(buffer, 0, count, cancel).ConfigureAwait(false);
         return buffer;
     }

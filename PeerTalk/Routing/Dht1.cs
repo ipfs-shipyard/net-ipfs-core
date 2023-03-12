@@ -253,7 +253,7 @@ public class Dht1 : IPeerProtocol, IService, IPeerRouting, IContentRouting
     {
         _ = Task.Run(async () =>
         {
-            int advertsNeeded = 4;
+            var advertsNeeded = 4;
             var message = new DhtMessage
             {
                 Type = MessageType.AddProvider,
@@ -403,7 +403,7 @@ public class Dht1 : IPeerProtocol, IService, IPeerRouting, IContentRouting
             return null;
         }
         var providers = request.ProviderPeers
-            .Select(p => p.TryToPeer(out Peer peer) ? peer : (Peer)null)
+            .Select(p => p.TryToPeer(out var peer) ? peer : (Peer)null)
             .Where(p => p != null && p == remotePeer && p.Addresses.Any() && Swarm.IsAllowed(p));
         foreach (var provider in providers)
         {

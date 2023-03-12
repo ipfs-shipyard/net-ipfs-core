@@ -13,7 +13,7 @@ public class BootstrapTest
     public async Task NullList()
     {
         var bootstrap = new Bootstrap { Addresses = null };
-        int found = 0;
+        var found = 0;
         bootstrap.PeerDiscovered += (s, e) =>
         {
             ++found;
@@ -33,7 +33,7 @@ public class BootstrapTest
                 "/ip4/104.131.131.83/tcp/4001/p2p/QmaCpDMGvV2BGHeYERUEnRQAwe3N8SzbUtfsmvsqQLuvuJ"
             }
         };
-        int found = 0;
+        var found = 0;
         bootstrap.PeerDiscovered += (s, peer) =>
         {
             Assert.IsNotNull(peer);
@@ -58,7 +58,7 @@ public class BootstrapTest
                 "/ip6/::/tcp/4001/p2p/QmdpwjdB94eNm2Lcvp9JqoCxswo3AKQqjLuNZyLixmCM1h"
             }
         };
-        int found = 0;
+        var found = 0;
         bootstrap.PeerDiscovered += (s, peer) =>
         {
             Assert.IsNotNull(peer);
@@ -78,7 +78,7 @@ public class BootstrapTest
                 "/ip4/104.131.131.82/tcp/4001/ipfs/QmaCpDMGvV2BGHeYERUEnRQAwe3N8SzbUtfsmvsqQLuvuJ"
             }
         };
-        int found = 0;
+        var found = 0;
         bootstrap.PeerDiscovered += (s, e) =>
         {
             Assert.IsNotNull(e);
@@ -103,7 +103,7 @@ public class BootstrapTest
                 "/ip4/104.131.131.82/tcp/4001/ipfs/QmaCpDMGvV2BGHeYERUEnRQAwe3N8SzbUtfsmvsqQLuvuJ"
             }
         };
-        int found = 0;
+        var found = 0;
         bootstrap.PeerDiscovered += (s, e) =>
         {
             Assert.IsNotNull(e);

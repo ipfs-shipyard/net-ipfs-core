@@ -28,7 +28,7 @@ public static class Base64Url
     /// </returns>
     public static string Encode(byte[] bytes)
     {
-        string s = Convert.ToBase64String(bytes); // Standard base64 encoder
+        var s = Convert.ToBase64String(bytes); // Standard base64 encoder
 
         s = s.TrimEnd('=');         // Remove any trailing '='s
         s = s.Replace('+', '-');    // 62nd char of encoding

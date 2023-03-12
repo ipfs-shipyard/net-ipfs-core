@@ -142,7 +142,7 @@ public class Muxer
     /// </remarks>
     public async Task<Substream> RemoveStreamAsync(Substream stream, CancellationToken cancel = default)
     {
-        if (Substreams.TryRemove(stream.Id, out Substream _))
+        if (Substreams.TryRemove(stream.Id, out var _))
         {
             // Tell the other side.
             using (await AcquireWriteAccessAsync().ConfigureAwait(false))
@@ -190,7 +190,7 @@ public class Muxer
                 await Channel.ReadExactAsync(payload, 0, length, cancel).ConfigureAwait(false);
 
                 // Process the packet
-                Substreams.TryGetValue(header.StreamId, out Substream substream);
+                Substreams.TryGetValue(header.StreamId, out var substream);
 
                 if (header.PacketType == PacketType.NewStream)
                 {
@@ -260,7 +260,7 @@ public class Muxer
                         continue;
                     }
                     substream.NoMoreData();
-                    Substreams.TryRemove(substream.Id, out Substream _);
+                    Substreams.TryRemove(substream.Id, out var _);
                     SubstreamClosed?.Invoke(this, substream);
                 }
                 else

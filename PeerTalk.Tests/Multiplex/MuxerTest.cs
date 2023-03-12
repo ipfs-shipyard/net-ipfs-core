@@ -72,7 +72,7 @@ public class MuxerTest
 
         channel.Position = 0;
         var muxer2 = new Muxer { Channel = channel };
-        int n = 0;
+        var n = 0;
         muxer2.SubstreamCreated += (s, e) => ++n;
         await muxer2.ProcessRequestsAsync();
         Assert.AreEqual(2, n);
@@ -106,7 +106,7 @@ public class MuxerTest
 
         channel.Position = 0;
         var muxer2 = new Muxer { Channel = channel };
-        int createCount = 0;
+        var createCount = 0;
         muxer2.SubstreamCreated += (s, e) =>
         {
             ++createCount;
@@ -131,7 +131,7 @@ public class MuxerTest
 
         var muxer2 = new Muxer { Channel = channel };
 
-        int closeCount = 2; // Default is 0
+        var closeCount = 2; // Default is 0
 
         // NOTE: the event was not firing and the count
         //       was changed to 2 (instead of the default)

@@ -273,7 +273,7 @@ public class ConnectionManagerTest
     [TestMethod]
     public void PeerDisconnectedEvent_RemovingPeer()
     {
-        bool gotEvent = false;
+        var gotEvent = false;
         var manager = new ConnectionManager();
         manager.PeerDisconnected += (s, e) => gotEvent = true;
         var peerA = new Peer { Id = _aId };
@@ -287,7 +287,7 @@ public class ConnectionManagerTest
     [TestMethod]
     public void PeerDisconnectedEvent_RemovingConnection()
     {
-        int gotEvent = 0;
+        var gotEvent = 0;
         var manager = new ConnectionManager();
         manager.PeerDisconnected += (s, e) => gotEvent += 1;
         var peerA = new Peer { Id = _aId };
@@ -301,7 +301,7 @@ public class ConnectionManagerTest
     [TestMethod]
     public void PeerDisconnectedEvent_ConnectionClose()
     {
-        int gotEvent = 0;
+        var gotEvent = 0;
         var manager = new ConnectionManager();
         manager.PeerDisconnected += (s, e) => gotEvent += 1;
         var peerA = new Peer { Id = _aId };

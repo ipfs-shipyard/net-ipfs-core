@@ -148,8 +148,8 @@ public class DistributedQuery<T> where T : class
     /// </summary>
     private async Task AskAsync(int taskId)
     {
-        int pass = 0;
-        int waits = 20;
+        var pass = 0;
+        var waits = 20;
         while (!_runningQuery.IsCancellationRequested && waits > 0)
         {
             // Get the nearest peer that has not been visited.
@@ -212,7 +212,7 @@ public class DistributedQuery<T> where T : class
 
         foreach (var provider in providers)
         {
-            if (provider.TryToPeer(out Peer p))
+            if (provider.TryToPeer(out var p))
             {
                 if (p == Dht.Swarm.LocalPeer || !Dht.Swarm.IsAllowed(p))
                     continue;
@@ -237,7 +237,7 @@ public class DistributedQuery<T> where T : class
             return;
         foreach (var closer in closerPeers)
         {
-            if (closer.TryToPeer(out Peer p))
+            if (closer.TryToPeer(out var p))
             {
                 if (p == Dht.Swarm.LocalPeer || !Dht.Swarm.IsAllowed(p))
                     continue;

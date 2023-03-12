@@ -111,7 +111,7 @@ public partial class MerkleNodeTest
     public void DataBytes()
     {
         var node = new MerkleNode(IpfsInfo);
-        byte[] data = node.DataBytes;
+        var data = node.DataBytes;
         Assert.AreEqual(node.BlockSize, data.Length);
     }
 
@@ -119,7 +119,7 @@ public partial class MerkleNodeTest
     public void DataStream()
     {
         var node = new MerkleNode(IpfsInfo);
-        byte[] data = node.DataBytes;
+        var data = node.DataBytes;
         var streamData = new MemoryStream();
         node.DataStream.CopyTo(streamData);
         CollectionAssert.AreEqual(data, streamData.ToArray());

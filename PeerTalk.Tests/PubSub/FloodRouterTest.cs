@@ -81,7 +81,7 @@ public class FloodRouterTest
             await ns1.SubscribeAsync(topic, msg => { }, cs.Token);
             await swarm1.ConnectAsync(_other);
 
-            Peer[] peers = new Peer[0];
+            var peers = new Peer[0];
             var endTime = DateTime.Now.AddSeconds(3);
             while (peers.Length == 0)
             {
@@ -130,7 +130,7 @@ public class FloodRouterTest
             await swarm1.ConnectAsync(_other);
             await ns1.SubscribeAsync(topic, msg => { }, cs.Token);
 
-            Peer[] peers = new Peer[0];
+            var peers = new Peer[0];
             var endTime = DateTime.Now.AddSeconds(3);
             while (peers.Length == 0)
             {
@@ -179,7 +179,7 @@ public class FloodRouterTest
             await swarm1.ConnectAsync(_other);
             await ns1.SubscribeAsync(topic, msg => { }, cs.Token);
 
-            Peer[] peers = new Peer[0];
+            var peers = new Peer[0];
             var endTime = DateTime.Now.AddSeconds(3);
             while (peers.Length == 0)
             {
@@ -251,7 +251,7 @@ public class FloodRouterTest
             await swarm1.ConnectAsync(_other);
             await swarm3.ConnectAsync(_other);
 
-            Peer[] peers = new Peer[0];
+            var peers = new Peer[0];
             var endTime = DateTime.Now.AddSeconds(3);
             while (peers.Length == 0)
             {

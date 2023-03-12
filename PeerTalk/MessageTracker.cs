@@ -72,7 +72,7 @@ public class MessageTracker
             .ToArray();
         foreach (var key in expired)
         {
-            _messages.TryRemove(key, out DateTime _);
+            _messages.TryRemove(key, out var _);
         }
     }
 }

@@ -277,7 +277,7 @@ public class MultiAddressTest
         Assert.AreEqual(ma1, ma2);
         Assert.AreNotSame(ma1, ma2);
         Assert.AreNotSame(ma1.Protocols, ma2.Protocols);
-        for (int i = 0; i < ma1.Protocols.Count; ++i)
+        for (var i = 0; i < ma1.Protocols.Count; ++i)
         {
             var p1 = ma1.Protocols[i];
             var p2 = ma2.Protocols[i];
@@ -319,7 +319,7 @@ public class MultiAddressTest
     public void JsonSerialization()
     {
         var a = new MultiAddress("/ip6/fe80::7573:b0a8:46b0:0bad/tcp/4009");
-        string json = JsonConvert.SerializeObject(a);
+        var json = JsonConvert.SerializeObject(a);
         Assert.AreEqual($"\"{a.ToString()}\"", json);
         var b = JsonConvert.DeserializeObject<MultiAddress>(json);
         Assert.AreEqual(a.ToString(), b.ToString());

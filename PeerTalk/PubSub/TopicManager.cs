@@ -31,7 +31,7 @@ public class TopicManager
             return _topics.Values.SelectMany(v => v);
         }
 
-        if (!_topics.TryGetValue(topic, out HashSet<Peer> peers))
+        if (!_topics.TryGetValue(topic, out var peers))
         {
             return nopeers;
         }

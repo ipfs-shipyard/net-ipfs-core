@@ -244,7 +244,7 @@ internal abstract class IpNetworkProtocol : NetworkProtocol
         try
         {
             // Remove the scope id.
-            int i = Value.LastIndexOf('%');
+            var i = Value.LastIndexOf('%');
             if (i != -1)
                 Value = Value.Substring(0, i);
 

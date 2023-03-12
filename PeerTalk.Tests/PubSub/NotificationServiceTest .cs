@@ -103,7 +103,7 @@ public class NotificationServiceTest
         {
             var topic = Guid.NewGuid().ToString();
             var cs = new CancellationTokenSource();
-            int messageCount = 0;
+            var messageCount = 0;
             await ns.SubscribeAsync(topic, msg => { ++messageCount; }, cs.Token);
             await ns.SubscribeAsync(topic, msg => { ++messageCount; }, cs.Token);
 
@@ -125,7 +125,7 @@ public class NotificationServiceTest
         {
             var topic = Guid.NewGuid().ToString();
             var cs = new CancellationTokenSource();
-            int messageCount = 0;
+            var messageCount = 0;
             await ns.SubscribeAsync(topic, msg => { ++messageCount; throw new(); }, cs.Token);
 
             await ns.PublishAsync(topic, "");
@@ -147,7 +147,7 @@ public class NotificationServiceTest
         {
             var topic = Guid.NewGuid().ToString();
             var cs = new CancellationTokenSource();
-            int messageCount = 0;
+            var messageCount = 0;
             await ns.SubscribeAsync(topic, msg => { ++messageCount; }, cs.Token);
 
             await ns.PublishAsync(topic, "");

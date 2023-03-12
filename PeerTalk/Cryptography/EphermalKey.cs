@@ -65,7 +65,7 @@ public class EphermalKey
     /// </param>
     public static EphermalKey CreatePublicKeyFromIpfs(string curveName, byte[] bytes)
     {
-        X9ECParameters ecP = ECNamedCurveTable.GetByName(curveName);
+        var ecP = ECNamedCurveTable.GetByName(curveName);
         if (ecP == null)
             throw new KeyNotFoundException($"Unknown curve name '{curveName}'.");
         var domain = new ECDomainParameters(ecP.Curve, ecP.G, ecP.N, ecP.H, ecP.GetSeed());
@@ -87,7 +87,7 @@ public class EphermalKey
     /// </returns>
     public static EphermalKey Generate(string curveName)
     {
-        X9ECParameters ecP = ECNamedCurveTable.GetByName(curveName);
+        var ecP = ECNamedCurveTable.GetByName(curveName);
         if (ecP == null)
             throw new($"Unknown curve name '{curveName}'.");
         var domain = new ECDomainParameters(ecP.Curve, ecP.G, ecP.N, ecP.H, ecP.GetSeed());

@@ -40,7 +40,7 @@ public static class MultiCodec
     public static Codec ReadMultiCodec(this Stream stream)
     {
         var code = stream.ReadVarint32();
-        Codec.Codes.TryGetValue(code, out Codec codec);
+        Codec.Codes.TryGetValue(code, out var codec);
         if (codec == null)
         {
             codec = Codec.Register($"codec-{code}", code);
@@ -63,7 +63,7 @@ public static class MultiCodec
     public static Codec ReadMultiCodec(this CodedInputStream stream)
     {
         var code = stream.ReadInt32();
-        Codec.Codes.TryGetValue(code, out Codec codec);
+        Codec.Codes.TryGetValue(code, out var codec);
 
         return codec ?? Codec.Register($"codec-{code}", code);
     }
@@ -86,7 +86,7 @@ public static class MultiCodec
     /// </exception>
     public static void WriteMultiCodec(this Stream stream, string name)
     {
-        Codec.Names.TryGetValue(name, out Codec codec);
+        Codec.Names.TryGetValue(name, out var codec);
         if (codec == null)
         {
             throw new KeyNotFoundException($"Codec '{name}' is not registered.");

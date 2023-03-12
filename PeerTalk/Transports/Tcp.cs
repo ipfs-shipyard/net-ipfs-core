@@ -53,7 +53,7 @@ namespace IpfsShipyard.PeerTalk.Transports
                 SocketType.Stream,
                 ProtocolType.Tcp);
 
-            TimeSpan latency = MinReadTimeout; // keep compiler happy
+            var latency = MinReadTimeout; // keep compiler happy
             var start = DateTime.Now;
             try
             {
@@ -199,7 +199,7 @@ namespace IpfsShipyard.PeerTalk.Transports
             {
                 while (!cancel.IsCancellationRequested)
                 {
-                    Socket conn = socket.Accept();
+                    var conn = socket.Accept();
                     if (conn == null)
                     {
                         log.Warn("Null socket from Accept");

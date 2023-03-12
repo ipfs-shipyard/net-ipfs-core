@@ -310,8 +310,8 @@ public class MultiAddress : IEquatable<MultiAddress>
         Protocols.Clear();
         do
         {
-            uint code = (uint)stream.ReadInt64();
-            if (!NetworkProtocol.Codes.TryGetValue(code, out Type protocolType))
+            var code = (uint)stream.ReadInt64();
+            if (!NetworkProtocol.Codes.TryGetValue(code, out var protocolType))
                 throw new InvalidDataException(string.Format("The IPFS network protocol code '{0}' is unknown.", code));
             var p = (NetworkProtocol)Activator.CreateInstance(protocolType);
             p.ReadValue(stream);
@@ -348,7 +348,7 @@ public class MultiAddress : IEquatable<MultiAddress>
             if (name.Length == 0)
                 break;
 
-            if (!NetworkProtocol.Names.TryGetValue(name.ToString(), out Type protocolType))
+            if (!NetworkProtocol.Names.TryGetValue(name.ToString(), out var protocolType))
                 throw new FormatException($"The IPFS network protocol '{name}' is unknown.");
 
             var p = (NetworkProtocol)Activator.CreateInstance(protocolType);
@@ -363,7 +363,7 @@ public class MultiAddress : IEquatable<MultiAddress>
     /// <inheritdoc />
     public override int GetHashCode()
     {
-        int code = 0;
+        var code = 0;
 
         foreach (var p in Protocols)
         {
@@ -387,7 +387,7 @@ public class MultiAddress : IEquatable<MultiAddress>
     {
         if (Protocols.Count != that.Protocols.Count)
             return false;
-        for (int i = 0; i < Protocols.Count; ++i)
+        for (var i = 0; i < Protocols.Count; ++i)
         {
             if (Protocols[i].Code != that.Protocols[i].Code)
                 return false;

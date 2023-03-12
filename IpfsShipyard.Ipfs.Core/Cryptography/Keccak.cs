@@ -95,7 +95,7 @@ internal abstract class Keccak : System.Security.Cryptography.HashAlgorithm
 
     protected void AddToBuffer(byte[] array, ref int offset, ref int count)
     {
-        int amount = Math.Min(count, Buffer.Length - BuffLength);
+        var amount = Math.Min(count, Buffer.Length - BuffLength);
         System.Buffer.BlockCopy(array, offset, Buffer, BuffLength, amount);
         offset += amount;
         BuffLength += amount;

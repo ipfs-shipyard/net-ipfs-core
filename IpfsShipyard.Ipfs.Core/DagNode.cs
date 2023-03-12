@@ -263,7 +263,7 @@ public class DagNode : IMerkleNode<IMerkleLink>
     private void Read(CodedInputStream stream)
     {
         var links = new List<DagLink>();
-        bool done = false;
+        var done = false;
 
         while (!stream.IsAtEnd && !done)
         {

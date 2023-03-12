@@ -111,7 +111,7 @@ internal static class SocketTaskExtensions
         SocketFlags socketFlags,
         EndPoint remoteEndPoint)
     {
-        object[] packedArguments = new object[] { socket, remoteEndPoint };
+        var packedArguments = new object[] { socket, remoteEndPoint };
 
         return Task<SocketReceiveFromResult>.Factory.FromAsync(
             (targetBuffer, flags, callback, state) =>
@@ -120,7 +120,7 @@ internal static class SocketTaskExtensions
                 var s = (Socket)arguments[0];
                 var e = (EndPoint)arguments[1];
 
-                IAsyncResult result = s.BeginReceiveFrom(
+                var result = s.BeginReceiveFrom(
                     targetBuffer.Array,
                     targetBuffer.Offset,
                     targetBuffer.Count,
@@ -138,7 +138,7 @@ internal static class SocketTaskExtensions
                 var s = (Socket)arguments[0];
                 var e = (EndPoint)arguments[1];
 
-                int bytesReceived = s.EndReceiveFrom(asyncResult, ref e);
+                var bytesReceived = s.EndReceiveFrom(asyncResult, ref e);
 
                 return new()
                 {
@@ -157,7 +157,7 @@ internal static class SocketTaskExtensions
         SocketFlags socketFlags,
         EndPoint remoteEndPoint)
     {
-        object[] packedArguments = new object[] { socket, socketFlags, remoteEndPoint };
+        var packedArguments = new object[] { socket, socketFlags, remoteEndPoint };
 
         return Task<SocketReceiveMessageFromResult>.Factory.FromAsync(
             (targetBuffer, callback, state) =>
@@ -167,7 +167,7 @@ internal static class SocketTaskExtensions
                 var f = (SocketFlags)arguments[1];
                 var e = (EndPoint)arguments[2];
 
-                IAsyncResult result = s.BeginReceiveMessageFrom(
+                var result = s.BeginReceiveMessageFrom(
                     targetBuffer.Array,
                     targetBuffer.Offset,
                     targetBuffer.Count,
@@ -186,11 +186,11 @@ internal static class SocketTaskExtensions
                 var f = (SocketFlags)arguments[1];
                 var e = (EndPoint)arguments[2];
 
-                int bytesReceived = s.EndReceiveMessageFrom(
+                var bytesReceived = s.EndReceiveMessageFrom(
                     asyncResult,
                     ref f,
                     ref e,
-                    out IPPacketInformation ipPacket);
+                    out var ipPacket);
 
                 return new()
                 {

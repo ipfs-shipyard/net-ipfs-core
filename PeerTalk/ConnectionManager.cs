@@ -54,7 +54,7 @@ public class ConnectionManager
     /// </returns>
     public bool IsConnected(Peer peer)
     {
-        return TryGet(peer, out PeerConnection _);
+        return TryGet(peer, out var _);
     }
 
     /// <summary>
@@ -76,7 +76,7 @@ public class ConnectionManager
     public bool TryGet(Peer peer, out PeerConnection connection)
     {
         connection = null;
-        if (!_connections.TryGetValue(Key(peer), out List<PeerConnection> conns))
+        if (!_connections.TryGetValue(Key(peer), out var conns))
         {
             return false;
         }
@@ -151,7 +151,7 @@ public class ConnectionManager
             return false;
         }
 
-        if (!_connections.TryGetValue(Key(connection.RemotePeer), out List<PeerConnection> originalConns))
+        if (!_connections.TryGetValue(Key(connection.RemotePeer), out var originalConns))
         {
             connection.Dispose();
             return false;
@@ -191,7 +191,7 @@ public class ConnectionManager
     /// </returns>
     public bool Remove(MultiHash id)
     {
-        if (!_connections.TryRemove(Key(id), out List<PeerConnection> conns))
+        if (!_connections.TryRemove(Key(id), out var conns))
         {
             return false;
         }

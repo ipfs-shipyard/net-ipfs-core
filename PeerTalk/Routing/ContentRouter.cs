@@ -106,7 +106,7 @@ public class ContentRouter : IDisposable
     /// </returns>
     public IEnumerable<MultiHash> Get(Cid cid)
     {
-        if (!_content.TryGetValue(Key(cid), out List<ProviderInfo> providers))
+        if (!_content.TryGetValue(Key(cid), out var providers))
         {
             return Enumerable.Empty<MultiHash>();
         }

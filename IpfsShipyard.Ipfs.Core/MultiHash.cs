@@ -103,7 +103,7 @@ public class MultiHash : IEquatable<MultiHash>
         if (digest == null)
             throw new ArgumentNullException("digest");
 
-        if (!HashingAlgorithm.Names.TryGetValue(algorithmName, out HashingAlgorithm a))
+        if (!HashingAlgorithm.Names.TryGetValue(algorithmName, out var a))
         {
             throw new ArgumentException(string.Format("The IPFS hashing algorithm '{0}' is unknown.", algorithmName));
         }
@@ -320,7 +320,7 @@ public class MultiHash : IEquatable<MultiHash>
         var code = stream.ReadInt32();
         var digestSize = stream.ReadLength();
 
-        HashingAlgorithm.Codes.TryGetValue(code, out HashingAlgorithm a);
+        HashingAlgorithm.Codes.TryGetValue(code, out var a);
         Algorithm = a;
         if (Algorithm == null)
         {
@@ -454,7 +454,7 @@ public class MultiHash : IEquatable<MultiHash>
     public bool Matches(byte[] data)
     {
         var digest = Algorithm.Hasher().ComputeHash(data);
-        for (int i = digest.Length - 1; 0 <= i; --i)
+        for (var i = digest.Length - 1; 0 <= i; --i)
         {
             if (digest[i] != Digest[i])
                 return false;
@@ -477,7 +477,7 @@ public class MultiHash : IEquatable<MultiHash>
     public bool Matches(Stream data)
     {
         var digest = Algorithm.Hasher().ComputeHash(data);
-        for (int i = digest.Length - 1; 0 <= i; --i)
+        for (var i = digest.Length - 1; 0 <= i; --i)
         {
             if (digest[i] != Digest[i])
                 return false;

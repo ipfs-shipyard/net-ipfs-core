@@ -129,7 +129,7 @@ public class Ping1 : IPeerProtocol, IService
 
         using (var stream = await Swarm.DialAsync(peer, ToString(), cancel))
         {
-            for (int i = 0; i < count; ++i)
+            for (var i = 0; i < count; ++i)
             {
                 rng.NextBytes(ping);
 

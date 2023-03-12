@@ -39,7 +39,7 @@ public class Multistream1 : IPeerProtocol
         }
 
         // Switch to the specified protocol
-        if (!connection.Protocols.TryGetValue(msg, out Func<PeerConnection, Stream, CancellationToken, Task> protocol))
+        if (!connection.Protocols.TryGetValue(msg, out var protocol))
         {
             await Message.WriteAsync("na", stream, cancel).ConfigureAwait(false);
             return;

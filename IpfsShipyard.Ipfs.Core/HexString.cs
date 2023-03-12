@@ -66,7 +66,7 @@ public static class HexString
                 throw new FormatException(string.Format("Invalid HexString format '{0}', only 'G', 'x' or 'X' are allowed.", format));
         }
 
-        StringBuilder s = new StringBuilder(buffer.Length * 2);
+        var s = new StringBuilder(buffer.Length * 2);
         foreach (var v in buffer)
             s.Append(hexStrings[v]);
         return s.ToString();
@@ -102,7 +102,7 @@ public static class HexString
     /// </returns>
     public static byte[] Decode(string s)
     {
-        int n = s.Length;
+        var n = s.Length;
         if (n % 2 != 0)
             throw new InvalidDataException("The hex string length must be a multiple of 2.");
 

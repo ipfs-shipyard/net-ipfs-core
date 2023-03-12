@@ -11,14 +11,14 @@ public class DnsApiTest
     [TestMethod]
     public void Api_Exists()
     {
-        IpfsClient ipfs = TestFixture.Ipfs;
+        var ipfs = TestFixture.Ipfs;
         Assert.IsNotNull(ipfs.Dns);
     }
 
     [TestMethod]
     public async Task Resolve()
     {
-        IpfsClient ipfs = TestFixture.Ipfs;
+        var ipfs = TestFixture.Ipfs;
         var cts = new CancellationTokenSource(TimeSpan.FromSeconds(30));
         var path = await ipfs.Dns.ResolveAsync("ipfs.io", recursive: true, cancel: cts.Token);
         StringAssert.StartsWith(path, "/ipfs/");

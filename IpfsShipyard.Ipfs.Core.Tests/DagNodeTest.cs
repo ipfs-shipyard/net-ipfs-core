@@ -247,7 +247,7 @@ public class DagNodeTest
         using (var second = b.DataStream)
         {
             Assert.AreEqual(first.Length, second.Length);
-            for (int i = 0; i < first.Length; ++i)
+            for (var i = 0; i < first.Length; ++i)
             {
                 Assert.AreEqual(first.ReadByte(), second.ReadByte());
             }

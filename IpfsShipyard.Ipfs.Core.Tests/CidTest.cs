@@ -330,7 +330,7 @@ public class CidTest
         var stream = new MemoryStream();
         cid.Write(stream);
         stream.Position = 0;
-        Cid clone = Cid.Read(stream);
+        var clone = Cid.Read(stream);
         Assert.AreEqual(cid.Version, clone.Version);
         Assert.AreEqual(cid.ContentType, clone.ContentType);
         Assert.AreEqual(cid.Hash, clone.Hash);
@@ -343,7 +343,7 @@ public class CidTest
         var stream = new MemoryStream();
         cid.Write(stream);
         stream.Position = 0;
-        Cid clone = Cid.Read(stream);
+        var clone = Cid.Read(stream);
         Assert.AreEqual(cid.Version, clone.Version);
         Assert.AreEqual(cid.ContentType, clone.ContentType);
         Assert.AreEqual(cid.Hash, clone.Hash);
@@ -358,7 +358,7 @@ public class CidTest
         cos.Flush();
         stream.Position = 0;
         var cis = new CodedInputStream(stream);
-        Cid clone = Cid.Read(cis);
+        var clone = Cid.Read(cis);
         Assert.AreEqual(cid.Version, clone.Version);
         Assert.AreEqual(cid.ContentType, clone.ContentType);
         Assert.AreEqual(cid.Hash, clone.Hash);
@@ -374,7 +374,7 @@ public class CidTest
         cos.Flush();
         stream.Position = 0;
         var cis = new CodedInputStream(stream);
-        Cid clone = Cid.Read(cis);
+        var clone = Cid.Read(cis);
         Assert.AreEqual(cid.Version, clone.Version);
         Assert.AreEqual(cid.ContentType, clone.ContentType);
         Assert.AreEqual(cid.Hash, clone.Hash);
@@ -401,7 +401,7 @@ public class CidTest
     public void JsonSerialization()
     {
         Cid a = "QmaozNR7DZHQK1ZcU9p7QdrshMvXqWK6gpu5rmrkPdT3L4";
-        string json = JsonConvert.SerializeObject(a);
+        var json = JsonConvert.SerializeObject(a);
         Assert.AreEqual($"\"{a.Encode()}\"", json);
         var b = JsonConvert.DeserializeObject<Cid>(json);
         Assert.AreEqual(a, b);

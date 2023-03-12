@@ -13,7 +13,7 @@ public class StretchedKeyTest
         var cipher = "AES-256";
         var hash = "SHA256";
         var secret = new byte[] { 195, 191, 209, 165, 209, 201, 127, 122, 136, 111, 31, 66, 111, 68, 38, 155, 216, 204, 46, 181, 200, 188, 170, 204, 104, 74, 239, 251, 173, 114, 222, 234 };
-        StretchedKey.Generate(cipher, hash, secret, out StretchedKey k1, out StretchedKey k2);
+        StretchedKey.Generate(cipher, hash, secret, out var k1, out var k2);
 
         Assert.IsNotNull(k1);
         CollectionAssert.AreEqual(new byte[] { 208, 132, 203, 169, 253, 52, 40, 83, 161, 91, 17, 71, 33, 136, 67, 96 }, k1.Iv);

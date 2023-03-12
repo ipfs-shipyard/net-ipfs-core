@@ -122,7 +122,7 @@ public class AutoDialerTest
         await swarmC.StartAsync();
         var peerCAddress = await swarmC.StartListeningAsync("/ip4/127.0.0.1/tcp/0");
 
-        bool isBConnected = false;
+        var isBConnected = false;
         swarmA.ConnectionEstablished += (s, conn) =>
         {
             if (conn.RemotePeer == _peerB)
