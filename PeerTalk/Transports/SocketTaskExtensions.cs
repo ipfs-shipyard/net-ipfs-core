@@ -140,7 +140,7 @@ internal static class SocketTaskExtensions
 
                 int bytesReceived = s.EndReceiveFrom(asyncResult, ref e);
 
-                return new SocketReceiveFromResult()
+                return new()
                 {
                     ReceivedBytes = bytesReceived,
                     RemoteEndPoint = e
@@ -192,7 +192,7 @@ internal static class SocketTaskExtensions
                     ref e,
                     out IPPacketInformation ipPacket);
 
-                return new SocketReceiveMessageFromResult()
+                return new()
                 {
                     PacketInformation = ipPacket,
                     ReceivedBytes = bytesReceived,

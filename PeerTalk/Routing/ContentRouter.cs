@@ -78,7 +78,7 @@ public class ContentRouter : IDisposable
 
         _content.AddOrUpdate(
             Key(cid),
-            (_) => new List<ProviderInfo> { pi },
+            (_) => new() { pi },
             (_, providers) =>
             {
                 var existing = providers

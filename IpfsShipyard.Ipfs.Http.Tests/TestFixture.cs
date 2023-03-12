@@ -9,5 +9,5 @@ public static class TestFixture
     /// </summary>
     //IpfsClient.DefaultApiUri = new Uri("http://127.0.0.1.:5001");
 
-    public static IpfsClient Ipfs = new IpfsClient();
+    public static IpfsClient Ipfs = new();
 }

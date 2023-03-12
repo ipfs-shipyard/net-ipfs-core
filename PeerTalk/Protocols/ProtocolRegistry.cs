@@ -19,7 +19,7 @@ public static class ProtocolRegistry
 
     static ProtocolRegistry()
     {
-        Protocols = new Dictionary<string, Func<IPeerProtocol>>();
+        Protocols = new();
         Register<Multistream1>();
         Register<SecureCommunication.Secio1>();
         Register<Plaintext1>();

@@ -47,7 +47,7 @@ public partial class IpfsClient : IGenericApi
                 var json = sr.ReadLine();
 
                 var r = JObject.Parse(json);
-                yield return new PingResult
+                yield return new()
                 {
                     Success = (bool)r["Success"],
                     Text = (string)r["Text"],

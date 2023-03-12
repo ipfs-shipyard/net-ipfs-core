@@ -11,7 +11,7 @@ public class DurationTest
     {
         Assert.AreEqual(TimeSpan.FromMilliseconds(300), Duration.Parse("300ms"));
         Assert.AreEqual(TimeSpan.FromHours(-1.5), Duration.Parse("-1.5h"));
-        Assert.AreEqual(new TimeSpan(2, 45, 0), Duration.Parse("2h45m"));
+        Assert.AreEqual(new(2, 45, 0), Duration.Parse("2h45m"));
         Assert.AreEqual(new TimeSpan(0, 1, 0) + TimeSpan.FromSeconds(4.483878032), Duration.Parse("1m4.483878032s"));
     }
 
@@ -74,12 +74,12 @@ public class DurationTest
         Assert.AreEqual("0s", Duration.Stringify(TimeSpan.Zero));
         Assert.AreEqual("n/a", Duration.Stringify(TimeSpan.Zero, "n/a"));
 
-        Assert.AreEqual("2h", Duration.Stringify(new TimeSpan(2, 0, 0)));
-        Assert.AreEqual("3m", Duration.Stringify(new TimeSpan(0, 3, 0)));
-        Assert.AreEqual("4s", Duration.Stringify(new TimeSpan(0, 0, 4)));
-        Assert.AreEqual("5ms", Duration.Stringify(new TimeSpan(0, 0, 0, 0, 5)));
-        Assert.AreEqual("2h4s", Duration.Stringify(new TimeSpan(2, 0, 4)));
-        Assert.AreEqual("26h3m4s5ms", Duration.Stringify(new TimeSpan(1, 2, 3, 4, 5)));
+        Assert.AreEqual("2h", Duration.Stringify(new(2, 0, 0)));
+        Assert.AreEqual("3m", Duration.Stringify(new(0, 3, 0)));
+        Assert.AreEqual("4s", Duration.Stringify(new(0, 0, 4)));
+        Assert.AreEqual("5ms", Duration.Stringify(new(0, 0, 0, 0, 5)));
+        Assert.AreEqual("2h4s", Duration.Stringify(new(2, 0, 4)));
+        Assert.AreEqual("26h3m4s5ms", Duration.Stringify(new(1, 2, 3, 4, 5)));
 
         Assert.AreEqual("-48h", Duration.Stringify(TimeSpan.FromDays(-2)));
         Assert.AreEqual("-2h", Duration.Stringify(TimeSpan.FromHours(-2)));

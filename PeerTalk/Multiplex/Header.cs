@@ -81,7 +81,7 @@ public struct Header
     public static async Task<Header> ReadAsync(Stream stream, CancellationToken cancel = default)
     {
         var varint = await stream.ReadVarint64Async(cancel).ConfigureAwait(false);
-        return new Header
+        return new()
         {
             StreamId = varint >> 3,
             PacketType = (PacketType)((byte)varint & 0x7)

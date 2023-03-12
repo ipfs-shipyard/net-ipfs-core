@@ -39,7 +39,7 @@ internal class ObjectApi : IObjectApi
 
     public Task<DagNode> PutAsync(byte[] data, IEnumerable<IMerkleLink> links = null, CancellationToken cancel = default(CancellationToken))
     {
-        return PutAsync(new DagNode(data, links), cancel);
+        return PutAsync(new(data, links), cancel);
     }
 
     public async Task<DagNode> PutAsync(DagNode node, CancellationToken cancel = default(CancellationToken))
@@ -73,7 +73,7 @@ internal class ObjectApi : IObjectApi
                 (string)link["Name"],
                 (string)link["Hash"],
                 (long)link["Size"]));
-        return new DagNode(data, links);
+        return new(data, links);
     }
 
     public async Task<ObjectStat> StatAsync(Cid id, CancellationToken cancel = default(CancellationToken))
@@ -81,7 +81,7 @@ internal class ObjectApi : IObjectApi
         var json = await _ipfs.DoCommandAsync("object/stat", cancel, id);
         var r = JObject.Parse(json);
 
-        return new ObjectStat
+        return new()
         {
             LinkCount = (int)r["NumLinks"],
             LinkSize = (long)r["LinksSize"],

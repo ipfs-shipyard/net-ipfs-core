@@ -24,7 +24,7 @@ public class Dht1 : IPeerProtocol, IService, IPeerRouting, IContentRouting
     public string Name { get; } = "ipfs/kad";
 
     /// <inheritdoc />
-    public SemVersion Version { get; } = new SemVersion(1, 0);
+    public SemVersion Version { get; } = new(1, 0);
 
     /// <summary>
     ///   Provides access to other peers.
@@ -110,8 +110,8 @@ public class Dht1 : IPeerProtocol, IService, IPeerRouting, IContentRouting
     {
         log.Debug("Starting");
 
-        RoutingTable = new RoutingTable(Swarm.LocalPeer);
-        ContentRouter = new ContentRouter();
+        RoutingTable = new(Swarm.LocalPeer);
+        ContentRouter = new();
         Swarm.AddProtocol(this);
         Swarm.PeerDiscovered += Swarm_PeerDiscovered;
         Swarm.PeerRemoved += Swarm_PeerRemoved;
@@ -222,7 +222,7 @@ public class Dht1 : IPeerProtocol, IService, IPeerRouting, IContentRouting
             {
                 return (pid == Swarm.LocalPeer.Id)
                     ? Swarm.LocalPeer
-                    : Swarm.RegisterPeer(new Peer { Id = pid });
+                    : Swarm.RegisterPeer(new() { Id = pid });
             });
         foreach (var provider in providers)
         {
@@ -260,7 +260,7 @@ public class Dht1 : IPeerProtocol, IService, IPeerRouting, IContentRouting
                 Key = cid.Hash.ToArray(),
                 ProviderPeers = new DhtPeerMessage[]
                 {
-                    new DhtPeerMessage
+                    new()
                     {
                         Id = Swarm.LocalPeer.Id.ToArray(),
                         Addresses = Swarm.LocalPeer.Addresses
@@ -312,7 +312,7 @@ public class Dht1 : IPeerProtocol, IService, IPeerRouting, IContentRouting
         MultiHash peerId;
         try
         {
-            peerId = new MultiHash(request.Key);
+            peerId = new(request.Key);
         }
         catch (Exception)
         {
@@ -362,14 +362,14 @@ public class Dht1 : IPeerProtocol, IService, IPeerRouting, IContentRouting
     public DhtMessage ProcessGetProviders(DhtMessage request, DhtMessage response)
     {
         // Find providers for the content.
-        var cid = new Cid { Hash = new MultiHash(request.Key) };
+        var cid = new Cid { Hash = new(request.Key) };
         response.ProviderPeers = ContentRouter
             .Get(cid)
             .Select(pid =>
             {
                 var peer = (pid == Swarm.LocalPeer.Id)
                     ? Swarm.LocalPeer
-                    : Swarm.RegisterPeer(new Peer { Id = pid });
+                    : Swarm.RegisterPeer(new() { Id = pid });
                 return new DhtPeerMessage
                 {
                     Id = peer.Id.ToArray(),
@@ -395,7 +395,7 @@ public class Dht1 : IPeerProtocol, IService, IPeerRouting, IContentRouting
         Cid cid;
         try
         {
-            cid = new Cid { Hash = new MultiHash(request.Key) };
+            cid = new() { Hash = new(request.Key) };
         }
         catch (Exception)
         {

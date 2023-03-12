@@ -6,7 +6,7 @@ namespace IpfsShipyard.Ipfs.Http.Tests;
 
 public partial class IpfsClientTest
 {
-    private readonly MultiAddress _newTrustedPeer = new MultiAddress("/ip4/25.196.147.100/tcp/4001/ipfs/QmaMqSwWShsPg2RbredZtoneFjXhim7AQkqbLxib45Lx4S");
+    private readonly MultiAddress _newTrustedPeer = new("/ip4/25.196.147.100/tcp/4001/ipfs/QmaMqSwWShsPg2RbredZtoneFjXhim7AQkqbLxib45Lx4S");
 
     [TestMethod]
     public void Trusted_Peers_List()

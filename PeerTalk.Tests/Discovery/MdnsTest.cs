@@ -28,13 +28,13 @@ public class MdnsTest
         var done = new ManualResetEvent(false);
         var mdns1 = new MdnsNext
         {
-            MulticastService = new MulticastService(),
+            MulticastService = new(),
             ServiceName = serviceName,
             LocalPeer = peer1
         };
         var mdns2 = new MdnsNext
         {
-            MulticastService = new MulticastService(),
+            MulticastService = new(),
             ServiceName = serviceName,
             LocalPeer = peer2
         };
@@ -78,13 +78,13 @@ public class MdnsTest
         var done = new ManualResetEvent(false);
         var mdns1 = new MdnsJs
         {
-            MulticastService = new MulticastService(),
+            MulticastService = new(),
             ServiceName = serviceName,
             LocalPeer = peer1
         };
         var mdns2 = new MdnsJs
         {
-            MulticastService = new MulticastService(),
+            MulticastService = new(),
             ServiceName = serviceName,
             LocalPeer = peer2
         };

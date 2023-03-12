@@ -24,7 +24,7 @@ public class Secio1 : IEncryptionProtocol
     public string Name { get; } = "secio";
 
     /// <inheritdoc />
-    public SemVersion Version { get; } = new SemVersion(1, 0);
+    public SemVersion Version { get; } = new(1, 0);
 
     /// <inheritdoc />
     public override string ToString()
@@ -45,7 +45,7 @@ public class Secio1 : IEncryptionProtocol
     {
         var stream = connection.Stream;
         var localPeer = connection.LocalPeer;
-        connection.RemotePeer ??= new Peer();
+        connection.RemotePeer ??= new();
         var remotePeer = connection.RemotePeer;
 
         // =============================================================================
@@ -76,7 +76,7 @@ public class Secio1 : IEncryptionProtocol
         }
         else if (remoteId != remotePeer.Id)
         {
-            throw new Exception($"Expected peer '{remotePeer.Id}', got '{remoteId}'");
+            throw new($"Expected peer '{remotePeer.Id}', got '{remoteId}'");
         }
 
         // =============================================================================
@@ -109,18 +109,18 @@ public class Secio1 : IEncryptionProtocol
             order = oh1[i].CompareTo(oh2[i]);
         }
         if (order == 0)
-            throw new Exception("Same keys and nonces; talking to self");
+            throw new("Same keys and nonces; talking to self");
         var curveName = SelectBest(order, localProposal.Exchanges, remoteProposal.Exchanges);
         if (curveName == null)
-            throw new Exception("Cannot agree on a key exchange.");
+            throw new("Cannot agree on a key exchange.");
 
         var cipherName = SelectBest(order, localProposal.Ciphers, remoteProposal.Ciphers);
         if (cipherName == null)
-            throw new Exception("Cannot agree on a chipher.");
+            throw new("Cannot agree on a chipher.");
 
         var hashName = SelectBest(order, localProposal.Hashes, remoteProposal.Hashes);
         if (hashName == null)
-            throw new Exception("Cannot agree on a hash.");
+            throw new("Cannot agree on a hash.");
 
         // =============================================================================
         // step 2. Exchange -- exchange (signed) ephemeral keys. verify signatures.
@@ -147,7 +147,7 @@ public class Secio1 : IEncryptionProtocol
         var remoteExchange = Serializer.DeserializeWithLengthPrefix<Secio1Exchange>(stream, PrefixStyle.Fixed32BigEndian);
         if (remoteExchange == null)
         {
-            throw new Exception("Remote refuses the SECIO exchange.");
+            throw new("Remote refuses the SECIO exchange.");
         }
 
         // =============================================================================
@@ -187,7 +187,7 @@ public class Secio1 : IEncryptionProtocol
         await secureStream.ReadExactAsync(verification, 0, verification.Length, cancel);
         if (!localNonce.SequenceEqual(verification))
         {
-            throw new Exception("SECIO verification message failure.");
+            throw new("SECIO verification message failure.");
         }
 
         log.Debug($"Secure session with {remotePeer}");

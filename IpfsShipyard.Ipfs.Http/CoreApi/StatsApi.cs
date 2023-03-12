@@ -25,7 +25,7 @@ internal class StatApi : IStatsApi
     {
         var json = await _ipfs.DoCommandAsync("stats/bitswap", cancel);
         var stat = JObject.Parse(json);
-        return new BitswapData
+        return new()
         {
             BlocksReceived = (ulong)stat["BlocksReceived"],
             DataReceived = (ulong)stat["DataReceived"],

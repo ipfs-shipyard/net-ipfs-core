@@ -38,7 +38,7 @@ public class PeerTest
     {
         var peer = new Peer
         {
-            ConnectedAddress = new MultiAddress(_marsAddress),
+            ConnectedAddress = new(_marsAddress),
             Latency = TimeSpan.FromHours(3.03 * 2)
         };
         Assert.AreEqual(_marsAddress, peer.ConnectedAddress.ToString());

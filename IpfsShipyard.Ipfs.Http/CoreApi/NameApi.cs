@@ -25,7 +25,7 @@ internal class NameApi : INameApi
             $"key={key}");
         // TODO: lifetime
         var info = JObject.Parse(json);
-        return new NamedContent
+        return new()
         {
             NamePath = (string)info["Name"],
             ContentPath = (string)info["Value"]

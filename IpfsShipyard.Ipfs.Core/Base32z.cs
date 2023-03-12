@@ -11,11 +11,10 @@ namespace IpfsShipyard.Ipfs.Core;
 /// <seealso href="https://en.wikipedia.org/wiki/Base32#z-base-32"/>
 public static class Base32Z
 {
-    private static readonly Base32Alphabet alphabet =
-        new Base32Alphabet("ybndrfg8ejkmcpqxot1uwisza345h769");
+    private static readonly Base32Alphabet alphabet = new("ybndrfg8ejkmcpqxot1uwisza345h769");
 
     /// <summary>
     ///   The encoder/decoder for z-base-32.
     /// </summary>
-    public static readonly SimpleBase.Base32 Codec = new SimpleBase.Base32(alphabet);
+    public static readonly SimpleBase.Base32 Codec = new(alphabet);
 }

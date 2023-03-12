@@ -38,8 +38,8 @@ namespace IpfsShipyard.Ipfs.Core.Registry;
 /// </remarks>
 public class HashingAlgorithm
 {
-    internal static Dictionary<string, HashingAlgorithm> Names = new Dictionary<string, HashingAlgorithm>();
-    internal static Dictionary<int, HashingAlgorithm> Codes = new Dictionary<int, HashingAlgorithm>();
+    internal static Dictionary<string, HashingAlgorithm> Names = new();
+    internal static Dictionary<int, HashingAlgorithm> Codes = new();
 
     /// <summary>
     ///   Register the standard hash algorithms for IPFS.

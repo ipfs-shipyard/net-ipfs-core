@@ -81,14 +81,14 @@ public class MdnsJs : Mdns
                 .Where(a => a.Name == name || a.Name == srv.Target);
             foreach (var a in aRecords)
             {
-                yield return new MultiAddress($"/ip4/{a.Address}/tcp/{srv.Port}/ipfs/{id}");
+                yield return new($"/ip4/{a.Address}/tcp/{srv.Port}/ipfs/{id}");
             }
             var aaaaRecords = message.Answers
                 .OfType<AAAARecord>()
                 .Where(a => a.Name == name || a.Name == srv.Target);
             foreach (var a in aaaaRecords)
             {
-                yield return new MultiAddress($"/ip6/{a.Address}/tcp/{srv.Port}/ipfs/{id}");
+                yield return new($"/ip6/{a.Address}/tcp/{srv.Port}/ipfs/{id}");
             }
         }
     }

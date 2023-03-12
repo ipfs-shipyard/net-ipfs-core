@@ -21,7 +21,7 @@ public class Identify1 : IPeerProtocol
     public string Name { get; } = "ipfs/id";
 
     /// <inheritdoc />
-    public SemVersion Version { get; } = new SemVersion(1, 0);
+    public SemVersion Version { get; } = new(1, 0);
 
     /// <inheritdoc />
     public override string ToString()
@@ -69,7 +69,7 @@ public class Identify1 : IPeerProtocol
         Peer remote = connection.RemotePeer;
         if (remote == null)
         {
-            remote = new Peer();
+            remote = new();
             connection.RemotePeer = remote;
         }
 

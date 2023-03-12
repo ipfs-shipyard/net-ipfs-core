@@ -31,7 +31,7 @@ public partial class IpfsClient : ICoreApi
 {
     private const string UnknownFilename = "unknown";
 
-    private static readonly object _safe = new object();
+    private static readonly object _safe = new();
     private static HttpClient _api = null;
 
     /// <summary>
@@ -43,7 +43,7 @@ public partial class IpfsClient : ICoreApi
     /// <remarks>
     ///   The environment variable "IpfsHttpApi" overrides this value.
     /// </remarks>
-    public static Uri DefaultApiUri = new Uri(
+    public static Uri DefaultApiUri = new(
         Environment.GetEnvironmentVariable("IpfsHttpApi")
         ?? "http://localhost:5001");
 
@@ -63,7 +63,7 @@ public partial class IpfsClient : ICoreApi
         var version = assembly.GetName().Version;
 
         UserAgent = string.Format("{0}/{1}.{2}.{3}", assembly.GetName().Name, version.Major, version.Minor, version.Revision);
-        TrustedPeers = new TrustedPeerCollection(this);
+        TrustedPeers = new(this);
 
         Bootstrap = new BootstrapApi(this);
         Bitswap = new BitswapApi(this);
@@ -95,7 +95,7 @@ public partial class IpfsClient : ICoreApi
     public IpfsClient(string host)
         : this()
     {
-        ApiUri = new Uri(host);
+        ApiUri = new(host);
     }
 
     /// <summary>
@@ -205,7 +205,7 @@ public partial class IpfsClient : ICoreApi
             url = q.ToString();
         }
 
-        return new Uri(ApiUri, url);
+        return new(ApiUri, url);
     }
 
     /// <summary>
@@ -231,7 +231,7 @@ public partial class IpfsClient : ICoreApi
                                                          | DecompressionMethods.Deflate;
                     }
 
-                    _api = new HttpClient(HttpMessageHandler)
+                    _api = new(HttpMessageHandler)
                     {
                         Timeout = Timeout.InfiniteTimeSpan
                     };
@@ -477,7 +477,7 @@ public partial class IpfsClient : ICoreApi
         var content = new MultipartFormDataContent();
         var streamContent = new StreamContent(data);
 
-        streamContent.Headers.ContentType = new MediaTypeHeaderValue("application/octet-stream");
+        streamContent.Headers.ContentType = new("application/octet-stream");
 
         if (string.IsNullOrEmpty(name))
             content.Add(streamContent, "file", UnknownFilename);
@@ -527,7 +527,7 @@ public partial class IpfsClient : ICoreApi
         var content = new MultipartFormDataContent();
         var streamContent = new StreamContent(data);
 
-        streamContent.Headers.ContentType = new MediaTypeHeaderValue("application/octet-stream");
+        streamContent.Headers.ContentType = new("application/octet-stream");
 
         content.Add(streamContent, "file", string.IsNullOrEmpty(name) ? UnknownFilename : name);
 
@@ -547,7 +547,7 @@ public partial class IpfsClient : ICoreApi
         var content = new MultipartFormDataContent();
         var streamContent = new ByteArrayContent(data);
 
-        streamContent.Headers.ContentType = new MediaTypeHeaderValue("application/octet-stream");
+        streamContent.Headers.ContentType = new("application/octet-stream");
         content.Add(streamContent, "file", UnknownFilename);
 
         var url = BuildCommand(command, null, options);
@@ -600,8 +600,8 @@ public partial class IpfsClient : ICoreApi
     }
 
     /// <inheritdoc />
-    public IAsyncEnumerable<PingResult> Ping(MultiHash peer, int count = 10, CancellationToken cancel = new CancellationToken()) => Generic.Ping(peer, count, cancel);
+    public IAsyncEnumerable<PingResult> Ping(MultiHash peer, int count = 10, CancellationToken cancel = new()) => Generic.Ping(peer, count, cancel);
 
     /// <inheritdoc />
-    public IAsyncEnumerable<PingResult> Ping(MultiAddress address, int count = 10, CancellationToken cancel = new CancellationToken()) => Generic.Ping(address, count, cancel);
+    public IAsyncEnumerable<PingResult> Ping(MultiAddress address, int count = 10, CancellationToken cancel = new()) => Generic.Ping(address, count, cancel);
 }

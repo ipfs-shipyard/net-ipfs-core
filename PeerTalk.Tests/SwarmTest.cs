@@ -17,14 +17,14 @@ public class SwarmTest
     private readonly MultiAddress _venus = "/ip4/104.236.76.40/tcp/4001/ipfs/QmSoLV4Bbm51jM9C4gDYZQ9Cy3U6aXMJDAbzgu2fzaDs64";
     private readonly MultiAddress _earth = "/ip4/178.62.158.247/tcp/4001/ipfs/QmSoLer265NRgSp2LA3dPaeykiS1J6DifTC88f5uVQKNAd";
 
-    private readonly Peer _self = new Peer
+    private readonly Peer _self = new()
     {
         AgentVersion = "self",
         Id = "QmXK9VBxaXFuuT29AaPUTgW3jBWZ9JgLVZYdMYTHC6LLAH",
         PublicKey = "CAASXjBcMA0GCSqGSIb3DQEBAQUAA0sAMEgCQQCC5r4nQBtnd9qgjnG8fBN5+gnqIeWEIcUFUdCG4su/vrbQ1py8XGKNUBuDjkyTv25Gd3hlrtNJV3eOKZVSL8ePAgMBAAE="
     };
 
-    private readonly Peer _other = new Peer
+    private readonly Peer _other = new()
     {
         AgentVersion = "other",
         Id = "QmdpwjdB94eNm2Lcvp9JqoCxswo3AKQqjLuNZyLixmCM1h",
@@ -979,18 +979,18 @@ public class SwarmTest
         });
         ExceptionAssert.Throws<ArgumentNullException>(() =>
         {
-            swarm.LocalPeer = new Peer { Id = _self.Id };
+            swarm.LocalPeer = new() { Id = _self.Id };
         });
         ExceptionAssert.Throws<ArgumentNullException>(() =>
         {
-            swarm.LocalPeer = new Peer { PublicKey = _self.PublicKey };
+            swarm.LocalPeer = new() { PublicKey = _self.PublicKey };
         });
         ExceptionAssert.Throws<ArgumentException>(() =>
         {
-            swarm.LocalPeer = new Peer { Id = _self.Id, PublicKey = _other.PublicKey };
+            swarm.LocalPeer = new() { Id = _self.Id, PublicKey = _other.PublicKey };
         });
 
-        swarm.LocalPeer = new Peer { Id = _other.Id, PublicKey = _other.PublicKey };
+        swarm.LocalPeer = new() { Id = _other.Id, PublicKey = _other.PublicKey };
         Assert.AreEqual(_other, swarm.LocalPeer);
     }
 
@@ -1025,8 +1025,8 @@ public class SwarmTest
             Id = _mars.PeerId,
             Addresses = new List<MultiAddress>
             {
-                new MultiAddress($"/ip4/127.0.0.1/tcp/4242/ipfs/{_mars.PeerId}"),
-                new MultiAddress($"/ip4/127.0.0.2/tcp/4242/ipfs/{_mars.PeerId}")
+                new($"/ip4/127.0.0.1/tcp/4242/ipfs/{_mars.PeerId}"),
+                new($"/ip4/127.0.0.2/tcp/4242/ipfs/{_mars.PeerId}")
             }
         };
 
@@ -1119,8 +1119,8 @@ public class SwarmTest
         swarm.RegisterPeerAddress("/ip4/127.0.0.1/tcp/4001/ipfs/QmdpwjdB94eNm2Lcvp9JqoCxswo3AKQqjLuNZyLixmCM1i");
         swarm.RegisterPeerAddress("/ip4/127.0.0.2/tcp/4001/ipfs/QmdpwjdB94eNm2Lcvp9JqoCxswo3AKQqjLuNZyLixmCM1i");
         swarm.RegisterPeerAddress("/ip4/127.0.0.3/tcp/4001/ipfs/QmdpwjdB94eNm2Lcvp9JqoCxswo3AKQqjLuNZyLixmCM1i");
-        swarm.RegisterPeer(new Peer { Id = "QmdpwjdB94eNm2Lcvp9JqoCxswo3AKQqjLuNZyLixmCM1j" });
-        swarm.RegisterPeer(new Peer { Id = "QmdpwjdB94eNm2Lcvp9JqoCxswo3AKQqjLuNZyLixmCM1j" });
+        swarm.RegisterPeer(new() { Id = "QmdpwjdB94eNm2Lcvp9JqoCxswo3AKQqjLuNZyLixmCM1j" });
+        swarm.RegisterPeer(new() { Id = "QmdpwjdB94eNm2Lcvp9JqoCxswo3AKQqjLuNZyLixmCM1j" });
 
         Assert.AreEqual(3, peerCount);
     }

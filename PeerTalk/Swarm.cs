@@ -149,7 +149,7 @@ public class Swarm : IService, IPolicy<MultiAddress>, IPolicy<Peer>
     /// <summary>
     ///   Manages the swarm's peer connections.
     /// </summary>
-    public ConnectionManager Manager = new ConnectionManager();
+    public ConnectionManager Manager = new();
 
     /// <summary>
     ///   Use to find addresses of a peer.
@@ -273,7 +273,7 @@ public class Swarm : IService, IPolicy<MultiAddress>, IPolicy<Peer>
         }
         if (!IsAllowed(peer))
         {
-            throw new Exception($"Communication with '{peer}' is not allowed.");
+            throw new($"Communication with '{peer}' is not allowed.");
         }
 
         var isNew = false;
@@ -353,12 +353,12 @@ public class Swarm : IService, IPolicy<MultiAddress>, IPolicy<Peer>
     /// <summary>
     ///   The addresses that cannot be used.
     /// </summary>
-    public MultiAddressBlackList BlackList { get; set; } = new MultiAddressBlackList();
+    public MultiAddressBlackList BlackList { get; set; } = new();
 
     /// <summary>
     ///   The addresses that can be used.
     /// </summary>
-    public MultiAddressWhiteList WhiteList { get; set; } = new MultiAddressWhiteList();
+    public MultiAddressWhiteList WhiteList { get; set; } = new();
 
     /// <inheritdoc />
     public Task StartAsync()
@@ -387,7 +387,7 @@ public class Swarm : IService, IPolicy<MultiAddress>, IPolicy<Peer>
 
         Manager.PeerDisconnected += OnPeerDisconnected;
         IsRunning = true;
-        _swarmCancellation = new CancellationTokenSource();
+        _swarmCancellation = new();
         log.Debug("Started");
 
         return Task.CompletedTask;
@@ -397,7 +397,7 @@ public class Swarm : IService, IPolicy<MultiAddress>, IPolicy<Peer>
     {
         if (!_otherPeers.TryGetValue(peerId.ToBase58(), out Peer peer))
         {
-            peer = new Peer { Id = peerId };
+            peer = new() { Id = peerId };
         }
         PeerDisconnected?.Invoke(this, peer);
     }
@@ -424,8 +424,8 @@ public class Swarm : IService, IPolicy<MultiAddress>, IPolicy<Peer>
         _listeners.Clear();
         _pendingConnections.Clear();
         _pendingRemoteConnections.Clear();
-        BlackList = new MultiAddressBlackList();
-        WhiteList = new MultiAddressWhiteList();
+        BlackList = new();
+        WhiteList = new();
 
         log.Debug($"Stopped {LocalPeer}");
     }
@@ -475,7 +475,7 @@ public class Swarm : IService, IPolicy<MultiAddress>, IPolicy<Peer>
     {
         if (!IsRunning)
         {
-            throw new Exception("The swarm is not running.");
+            throw new("The swarm is not running.");
         }
 
         peer = RegisterPeer(peer);
@@ -492,7 +492,7 @@ public class Swarm : IService, IPolicy<MultiAddress>, IPolicy<Peer>
             using (var cts = CancellationTokenSource.CreateLinkedTokenSource(_swarmCancellation.Token, cancel))
             {
                 return await _pendingConnections
-                    .GetOrAdd(peer, (_) => new AsyncLazy<PeerConnection>(() => DialAsync(peer, peer.Addresses, cts.Token)))
+                    .GetOrAdd(peer, (_) => new(() => DialAsync(peer, peer.Addresses, cts.Token)))
                     .ConfigureAwait(false);
             }
         }
@@ -547,7 +547,7 @@ public class Swarm : IService, IPolicy<MultiAddress>, IPolicy<Peer>
             var result = await Message.ReadStringAsync(stream, cancel).ConfigureAwait(false);
             if (result != protocol)
             {
-                throw new Exception($"Protocol '{protocol}' not supported by '{peer}'.");
+                throw new($"Protocol '{protocol}' not supported by '{peer}'.");
             }
 
             return stream;
@@ -572,7 +572,7 @@ public class Swarm : IService, IPolicy<MultiAddress>, IPolicy<Peer>
 
         if (remote == LocalPeer)
         {
-            throw new Exception("Cannot dial self.");
+            throw new("Cannot dial self.");
         }
 
         // If no addresses, then ask peer routing.
@@ -596,7 +596,7 @@ public class Swarm : IService, IPolicy<MultiAddress>, IPolicy<Peer>
             .ToArray();
         if (possibleAddresses.Length == 0)
         {
-            throw new Exception($"{remote} has no known or reachable address.");
+            throw new($"{remote} has no known or reachable address.");
         }
 
         // Try the various addresses in parallel.  The first one to complete wins.
@@ -616,7 +616,7 @@ public class Swarm : IService, IPolicy<MultiAddress>, IPolicy<Peer>
         {
             var attemped = string.Join(", ", possibleAddresses.Select(a => a.ToString()));
             log.Trace($"Cannot dial {attemped}");
-            throw new Exception($"Cannot dial {remote}.", e);
+            throw new($"Cannot dial {remote}.", e);
         }
 
         // Do the connection handshake.
@@ -658,7 +658,7 @@ public class Swarm : IService, IPolicy<MultiAddress>, IPolicy<Peer>
         // short circuit to make life faster.
         if (addr.Protocols.Count != 3 || !(addr.Protocols[2].Name == "ipfs" || addr.Protocols[2].Name == "p2p"))
         {
-            throw new Exception($"Cannnot dial; unknown protocol in '{addr}'.");
+            throw new($"Cannnot dial; unknown protocol in '{addr}'.");
         }
 
         // Establish the transport stream.
@@ -679,7 +679,7 @@ public class Swarm : IService, IPolicy<MultiAddress>, IPolicy<Peer>
         }
         if (stream == null)
         {
-            throw new Exception("Missing a known transport protocol name.");
+            throw new("Missing a known transport protocol name.");
         }
 
         // Build the connection.
@@ -758,7 +758,7 @@ public class Swarm : IService, IPolicy<MultiAddress>, IPolicy<Peer>
 
         if (!_listeners.TryAdd(address, cancel))
         {
-            throw new Exception($"Already listening on '{address}'.");
+            throw new($"Already listening on '{address}'.");
         }
 
         // Start a listener for the transport
@@ -819,7 +819,7 @@ public class Swarm : IService, IPolicy<MultiAddress>, IPolicy<Peer>
                 msg += " nic-ip: " + ip.Address.ToString();
             }
             cancel.Cancel();
-            throw new Exception(msg);
+            throw new(msg);
         }
 
         // Add actual addresses to listeners and local peer addresses.
@@ -935,7 +935,7 @@ public class Swarm : IService, IPolicy<MultiAddress>, IPolicy<Peer>
             connection.RemotePeer = await identify.GetRemotePeerAsync(connection, default).ConfigureAwait(false);
 
             connection.RemotePeer = RegisterPeer(connection.RemotePeer);
-            connection.RemoteAddress = new MultiAddress($"{remote}/ipfs/{connection.RemotePeer.Id}");
+            connection.RemoteAddress = new($"{remote}/ipfs/{connection.RemotePeer.Id}");
             var actual = Manager.Add(connection);
             if (actual == connection)
             {

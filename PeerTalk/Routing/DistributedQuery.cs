@@ -113,7 +113,7 @@ public class DistributedQuery<T> where T : class
 
         _runningQuery = CancellationTokenSource.CreateLinkedTokenSource(cancel);
         Dht.Stopped += OnDhtStopped;
-        _queryMessage = new DhtMessage
+        _queryMessage = new()
         {
             Type = QueryType,
             Key = QueryKey?.ToArray(),

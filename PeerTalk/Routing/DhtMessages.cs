@@ -150,7 +150,7 @@ public class DhtPeerMessage
             return false;
 
         var id = new MultiHash(Id);
-        peer = new Peer
+        peer = new()
         {
             Id = id
         };

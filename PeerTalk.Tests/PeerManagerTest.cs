@@ -8,7 +8,7 @@ namespace IpfsShipyard.PeerTalk.Tests;
 [TestClass]
 public class PeerManagerTest
 {
-    private readonly Peer _self = new Peer
+    private readonly Peer _self = new()
     {
         AgentVersion = "self",
         Id = "QmXK9VBxaXFuuT29AaPUTgW3jBWZ9JgLVZYdMYTHC6LLAH",
@@ -19,7 +19,7 @@ public class PeerManagerTest
     public void IsNotReachable()
     {
         var peer = new Peer { Id = "QmXFX2P5ammdmXQgfqGkfswtEVFsZUJ5KeHRXQYCTdiTAb" };
-        var manager = new PeerManager { Swarm = new Swarm() };
+        var manager = new PeerManager { Swarm = new() };
         Assert.AreEqual(0, manager.DeadPeers.Count);
 
         manager.SetNotReachable(peer);
@@ -39,7 +39,7 @@ public class PeerManagerTest
     public void BlackListsThePeer()
     {
         var peer = new Peer { Id = "QmXFX2P5ammdmXQgfqGkfswtEVFsZUJ5KeHRXQYCTdiTAb" };
-        var manager = new PeerManager { Swarm = new Swarm() };
+        var manager = new PeerManager { Swarm = new() };
         Assert.AreEqual(0, manager.DeadPeers.Count);
 
         manager.SetNotReachable(peer);

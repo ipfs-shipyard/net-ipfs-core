@@ -62,7 +62,7 @@ public class RoutingTable
     /// </summary>
     public void Add(Peer peer)
     {
-        _peers.Add(new RoutingPeer(peer));
+        _peers.Add(new(peer));
     }
 
     /// <summary>
@@ -70,7 +70,7 @@ public class RoutingTable
     /// </summary>
     public void Remove(Peer peer)
     {
-        _peers.Remove(new RoutingPeer(peer));
+        _peers.Remove(new(peer));
     }
 
     /// <summary>
@@ -78,7 +78,7 @@ public class RoutingTable
     /// </summary>
     public bool Contains(Peer peer)
     {
-        return _peers.Contains(new RoutingPeer(peer));
+        return _peers.Contains(new(peer));
     }
 
     /// <summary>

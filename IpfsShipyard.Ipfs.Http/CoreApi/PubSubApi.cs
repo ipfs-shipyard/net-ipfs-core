@@ -49,7 +49,7 @@ internal class PubSubApi : IPubSubApi
         url.Append("?arg=");
         url.Append(Multibase.Encode(MultibaseEncoding.Base64Url, Encoding.UTF8.GetBytes(topic)));
 
-        return _ipfs.DoCommandAsync(new Uri(_ipfs.ApiUri, url.ToString()), message, cancel);
+        return _ipfs.DoCommandAsync(new(_ipfs.ApiUri, url.ToString()), message, cancel);
     }
 
     public Task PublishAsync(string topic, Stream message, CancellationToken cancel = default)
@@ -59,7 +59,7 @@ internal class PubSubApi : IPubSubApi
         url.Append("?arg=");
         url.Append(Multibase.Encode(MultibaseEncoding.Base64Url, Encoding.UTF8.GetBytes(topic)));
 
-        return _ipfs.DoCommandAsync(new Uri(_ipfs.ApiUri, url.ToString()), message, cancel);
+        return _ipfs.DoCommandAsync(new(_ipfs.ApiUri, url.ToString()), message, cancel);
     }
 
     public async Task PublishAsync(string topic, string message, CancellationToken cancel = default)
@@ -69,7 +69,7 @@ internal class PubSubApi : IPubSubApi
         url.Append("?arg=");
         url.Append(Multibase.Encode(MultibaseEncoding.Base64Url, Encoding.UTF8.GetBytes(topic)));
 
-        await _ipfs.DoCommandAsync(new Uri(_ipfs.ApiUri, url.ToString()), message, cancel);
+        await _ipfs.DoCommandAsync(new(_ipfs.ApiUri, url.ToString()), message, cancel);
     }
 
     public async Task SubscribeAsync(string topic, Action<IPublishedMessage> handler, CancellationToken cancellationToken)
@@ -100,7 +100,7 @@ internal class PubSubApi : IPubSubApi
 
                 if (!ct.IsCancellationRequested)
                 {
-                    handler(new PublishedMessage(json));
+                    handler(new(json));
                 }
             }
         }

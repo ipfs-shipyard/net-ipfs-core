@@ -310,12 +310,12 @@ public class Cid : IEquatable<Cid>
                 {
                     throw new InvalidDataException($"Unknown CID version '{v}'.");
                 }
-                return new Cid
+                return new()
                 {
                     Version = v,
                     Encoding = Registry.MultiBaseAlgorithm.Codes[input[0]].Name,
                     ContentType = ms.ReadMultiCodec().Name,
-                    Hash = new MultiHash(ms)
+                    Hash = new(ms)
                 };
             }
         }
@@ -347,7 +347,7 @@ public class Cid : IEquatable<Cid>
             cid.Version = stream.ReadVarint32();
             cid.ContentType = stream.ReadMultiCodec().Name;
         }
-        cid.Hash = new MultiHash(stream);
+        cid.Hash = new(stream);
 
         return cid;
     }
@@ -398,7 +398,7 @@ public class Cid : IEquatable<Cid>
             cid.ContentType = stream.ReadMultiCodec().Name;
         }
 
-        cid.Hash = new MultiHash(stream);
+        cid.Hash = new(stream);
 
         return cid;
     }
@@ -444,7 +444,7 @@ public class Cid : IEquatable<Cid>
         if (buffer.Length == 34)
         {
             cid.Version = 0;
-            cid.Hash = new MultiHash(buffer);
+            cid.Hash = new(buffer);
             return cid;
         }
 
@@ -452,7 +452,7 @@ public class Cid : IEquatable<Cid>
         {
             cid.Version = ms.ReadVarint32();
             cid.ContentType = ms.ReadMultiCodec().Name;
-            cid.Hash = new MultiHash(ms);
+            cid.Hash = new(ms);
             return cid;
         }
     }
@@ -496,7 +496,7 @@ public class Cid : IEquatable<Cid>
     {
         if (hash.Algorithm.Name == "sha2-256")
         {
-            return new Cid
+            return new()
             {
                 Hash = hash,
                 Version = 0,
@@ -505,7 +505,7 @@ public class Cid : IEquatable<Cid>
             };
         }
 
-        return new Cid
+        return new()
         {
             Version = 1,
             Hash = hash

@@ -58,10 +58,10 @@ public class Secio1Stream : Stream
     {
         _stream = stream;
 
-        _inHmac = new HMac(DigestUtilities.GetDigest(hashName));
+        _inHmac = new(DigestUtilities.GetDigest(hashName));
         _inHmac.Init(new KeyParameter(localKey.MacKey));
 
-        _outHmac = new HMac(DigestUtilities.GetDigest(hashName));
+        _outHmac = new(DigestUtilities.GetDigest(hashName));
         _outHmac.Init(new KeyParameter(remoteKey.MacKey));
 
         if (cipherName == "AES-256" || cipherName == "AES-512")
@@ -71,7 +71,7 @@ public class Secio1Stream : Stream
             _decrypt.Init(false, p);
 
             _encrypt = new CtrStreamCipher(new AesEngine());
-            p = new ParametersWithIV(new KeyParameter(localKey.CipherKey), localKey.Iv);
+            p = new(new KeyParameter(localKey.CipherKey), localKey.Iv);
             _encrypt.Init(true, p);
         }
         else

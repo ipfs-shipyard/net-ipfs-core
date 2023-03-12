@@ -12,7 +12,7 @@ public class TopicManager
 {
     private static readonly IEnumerable<Peer> nopeers = Enumerable.Empty<Peer>();
 
-    private readonly ConcurrentDictionary<string, HashSet<Peer>> _topics = new ConcurrentDictionary<string, HashSet<Peer>>();
+    private readonly ConcurrentDictionary<string, HashSet<Peer>> _topics = new();
 
     /// <summary>
     ///   Get the peers interested in a topic.
@@ -72,7 +72,7 @@ public class TopicManager
     {
         _topics.AddOrUpdate(
             topic,
-            (_) => new HashSet<Peer> { peer },
+            (_) => new() { peer },
             (_, peers) =>
             {
                 peers.Add(peer);
@@ -94,7 +94,7 @@ public class TopicManager
     {
         _topics.AddOrUpdate(
             topic,
-            (_) => new HashSet<Peer>(),
+            (_) => new(),
             (_, list) =>
             {
                 list.Remove(peer);

@@ -24,7 +24,7 @@ public class Ping1 : IPeerProtocol, IService
     public string Name { get; } = "ipfs/ping";
 
     /// <inheritdoc />
-    public SemVersion Version { get; } = new SemVersion(1, 0);
+    public SemVersion Version { get; } = new(1, 0);
 
     /// <summary>
     ///   Provides access to other peers.
@@ -123,7 +123,7 @@ public class Ping1 : IPeerProtocol, IService
         var rng = new Random();
         var results = new List<PingResult>
         {
-            new PingResult { Success = true, Text = $"PING {peer}."}
+            new() { Success = true, Text = $"PING {peer}."}
         };
         var totalTime = TimeSpan.Zero;
 
@@ -162,7 +162,7 @@ public class Ping1 : IPeerProtocol, IService
                 }
                 catch (Exception e)
                 {
-                    results.Add(new PingResult
+                    results.Add(new()
                     {
                         Success = false,
                         Time = DateTime.Now - start,
@@ -173,7 +173,7 @@ public class Ping1 : IPeerProtocol, IService
         }
 
         var avg = totalTime.TotalMilliseconds / count;
-        results.Add(new PingResult
+        results.Add(new()
         {
             Success = true,
             Text = $"Average latency: {avg:0.000}ms"

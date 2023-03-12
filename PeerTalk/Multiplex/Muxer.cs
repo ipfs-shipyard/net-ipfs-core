@@ -200,7 +200,7 @@ public class Muxer
                         continue;
                     }
 
-                    substream = new Substream
+                    substream = new()
                     {
                         Id = header.StreamId,
                         Name = Encoding.UTF8.GetString(payload),
@@ -210,7 +210,7 @@ public class Muxer
                     if (!Substreams.TryAdd(substream.Id, substream))
                     {
                         // Should not happen.
-                        throw new Exception($"Stream {substream.Id} already exists");
+                        throw new($"Stream {substream.Id} already exists");
                     }
                     SubstreamCreated?.Invoke(this, substream);
 

@@ -70,9 +70,9 @@ public class EphermalKey
             throw new KeyNotFoundException($"Unknown curve name '{curveName}'.");
         var domain = new ECDomainParameters(ecP.Curve, ecP.G, ecP.N, ecP.H, ecP.GetSeed());
         var q = ecP.Curve.DecodePoint(bytes);
-        return new EphermalKey
+        return new()
         {
-            _publicKey = new ECPublicKeyParameters(q, domain)
+            _publicKey = new(q, domain)
         };
     }
 
@@ -89,13 +89,13 @@ public class EphermalKey
     {
         X9ECParameters ecP = ECNamedCurveTable.GetByName(curveName);
         if (ecP == null)
-            throw new Exception($"Unknown curve name '{curveName}'.");
+            throw new($"Unknown curve name '{curveName}'.");
         var domain = new ECDomainParameters(ecP.Curve, ecP.G, ecP.N, ecP.H, ecP.GetSeed());
         var g = GeneratorUtilities.GetKeyPairGenerator("EC");
-        g.Init(new ECKeyGenerationParameters(domain, new SecureRandom()));
+        g.Init(new ECKeyGenerationParameters(domain, new()));
         var keyPair = g.GenerateKeyPair();
 
-        return new EphermalKey
+        return new()
         {
             _privateKey = (ECPrivateKeyParameters)keyPair.Private,
             _publicKey = (ECPublicKeyParameters)keyPair.Public

@@ -9,7 +9,7 @@ internal static class TransportRegistry
 
     static TransportRegistry()
     {
-        Transports = new Dictionary<string, Func<IPeerTransport>>();
+        Transports = new();
         Register("tcp", () => new Tcp());
         Register("udp", () => new Udp());
     }

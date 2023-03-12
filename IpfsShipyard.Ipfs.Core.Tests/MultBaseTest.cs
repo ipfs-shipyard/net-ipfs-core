@@ -54,127 +54,152 @@ public class MultiBaseTest
 
     private readonly TestVector[] _testVectors = new TestVector[]
     {
-        new TestVector {
+        new()
+        {
             Algorithm = "base16",
             Input = "yes mani !",
             Output = "f796573206d616e692021"
         },
-        new TestVector {
+        new()
+        {
             Algorithm = "base32",
             Input = "yes mani !",
             Output = "bpfsxgidnmfxgsibb"
         },
-        new TestVector {
+        new()
+        {
             Algorithm = "base32pad",
             Input = "yes mani !",
             Output = "cpfsxgidnmfxgsibb"
         },
-        new TestVector {
+        new()
+        {
             Algorithm = "base32",
             Input = "f",
             Output = "bmy"
         },
-        new TestVector {
+        new()
+        {
             Algorithm = "base32pad",
             Input = "f",
             Output = "cmy======"
         },
-        new TestVector {
+        new()
+        {
             Algorithm = "base32hex",
             Input = "f",
             Output = "vco"
         },
-        new TestVector {
+        new()
+        {
             Algorithm = "base32hexpad",
             Input = "f",
             Output = "tco======"
         },
-        new TestVector {
+        new()
+        {
             Algorithm = "base64pad",
             Input = "f",
             Output = "MZg=="
         },
-        new TestVector {
+        new()
+        {
             Algorithm = "base64",
             Input = "f",
             Output = "mZg"
         },
-        new TestVector {
+        new()
+        {
             Algorithm = "base64",
             Input = "\u00f7\u00ef\u00ff",
             Output = "mw7fDr8O/"
         },
-        new TestVector {
+        new()
+        {
             Algorithm = "base64url",
             Input = "\u00f7\u00ef\u00ff",
             Output = "uw7fDr8O_"
         },
-        new TestVector {
+        new()
+        {
             Algorithm = "base64url",
             Input = "f",
             Output = "uZg"
         },
-        new TestVector {
+        new()
+        {
             Algorithm = "base64url",
             Input = "fo",
             Output = "uZm8"
         },
-        new TestVector {
+        new()
+        {
             Algorithm = "base64url",
             Input = "foo",
             Output = "uZm9v"
         },
-        new TestVector {
+        new()
+        {
             Algorithm = "BASE16",
             Input = "yes mani !",
             Output = "F796573206D616E692021"
         },
-        new TestVector {
+        new()
+        {
             Algorithm = "BASE32",
             Input = "yes mani !",
             Output = "BPFSXGIDNMFXGSIBB"
         },
-        new TestVector {
+        new()
+        {
             Algorithm = "BASE32PAD",
             Input = "yes mani !",
             Output = "CPFSXGIDNMFXGSIBB"
         },
-        new TestVector {
+        new()
+        {
             Algorithm = "BASE32",
             Input = "f",
             Output = "BMY"
         },
-        new TestVector {
+        new()
+        {
             Algorithm = "BASE32PAD",
             Input = "f",
             Output = "CMY======"
         },
-        new TestVector {
+        new()
+        {
             Algorithm = "BASE32HEX",
             Input = "f",
             Output = "VCO"
         },
-        new TestVector {
+        new()
+        {
             Algorithm = "BASE32HEXPAD",
             Input = "f",
             Output = "TCO======"
         },
-        new TestVector {
+        new()
+        {
             Algorithm = "base32z",
             Input="Decentralize everything!!",
             Output ="het1sg3mqqt3gn5djxj11y3msci3817depfzgqejb"
         },
-        new TestVector {
+        new()
+        {
             Algorithm = "base32z",
             Input ="yes mani !",
             Output ="hxf1zgedpcfzg1ebb"
         },
-        new TestVector {
+        new()
+        {
             Algorithm = "base32z",
             Input ="hello world",
             Output ="hpb1sa5dxrb5s6hucco"
         },
-        new TestVector {
+        new()
+        {
             Algorithm = "base32z",
             Input ="\x00\x00yes mani !",
             Output ="hyyy813murbssn5ujryoo"

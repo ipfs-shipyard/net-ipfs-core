@@ -124,7 +124,7 @@ public class PreSharedKey
                 break;
 
             default:
-                throw new Exception($"Unknown encoding '{format}'.");
+                throw new($"Unknown encoding '{format}'.");
         }
     }
 

@@ -14,7 +14,7 @@ public class CidTest
     [TestMethod]
     public void ToString_Default()
     {
-        var cid = new Cid { Hash = new MultiHash("QmXg9Pp2ytZ14xgmQjYEiHjVjMFXzCVVEcRTWJBmLgR39V") };
+        var cid = new Cid { Hash = new("QmXg9Pp2ytZ14xgmQjYEiHjVjMFXzCVVEcRTWJBmLgR39V") };
         Assert.AreEqual("QmXg9Pp2ytZ14xgmQjYEiHjVjMFXzCVVEcRTWJBmLgR39V", cid.ToString());
 
         cid = "zBunRGrmCGokA1oMESGGTfrtcMFsVA8aEtcNzM54akPWXF97uXCqTjF3GZ9v8YzxHrG66J8QhtPFWwZebRZ2zeUEELu67";
@@ -24,7 +24,7 @@ public class CidTest
     [TestMethod]
     public void ToString_L()
     {
-        var cid = new Cid { Hash = new MultiHash("QmXg9Pp2ytZ14xgmQjYEiHjVjMFXzCVVEcRTWJBmLgR39V") };
+        var cid = new Cid { Hash = new("QmXg9Pp2ytZ14xgmQjYEiHjVjMFXzCVVEcRTWJBmLgR39V") };
         Assert.AreEqual("base58btc cidv0 dag-pb sha2-256 QmXg9Pp2ytZ14xgmQjYEiHjVjMFXzCVVEcRTWJBmLgR39V", cid.ToString("L"));
 
         cid = "zBunRGrmCGokA1oMESGGTfrtcMFsVA8aEtcNzM54akPWXF97uXCqTjF3GZ9v8YzxHrG66J8QhtPFWwZebRZ2zeUEELu67";
@@ -34,7 +34,7 @@ public class CidTest
     [TestMethod]
     public void ToString_G()
     {
-        var cid = new Cid { Hash = new MultiHash("QmXg9Pp2ytZ14xgmQjYEiHjVjMFXzCVVEcRTWJBmLgR39V") };
+        var cid = new Cid { Hash = new("QmXg9Pp2ytZ14xgmQjYEiHjVjMFXzCVVEcRTWJBmLgR39V") };
         Assert.AreEqual("QmXg9Pp2ytZ14xgmQjYEiHjVjMFXzCVVEcRTWJBmLgR39V", cid.ToString("G"));
 
         cid = "zBunRGrmCGokA1oMESGGTfrtcMFsVA8aEtcNzM54akPWXF97uXCqTjF3GZ9v8YzxHrG66J8QhtPFWwZebRZ2zeUEELu67";
@@ -44,7 +44,7 @@ public class CidTest
     [TestMethod]
     public void ToString_InvalidFormat()
     {
-        var cid = new Cid { Hash = new MultiHash("QmXg9Pp2ytZ14xgmQjYEiHjVjMFXzCVVEcRTWJBmLgR39V") };
+        var cid = new Cid { Hash = new("QmXg9Pp2ytZ14xgmQjYEiHjVjMFXzCVVEcRTWJBmLgR39V") };
         ExceptionAssert.Throws<FormatException>(() => cid.ToString("?"));
     }
 
@@ -79,7 +79,7 @@ public class CidTest
         Assert.AreEqual(hash, cid.Encode());
         Assert.AreEqual(0, cid.Version);
 
-        cid = new Cid
+        cid = new()
         {
             ContentType = "dag-pb",
             Encoding = "base58btc",             
@@ -101,7 +101,7 @@ public class CidTest
         };
         Assert.AreEqual("zb2rhj7crUKTQYRGCRATFaQ6YFLTde2YzdqbbhAASkL9uRDXn", cid.Encode());
 
-        cid = new Cid
+        cid = new()
         {
             ContentType = "raw",
             Hash = "QmaozNR7DZHQK1ZcU9p7QdrshMvXqWK6gpu5rmrkPdT3L4"

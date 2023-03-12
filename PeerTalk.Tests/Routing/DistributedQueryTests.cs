@@ -15,7 +15,7 @@ public class DistributedQueryTest
     {
         var dquery = new DistributedQuery<Peer>
         {
-            Dht = new Dht1()
+            Dht = new()
         };
         var cts = new CancellationTokenSource();
         cts.Cancel();

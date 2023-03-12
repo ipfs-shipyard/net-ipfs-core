@@ -89,7 +89,7 @@ namespace IpfsShipyard.PeerTalk.Transports
             }
 
             var timeout = (int)Math.Max(MinReadTimeout.TotalMilliseconds, latency.TotalMilliseconds * 3);
-            socket.LingerState = new LingerOption(false, 0);
+            socket.LingerState = new(false, 0);
             socket.ReceiveTimeout = timeout;
             socket.SendTimeout = timeout;
             Stream stream = new NetworkStream(socket, ownsSocket: true);
@@ -136,7 +136,7 @@ namespace IpfsShipyard.PeerTalk.Transports
             catch (Exception e)
             {
                 socket.Dispose();
-                throw new Exception("Bind/listen failed on " + address, e);
+                throw new("Bind/listen failed on " + address, e);
             }
 
             // If no port specified, then add it.
@@ -214,7 +214,7 @@ namespace IpfsShipyard.PeerTalk.Transports
                         s.Append(endPoint.Address.ToString());
                         s.Append("/tcp/");
                         s.Append(endPoint.Port);
-                        remote = new MultiAddress(s.ToString());
+                        remote = new(s.ToString());
                         log.Debug("connection from " + remote);
                     }
 

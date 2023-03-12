@@ -9,20 +9,20 @@ namespace IpfsShipyard.PeerTalk.Tests.Routing;
 [TestClass]
 public class ContentRouterTest
 {
-    private readonly Peer _self = new Peer
+    private readonly Peer _self = new()
     {
         AgentVersion = "self",
         Id = "QmXK9VBxaXFuuT29AaPUTgW3jBWZ9JgLVZYdMYTHC6LLAH",
         PublicKey = "CAASXjBcMA0GCSqGSIb3DQEBAQUAA0sAMEgCQQCC5r4nQBtnd9qgjnG8fBN5+gnqIeWEIcUFUdCG4su/vrbQ1py8XGKNUBuDjkyTv25Gd3hlrtNJV3eOKZVSL8ePAgMBAAE="
     };
 
-    private readonly Peer _other = new Peer
+    private readonly Peer _other = new()
     {
         AgentVersion = "other",
         Id = "QmdpwjdB94eNm2Lcvp9JqoCxswo3AKQqjLuNZyLixmCM1h",
         Addresses = new MultiAddress[]
         {
-            new MultiAddress("/ip4/127.0.0.1/tcp/4001")
+            new("/ip4/127.0.0.1/tcp/4001")
         }
     };
 

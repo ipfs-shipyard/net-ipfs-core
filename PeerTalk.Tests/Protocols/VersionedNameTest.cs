@@ -23,7 +23,7 @@ public class VersionedNameTest
     [TestMethod]
     public void Stringing()
     {
-        var vn = new VersionedName { Name = "x", Version = new Semver.SemVersion(0, 42) };
+        var vn = new VersionedName { Name = "x", Version = new(0, 42) };
         Assert.AreEqual("/x/0.42.0", vn.ToString());
     }
 

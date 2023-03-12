@@ -20,7 +20,7 @@ internal class FileSystemApi : IFileSystemApi
     internal FileSystemApi(IpfsClient ipfs)
     {
         _ipfs = ipfs;
-        _emptyFolder = new Lazy<DagNode>(() => ipfs.Object.NewDirectoryAsync().Result);
+        _emptyFolder = new(() => ipfs.Object.NewDirectoryAsync().Result);
     }
 
     public async Task<IFileSystemNode> AddFileAsync(string path, AddFileOptions options = null, CancellationToken cancel = default(CancellationToken))
@@ -40,7 +40,7 @@ internal class FileSystemApi : IFileSystemApi
     public async Task<IFileSystemNode> AddAsync(Stream stream, string name = "", AddFileOptions options = null, CancellationToken cancel = default(CancellationToken))
     {
         if (options == null)
-            options = new AddFileOptions();
+            options = new();
         var opts = new List<string>();
         if (!options.Pin)
             opts.Add("pin=false");
@@ -77,7 +77,7 @@ internal class FileSystemApi : IFileSystemApi
                 // If a progress report.
                 if (r.ContainsKey("Bytes"))
                 {
-                    options.Progress?.Report(new TransferProgress
+                    options.Progress?.Report(new()
                     {
                         Name = (string)r["Name"],
                         Bytes = (ulong)r["Bytes"]
@@ -87,7 +87,7 @@ internal class FileSystemApi : IFileSystemApi
                 // Else must be an added file.
                 else
                 {
-                    fsn = new FileSystemNode
+                    fsn = new()
                     {
                         Id = (string)r["Hash"],
                         Size = long.Parse((string)r["Size"]),
@@ -106,7 +106,7 @@ internal class FileSystemApi : IFileSystemApi
     public async Task<IFileSystemNode> AddDirectoryAsync(string path, bool recursive = true, AddFileOptions options = null, CancellationToken cancel = default(CancellationToken))
     {
         if (options == null)
-            options = new AddFileOptions();
+            options = new();
         options.Wrap = false;
 
         // Add the files and sub-directories.

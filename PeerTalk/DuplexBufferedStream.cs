@@ -34,8 +34,8 @@ namespace IpfsShipyard.PeerTalk
         public DuplexBufferedStream(Stream stream)
         {
             _inner = stream;
-            _readBuffer = new BufferedStream(stream);
-            _writeBuffer = new BufferedStream(stream);
+            _readBuffer = new(stream);
+            _writeBuffer = new(stream);
         }
 
         protected override void Dispose(bool disposing)

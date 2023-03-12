@@ -98,7 +98,7 @@ public abstract class Mdns : IPeerDiscovery
                 .ToArray();
             if (addresses.Length > 0)
             {
-                PeerDiscovered?.Invoke(this, new Peer { Id = addresses[0].PeerId, Addresses = addresses });
+                PeerDiscovered?.Invoke(this, new() { Id = addresses[0].PeerId, Addresses = addresses });
             }
         }
         catch (Exception ex)

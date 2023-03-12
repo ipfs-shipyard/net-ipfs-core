@@ -9,20 +9,20 @@ namespace IpfsShipyard.PeerTalk.Tests.Routing;
 [TestClass]
 public class Dht1Test
 {
-    private readonly Peer _self = new Peer
+    private readonly Peer _self = new()
     {
         AgentVersion = "self",
         Id = "QmXK9VBxaXFuuT29AaPUTgW3jBWZ9JgLVZYdMYTHC6LLAH",
         PublicKey = "CAASXjBcMA0GCSqGSIb3DQEBAQUAA0sAMEgCQQCC5r4nQBtnd9qgjnG8fBN5+gnqIeWEIcUFUdCG4su/vrbQ1py8XGKNUBuDjkyTv25Gd3hlrtNJV3eOKZVSL8ePAgMBAAE="
     };
 
-    private readonly Peer _other = new Peer
+    private readonly Peer _other = new()
     {
         AgentVersion = "other",
         Id = "QmdpwjdB94eNm2Lcvp9JqoCxswo3AKQqjLuNZyLixmCM1h",
         Addresses = new MultiAddress[]
         {
-            new MultiAddress("/ip4/127.0.0.1/tcp/0")
+            new("/ip4/127.0.0.1/tcp/0")
         }
     };
 
@@ -105,7 +105,7 @@ public class Dht1Test
                 Type = MessageType.FindNode,
                 Key = _self.Id.ToArray()
             };
-            var response = dht.ProcessFindNode(request, new DhtMessage());
+            var response = dht.ProcessFindNode(request, new());
             Assert.AreEqual(1, response.CloserPeers.Length);
             var ok = response.CloserPeers[0].TryToPeer(out Peer found);
             Assert.IsTrue(ok);
@@ -131,7 +131,7 @@ public class Dht1Test
                 Type = MessageType.FindNode,
                 Key = _other.Id.ToArray()
             };
-            var response = dht.ProcessFindNode(request, new DhtMessage());
+            var response = dht.ProcessFindNode(request, new());
             Assert.AreEqual(1, response.CloserPeers.Length);
             var ok = response.CloserPeers[0].TryToPeer(out Peer found);
             Assert.IsTrue(ok);
@@ -160,7 +160,7 @@ public class Dht1Test
                 Type = MessageType.FindNode,
                 Key = other.Id.ToArray()
             };
-            var response = dht.ProcessFindNode(request, new DhtMessage());
+            var response = dht.ProcessFindNode(request, new());
             Assert.AreEqual(1, response.CloserPeers.Length);
             var ok = response.CloserPeers[0].TryToPeer(out Peer found);
             Assert.IsTrue(ok);
@@ -194,7 +194,7 @@ public class Dht1Test
                 Type = MessageType.FindNode,
                 Key = _other.Id.ToArray()
             };
-            var response = dht.ProcessFindNode(request, new DhtMessage());
+            var response = dht.ProcessFindNode(request, new());
             Assert.AreEqual(3, response.CloserPeers.Length);
         }
         finally
@@ -222,7 +222,7 @@ public class Dht1Test
                 Type = MessageType.FindNode,
                 Key = new byte[] {0xFF, 1, 2, 3 }
             };
-            var response = dht.ProcessFindNode(request, new DhtMessage());
+            var response = dht.ProcessFindNode(request, new());
             Assert.AreEqual(3, response.CloserPeers.Length);
         }
         finally
@@ -244,7 +244,7 @@ public class Dht1Test
                 Type = MessageType.FindNode,
                 Key = new MultiHash("QmdpwjdB94eNm2Lcvp9JqoCxswo3AKQqjLuNZyLixmCM1h").ToArray()
             };
-            var response = dht.ProcessFindNode(request, new DhtMessage());
+            var response = dht.ProcessFindNode(request, new());
             Assert.AreEqual(0, response.CloserPeers.Length);
         }
         finally
@@ -268,7 +268,7 @@ public class Dht1Test
                 Type = MessageType.GetProviders,
                 Key = cid.Hash.ToArray()
             };
-            var response = dht.ProcessGetProviders(request, new DhtMessage());
+            var response = dht.ProcessGetProviders(request, new());
             Assert.AreNotEqual(0, response.CloserPeers.Length);
         }
         finally
@@ -293,7 +293,7 @@ public class Dht1Test
                 Type = MessageType.GetProviders,
                 Key = cid.Hash.ToArray()
             };
-            var response = dht.ProcessGetProviders(request, new DhtMessage());
+            var response = dht.ProcessGetProviders(request, new());
             Assert.AreEqual(1, response.ProviderPeers.Length);
             response.ProviderPeers[0].TryToPeer(out Peer found);
             Assert.AreEqual(_other, found);
@@ -320,14 +320,14 @@ public class Dht1Test
                 Key = cid.Hash.ToArray(),
                 ProviderPeers = new DhtPeerMessage[]
                 {
-                    new DhtPeerMessage
+                    new()
                     {
                         Id = _other.Id.ToArray(),
                         Addresses = _other.Addresses.Select(a => a.ToArray()).ToArray()
                     }
                 }
             };
-            var response = dht.ProcessAddProvider(_other, request, new DhtMessage());
+            var response = dht.ProcessAddProvider(_other, request, new());
             Assert.IsNull(response);
             var providers = dht.ContentRouter.Get(cid).ToArray();
             Assert.AreEqual(1, providers.Length);

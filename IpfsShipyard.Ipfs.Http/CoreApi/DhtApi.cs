@@ -64,7 +64,7 @@ internal class DhtApi : IDhtApi
                 if (id != String.Empty)
                 {
                     ++n;
-                    yield return new Peer { Id = new MultiHash(id) };
+                    yield return new() { Id = new(id) };
                 }
                 else
                 {
@@ -77,7 +77,7 @@ internal class DhtApi : IDhtApi
                             if (rid != String.Empty)
                             {
                                 ++n;
-                                yield return new Peer { Id = new MultiHash(rid) };
+                                yield return new() { Id = new(rid) };
                             }
                         }
                     }

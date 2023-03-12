@@ -339,15 +339,15 @@ public class MultiAddressTest
         var ma1 = new MultiAddress("/ip4/127.0.0.1/tcp/4001");
         Assert.AreEqual($"{ma1}/p2p/{id}", ma1.WithPeerId(id));
 
-        ma1 = new MultiAddress($"/ip4/127.0.0.1/tcp/4001/ipfs/{id}");
+        ma1 = new($"/ip4/127.0.0.1/tcp/4001/ipfs/{id}");
         Assert.AreSame(ma1, ma1.WithPeerId(id));
 
-        ma1 = new MultiAddress($"/ip4/127.0.0.1/tcp/4001/p2p/{id}");
+        ma1 = new($"/ip4/127.0.0.1/tcp/4001/p2p/{id}");
         Assert.AreSame(ma1, ma1.WithPeerId(id));
 
         ExceptionAssert.Throws<Exception>(() =>
         {
-            ma1 = new MultiAddress($"/ip4/127.0.0.1/tcp/4001/ipfs/{id3}");
+            ma1 = new($"/ip4/127.0.0.1/tcp/4001/ipfs/{id3}");
             Assert.AreSame(ma1, ma1.WithPeerId(id));
         });
     }
@@ -360,10 +360,10 @@ public class MultiAddressTest
         var ma1 = new MultiAddress("/ip4/127.0.0.1/tcp/4001");
         Assert.AreSame(ma1, ma1.WithoutPeerId());
 
-        ma1 = new MultiAddress($"/ip4/127.0.0.1/tcp/4001/ipfs/{id}");
+        ma1 = new($"/ip4/127.0.0.1/tcp/4001/ipfs/{id}");
         Assert.AreEqual("/ip4/127.0.0.1/tcp/4001", ma1.WithoutPeerId());
 
-        ma1 = new MultiAddress($"/ip4/127.0.0.1/tcp/4001/p2p/{id}");
+        ma1 = new($"/ip4/127.0.0.1/tcp/4001/p2p/{id}");
         Assert.AreEqual("/ip4/127.0.0.1/tcp/4001", ma1.WithoutPeerId());
     }
 
@@ -391,7 +391,7 @@ public class MultiAddressTest
         var ma = new MultiAddress(IPAddress.Loopback);
         Assert.AreEqual("/ip4/127.0.0.1", ma.ToString());
 
-        ma = new MultiAddress(IPAddress.IPv6Loopback);
+        ma = new(IPAddress.IPv6Loopback);
         Assert.AreEqual("/ip6/::1", ma.ToString());
     }
 
@@ -401,7 +401,7 @@ public class MultiAddressTest
         var ma = new MultiAddress(new IPEndPoint(IPAddress.Loopback, 4001));
         Assert.AreEqual("/ip4/127.0.0.1/tcp/4001", ma.ToString());
 
-        ma = new MultiAddress(new IPEndPoint(IPAddress.IPv6Loopback, 4002));
+        ma = new(new IPEndPoint(IPAddress.IPv6Loopback, 4002));
         Assert.AreEqual("/ip6/::1/tcp/4002", ma.ToString());
     }
 }

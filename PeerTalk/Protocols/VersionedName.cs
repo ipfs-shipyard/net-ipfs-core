@@ -36,7 +36,7 @@ public class VersionedName : IEquatable<VersionedName>, IComparable<VersionedNam
     public static VersionedName Parse(string s)
     {
         var parts = s.Split('/').Where(p => p.Length > 0).ToArray();
-        return new VersionedName
+        return new()
         {
             Name = string.Join("/", parts, 0, parts.Length - 1),
             Version = SemVersion.Parse(parts[^1], SemVersionStyles.Strict)

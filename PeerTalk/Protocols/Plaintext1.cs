@@ -14,7 +14,7 @@ public class Plaintext1 : IEncryptionProtocol
     public string Name { get; } = "plaintext";
 
     /// <inheritdoc />
-    public SemVersion Version { get; } = new SemVersion(1, 0);
+    public SemVersion Version { get; } = new(1, 0);
 
     /// <inheritdoc />
     public override string ToString()

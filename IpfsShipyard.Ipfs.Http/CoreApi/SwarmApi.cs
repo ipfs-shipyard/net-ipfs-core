@@ -62,7 +62,7 @@ internal class SwarmApi : ISwarmApi
             return peers.Select(p => new Peer
             {
                 Id = (string)p["Peer"],
-                ConnectedAddress = new MultiAddress((string)p["Addr"] + "/ipfs/" + (string)p["Peer"]),
+                ConnectedAddress = new((string)p["Addr"] + "/ipfs/" + (string)p["Peer"]),
                 Latency = Duration.Parse((string)p["Latency"])
             });
         }
@@ -89,7 +89,7 @@ internal class SwarmApi : ISwarmApi
         var a = addrs.FirstOrDefault();
         if (a == null)
             return null;
-        return new MultiAddress((string)a);
+        return new((string)a);
     }
 
     public async Task<IEnumerable<MultiAddress>> ListAddressFiltersAsync(bool persist = false, CancellationToken cancel = default(CancellationToken))
@@ -120,6 +120,6 @@ internal class SwarmApi : ISwarmApi
         var a = addrs.FirstOrDefault();
         if (a == null)
             return null;
-        return new MultiAddress((string)a);
+        return new((string)a);
     }
 }

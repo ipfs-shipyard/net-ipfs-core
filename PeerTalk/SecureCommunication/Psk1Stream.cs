@@ -42,7 +42,7 @@ public class Psk1Stream : Stream
         PreSharedKey key)
     {
         if (key.Length != KeyBitLength)
-            throw new Exception($"The pre-shared key must be {KeyBitLength} bits in length.");
+            throw new($"The pre-shared key must be {KeyBitLength} bits in length.");
 
         _stream = stream;
         _key = key;

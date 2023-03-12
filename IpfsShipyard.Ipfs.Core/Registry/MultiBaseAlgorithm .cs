@@ -18,8 +18,8 @@ namespace IpfsShipyard.Ipfs.Core.Registry;
 /// </remarks>
 public class MultiBaseAlgorithm
 {
-    internal static Dictionary<string, MultiBaseAlgorithm> Names = new Dictionary<string, MultiBaseAlgorithm>();
-    internal static Dictionary<char, MultiBaseAlgorithm> Codes = new Dictionary<char, MultiBaseAlgorithm>();
+    internal static Dictionary<string, MultiBaseAlgorithm> Names = new();
+    internal static Dictionary<char, MultiBaseAlgorithm> Codes = new();
 
     /// <summary>
     ///   Register the standard multi-base algorithms for IPFS.

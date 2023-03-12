@@ -53,7 +53,7 @@ public class PeerManager : IService
         Swarm.ConnectionEstablished += Swarm_ConnectionEstablished;
         Swarm.PeerNotReachable += Swarm_PeerNotReachable;
 
-        _cancel = new CancellationTokenSource();
+        _cancel = new();
         var _ = PhoenixAsync(_cancel.Token);
 
         log.Debug("started");

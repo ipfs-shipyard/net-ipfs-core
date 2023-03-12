@@ -35,7 +35,7 @@ public class MultiAddress : IEquatable<MultiAddress>
     /// </summary>
     public MultiAddress()
     {
-        Protocols = new List<NetworkProtocol>();
+        Protocols = new();
     }
 
     /// <summary>
@@ -109,7 +109,7 @@ public class MultiAddress : IEquatable<MultiAddress>
     /// </returns>
     public MultiAddress Clone()
     {
-        return new MultiAddress(ToString());
+        return new(ToString());
     }
 
     /// <summary>
@@ -157,7 +157,7 @@ public class MultiAddress : IEquatable<MultiAddress>
                 .LastOrDefault(p => p.Name == "ipfs" || p.Name == "p2p");
             if (protocol == null)
             {
-                throw new Exception($"'{this}' is missing the peer ID. Add the 'ipfs' or 'p2p' protocol.");
+                throw new($"'{this}' is missing the peer ID. Add the 'ipfs' or 'p2p' protocol.");
             }
             return protocol.Value;
         }
@@ -202,12 +202,12 @@ public class MultiAddress : IEquatable<MultiAddress>
             var id = PeerId;
             if (id != peerId)
             {
-                throw new Exception($"Expected a multiaddress with peer ID of '{peerId}', not '{id}'.");
+                throw new($"Expected a multiaddress with peer ID of '{peerId}', not '{id}'.");
             }
             return this;
         }
 
-        return new MultiAddress(ToString() + $"/p2p/{peerId}");
+        return new(ToString() + $"/p2p/{peerId}");
     }
 
     /// <summary>
@@ -459,7 +459,7 @@ public class MultiAddress : IEquatable<MultiAddress>
     /// <returns>A new <see cref="MultiAddress"/>.</returns>
     static public implicit operator MultiAddress(string s)
     {
-        return new MultiAddress(s);
+        return new(s);
     }
 
     /// <summary>
@@ -476,7 +476,7 @@ public class MultiAddress : IEquatable<MultiAddress>
     {
         try
         {
-            return new MultiAddress(s);
+            return new(s);
         }
         catch
         {
@@ -498,7 +498,7 @@ public class MultiAddress : IEquatable<MultiAddress>
     {
         try
         {
-            return new MultiAddress(bytes);
+            return new(bytes);
         }
         catch
         {

@@ -18,8 +18,8 @@ namespace IpfsShipyard.Ipfs.Core;
 /// <seealso cref="MultiAddress"/>
 public abstract class NetworkProtocol
 {
-    internal static Dictionary<string, Type> Names = new Dictionary<string, Type>();
-    internal static Dictionary<uint, Type> Codes = new Dictionary<uint, Type>();
+    internal static Dictionary<string, Type> Names = new();
+    internal static Dictionary<uint, Type> Codes = new();
 
     /// <summary>
     ///   Registers the standard network protocols for IPFS.
@@ -283,7 +283,7 @@ internal class Ipv4NetworkProtocol : IpNetworkProtocol
     public override void ReadValue(CodedInputStream stream)
     {
         var a = stream.ReadSomeBytes(_addressSize);
-        Address = new IPAddress(a);
+        Address = new(a);
         Value = Address.ToString();
     }
 
@@ -305,7 +305,7 @@ internal class Ipv6NetworkProtocol : IpNetworkProtocol
     public override void ReadValue(CodedInputStream stream)
     {
         var a = stream.ReadSomeBytes(_addressSize);
-        Address = new IPAddress(a);
+        Address = new(a);
         Value = Address.ToString();
     }
 }
@@ -319,13 +319,13 @@ internal class P2PNetworkProtocol : NetworkProtocol
     public override void ReadValue(TextReader stream)
     {
         base.ReadValue(stream);
-        MultiHash = new MultiHash(Value);
+        MultiHash = new(Value);
     }
 
     public override void ReadValue(CodedInputStream stream)
     {
         stream.ReadLength();
-        MultiHash = new MultiHash(stream);
+        MultiHash = new(stream);
         Value = MultiHash.ToBase58();
     }
 

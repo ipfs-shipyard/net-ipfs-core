@@ -31,7 +31,7 @@ public class PublishedMessage : IPublishedMessage
     private byte[] From
     {
         get => Sender?.Id.ToArray();
-        set => Sender = new Peer { Id = new MultiHash(value) };
+        set => Sender = new() { Id = new(value) };
     }
 
     /// <inheritdoc />

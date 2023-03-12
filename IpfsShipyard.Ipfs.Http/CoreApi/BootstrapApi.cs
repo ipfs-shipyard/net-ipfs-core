@@ -24,7 +24,7 @@ internal class BootstrapApi : IBootstrapApi
         var a = addrs.FirstOrDefault();
         if (a == null)
             return null;
-        return new MultiAddress((string)a);
+        return new((string)a);
     }
 
     public async Task<IEnumerable<MultiAddress>> AddDefaultsAsync(CancellationToken cancel = default(CancellationToken))
@@ -57,6 +57,6 @@ internal class BootstrapApi : IBootstrapApi
         var a = addrs.FirstOrDefault();
         if (a == null)
             return null;
-        return new MultiAddress((string)a);
+        return new((string)a);
     }
 }

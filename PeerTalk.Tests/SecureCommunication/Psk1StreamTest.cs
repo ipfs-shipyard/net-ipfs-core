@@ -27,13 +27,13 @@ public class Psk1StreamTest
         secure.WriteByte(0x10);
         Assert.AreEqual(24 + 1, insecure.Length);
 
-        insecure = new MemoryStream();
-        secure = new Psk1Stream(insecure, psk);
+        insecure = new();
+        secure = new(insecure, psk);
         secure.Write(new byte[10], 0, 10);
         Assert.AreEqual(24 + 10, insecure.Length);
 
-        insecure = new MemoryStream();
-        secure = new Psk1Stream(insecure, psk);
+        insecure = new();
+        secure = new(insecure, psk);
         secure.WriteAsync(new byte[12], 0, 12).Wait();
         Assert.AreEqual(24 + 12, insecure.Length);
     }
@@ -52,12 +52,12 @@ public class Psk1StreamTest
         secure.Flush();
 
         insecure.Position = 0;
-        secure = new Psk1Stream(insecure, psk);
+        secure = new(insecure, psk);
         secure.Read(plain1, 0, plain1.Length);
         CollectionAssert.AreEqual(plain, plain1);
 
         insecure.Position = 0;
-        secure = new Psk1Stream(insecure, psk);
+        secure = new(insecure, psk);
         secure.ReadAsync(plain2, 0, plain2.Length).Wait();
         CollectionAssert.AreEqual(plain, plain2);
     }

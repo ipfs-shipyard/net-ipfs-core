@@ -14,7 +14,7 @@ public class StatsStream : Stream
     /// <summary>
     ///   A summary of all StatStreams.
     /// </summary>
-    public static BandwidthData AllBandwidth = new BandwidthData
+    public static BandwidthData AllBandwidth = new()
     {
         RateIn = 5 * 1024,
         RateOut = 1024

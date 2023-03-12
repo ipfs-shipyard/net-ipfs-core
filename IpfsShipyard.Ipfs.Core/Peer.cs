@@ -171,6 +171,6 @@ public class Peer : IEquatable<Peer>
     /// </remarks>
     static public implicit operator Peer(string s)
     {
-        return new Peer { Id = s };
+        return new() { Id = s };
     }
 }

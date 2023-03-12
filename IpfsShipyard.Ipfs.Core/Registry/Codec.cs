@@ -14,8 +14,8 @@ namespace IpfsShipyard.Ipfs.Core.Registry;
 /// <seealso href="https://github.com/multiformats/multicodec"/>
 public class Codec
 {
-    internal static Dictionary<string, Codec> Names = new Dictionary<string, Codec>();
-    internal static Dictionary<int, Codec> Codes = new Dictionary<int, Codec>();
+    internal static Dictionary<string, Codec> Names = new();
+    internal static Dictionary<int, Codec> Codes = new();
 
     /// <summary>
     ///   Register the standard multi-codecs for IPFS.

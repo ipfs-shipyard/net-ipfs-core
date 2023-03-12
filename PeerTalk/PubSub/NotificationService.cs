@@ -44,7 +44,7 @@ public class NotificationService : IService, IPubSubApi
     /// <summary>
     ///   Sends and receives messages to other peers.
     /// </summary>
-    public List<IMessageRouter> Routers { get; set; } = new List<IMessageRouter>
+    public List<IMessageRouter> Routers { get; set; } = new()
     {
         new LoopbackRouter()
     };
@@ -67,7 +67,7 @@ public class NotificationService : IService, IPubSubApi
     /// <inheritdoc />
     public async Task StartAsync()
     {
-        _topicHandlers = new ConcurrentDictionary<TopicHandler, TopicHandler>();
+        _topicHandlers = new();
 
         // Resolution of 100 nanoseconds.
         _nextSequenceNumber = DateTime.UtcNow.Ticks;
@@ -121,7 +121,7 @@ public class NotificationService : IService, IPubSubApi
         {
             seqno = seqno.Reverse().ToArray();
         }
-        return new PublishedMessage
+        return new()
         {
             Topics = new string[] { topic },
             Sender = LocalPeer,

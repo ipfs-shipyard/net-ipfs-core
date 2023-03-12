@@ -124,7 +124,7 @@ public class UdpTest
 
     private class HelloServer : IDisposable
     {
-        private readonly CancellationTokenSource _cs = new CancellationTokenSource(TimeSpan.FromSeconds(30));
+        private readonly CancellationTokenSource _cs = new(TimeSpan.FromSeconds(30));
 
         public HelloServer()
         {

@@ -61,7 +61,7 @@ public static class Base64NoPad
             case 0: break; // No pad chars in this case
             case 2: s += "=="; break; // Two pad chars
             case 3: s += "="; break; // One pad char
-            default: throw new Exception("Illegal base64 string!");
+            default: throw new("Illegal base64 string!");
         }
 
         return Convert.FromBase64String(s); // Standard base64 decoder

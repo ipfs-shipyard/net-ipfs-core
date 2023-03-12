@@ -158,7 +158,7 @@ public class DagNode : IMerkleNode<IMerkleLink>
     public DagNode AddLinks(IEnumerable<IMerkleLink> links)
     {
         var all = Links.Union(links);
-        return new DagNode(DataBytes, all, _hashAlgorithm);
+        return new(DataBytes, all, _hashAlgorithm);
     }
 
     /// <summary>
@@ -204,7 +204,7 @@ public class DagNode : IMerkleNode<IMerkleLink>
     {
         var ignore = links.ToLookup(link => link.Id);
         var some = Links.Where(link => !ignore.Contains(link.Id));
-        return new DagNode(DataBytes, some, _hashAlgorithm);
+        return new(DataBytes, some, _hashAlgorithm);
     }
 
     /// <summary>
@@ -277,7 +277,7 @@ public class DagNode : IMerkleNode<IMerkleLink>
                 case 2:
                     using (var ms = new MemoryStream(stream.ReadSomeBytes(stream.ReadLength())))
                     {
-                        links.Add(new DagLink(ms));
+                        links.Add(new(ms));
                     }
                     break;
                 default:

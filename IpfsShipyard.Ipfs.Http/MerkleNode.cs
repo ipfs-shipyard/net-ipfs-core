@@ -80,7 +80,7 @@ public class MerkleNode : IMerkleNode<IMerkleLink>, IEquatable<MerkleNode>
             {
                 lock (this)
                 {
-                    _ipfsClient = new IpfsClient();
+                    _ipfsClient = new();
                 }
             }
             return _ipfsClient;
@@ -220,7 +220,7 @@ public class MerkleNode : IMerkleNode<IMerkleLink>, IEquatable<MerkleNode>
     /// </summary>
     static public implicit operator MerkleNode(string hash)
     {
-        return new MerkleNode(hash);
+        return new(hash);
     }
 
 }

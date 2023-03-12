@@ -90,7 +90,7 @@ public class StretchedKey
         }
 
         int half = need / 2;
-        k1 = new StretchedKey
+        k1 = new()
         {
             Iv = new byte[ivSize],
             CipherKey = new byte[cipherKeySize],
@@ -100,7 +100,7 @@ public class StretchedKey
         Buffer.BlockCopy(result, ivSize, k1.CipherKey, 0, cipherKeySize);
         Buffer.BlockCopy(result, ivSize + cipherKeySize, k1.MacKey, 0, hmacKeySize);
 
-        k2 = new StretchedKey
+        k2 = new()
         {
             Iv = new byte[ivSize],
             CipherKey = new byte[cipherKeySize],

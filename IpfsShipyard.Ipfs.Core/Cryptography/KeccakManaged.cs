@@ -23,7 +23,7 @@ internal partial class KeccakManaged : Keccak
         int stride = sizeInBytes >> 3;
         ulong[] utemps = new ulong[stride];
         if (BuffLength == sizeInBytes)
-            throw new Exception("Unexpected error, the internal buffer is full");
+            throw new("Unexpected error, the internal buffer is full");
         AddToBuffer(array, ref ibStart, ref cbSize);
         if (BuffLength == sizeInBytes)//buffer full
         {

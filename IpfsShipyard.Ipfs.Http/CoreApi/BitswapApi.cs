@@ -46,7 +46,7 @@ internal class BitswapApi : IBitswapApi
     {
         var json = await _ipfs.DoCommandAsync("bitswap/ledger", cancel, peer.Id.ToString());
         var o = JObject.Parse(json);
-        return new BitswapLedger
+        return new()
         {
             Peer = (string)o["Peer"],
             DataReceived = (ulong)o["Sent"],

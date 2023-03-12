@@ -142,7 +142,7 @@ public class TcpTest
         Action<Stream, MultiAddress, MultiAddress> handler = (stream, local, remote) =>
         {
             called = true;
-            throw new Exception("foobar");
+            throw new("foobar");
         };
         try
         {
@@ -177,7 +177,7 @@ public class TcpTest
 
     private class HelloServer : IDisposable
     {
-        private readonly CancellationTokenSource _cs = new CancellationTokenSource(TimeSpan.FromSeconds(30));
+        private readonly CancellationTokenSource _cs = new(TimeSpan.FromSeconds(30));
 
         public HelloServer()
         {

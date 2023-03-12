@@ -238,7 +238,7 @@ public class MultiHash : IEquatable<MultiHash>
     /// </remarks>
     static public implicit operator MultiHash(string s)
     {
-        return new MultiHash(s);
+        return new(s);
     }
 
     /// <summary>
@@ -511,7 +511,7 @@ public class MultiHash : IEquatable<MultiHash>
     {
         using (var alg = GetHashAlgorithm(algorithmName))
         {
-            return new MultiHash(algorithmName, alg.ComputeHash(data));
+            return new(algorithmName, alg.ComputeHash(data));
         }
     }
 
@@ -531,7 +531,7 @@ public class MultiHash : IEquatable<MultiHash>
     {
         using (var alg = GetHashAlgorithm(algorithmName))
         {
-            return new MultiHash(algorithmName, alg.ComputeHash(data));
+            return new(algorithmName, alg.ComputeHash(data));
         }
     }
 

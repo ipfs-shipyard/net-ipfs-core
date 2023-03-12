@@ -26,7 +26,7 @@ public class FloodRouter : IPeerProtocol, IMessageRouter
     /// <summary>
     ///   The topics of interest of other peers.
     /// </summary>
-    public TopicManager RemoteTopics { get; set; } = new TopicManager();
+    public TopicManager RemoteTopics { get; set; } = new();
 
     /// <inheritdoc />
     public event EventHandler<PublishedMessage> MessageReceived;
@@ -35,7 +35,7 @@ public class FloodRouter : IPeerProtocol, IMessageRouter
     public string Name { get; } = "floodsub";
 
     /// <inheritdoc />
-    public SemVersion Version { get; } = new SemVersion(1, 0);
+    public SemVersion Version { get; } = new(1, 0);
 
     /// <inheritdoc />
     public override string ToString()
@@ -144,7 +144,7 @@ public class FloodRouter : IPeerProtocol, IMessageRouter
         {
             Subscriptions = new Subscription[]
             {
-                new Subscription
+                new()
                 {
                     Topic = topic,
                     Subscribe = true
@@ -170,7 +170,7 @@ public class FloodRouter : IPeerProtocol, IMessageRouter
         {
             Subscriptions = new Subscription[]
             {
-                new Subscription
+                new()
                 {
                     Topic = topic,
                     Subscribe = false

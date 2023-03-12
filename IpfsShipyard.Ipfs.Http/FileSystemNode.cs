@@ -120,7 +120,7 @@ public class FileSystemNode : IFileSystemNode
             {
                 lock (this)
                 {
-                    _ipfsClient = new IpfsClient();
+                    _ipfsClient = new();
                 }
             }
             return _ipfsClient;
