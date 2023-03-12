@@ -653,7 +653,7 @@ public class Swarm : IService, IPolicy<MultiAddress>, IPolicy<Peer>
     {
         // TODO: HACK: Currenty only the ipfs/p2p is supported.
         // short circuit to make life faster.
-        if (addr.Protocols.Count != 3 || !(addr.Protocols[2].Name == "ipfs" || addr.Protocols[2].Name == "p2p"))
+        if (addr.Protocols.Count != 3 || !(addr.Protocols[2].Name is "ipfs" or "p2p"))
         {
             throw new($"Cannnot dial; unknown protocol in '{addr}'.");
         }
@@ -784,18 +784,20 @@ public class Swarm : IService, IPolicy<MultiAddress>, IPolicy<Peer>
             .Where(nic => nic.OperationalStatus == OperationalStatus.Up
                           || nic.NetworkInterfaceType == NetworkInterfaceType.Loopback)
             .SelectMany(nic => nic.GetIPProperties().UnicastAddresses);
-        if (result.ToString().StartsWith("/ip4/0.0.0.0/"))
+        var unicastIpAddressInformations = ips.ToList();
+        var s = result.ToString();
+        if (s.StartsWith("/ip4/0.0.0.0/"))
         {
-            addresses = ips
+            addresses = unicastIpAddressInformations
                 .Where(ip => ip.Address.AddressFamily == AddressFamily.InterNetwork)
-                .Select(ip => new MultiAddress(result.ToString().Replace("0.0.0.0", ip.Address.ToString())))
+                .Select(ip => new MultiAddress(s.Replace("0.0.0.0", ip.Address.ToString())))
                 .ToArray();
         }
-        else if (result.ToString().StartsWith("/ip6/::/"))
+        else if (s.StartsWith("/ip6/::/"))
         {
-            addresses = ips
+            addresses = unicastIpAddressInformations
                 .Where(ip => ip.Address.AddressFamily == AddressFamily.InterNetworkV6)
-                .Select(ip => new MultiAddress(result.ToString().Replace("::", ip.Address.ToString())))
+                .Select(ip => new MultiAddress(s.Replace("::", ip.Address.ToString())))
                 .ToArray();
         }
         else
@@ -805,7 +807,7 @@ public class Swarm : IService, IPolicy<MultiAddress>, IPolicy<Peer>
         if (!addresses.Any())
         {
             var msg = "Cannot determine address(es) for " + result;
-            msg = ips.Aggregate(msg, (current, ip) => current + (" nic-ip: " + ip.Address));
+            msg = unicastIpAddressInformations.Aggregate(msg, (current, ip) => current + (" nic-ip: " + ip.Address));
             cancel.Cancel();
             throw new(msg);
         }

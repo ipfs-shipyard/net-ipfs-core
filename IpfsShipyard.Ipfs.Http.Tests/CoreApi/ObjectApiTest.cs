@@ -79,10 +79,11 @@ public class ObjectApiTest
         var alpha = new DagNode(adata);
         var beta = await _ipfs.Object.PutAsync(bdata, new[] { alpha.ToLink() });
         var links = await _ipfs.Object.LinksAsync(beta.Id);
-        Assert.AreEqual(beta.Links.Count(), links.Count());
-        Assert.AreEqual(beta.Links.First().Id, links.First().Id);
-        Assert.AreEqual(beta.Links.First().Name, links.First().Name);
-        Assert.AreEqual(beta.Links.First().Size, links.First().Size);
+        var merkleLinks = links.ToList();
+        Assert.AreEqual(beta.Links.Count(), merkleLinks.Count);
+        Assert.AreEqual(beta.Links.First().Id, merkleLinks.First().Id);
+        Assert.AreEqual(beta.Links.First().Name, merkleLinks.First().Name);
+        Assert.AreEqual(beta.Links.First().Size, merkleLinks.First().Size);
     }
 
     [TestMethod]

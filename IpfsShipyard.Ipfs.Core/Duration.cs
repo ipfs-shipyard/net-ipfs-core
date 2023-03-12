@@ -44,7 +44,7 @@ public static class Duration
     /// </remarks>
     public static TimeSpan Parse(string s)
     {
-        if (string.IsNullOrWhiteSpace(s) || s == "n/a" || s == "unknown")
+        if (string.IsNullOrWhiteSpace(s) || s is "n/a" or "unknown")
             return TimeSpan.Zero;
 
         var result = TimeSpan.Zero;
@@ -117,7 +117,7 @@ public static class Duration
         while (true)
         {
             var c = (char)reader.Peek();
-            if (char.IsDigit(c) || c == '.' || c == (char)0xFFFF)
+            if (char.IsDigit(c) || c is '.' or (char)0xFFFF)
                 break;
             s.Append(c);
             reader.Read();

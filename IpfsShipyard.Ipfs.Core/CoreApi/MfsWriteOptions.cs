@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace IpfsShipyard.Ipfs.Core.CoreApi;
+﻿namespace IpfsShipyard.Ipfs.Core.CoreApi;
 
 /// <summary>
 ///   The options when adding data to the MFS file system.

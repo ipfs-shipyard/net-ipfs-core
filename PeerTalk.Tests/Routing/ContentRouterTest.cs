@@ -35,8 +35,9 @@ public class ContentRouterTest
         router.Add(_cid1, _self.Id);
 
         var providers = router.Get(_cid1);
-        Assert.AreEqual(1, providers.Count());
-        Assert.AreEqual(_self.Id, providers.First());
+        var multiHashes = providers.ToList();
+        Assert.AreEqual(1, multiHashes.Count);
+        Assert.AreEqual(_self.Id, multiHashes.First());
     }
 
     [TestMethod]
@@ -47,8 +48,9 @@ public class ContentRouterTest
         router.Add(_cid1, _self.Id);
 
         var providers = router.Get(_cid1);
-        Assert.AreEqual(1, providers.Count());
-        Assert.AreEqual(_self.Id, providers.First());
+        var multiHashes = providers.ToList();
+        Assert.AreEqual(1, multiHashes.Count);
+        Assert.AreEqual(_self.Id, multiHashes.First());
     }
 
     [TestMethod]

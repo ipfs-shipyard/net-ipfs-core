@@ -154,7 +154,7 @@ public class MultiAddress : IEquatable<MultiAddress>
         get
         {
             var protocol = Protocols
-                .LastOrDefault(p => p.Name == "ipfs" || p.Name == "p2p");
+                .LastOrDefault(p => p.Name is "ipfs" or "p2p");
             if (protocol == null)
             {
                 throw new($"'{this}' is missing the peer ID. Add the 'ipfs' or 'p2p' protocol.");
@@ -177,7 +177,7 @@ public class MultiAddress : IEquatable<MultiAddress>
     {
         get
         {
-            return Protocols.Any(p => p.Name == "ipfs" || p.Name == "p2p");
+            return Protocols.Any(p => p.Name is "ipfs" or "p2p");
         }
     }
 
@@ -225,7 +225,7 @@ public class MultiAddress : IEquatable<MultiAddress>
         }
         var clone = Clone();
         clone.Protocols
-            .RemoveAll(p => p.Name == "p2p" || p.Name == "ipfs");
+            .RemoveAll(p => p.Name is "p2p" or "ipfs");
         return clone;
     }
 

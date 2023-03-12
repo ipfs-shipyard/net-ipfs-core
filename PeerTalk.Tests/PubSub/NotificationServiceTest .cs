@@ -31,7 +31,7 @@ public class NotificationServiceTest
         {
             var a = ns.CreateMessage("topic", Array.Empty<byte>());
             var b = ns.CreateMessage("topic", Array.Empty<byte>());
-            Assert.IsTrue(b.MessageId.CompareTo(a.MessageId) > 0);
+            Assert.IsTrue(string.Compare(b.MessageId, a.MessageId, StringComparison.Ordinal) > 0);
         }
         finally
         {

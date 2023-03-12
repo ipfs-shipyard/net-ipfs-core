@@ -32,18 +32,18 @@ public class MdnsJs : Mdns
     {
         // Only internet addresses.
         var addresses = LocalPeer.Addresses
-            .Where(a => a.Protocols.FirstOrDefault().Name == "ip4" || a.Protocols.FirstOrDefault().Name == "ip6")
+            .Where(a => a.Protocols.FirstOrDefault()?.Name is "ip4" or "ip6")
             .ToArray();
         if (addresses.Length == 0)
         {
             return null;
         }
         var ipAddresses = addresses
-            .Select(a => IPAddress.Parse(a.Protocols.FirstOrDefault().Value));
+            .Select(a => IPAddress.Parse(a.Protocols.FirstOrDefault()?.Value));
 
         // Only one port is supported.
         var tcpPort = addresses.FirstOrDefault()
-            .Protocols.Find(p => p.Name == "tcp")
+            ?.Protocols.Find(p => p.Name == "tcp")
             .Value;
 
         // Create the DNS records for this peer.  The TXT record

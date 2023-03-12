@@ -26,7 +26,7 @@ public class Udp : IPeerTransport
             .Select(p => int.Parse(p.Value))
             .First();
         var ip = address.Protocols
-            .Find(p => p.Name == "ip4" || p.Name == "ip6");
+            .Find(p => p.Name is "ip4" or "ip6");
         var socket = new Socket(
             ip.Name == "ip4" ? AddressFamily.InterNetwork : AddressFamily.InterNetworkV6,
             SocketType.Dgram,
@@ -71,7 +71,7 @@ public class Udp : IPeerTransport
             .Select(p => int.Parse(p.Value))
             .FirstOrDefault();
         var ip = address.Protocols
-            .First(p => p.Name == "ip4" || p.Name == "ip6");
+            .First(p => p.Name is "ip4" or "ip6");
         var ipAddress = IPAddress.Parse(ip.Value);
         var endPoint = new IPEndPoint(ipAddress, port);
         var socket = new Socket(

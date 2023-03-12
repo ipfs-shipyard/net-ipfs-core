@@ -88,10 +88,8 @@ public class VersionedName : IEquatable<VersionedName>, IComparable<VersionedNam
     }
 
     /// <inheritdoc />
-    public int CompareTo(VersionedName that)
-    {
-        if (that == null) return 1;
-        if (Name == that.Name) return Version.ComparePrecedenceTo(that.Version);
-        return Name.CompareTo(that.Name);
-    }
+    public int CompareTo(VersionedName that) =>
+        that == null ? 1 :
+        Name == that.Name ? Version.ComparePrecedenceTo(that.Version) :
+        string.Compare(Name, that.Name, StringComparison.Ordinal);
 }

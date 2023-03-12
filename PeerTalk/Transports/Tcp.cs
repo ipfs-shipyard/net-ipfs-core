@@ -45,7 +45,7 @@ namespace IpfsShipyard.PeerTalk.Transports
                 .Select(p => int.Parse(p.Value))
                 .First();
             var ip = address.Protocols
-                .Find(p => p.Name == "ip4" || p.Name == "ip6");
+                .Find(p => p.Name is "ip4" or "ip6");
             if (ip == null)
                 throw new ArgumentException($"Missing IP address in '{address}'.", nameof(address));
             var socket = new Socket(
@@ -119,7 +119,7 @@ namespace IpfsShipyard.PeerTalk.Transports
                 .Select(p => int.Parse(p.Value))
                 .FirstOrDefault();
             var ip = address.Protocols
-                .Find(p => p.Name == "ip4" || p.Name == "ip6");
+                .Find(p => p.Name is "ip4" or "ip6");
             if (ip == null)
                 throw new ArgumentException($"Missing IP address in '{address}'.", nameof(address));
             var ipAddress = IPAddress.Parse(ip.Value);

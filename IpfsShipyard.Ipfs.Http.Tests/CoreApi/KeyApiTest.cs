@@ -84,8 +84,9 @@ public class KeyApiTest
             Assert.AreEqual(rname, rkey.Name);
 
             var keys = await ipfs.Key.ListAsync();
-            Assert.IsTrue(keys.Any(k => k.Name == rname));
-            Assert.IsFalse(keys.Any(k => k.Name == oname));
+            var enumerable = keys.ToList();
+            Assert.IsTrue(enumerable.Any(k => k.Name == rname));
+            Assert.IsFalse(enumerable.Any(k => k.Name == oname));
         }
         finally
         {

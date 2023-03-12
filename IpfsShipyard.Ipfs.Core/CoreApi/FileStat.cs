@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace IpfsShipyard.Ipfs.Core.CoreApi;
+﻿namespace IpfsShipyard.Ipfs.Core.CoreApi;
 
 /// <summary>
 ///   Information on a MFS file path

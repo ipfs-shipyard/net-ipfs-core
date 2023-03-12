@@ -27,8 +27,9 @@ public class SwarmApiTest
     {
         var ipfs = TestFixture.Ipfs;
         var peers = await ipfs.Swarm.PeersAsync();
-        Assert.AreNotEqual(0, peers.Count());
-        foreach (var peer in peers)
+        var enumerable = peers.ToList();
+        Assert.AreNotEqual(0, enumerable.Count);
+        foreach (var peer in enumerable)
         {
             Assert.IsNotNull(peer.Id);
             Assert.IsNotNull(peer.ConnectedAddress);

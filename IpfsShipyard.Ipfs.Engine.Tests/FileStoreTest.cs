@@ -128,7 +128,7 @@ public class FileStoreTest
         await store.PutAsync(11, _a);
         await store.PutAsync(12, _a);
         await store.PutAsync(13, _a);
-        var names = Store.Names.Where(n => n == 11 || n == 13).ToArray();
+        var names = Store.Names.Where(n => n is 11 or 13).ToArray();
         Assert.AreEqual(2, names.Length);
     }
 
