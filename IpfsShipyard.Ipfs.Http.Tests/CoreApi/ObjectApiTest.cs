@@ -33,8 +33,8 @@ public class ObjectApiTest
     [TestMethod]
     public async Task Put_Get_Dag()
     {
-        var adata = Encoding.UTF8.GetBytes("alpha");
-        var bdata = Encoding.UTF8.GetBytes("beta");
+        var adata = "alpha"u8.ToArray();
+        var bdata = "beta"u8.ToArray();
         var alpha = new DagNode(adata);
         var beta = new DagNode(bdata, new[] { alpha.ToLink() });
         var x = await _ipfs.Object.PutAsync(beta);
@@ -49,8 +49,8 @@ public class ObjectApiTest
     [TestMethod]
     public async Task Put_Get_Data()
     {
-        var adata = Encoding.UTF8.GetBytes("alpha");
-        var bdata = Encoding.UTF8.GetBytes("beta");
+        var adata = "alpha"u8.ToArray();
+        var bdata = "beta"u8.ToArray();
         var alpha = new DagNode(adata);
         var beta = await _ipfs.Object.PutAsync(bdata, new[] { alpha.ToLink() });
         var node = await _ipfs.Object.GetAsync(beta.Id);
@@ -64,7 +64,7 @@ public class ObjectApiTest
     [TestMethod]
     public async Task Data()
     {
-        var adata = Encoding.UTF8.GetBytes("alpha");
+        var adata = "alpha"u8.ToArray();
         var node = await _ipfs.Object.PutAsync(adata);
         using (var stream = await _ipfs.Object.DataAsync(node.Id))
         {
@@ -77,8 +77,8 @@ public class ObjectApiTest
     [TestMethod]
     public async Task Links()
     {
-        var adata = Encoding.UTF8.GetBytes("alpha");
-        var bdata = Encoding.UTF8.GetBytes("beta");
+        var adata = "alpha"u8.ToArray();
+        var bdata = "beta"u8.ToArray();
         var alpha = new DagNode(adata);
         var beta = await _ipfs.Object.PutAsync(bdata, new[] { alpha.ToLink() });
         var links = await _ipfs.Object.LinksAsync(beta.Id);
@@ -91,8 +91,8 @@ public class ObjectApiTest
     [TestMethod]
     public async Task Stat()
     {
-        var data1 = Encoding.UTF8.GetBytes("Some data 1");
-        var data2 = Encoding.UTF8.GetBytes("Some data 2");
+        var data1 = "Some data 1"u8.ToArray();
+        var data2 = "Some data 2"u8.ToArray();
         var node2 = new DagNode(data2);
         var node1 = await _ipfs.Object.PutAsync(data1,
             new[] { node2.ToLink("some-link") });
@@ -107,7 +107,7 @@ public class ObjectApiTest
     [TestMethod]
     public async Task Get_Nonexistent()
     {
-        var data = Encoding.UTF8.GetBytes("Some data for net-ipfs-http-client-test that cannot be found");
+        var data = "Some data for net-ipfs-http-client-test that cannot be found"u8.ToArray();
         var node = new DagNode(data);
         var id = node.Id;
         var cs = new CancellationTokenSource(500);

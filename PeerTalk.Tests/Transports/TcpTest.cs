@@ -194,7 +194,7 @@ public class TcpTest
 
         private void Handler(Stream stream, MultiAddress local, MultiAddress remote)
         {
-            var msg = Encoding.UTF8.GetBytes("hello");
+            var msg = "hello"u8.ToArray();
             stream.Write(msg, 0, msg.Length);
             stream.Flush();
             stream.Dispose();

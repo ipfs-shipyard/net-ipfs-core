@@ -13,7 +13,7 @@ public class BlockApiTest
 {
     private readonly IpfsClient _ipfs = TestFixture.Ipfs;
     private readonly string _id = "QmPv52ekjS75L4JmHpXVeuJ5uX2ecSfSZo88NSyxwA3rAQ";
-    private readonly byte[] _blob = Encoding.UTF8.GetBytes("blorb");
+    private readonly byte[] _blob = "blorb"u8.ToArray();
 
     [TestMethod]
     public void Put_Bytes()

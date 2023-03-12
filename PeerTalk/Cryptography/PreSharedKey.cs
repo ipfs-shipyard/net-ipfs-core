@@ -52,7 +52,7 @@ public class PreSharedKey
         // Encrypt data first so we don't feed PSK to hash function.
         // Salsa20 function is not reversible thus increasing our security margin.
         var encrypted = new byte[64];
-        var nonce = Encoding.ASCII.GetBytes("finprint");
+        var nonce = "finprint"u8.ToArray();
         var cipher = new Salsa20Engine();
         cipher.Init(true, new ParametersWithIV(new KeyParameter(Value), nonce));
         cipher.ProcessBytes(encrypted, 0, encrypted.Length, encrypted, 0);

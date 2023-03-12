@@ -41,7 +41,7 @@ public class CtrStreamCipherTest
         var p = new ParametersWithIV(new KeyParameter(key), iv);
         encrypt.Init(true, p);
 
-        var plain = Encoding.UTF8.GetBytes("this is some text that spans multiple blocks");
+        var plain = "this is some text that spans multiple blocks"u8.ToArray();
         var expected1 = "a8fda90b8229faa9de27cf71b2f045ff272ffe93a63116cad902da82e4a606e7bace305128400902682daea0".ToHexBuffer();
         var expected2 = "ce9bf46b520970ea44c94711f1d690f6012641e6bc3e915b3d2b8f0861852c483365469b2261a98deed81443".ToHexBuffer();
         var actual = new byte[plain.Length];
@@ -62,7 +62,7 @@ public class CtrStreamCipherTest
         var p = new ParametersWithIV(new KeyParameter(key), iv);
         encrypt.Init(true, p);
 
-        var plain = Encoding.UTF8.GetBytes("1234567890123456");
+        var plain = "1234567890123456"u8.ToArray();
         var expected1 = "eda7f34c9776beb194789326a1b015b1".ToHexBuffer();
         var expected2 = "623db9cff2730181905385c3f7ff46bd".ToHexBuffer();
         var actual = new byte[plain.Length];

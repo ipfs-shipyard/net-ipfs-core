@@ -61,7 +61,7 @@ public class StretchedKey
 
         var hmac = new HMac(DigestUtilities.GetDigest(hashName));
         var kp = new KeyParameter(secret);
-        var seed = Encoding.ASCII.GetBytes("key expansion");
+        var seed = "key expansion"u8.ToArray();
         hmac.Init(kp);
         var a = new byte[hmac.GetMacSize()];
         var b = new byte[hmac.GetMacSize()];
