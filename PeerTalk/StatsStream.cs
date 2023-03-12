@@ -20,7 +20,7 @@ public class StatsStream : Stream
         RateOut = 1024
     };
 
-    private Stream _stream;
+    private readonly Stream _stream;
     private long _bytesRead;
     private long _bytesWritten;
     private DateTime _lastUsed;

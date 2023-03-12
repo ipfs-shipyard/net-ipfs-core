@@ -6,12 +6,12 @@ namespace IpfsShipyard.Ipfs.Core;
 
 static class ProtobufHelper
 {
-    static MethodInfo _writeRawBytes = typeof(CodedOutputStream)
+    static readonly MethodInfo _writeRawBytes = typeof(CodedOutputStream)
         .GetMethods(BindingFlags.NonPublic | BindingFlags.Instance)
         .Single(m =>
             m.Name == "WriteRawBytes" && m.GetParameters().Count() == 1
         );
-    static MethodInfo _readRawBytes = typeof(CodedInputStream)
+    static readonly MethodInfo _readRawBytes = typeof(CodedInputStream)
         .GetMethods(BindingFlags.NonPublic | BindingFlags.Instance)
         .Single(m =>
             m.Name == "ReadRawBytes"

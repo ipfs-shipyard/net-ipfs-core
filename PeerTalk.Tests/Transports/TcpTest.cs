@@ -177,7 +177,7 @@ public class TcpTest
 
     class HelloServer : IDisposable
     {
-        CancellationTokenSource _cs = new CancellationTokenSource(TimeSpan.FromSeconds(30));
+        readonly CancellationTokenSource _cs = new CancellationTokenSource(TimeSpan.FromSeconds(30));
 
         public HelloServer()
         {

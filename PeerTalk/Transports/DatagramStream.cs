@@ -9,7 +9,7 @@ namespace IpfsShipyard.PeerTalk.Transports;
 internal class DatagramStream : Stream
 {
     private Socket _socket;
-    private bool _ownsSocket;
+    private readonly bool _ownsSocket;
     private readonly MemoryStream _sendBuffer = new();
     private readonly MemoryStream _receiveBuffer = new();
     private readonly byte[] _datagram = new byte[2048];

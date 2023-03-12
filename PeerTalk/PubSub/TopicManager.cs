@@ -12,7 +12,7 @@ public class TopicManager
 {
     private static readonly IEnumerable<Peer> nopeers = Enumerable.Empty<Peer>();
 
-    private ConcurrentDictionary<string, HashSet<Peer>> _topics = new ConcurrentDictionary<string, HashSet<Peer>>();
+    private readonly ConcurrentDictionary<string, HashSet<Peer>> _topics = new ConcurrentDictionary<string, HashSet<Peer>>();
 
     /// <summary>
     ///   Get the peers interested in a topic.

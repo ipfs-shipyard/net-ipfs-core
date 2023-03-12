@@ -8,8 +8,8 @@ namespace IpfsShipyard.PeerTalk.Tests;
 [TestClass]
 public class ConnectionManagerTest
 {
-    MultiHash _aId = "QmXFX2P5ammdmXQgfqGkfswtEVFsZUJ5KeHRXQYCTdiTAb";
-    MultiHash _bId = "QmdpwjdB94eNm2Lcvp9JqoCxswo3AKQqjLuNZyLixmCM1h";
+    readonly MultiHash _aId = "QmXFX2P5ammdmXQgfqGkfswtEVFsZUJ5KeHRXQYCTdiTAb";
+    readonly MultiHash _bId = "QmdpwjdB94eNm2Lcvp9JqoCxswo3AKQqjLuNZyLixmCM1h";
 
     [TestMethod]
     public void IsConnected()

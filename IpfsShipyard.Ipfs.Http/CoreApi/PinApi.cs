@@ -10,7 +10,7 @@ namespace IpfsShipyard.Ipfs.Http.CoreApi;
 
 class PinApi : IPinApi
 {
-    private IpfsClient _ipfs;
+    private readonly IpfsClient _ipfs;
 
     internal PinApi(IpfsClient ipfs)
     {

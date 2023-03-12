@@ -10,7 +10,7 @@ namespace IpfsShipyard.Ipfs.Http.CoreApi;
 
 class BootstrapApi : IBootstrapApi
 {
-    IpfsClient _ipfs;
+    readonly IpfsClient _ipfs;
 
     internal BootstrapApi(IpfsClient ipfs)
     {

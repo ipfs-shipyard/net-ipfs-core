@@ -52,7 +52,7 @@ public class MultiBaseTest
         public string Output { get; set; }
     }
 
-    TestVector[] _testVectors = new TestVector[]
+    readonly TestVector[] _testVectors = new TestVector[]
     {
         new TestVector {
             Algorithm = "base16",

@@ -25,13 +25,13 @@ namespace IpfsShipyard.PeerTalk.SecureCommunication;
 public class Secio1Stream : Stream
 {
     private readonly MemoryStream _outStream = new();
-    private Stream _stream;
+    private readonly Stream _stream;
     private byte[] _inBlock;
     private int _inBlockOffset;
-    private HMac _inHmac;
-    private HMac _outHmac;
-    private IStreamCipher _decrypt;
-    private IStreamCipher _encrypt;
+    private readonly HMac _inHmac;
+    private readonly HMac _outHmac;
+    private readonly IStreamCipher _decrypt;
+    private readonly IStreamCipher _encrypt;
 
     /// <summary>
     ///   Creates a new instance of the <see cref="Secio1Stream"/> class.

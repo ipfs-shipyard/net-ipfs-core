@@ -14,7 +14,7 @@ namespace IpfsShipyard.Ipfs.Http.CoreApi;
 
 class PubSubApi : IPubSubApi
 {
-    private IpfsClient _ipfs;
+    private readonly IpfsClient _ipfs;
 
     internal PubSubApi(IpfsClient ipfs)
     {

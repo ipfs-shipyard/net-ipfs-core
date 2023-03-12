@@ -25,7 +25,7 @@ public class TrustedPeerCollection : ICollection<MultiAddress>
         public MultiAddress[] Peers { get; set; }
     }
 
-    IpfsClient _ipfs;
+    readonly IpfsClient _ipfs;
     MultiAddress[] _peers;
 
     internal TrustedPeerCollection(IpfsClient ipfs)

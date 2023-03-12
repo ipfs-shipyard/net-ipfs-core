@@ -23,8 +23,8 @@ public class Psk1Stream : Stream
     private const int NonceBitLength = 192;
     private const int NonceByteLength = NonceBitLength / 8;
 
-    private Stream _stream;
-    private PreSharedKey _key;
+    private readonly Stream _stream;
+    private readonly PreSharedKey _key;
     private IStreamCipher _readCipher;
     private IStreamCipher _writeCipher;
 

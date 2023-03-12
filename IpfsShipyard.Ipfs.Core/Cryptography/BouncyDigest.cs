@@ -8,7 +8,7 @@
 /// </remarks>
 internal class BouncyDigest : System.Security.Cryptography.HashAlgorithm
 {
-    Org.BouncyCastle.Crypto.IDigest _digest;
+    readonly Org.BouncyCastle.Crypto.IDigest _digest;
 
     /// <summary>
     ///   Wrap the bouncy castle digest.

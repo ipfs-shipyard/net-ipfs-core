@@ -8,21 +8,21 @@ namespace IpfsShipyard.PeerTalk.Tests;
 [TestClass]
 public class AutoDialerTest
 {
-    private Peer _peerA = new Peer
+    private readonly Peer _peerA = new Peer
     {
         AgentVersion = "A",
         Id = "QmXK9VBxaXFuuT29AaPUTgW3jBWZ9JgLVZYdMYTHC6LLAH",
         PublicKey = "CAASXjBcMA0GCSqGSIb3DQEBAQUAA0sAMEgCQQCC5r4nQBtnd9qgjnG8fBN5+gnqIeWEIcUFUdCG4su/vrbQ1py8XGKNUBuDjkyTv25Gd3hlrtNJV3eOKZVSL8ePAgMBAAE="
     };
 
-    private Peer _peerB = new Peer
+    private readonly Peer _peerB = new Peer
     {
         AgentVersion = "B",
         Id = "QmdpwjdB94eNm2Lcvp9JqoCxswo3AKQqjLuNZyLixmCM1h",
         PublicKey = "CAASXjBcMA0GCSqGSIb3DQEBAQUAA0sAMEgCQQDlTSgVLprWaXfmxDr92DJE1FP0wOexhulPqXSTsNh5ot6j+UiuMgwb0shSPKzLx9AuTolCGhnwpTBYHVhFoBErAgMBAAE="
     };
 
-    private Peer _peerC = new Peer
+    private readonly Peer _peerC = new Peer
     {
         AgentVersion = "C",
         Id = "QmTcEBjSTSLjeu2oTiSoBSQQgqH5MADUsemXewn6rThoDT",

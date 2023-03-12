@@ -11,7 +11,7 @@ namespace IpfsShipyard.Ipfs.Core;
 /// </remarks>
 public class Peer : IEquatable<Peer>
 {
-    static MultiAddress[] _noAddress = new MultiAddress[0];
+    static readonly MultiAddress[] _noAddress = new MultiAddress[0];
     const string Unknown = "unknown/0.0";
 
     /// <summary>

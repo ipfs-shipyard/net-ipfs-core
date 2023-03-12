@@ -7,7 +7,7 @@ namespace IpfsShipyard.Ipfs.Http.CoreApi;
 
 class DnsApi : IDnsApi
 {
-    private IpfsClient _ipfs;
+    private readonly IpfsClient _ipfs;
 
     internal DnsApi(IpfsClient ipfs)
     {

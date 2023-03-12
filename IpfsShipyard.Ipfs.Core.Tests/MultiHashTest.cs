@@ -306,7 +306,7 @@ public class MultiHashTest
         public bool Ignore { get; set; }
     }
 
-    TestVector[] _testVectors = new TestVector[]
+    readonly TestVector[] _testVectors = new TestVector[]
     {
         // From https://github.com/multiformats/js-multihashing-async/blob/master/test/fixtures/encodes.js
         new TestVector {

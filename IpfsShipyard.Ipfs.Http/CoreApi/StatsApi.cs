@@ -9,7 +9,7 @@ namespace IpfsShipyard.Ipfs.Http.CoreApi;
 
 class StatApi : IStatsApi
 {
-    private IpfsClient _ipfs;
+    private readonly IpfsClient _ipfs;
 
     internal StatApi(IpfsClient ipfs)
     {

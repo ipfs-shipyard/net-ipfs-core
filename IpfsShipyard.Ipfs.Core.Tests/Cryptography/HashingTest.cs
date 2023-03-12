@@ -15,7 +15,7 @@ public class HashingTest
         public string Digest { get; set; }
     }
 
-    TestVector[] _testVectors = new TestVector[]
+    readonly TestVector[] _testVectors = new TestVector[]
     {
         new TestVector
         {

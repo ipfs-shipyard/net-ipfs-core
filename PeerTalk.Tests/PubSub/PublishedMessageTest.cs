@@ -11,8 +11,8 @@ namespace IpfsShipyard.PeerTalk.Tests.PubSub;
 [TestClass]
 public class PublishedMessageTest
 {
-    Peer _self = new Peer { Id = "QmXK9VBxaXFuuT29AaPUTgW3jBWZ9JgLVZYdMYTHC6LLAH" };
-    Peer _other = new Peer { Id = "QmaCpDMGvV2BGHeYERUEnRQAwe3N8SzbUtfsmvsqQLuvuJ" };
+    readonly Peer _self = new Peer { Id = "QmXK9VBxaXFuuT29AaPUTgW3jBWZ9JgLVZYdMYTHC6LLAH" };
+    readonly Peer _other = new Peer { Id = "QmaCpDMGvV2BGHeYERUEnRQAwe3N8SzbUtfsmvsqQLuvuJ" };
 
     [TestMethod]
     public void RoundTrip()

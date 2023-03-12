@@ -269,7 +269,7 @@ abstract class IpNetworkProtocol : NetworkProtocol
 
 class Ipv4NetworkProtocol : IpNetworkProtocol
 {
-    static int _addressSize = IPAddress.Any.GetAddressBytes().Length;
+    static readonly int _addressSize = IPAddress.Any.GetAddressBytes().Length;
 
     public override string Name => "ip4";
     public override uint Code => 4;
@@ -291,7 +291,7 @@ class Ipv4NetworkProtocol : IpNetworkProtocol
 
 class Ipv6NetworkProtocol : IpNetworkProtocol
 {
-    static int _addressSize = IPAddress.IPv6Any.GetAddressBytes().Length;
+    static readonly int _addressSize = IPAddress.IPv6Any.GetAddressBytes().Length;
 
     public override string Name => "ip6";
     public override uint Code => 41;

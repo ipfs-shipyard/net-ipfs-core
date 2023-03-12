@@ -10,7 +10,7 @@ namespace IpfsShipyard.Ipfs.Http.Tests.CoreApi;
 [TestClass]
 public class ObjectApiTest
 {
-    private IpfsClient _ipfs = TestFixture.Ipfs;
+    private readonly IpfsClient _ipfs = TestFixture.Ipfs;
 
     [TestMethod]
     public async Task New_Template_Null()

@@ -31,7 +31,7 @@ public partial class IpfsClient : ICoreApi
 {
     const string UnknownFilename = "unknown";
 
-    static object _safe = new object();
+    static readonly object _safe = new object();
     static HttpClient _api = null;
 
     /// <summary>

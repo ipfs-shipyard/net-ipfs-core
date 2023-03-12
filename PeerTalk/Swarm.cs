@@ -38,7 +38,7 @@ public class Swarm : IService, IPolicy<MultiAddress>, IPolicy<Peer>
     /// <remarks>
     ///   Use sychronized access, e.g. <c>lock (protocols) { ... }</c>.
     /// </remarks>
-    private List<IPeerProtocol> _protocols = new()
+    private readonly List<IPeerProtocol> _protocols = new()
     {
         new Multistream1(),
         new SecureCommunication.Secio1(),

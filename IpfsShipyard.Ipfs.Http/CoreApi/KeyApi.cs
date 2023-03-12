@@ -29,7 +29,8 @@ class KeyApi : IKeyApi
         }
 
     }
-    IpfsClient _ipfs;
+
+    readonly IpfsClient _ipfs;
 
     internal KeyApi(IpfsClient ipfs)
     {

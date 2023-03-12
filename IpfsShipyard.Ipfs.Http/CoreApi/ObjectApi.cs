@@ -12,7 +12,7 @@ namespace IpfsShipyard.Ipfs.Http.CoreApi;
 
 class ObjectApi : IObjectApi
 {
-    private IpfsClient _ipfs;
+    private readonly IpfsClient _ipfs;
 
     internal ObjectApi(IpfsClient ipfs)
     {

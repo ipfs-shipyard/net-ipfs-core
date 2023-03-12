@@ -11,7 +11,7 @@ namespace IpfsShipyard.Ipfs.Http.CoreApi;
 
 class BlockApi : IBlockApi
 {
-    IpfsClient _ipfs;
+    readonly IpfsClient _ipfs;
 
     internal BlockApi(IpfsClient ipfs)
     {

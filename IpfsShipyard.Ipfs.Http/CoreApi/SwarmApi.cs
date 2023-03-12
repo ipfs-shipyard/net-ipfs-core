@@ -11,7 +11,7 @@ namespace IpfsShipyard.Ipfs.Http.CoreApi;
 
 class SwarmApi : ISwarmApi
 {
-    private IpfsClient _ipfs;
+    private readonly IpfsClient _ipfs;
 
     internal SwarmApi(IpfsClient ipfs)
     {

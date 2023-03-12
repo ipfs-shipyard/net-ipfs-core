@@ -7,7 +7,7 @@ namespace IpfsShipyard.Ipfs.Http.CoreApi;
 
 class BlockRepositoryApi : IBlockRepositoryApi
 {
-    IpfsClient _ipfs;
+    readonly IpfsClient _ipfs;
 
     internal BlockRepositoryApi(IpfsClient ipfs)
     {

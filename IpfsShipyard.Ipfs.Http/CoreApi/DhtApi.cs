@@ -11,7 +11,7 @@ namespace IpfsShipyard.Ipfs.Http.CoreApi;
 
 class DhtApi : IDhtApi
 {
-    private IpfsClient _ipfs;
+    private readonly IpfsClient _ipfs;
 
     internal DhtApi(IpfsClient ipfs)
     {

@@ -9,7 +9,7 @@ namespace IpfsShipyard.Ipfs.Http.CoreApi;
 
 class ConfigApi : IConfigApi
 {
-    IpfsClient _ipfs;
+    readonly IpfsClient _ipfs;
 
     internal ConfigApi(IpfsClient ipfs)
     {

@@ -14,8 +14,8 @@ namespace IpfsShipyard.Ipfs.Http.CoreApi;
 
 class FileSystemApi : IFileSystemApi
 {
-    private IpfsClient _ipfs;
-    private Lazy<DagNode> _emptyFolder;
+    private readonly IpfsClient _ipfs;
+    private readonly Lazy<DagNode> _emptyFolder;
 
     internal FileSystemApi(IpfsClient ipfs)
     {
