@@ -862,7 +862,7 @@ public class Swarm : IService, IPolicy<MultiAddress>, IPolicy<Peer>
         {
             try
             {
-                stream.Dispose();
+                await stream.DisposeAsync();
             }
             catch
             {
@@ -878,7 +878,7 @@ public class Swarm : IService, IPolicy<MultiAddress>, IPolicy<Peer>
             log.Debug($"Duplicate remote connection from {remote}");
             try
             {
-                stream.Dispose();
+                await stream.DisposeAsync();
             }
             catch
             {
@@ -950,7 +950,7 @@ public class Swarm : IService, IPolicy<MultiAddress>, IPolicy<Peer>
             }
             try
             {
-                stream.Dispose();
+                await stream.DisposeAsync();
             }
             catch
             {

@@ -84,7 +84,7 @@ public class VarintTest
         {
             await ms.WriteVarintAsync(long.MaxValue);
             ms.Position = 0;
-            Assert.AreEqual(long.MaxValue, ms.ReadVarint64());
+            Assert.AreEqual(long.MaxValue, await ms.ReadVarint64Async());
         }
     }
 

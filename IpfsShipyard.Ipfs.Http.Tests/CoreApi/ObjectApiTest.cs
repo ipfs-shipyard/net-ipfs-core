@@ -69,7 +69,7 @@ public class ObjectApiTest
         using (var stream = await _ipfs.Object.DataAsync(node.Id))
         {
             var bdata = new byte[adata.Length];
-            stream.Read(bdata, 0, bdata.Length);
+            await stream.ReadAsync(bdata, 0, bdata.Length);
             CollectionAssert.AreEqual(adata, bdata);
         }
     }

@@ -104,7 +104,7 @@ public class FileSystemApiTest
     public async Task Add_Wrap()
     {
         var path = "hello.txt";
-        File.WriteAllText(path, "hello world");
+        await File.WriteAllTextAsync(path, "hello world");
         try
         {
             var ipfs = TestFixture.Ipfs;
@@ -300,7 +300,7 @@ public class FileSystemApiTest
     public async Task AddFile_WithProgress()
     {
         var path = Path.GetTempFileName();
-        File.WriteAllText(path, "hello world");
+        await File.WriteAllTextAsync(path, "hello world");
         try
         {
             var ipfs = TestFixture.Ipfs;

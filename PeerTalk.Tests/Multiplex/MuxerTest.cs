@@ -54,8 +54,8 @@ public class MuxerTest
 
         // NewStream message is sent.
         channel.Position = 0;
-        Assert.AreEqual(stream.Id << 3, channel.ReadVarint32());
-        Assert.AreEqual(3, channel.ReadVarint32());
+        Assert.AreEqual(stream.Id << 3, await channel.ReadVarint32Async());
+        Assert.AreEqual(3, await channel.ReadVarint32Async());
         var name = new byte[3];
         channel.Read(name, 0, 3);
         Assert.AreEqual("foo", Encoding.UTF8.GetString(name));
