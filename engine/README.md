@@ -8,7 +8,7 @@
 [![docs](https://cdn.rawgit.com/richardschneider/net-ipfs-engine/master/doc/images/docs-latest-green.svg)](https://richardschneider.github.io/net-ipfs-engine/articles/intro.html)
 
 An embedded [IPFS](https://ipfs.io) engine implemented in C#.  It implements the 
-[IPFS Core API](https://richardschneider.github.io/net-ipfs-core/api/Ipfs.CoreApi.html) 
+[IPFS Core API](https://richardschneider.github.io/net-ipfs-core/api/IpfsShipyard.Ipfs.CoreApi.html) 
 which makes it possible to create a decentralised 
 and distributed application without relying on an "IPFS daemon".
 Basically, your application becomes an IPFS node.
@@ -30,7 +30,7 @@ This is **BETA CODE** and breaking changes will occur.
 - Supports [asynchronous I/O](https://richardschneider.github.io/net-ipfs-engine/articles/async.html)
 - Supports [cancellation](https://richardschneider.github.io/net-ipfs-engine/articles/cancellation.html)
 - Comprehensive [documentation](https://richardschneider.github.io/net-ipfs-engine/articles/intro.html)
-- C# style access to the [ipfs core interface](https://richardschneider.github.io/net-ipfs-core/api/Ipfs.CoreApi.html)
+- C# style access to the [ipfs core interface](https://richardschneider.github.io/net-ipfs-core/api/IpfsShipyard.Ipfs.CoreApi.html)
 
 ## Getting started
 

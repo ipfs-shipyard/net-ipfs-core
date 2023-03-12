@@ -1,0 +1,57 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+	<PropertyGroup>
+		<AllowedReferenceRelatedFileExtensions Condition=" '$(Configuration)' == 'Release' ">
+			<!-- Prevent default XML and PDB files copied to output in RELEASE. Only *.allowedextension files will be included, which doesn't exist in my case. -->
+			*.pdb;
+			*.xml
+		</AllowedReferenceRelatedFileExtensions>
+		<AssemblyName>csipfs</AssemblyName>
+		<!-- developer build is always 0.42 -->
+		<AssemblyVersion>0.42</AssemblyVersion>
+		<Authors>Richard Schneider</Authors>
+		<Copyright>© 2018-2019 Richard Schneider</Copyright>
+		<Description>The command line tool to IPFS engine for .Net</Description>
+		<GeneratePackageOnBuild Condition=" '$(Configuration)' == 'Release' ">true</GeneratePackageOnBuild>
+		<IsPackable>true</IsPackable>
+		<IsShippingPackage>true</IsShippingPackage>
+		<OutputType>Exe</OutputType>
+		<PackageIconUrl>https://raw.githubusercontent.com/richardschneider/net-ipfs-core/master/doc/images/ipfs-cs-logo-64x64.png</PackageIconUrl>
+		<PackageId>csipfs</PackageId>
+		<PackageProjectUrl>https://github.com/richardschneider/net-ipfs-engine</PackageProjectUrl>
+		<PackageReleaseNotes>https://github.com/richardschneider/net-ipfs-engine/releases</PackageReleaseNotes>
+		<PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+		<PackageTags>ipfs peer-to-peer p2p distributed file-system web</PackageTags>
+		<PackAsTool>true</PackAsTool>
+		<RootNamespace>Ipfs.Cli</RootNamespace>
+		<TargetFramework>net7.0</TargetFramework>
+		<TargetLatestRuntimePatch>true</TargetLatestRuntimePatch>
+		<Title>C# IPFS CLI</Title>
+		<ToolCommandName>csipfs</ToolCommandName>
+		<Version>0.42</Version>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<GenerateDocumentationFile>True</GenerateDocumentationFile>
+		<PackageReadmeFile>README.md</PackageReadmeFile>
+		<EnforceCodeStyleInBuild>True</EnforceCodeStyleInBuild>
+	</PropertyGroup>
+
+	<ItemGroup>
+	  <None Include="..\README.md">
+	    <Pack>True</Pack>
+	    <PackagePath>\</PackagePath>
+	  </None>
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Common.Logging" Version="3.4.1" />
+		<PackageReference Include="IpfsShipyard.Ipfs.Http.Client" Version="0.0.6" />
+		<PackageReference Include="McMaster.Extensions.CommandLineUtils" Version="4.0.2" />
+		<PackageReference Include="System.Threading.Tasks.Dataflow" Version="7.0.0" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\IpfsServer\Ipfs.Server.csproj" />
+		<ProjectReference Include="..\src\Ipfs.Engine.csproj" />
+	</ItemGroup>
+
+</Project>
