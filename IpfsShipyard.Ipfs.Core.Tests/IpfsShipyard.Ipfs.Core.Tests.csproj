@@ -6,6 +6,7 @@
         <IsPackable>false</IsPackable>
         <DebugType>portable</DebugType>
         <RootNamespace>IpfsShipyard.Ipfs.Core.Tests</RootNamespace>
+	    <RunSettingsFilePath>$(MSBuildProjectDirectory)\.runsettings</RunSettingsFilePath>
     </PropertyGroup>
 
     <ItemGroup>

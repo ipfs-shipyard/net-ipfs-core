@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 using Google.Protobuf;
 using IpfsShipyard.Ipfs.Core.Registry;
@@ -267,7 +268,7 @@ public class MultiHashTest
     [TestMethod]
     public void Compute_Hash_All_Algorithms()
     {
-        foreach (var alg in HashingAlgorithm.All)
+        foreach (var alg in HashingAlgorithm.All.ToList())
         {
             try
             {
