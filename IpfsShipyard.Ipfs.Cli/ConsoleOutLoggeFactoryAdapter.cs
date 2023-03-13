@@ -55,7 +55,7 @@ namespace IpfsShipyard.Ipfs.Cli;
 ///     </example>
 /// </remarks>
 /// <seealso cref="AbstractSimpleLoggerFactoryAdapter" />
-/// <seealso cref="LogManager.Adapter" />
+/// <seealso cref="LogManager.Adapter" /> 
 /// <seealso cref="ConfigurationSectionHandler" />
 /// <author>Gilles Bayon</author>
 /// <author>Mark Pollack</author>
@@ -82,7 +82,7 @@ public class ConsoleOutLoggerFactoryAdapter : AbstractSimpleLoggerFactoryAdapter
     ///     Looks for level, showDateTime, showLogName, dateTimeFormat items from
     ///     <paramref name="properties" /> for use when the GetLogger methods are called.
     ///     <see cref="ConfigurationSectionHandler" /> for more information on how to use the
-    ///     standard .NET application configuraiton file (App.config/Web.config)
+    ///     standard .NET application configuration file (App.config/Web.config)
     ///     to configure this adapter.
     /// </remarks>
     /// <param name="properties">

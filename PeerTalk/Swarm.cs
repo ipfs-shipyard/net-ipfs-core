@@ -611,8 +611,8 @@ public class Swarm : IService, IPolicy<MultiAddress>, IPolicy<Peer>
         }
         catch (Exception e)
         {
-            var attemped = string.Join(", ", possibleAddresses.Select(a => a.ToString()));
-            log.Trace($"Cannot dial {attemped}");
+            var attempted = string.Join(", ", possibleAddresses.Select(a => a.ToString()));
+            log.Trace($"Cannot dial {attempted}");
             throw new($"Cannot dial {remote}.", e);
         }
 
@@ -651,11 +651,11 @@ public class Swarm : IService, IPolicy<MultiAddress>, IPolicy<Peer>
 
     private async Task<PeerConnection> DialAsync(Peer remote, MultiAddress addr, CancellationToken cancel)
     {
-        // TODO: HACK: Currenty only the ipfs/p2p is supported.
+        // TODO: HACK: Currently only the ipfs/p2p is supported.
         // short circuit to make life faster.
         if (addr.Protocols.Count != 3 || !(addr.Protocols[2].Name is "ipfs" or "p2p"))
         {
-            throw new($"Cannnot dial; unknown protocol in '{addr}'.");
+            throw new($"Cannot dial; unknown protocol in '{addr}'.");
         }
 
         // Establish the transport stream.
@@ -714,7 +714,7 @@ public class Swarm : IService, IPolicy<MultiAddress>, IPolicy<Peer>
     ///   A task that represents the asynchronous operation.
     /// </returns>
     /// <remarks>
-    ///   If the peer is not conected, then nothing happens.
+    ///   If the peer is not connected, then nothing happens.
     /// </remarks>
     public Task DisconnectAsync(MultiAddress address, CancellationToken cancel = default)
     {
