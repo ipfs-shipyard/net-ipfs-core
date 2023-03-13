@@ -13,7 +13,7 @@ public class PeerConnectionTest
         var closeCount = 0;
         var stream = new MemoryStream();
         var connection = new PeerConnection { Stream = stream };
-        connection.Closed += (s, e) =>
+        connection.Closed += (_, _) =>
         {
             ++closeCount;
         };

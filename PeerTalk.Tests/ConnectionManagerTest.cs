@@ -275,7 +275,7 @@ public class ConnectionManagerTest
     {
         var gotEvent = false;
         var manager = new ConnectionManager();
-        manager.PeerDisconnected += (s, e) => gotEvent = true;
+        manager.PeerDisconnected += (_, _) => gotEvent = true;
         var peerA = new Peer { Id = _aId };
         var a = new PeerConnection { RemotePeer = peerA, Stream = Stream.Null };
         manager.Add(a);
@@ -289,7 +289,7 @@ public class ConnectionManagerTest
     {
         var gotEvent = 0;
         var manager = new ConnectionManager();
-        manager.PeerDisconnected += (s, e) => gotEvent += 1;
+        manager.PeerDisconnected += (_, _) => gotEvent += 1;
         var peerA = new Peer { Id = _aId };
         var a = new PeerConnection { RemotePeer = peerA, Stream = Stream.Null };
         manager.Add(a);
@@ -303,7 +303,7 @@ public class ConnectionManagerTest
     {
         var gotEvent = 0;
         var manager = new ConnectionManager();
-        manager.PeerDisconnected += (s, e) => gotEvent += 1;
+        manager.PeerDisconnected += (_, _) => gotEvent += 1;
         var peerA = new Peer { Id = _aId };
         var a = new PeerConnection { RemotePeer = peerA, Stream = Stream.Null };
         manager.Add(a);

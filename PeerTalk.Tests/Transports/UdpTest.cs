@@ -57,7 +57,7 @@ public class UdpTest
         var udp = new Udp();
         var cs = new CancellationTokenSource(TimeSpan.FromSeconds(30));
         var connected = false;
-        Action<Stream, MultiAddress, MultiAddress> handler = (stream, local, remote) =>
+        Action<Stream, MultiAddress, MultiAddress> handler = (stream, _, _) =>
         {
             Assert.IsNotNull(stream);
             connected = true;

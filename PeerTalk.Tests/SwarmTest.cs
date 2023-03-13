@@ -455,7 +455,7 @@ public class SwarmTest
         };
         var swarmB = new Swarm { LocalPeer = peerB };
         var swarmBConnections = 0;
-        swarmB.ConnectionEstablished += (s, e) =>
+        swarmB.ConnectionEstablished += (_, _) =>
         {
             ++swarmBConnections;
         };
@@ -464,7 +464,7 @@ public class SwarmTest
 
         var swarm = new Swarm { LocalPeer = _self };
         var swarmConnections = 0;
-        swarm.ConnectionEstablished += (s, e) =>
+        swarm.ConnectionEstablished += (_, _) =>
         {
             ++swarmConnections;
         };
@@ -539,7 +539,7 @@ public class SwarmTest
         MultiAddress remoteAddress = $"/ip4/127.0.0.1/tcp/4040/ipfs/{remoteId}";
         var swarm = new Swarm { LocalPeer = _self };
         Peer unreachable = null;
-        swarm.PeerNotReachable += (s, e) =>
+        swarm.PeerNotReachable += (_, e) =>
         {
             unreachable = e;
         };
@@ -674,11 +674,11 @@ public class SwarmTest
 
         var swarm = new Swarm { LocalPeer = _self };
         var swarmConnections = 0;
-        swarm.ConnectionEstablished += (s, e) =>
+        swarm.ConnectionEstablished += (_, _) =>
         {
             ++swarmConnections;
         };
-        swarm.PeerDisconnected += (s, e) =>
+        swarm.PeerDisconnected += (_, _) =>
         {
             --swarmConnections;
         };
@@ -814,7 +814,7 @@ public class SwarmTest
         MultiAddress addr = "/ip4/127.0.0.1/tcp/0";
         var swarm = new Swarm { LocalPeer = peer };
         Peer listeningPeer = null;
-        swarm.ListenerEstablished += (s, e) =>
+        swarm.ListenerEstablished += (_, e) =>
         {
             listeningPeer = e;
         };
@@ -1109,7 +1109,7 @@ public class SwarmTest
     {
         var swarm = new Swarm { LocalPeer = _self };
         var peerCount = 0;
-        swarm.PeerDiscovered += (s, e) =>
+        swarm.PeerDiscovered += (_, _) =>
         {
             ++peerCount;
         };
@@ -1174,7 +1174,7 @@ public class SwarmTest
         Assert.IsTrue(swarm.KnownPeers.Contains(_other));
 
         Peer removedPeer = null;
-        swarm.PeerRemoved += (s, e) => removedPeer = e;
+        swarm.PeerRemoved += (_, e) => removedPeer = e;
         swarm.DeregisterPeer(_other);
         Assert.IsFalse(swarm.KnownPeers.Contains(_other));
         Assert.AreEqual(_other, removedPeer);

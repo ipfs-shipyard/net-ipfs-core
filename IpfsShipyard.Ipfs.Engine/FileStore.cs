@@ -31,7 +31,7 @@ public class FileStore<TName, TValue>
     ///     This is the default <see cref="Serialize" />.
     /// </remarks>
     public static Func<Stream, TName, TValue, CancellationToken, Task> JsonSerialize =
-        (stream, name, value, canel) =>
+        (stream, _, value, _) =>
         {
             using var writer = new StreamWriter(stream);
             using var jtw = new JsonTextWriter(writer) { Formatting = Formatting.Indented };
@@ -48,7 +48,7 @@ public class FileStore<TName, TValue>
     ///     This is the default <see cref="Deserialize" />.
     /// </remarks>
     public static Func<Stream, TName, CancellationToken, Task<TValue>> JsonDeserialize =
-        (stream, name, cancel) =>
+        (stream, _, _) =>
         {
             using var reader = new StreamReader(stream);
             using var jtr = new JsonTextReader(reader);

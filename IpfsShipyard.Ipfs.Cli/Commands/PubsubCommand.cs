@@ -30,7 +30,7 @@ internal class PubsubListCommand : CommandBase
         var program = Parent.Parent;
         var topics = await program.CoreApi.PubSub.SubscribedTopicsAsync();
         var enumerable = topics.ToList();
-        return program.Output(app, enumerable, (data, writer) =>
+        return program.Output(app, enumerable, (_, writer) =>
         {
             foreach (var topic in enumerable)
             {

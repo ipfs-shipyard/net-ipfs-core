@@ -62,7 +62,7 @@ public class PinController : IpfsController
         var cids = await IpfsCore.Pin.ListAsync(Cancel);
         return new()
         {
-            Keys = cids.ToDictionary(cid => cid.Encode(), cid => new PinDetailDto())
+            Keys = cids.ToDictionary(cid => cid.Encode(), _ => new PinDetailDto())
         };
     }
 

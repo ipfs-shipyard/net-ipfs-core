@@ -40,7 +40,7 @@ public class MultiHashTest
     public void Parsing_Unknown_Hash_Number()
     {
         HashingAlgorithm unknown = null;
-        EventHandler<UnknownHashingAlgorithmEventArgs> unknownHandler = (s, e) => { unknown = e.Algorithm; };
+        EventHandler<UnknownHashingAlgorithmEventArgs> unknownHandler = (_, e) => { unknown = e.Algorithm; };
         var ms = new MemoryStream(new byte[] { 0x01, 0x02, 0x0a, 0x0b });
         MultiHash.UnknownHashingAlgorithm += unknownHandler;
         try

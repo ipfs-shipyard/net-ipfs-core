@@ -32,7 +32,7 @@ public class Dht1Test
         var swarm = new Swarm { LocalPeer = _self };
         var dht = new Dht1 { Swarm = swarm };
         var stopped = false;
-        dht.Stopped += (s, e) => { stopped = true;  };
+        dht.Stopped += (_, _) => { stopped = true;  };
         await dht.StartAsync();
         await dht.StopAsync();
         Assert.IsTrue(stopped);

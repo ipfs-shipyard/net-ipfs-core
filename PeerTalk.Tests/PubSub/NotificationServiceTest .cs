@@ -70,9 +70,9 @@ public class NotificationServiceTest
             var csA = new CancellationTokenSource();
             var csB = new CancellationTokenSource();
 
-            await ns.SubscribeAsync(topicA, msg => { }, csA.Token);
-            await ns.SubscribeAsync(topicA, msg => { }, csA.Token);
-            await ns.SubscribeAsync(topicB, msg => { }, csB.Token);
+            await ns.SubscribeAsync(topicA, _ => { }, csA.Token);
+            await ns.SubscribeAsync(topicA, _ => { }, csA.Token);
+            await ns.SubscribeAsync(topicB, _ => { }, csB.Token);
 
             var topics = (await ns.SubscribedTopicsAsync()).ToArray();
             Assert.AreEqual(2, topics.Length);
@@ -104,8 +104,8 @@ public class NotificationServiceTest
             var topic = Guid.NewGuid().ToString();
             var cs = new CancellationTokenSource();
             var messageCount = 0;
-            await ns.SubscribeAsync(topic, msg => { ++messageCount; }, cs.Token);
-            await ns.SubscribeAsync(topic, msg => { ++messageCount; }, cs.Token);
+            await ns.SubscribeAsync(topic, _ => { ++messageCount; }, cs.Token);
+            await ns.SubscribeAsync(topic, _ => { ++messageCount; }, cs.Token);
 
             await ns.PublishAsync(topic, "", cs.Token);
             Assert.AreEqual(2, messageCount);
@@ -126,7 +126,7 @@ public class NotificationServiceTest
             var topic = Guid.NewGuid().ToString();
             var cs = new CancellationTokenSource();
             var messageCount = 0;
-            await ns.SubscribeAsync(topic, msg => { ++messageCount; throw new(); }, cs.Token);
+            await ns.SubscribeAsync(topic, _ => { ++messageCount; throw new(); }, cs.Token);
 
             await ns.PublishAsync(topic, "", cs.Token);
             Assert.AreEqual(1, messageCount);
@@ -148,7 +148,7 @@ public class NotificationServiceTest
             var topic = Guid.NewGuid().ToString();
             var cs = new CancellationTokenSource();
             var messageCount = 0;
-            await ns.SubscribeAsync(topic, msg => { ++messageCount; }, cs.Token);
+            await ns.SubscribeAsync(topic, _ => { ++messageCount; }, cs.Token);
 
             await ns.PublishAsync(topic, "", cs.Token);
             Assert.AreEqual(1, messageCount);

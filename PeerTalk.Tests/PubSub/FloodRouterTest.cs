@@ -78,7 +78,7 @@ public class FloodRouterTest
             await swarm2.StartListeningAsync("/ip4/127.0.0.1/tcp/0");
 
             var cs = new CancellationTokenSource();
-            await ns1.SubscribeAsync(topic, msg => { }, cs.Token);
+            await ns1.SubscribeAsync(topic, _ => { }, cs.Token);
             await swarm1.ConnectAsync(_other, cs.Token);
 
             var peers = Array.Empty<Peer>();
@@ -128,7 +128,7 @@ public class FloodRouterTest
 
             var cs = new CancellationTokenSource();
             await swarm1.ConnectAsync(_other, cs.Token);
-            await ns1.SubscribeAsync(topic, msg => { }, cs.Token);
+            await ns1.SubscribeAsync(topic, _ => { }, cs.Token);
 
             var peers = Array.Empty<Peer>();
             var endTime = DateTime.Now.AddSeconds(3);
@@ -177,7 +177,7 @@ public class FloodRouterTest
 
             var cs = new CancellationTokenSource();
             await swarm1.ConnectAsync(_other, cs.Token);
-            await ns1.SubscribeAsync(topic, msg => { }, cs.Token);
+            await ns1.SubscribeAsync(topic, _ => { }, cs.Token);
 
             var peers = Array.Empty<Peer>();
             var endTime = DateTime.Now.AddSeconds(3);

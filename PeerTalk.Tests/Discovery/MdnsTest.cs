@@ -37,7 +37,7 @@ public class MdnsTest
             ServiceName = serviceName,
             LocalPeer = peer2
         };
-        mdns1.PeerDiscovered += (s, e) =>
+        mdns1.PeerDiscovered += (_, e) =>
         {
             if (e.Id == peer2.Id)
                 done.Set();
@@ -87,7 +87,7 @@ public class MdnsTest
             ServiceName = serviceName,
             LocalPeer = peer2
         };
-        mdns1.PeerDiscovered += (s, e) =>
+        mdns1.PeerDiscovered += (_, e) =>
         {
             if (e.Id == peer2.Id)
                 done.Set();

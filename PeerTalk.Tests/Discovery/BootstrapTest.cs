@@ -14,7 +14,7 @@ public class BootstrapTest
     {
         var bootstrap = new Bootstrap { Addresses = null };
         var found = 0;
-        bootstrap.PeerDiscovered += (s, e) =>
+        bootstrap.PeerDiscovered += (_, _) =>
         {
             ++found;
         };
@@ -34,7 +34,7 @@ public class BootstrapTest
             }
         };
         var found = 0;
-        bootstrap.PeerDiscovered += (s, peer) =>
+        bootstrap.PeerDiscovered += (_, peer) =>
         {
             Assert.IsNotNull(peer);
             Assert.AreEqual("QmaCpDMGvV2BGHeYERUEnRQAwe3N8SzbUtfsmvsqQLuvuJ", peer.Id.ToBase58());
@@ -59,7 +59,7 @@ public class BootstrapTest
             }
         };
         var found = 0;
-        bootstrap.PeerDiscovered += (s, peer) =>
+        bootstrap.PeerDiscovered += (_, peer) =>
         {
             Assert.IsNotNull(peer);
             ++found;
@@ -79,7 +79,7 @@ public class BootstrapTest
             }
         };
         var found = 0;
-        bootstrap.PeerDiscovered += (s, e) =>
+        bootstrap.PeerDiscovered += (_, e) =>
         {
             Assert.IsNotNull(e);
             ++found;
@@ -104,7 +104,7 @@ public class BootstrapTest
             }
         };
         var found = 0;
-        bootstrap.PeerDiscovered += (s, e) =>
+        bootstrap.PeerDiscovered += (_, e) =>
         {
             Assert.IsNotNull(e);
             Assert.IsNotNull(e.Addresses);

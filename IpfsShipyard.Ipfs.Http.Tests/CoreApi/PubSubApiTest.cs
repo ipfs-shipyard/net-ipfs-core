@@ -27,7 +27,7 @@ public class PubSubApiTest
         var cs = new CancellationTokenSource();
         try
         {
-            await ipfs.PubSub.SubscribeAsync(topic, msg => { }, cs.Token);
+            await ipfs.PubSub.SubscribeAsync(topic, _ => { }, cs.Token);
             var peers = ipfs.PubSub.PeersAsync(cancel: cs.Token).Result.ToArray();
             Assert.IsTrue(peers.Length > 0);
         }
@@ -54,7 +54,7 @@ public class PubSubApiTest
         var cs = new CancellationTokenSource();
         try
         {
-            await ipfs.PubSub.SubscribeAsync(topic, msg => { }, cs.Token);
+            await ipfs.PubSub.SubscribeAsync(topic, _ => { }, cs.Token);
             var topics = ipfs.PubSub.SubscribedTopicsAsync(cs.Token).Result.ToArray();
             Assert.IsTrue(topics.Length > 0);
             CollectionAssert.Contains(topics, topic);
@@ -76,7 +76,7 @@ public class PubSubApiTest
         var cs = new CancellationTokenSource();
         try
         {
-            await ipfs.PubSub.SubscribeAsync(topic, msg =>
+            await ipfs.PubSub.SubscribeAsync(topic, _ =>
             {
                 Interlocked.Increment(ref _messageCount);
             }, cs.Token);
@@ -101,7 +101,7 @@ public class PubSubApiTest
         var cs = new CancellationTokenSource();
         try
         {
-            await ipfs.PubSub.SubscribeAsync(topic, msg =>
+            await ipfs.PubSub.SubscribeAsync(topic, _ =>
             {
                 Interlocked.Increment(ref _messageCount);
             }, cs.Token);
@@ -127,7 +127,7 @@ public class PubSubApiTest
         var ipfs = TestFixture.Ipfs;
         var topic = "net-ipfs-http-client-test-" + Guid.NewGuid();
         var cs = new CancellationTokenSource();
-        Action<IPublishedMessage> processMessage = msg =>
+        Action<IPublishedMessage> processMessage = _ =>
         {
             Interlocked.Increment(ref _messageCount);
         };
@@ -158,7 +158,7 @@ public class PubSubApiTest
         var ipfs = TestFixture.Ipfs;
         var topic = "net-ipfs-http-client-test-" + Guid.NewGuid();
         var cs = new CancellationTokenSource();
-        await ipfs.PubSub.SubscribeAsync(topic, msg =>
+        await ipfs.PubSub.SubscribeAsync(topic, _ =>
         {
             Interlocked.Increment(ref _messageCount1);
         }, cs.Token);

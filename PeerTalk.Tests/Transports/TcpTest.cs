@@ -89,7 +89,7 @@ public class TcpTest
     {
         var tcp = new Tcp();
         var cs = new CancellationTokenSource();
-        Action<Stream, MultiAddress, MultiAddress> handler = (stream, local, remote) =>
+        Action<Stream, MultiAddress, MultiAddress> handler = (_, _, _) =>
         {
             Assert.Fail("handler should not be called");
         };
@@ -134,7 +134,7 @@ public class TcpTest
         var tcp = new Tcp();
         var cs = new CancellationTokenSource(TimeSpan.FromSeconds(30));
         var called = false;
-        Action<Stream, MultiAddress, MultiAddress> handler = (stream, local, remote) =>
+        Action<Stream, MultiAddress, MultiAddress> handler = (_, _, _) =>
         {
             called = true;
             throw new("foobar");

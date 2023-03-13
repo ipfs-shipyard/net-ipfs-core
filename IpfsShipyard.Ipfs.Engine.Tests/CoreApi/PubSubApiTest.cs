@@ -41,7 +41,7 @@ public class PubSubApiTest
         await ipfs.StartAsync();
         try
         {
-            await ipfs.PubSub.SubscribeAsync(topic, msg => { }, cs.Token);
+            await ipfs.PubSub.SubscribeAsync(topic, _ => { }, cs.Token);
             var topics = ipfs.PubSub.SubscribedTopicsAsync(cs.Token).Result.ToArray();
             Assert.IsTrue(topics.Length > 0);
             CollectionAssert.Contains(topics, topic);
@@ -63,7 +63,7 @@ public class PubSubApiTest
         await ipfs.StartAsync();
         try
         {
-            await ipfs.PubSub.SubscribeAsync(topic, msg => { Interlocked.Increment(ref _messageCount); }, cs.Token);
+            await ipfs.PubSub.SubscribeAsync(topic, _ => { Interlocked.Increment(ref _messageCount); }, cs.Token);
             await ipfs.PubSub.PublishAsync(topic, "hello world!", cs.Token);
 
             await Task.Delay(100, cs.Token);
@@ -87,7 +87,7 @@ public class PubSubApiTest
         await ipfs.StartAsync();
         try
         {
-            await ipfs.PubSub.SubscribeAsync(topic, msg => { Interlocked.Increment(ref _messageCount); }, cs.Token);
+            await ipfs.PubSub.SubscribeAsync(topic, _ => { Interlocked.Increment(ref _messageCount); }, cs.Token);
             foreach (var msg in messages)
             {
                 await ipfs.PubSub.PublishAsync(topic, msg, cs.Token);
@@ -147,7 +147,7 @@ public class PubSubApiTest
         await ipfs.StartAsync();
         try
         {
-            await ipfs.PubSub.SubscribeAsync(topic, msg => { Interlocked.Increment(ref _messageCount1); }, cs.Token);
+            await ipfs.PubSub.SubscribeAsync(topic, _ => { Interlocked.Increment(ref _messageCount1); }, cs.Token);
             await ipfs.PubSub.PublishAsync(topic, "hello world!", cs.Token);
             await Task.Delay(100, cs.Token);
             Assert.AreEqual(1, _messageCount1);

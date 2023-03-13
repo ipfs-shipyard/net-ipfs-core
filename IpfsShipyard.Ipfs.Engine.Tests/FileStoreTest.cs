@@ -139,7 +139,7 @@ public class FileStoreTest
         var nTasks = 100;
         var tasks = Enumerable
             .Range(1, nTasks)
-            .Select(i => Task.Run(() => AtomicTask(store)))
+            .Select(_ => Task.Run(() => AtomicTask(store)))
             .ToArray();
         await Task.WhenAll(tasks);
     }

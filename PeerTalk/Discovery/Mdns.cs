@@ -47,7 +47,7 @@ public abstract class Mdns : IPeerDiscovery
     /// <inheritdoc />
     public Task StartAsync()
     {
-        MulticastService.NetworkInterfaceDiscovered += (s, e) =>
+        MulticastService.NetworkInterfaceDiscovered += (_, _) =>
         {
             try
             {

@@ -255,13 +255,13 @@ public class Bitswap : IService
         var tsc = new TaskCompletionSource<IDataBlock>();
         var want = _wants.AddOrUpdate(
             id,
-            key => new()
+            _ => new()
             {
                 Id = id,
                 Consumers = new() { tsc },
                 Peers = new() { peer }
             },
-            (key, block) =>
+            (_, block) =>
             {
                 block.Peers.Add(peer);
                 block.Consumers.Add(tsc);
@@ -382,7 +382,7 @@ public class Bitswap : IService
                 BlocksExchanged = 1,
                 DataReceived = (ulong)block.LongLength
             },
-            (peer, ledger) =>
+            (_, ledger) =>
             {
                 ++ledger.BlocksExchanged;
                 _dataReceived += (ulong)block.LongLength;
@@ -433,7 +433,7 @@ public class Bitswap : IService
                 BlocksExchanged = 1,
                 DataSent = (ulong)block.Size
             },
-            (peer, ledger) =>
+            (_, ledger) =>
             {
                 ++ledger.BlocksExchanged;
                 _dataSent += (ulong)block.Size;

@@ -32,7 +32,7 @@ internal class DhtFindPeerCommand : CommandBase
         var program = Parent.Parent;
 
         var peer = await program.CoreApi.Dht.FindPeerAsync(new(PeerId));
-        return program.Output(app, peer, (data, writer) =>
+        return program.Output(app, peer, (_, writer) =>
         {
             foreach (var a in peer.Addresses)
             {
@@ -60,7 +60,7 @@ internal class DhtFindProvidersCommand : CommandBase
 
         var peers = await program.CoreApi.Dht.FindProvidersAsync(Cid.Decode(Key), Limit);
         var enumerable = peers.ToList();
-        return program.Output(app, enumerable, (data, writer) =>
+        return program.Output(app, enumerable, (_, writer) =>
         {
             foreach (var peer in enumerable)
             {

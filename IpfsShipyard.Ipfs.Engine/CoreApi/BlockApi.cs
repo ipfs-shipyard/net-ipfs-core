@@ -68,7 +68,7 @@ internal class BlockApi : IBlockApi
                 Folder = folder,
                 NameToKey = cid => cid.Hash.ToBase32(),
                 KeyToName = key => new MultiHash(key.FromBase32()),
-                Serialize = async (stream, cid, block, cancel) =>
+                Serialize = async (stream, _, block, cancel) =>
                 {
                     await stream.WriteAsync(block.DataBytes, 0, block.DataBytes.Length, cancel)
                         .ConfigureAwait(false);

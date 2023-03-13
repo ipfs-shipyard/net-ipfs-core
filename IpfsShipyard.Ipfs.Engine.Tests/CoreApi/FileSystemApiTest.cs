@@ -841,7 +841,7 @@ public class FileSystemApiTest
             var tar = await ipfs.FileSystem.GetAsync(dir.Id);
             var archive = TarArchive.CreateInputTarArchive(tar, Encoding.UTF8);
             var files = new List<string>();
-            archive.ProgressMessageEvent += (a, e, m) => { files.Add(e.Name); };
+            archive.ProgressMessageEvent += (_, e, _) => { files.Add(e.Name); };
             archive.ListContents();
 
             Assert.AreEqual($"{dirid}", files[0]);
@@ -875,7 +875,7 @@ public class FileSystemApiTest
             var tar = await ipfs.FileSystem.GetAsync(dir.Id);
             var archive = TarArchive.CreateInputTarArchive(tar, Encoding.UTF8);
             var files = new List<string>();
-            archive.ProgressMessageEvent += (a, e, m) => { files.Add(e.Name); };
+            archive.ProgressMessageEvent += (_, e, _) => { files.Add(e.Name); };
             archive.ListContents();
 
             Assert.AreEqual($"{dirid}", files[0]);
