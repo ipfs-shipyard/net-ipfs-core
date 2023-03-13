@@ -162,7 +162,7 @@ public class Dht1 : IPeerProtocol, IService, IPeerRouting, IContentRouting
 
         // Maybe the swarm knows about it.
         var found = Swarm.KnownPeers.FirstOrDefault(p => p.Id == id);
-        if ((found?.Addresses).Any())
+        if (found?.Addresses?.Any() ?? false)
             return found;
 
         // Ask our peers for information on the requested peer.
