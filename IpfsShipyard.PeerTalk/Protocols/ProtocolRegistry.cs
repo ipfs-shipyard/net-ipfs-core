@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using IpfsShipyard.PeerTalk.SecureCommunication;
 
 namespace IpfsShipyard.PeerTalk.Protocols;
 
@@ -22,7 +21,6 @@ public static class ProtocolRegistry
     {
         Protocols = new();
         Register<Multistream1>();
-        Register<Secio1>();
         Register<Plaintext1>();
         Register<Identify1>();
         Register<Mplex67>();

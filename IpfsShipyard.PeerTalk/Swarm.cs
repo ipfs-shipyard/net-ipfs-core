@@ -12,7 +12,6 @@ using IpfsShipyard.Ipfs.Core;
 using IpfsShipyard.Ipfs.Core.CoreApi;
 using IpfsShipyard.PeerTalk.Cryptography;
 using IpfsShipyard.PeerTalk.Protocols;
-using IpfsShipyard.PeerTalk.SecureCommunication;
 using IpfsShipyard.PeerTalk.Transports;
 using Nito.AsyncEx;
 
@@ -42,7 +41,6 @@ public class Swarm : IService, IPolicy<MultiAddress>, IPolicy<Peer>
     private readonly List<IPeerProtocol> _protocols = new()
     {
         new Multistream1(),
-        new Secio1(),
         new Identify1(),
         new Mplex67()
     };
