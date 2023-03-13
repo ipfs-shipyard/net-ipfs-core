@@ -37,7 +37,9 @@ public class StreamExtensionsTest
         {
             ExceptionAssert.Throws<EndOfStreamException>(() =>
             {
-                ms.ReadExactAsync(actual, 0, actual.Length, cancel.Token).Wait(cancel.Token);
+                // This is valid because we are not testing the cancellation itself
+                // ReSharper disable once MethodSupportsCancellation
+                ms.ReadExactAsync(actual, 0, actual.Length, cancel.Token).Wait();
             });
         }
     }
@@ -59,7 +61,9 @@ public class StreamExtensionsTest
         {
             ExceptionAssert.Throws<TaskCanceledException>(() =>
             {
-                ms.ReadExactAsync(actual, 0, actual.Length, cancel.Token).Wait(cancel.Token);
+                // This is valid because we are not testing the cancellation itself
+                // ReSharper disable once MethodSupportsCancellation
+                ms.ReadExactAsync(actual, 0, actual.Length, cancel.Token).Wait();
             });
         }
     }
