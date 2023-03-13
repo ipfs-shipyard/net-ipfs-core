@@ -58,7 +58,7 @@ public class HashingTest
             Input = "37d518",
             Digest = "4aa96b1547e6402c0eee781acaa660797efe26ec00b4f2e0aec4a6d10688dd64cbd7f12b3b6c7f802e2096c041208b9289aec380d1a748fdfcd4128553d781e3"
         },
-        /*new()
+        new()
         {
             Algorithm = "shake-128",
             Input = "",
@@ -75,7 +75,7 @@ public class HashingTest
             Algorithm = "shake-128",
             Input = "fd6dd3b63dc7b9664895c51fc17c57d59c349621dd3c5694a3cc404c660c2cc47d83d2f0e3d2a28a3aa2f0a710db54",
             Digest = "c8db32bf81bf75621db30264750954f8"
-        },*/
+        },
 
         // From https://en.wikipedia.org/wiki/MD4
         new()
