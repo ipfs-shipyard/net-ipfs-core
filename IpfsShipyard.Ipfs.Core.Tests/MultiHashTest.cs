@@ -352,18 +352,18 @@ public class MultiHashTest
             Input = "beep boop",
             Output = "171c0da73a89549018df311c0a63250e008f7be357f93ba4e582aaea32b8"
         },
-        /*new()
+        new()
         {
             Algorithm = "shake-128",
             Input = "beep boop",
-            Output = "5fe422311f770743c2e0d86bcca09211"
+            Output = "18105fe422311f770743c2e0d86bcca09211"
         },
         new()
         {
             Algorithm = "shake-256",
             Input = "beep boop",
-            Output = "5fe422311f770743c2e0d86bcca092111cbce85487212829739c3c3723776e5a"
-        },*/
+            Output = "192059feb5565e4f924baef74708649fed376d63948a862322ed763ecf093b63b38b"
+        },
         new()
         {
             Algorithm = "keccak-224",
