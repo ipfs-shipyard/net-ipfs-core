@@ -1,24 +1,23 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFrameworks>net7.0</TargetFrameworks>
-    <langversion>10.0</langversion>
+    <PropertyGroup>
+        <TargetFrameworks>net7.0</TargetFrameworks>
+        <langversion>10.0</langversion>
+        <IsPackable>false</IsPackable>
+        <DebugType>portable</DebugType>
+        <RootNamespace>IpfsShipyard.Ipfs.Core.Tests</RootNamespace>
+    </PropertyGroup>
 
-    <IsPackable>false</IsPackable>
-    <DebugType>portable</DebugType>
-    <RootNamespace>IpfsShipyard.Ipfs.Core.Tests</RootNamespace>
-  </PropertyGroup>
+    <ItemGroup>
+        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.5.0" PrivateAssets="all" />
+        <PackageReference Include="MSTest.TestAdapter" Version="3.0.2" PrivateAssets="all" />
+        <PackageReference Include="MSTest.TestFramework" Version="3.0.2" PrivateAssets="all" />
+        <PackageReference Include="Google.Protobuf" version="3.22.1" />
+    </ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.5.0" PrivateAssets="all" />
-    <PackageReference Include="MSTest.TestAdapter" Version="3.0.2" PrivateAssets="all" />
-    <PackageReference Include="MSTest.TestFramework" Version="3.0.2" PrivateAssets="all" />
-	  <PackageReference Include="Google.Protobuf" version="3.22.1" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\IpfsShipyard.Ipfs.Core\IpfsShipyard.Ipfs.Core.csproj" />
-  </ItemGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\IpfsShipyard.Ipfs.Core\IpfsShipyard.Ipfs.Core.csproj" />
+    </ItemGroup>
 
 
 </Project>

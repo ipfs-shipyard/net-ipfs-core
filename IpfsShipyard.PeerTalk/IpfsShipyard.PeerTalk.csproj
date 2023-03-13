@@ -1,35 +1,34 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
 	<PropertyGroup>
-		<TargetFramework>net7.0</TargetFramework>
-		<AssemblyName>IpfsShipyard.PeerTalk</AssemblyName>
-		<RootNamespace>IpfsShipyard.PeerTalk</RootNamespace>
-		<DocumentationFile>bin\$(Configuration)\$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>
-		<DebugType>portable</DebugType>
-		<TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-
-		<!-- developer build is always 0.42 -->
-		<AssemblyVersion>0.60</AssemblyVersion>
-		<Version>0.60</Version>
-
-		<!-- Nuget specs -->
-		<PackageId>PeerTalk</PackageId>
-		<Authors>Myina</Authors>
-		<Title>Peer to Peer communication</Title>
+		<Authors>Richard Schneider, Myina, Steve Fan</Authors>
+		<Copyright>© 2018-2019 Richard Schneider, 2022 Myina, 2023 Steve Fan</Copyright>
 		<Description>An implementation of the IPFS libp2p</Description>
-		<PackageReleaseNotes>https://github.com/Myina/peer-talk/releases</PackageReleaseNotes>
-		<PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
-		<PackageReleaseNotes></PackageReleaseNotes>
-		<Copyright>© 2022 Myina</Copyright>
-		<PackageTags>ipfs peer-to-peer libp2p p2p distributed web</PackageTags>
-		<IncludeSymbols>True</IncludeSymbols>
-		<PackageProjectUrl>https://github.com/Myina/peer-talk</PackageProjectUrl>
-		<GeneratePackageOnBuild Condition=" '$(Configuration)' == 'Release' ">true</GeneratePackageOnBuild>
-		<GenerateDocumentationFile>true</GenerateDocumentationFile>
+		<Title>Peer to Peer communication</Title>
+		<Version>0.60</Version>
 	</PropertyGroup>
 
+	<PropertyGroup>
+		<AssemblyName>IpfsShipyard.PeerTalk</AssemblyName>
+		<AssemblyVersion>0.60</AssemblyVersion>
+		<RootNamespace>IpfsShipyard.PeerTalk</RootNamespace>
+		<TargetFramework>net7.0</TargetFramework>
+	</PropertyGroup>
 
 	<PropertyGroup>
+		<PackageId>IpfsShipyard.PeerTalk</PackageId>
+		<PackageProjectUrl>https://github.com/ipfs-shipyard/net-ipfs-core</PackageProjectUrl>
+		<PackageReleaseNotes>https://github.com/ipfs-shipyard/net-ipfs-core/releases</PackageReleaseNotes>
+		<PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+		<PackageTags>ipfs peer-to-peer libp2p p2p distributed web</PackageTags>
+	</PropertyGroup>
+
+	<PropertyGroup>
+		<DebugType>portable</DebugType>
+		<DocumentationFile>bin\$(Configuration)\$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>
+		<GenerateDocumentationFile>true</GenerateDocumentationFile>
+		<GeneratePackageOnBuild Condition=" '$(Configuration)' == 'Release' ">true</GeneratePackageOnBuild>
+		<IncludeSymbols>True</IncludeSymbols>
+		<TreatWarningsAsErrors>true</TreatWarningsAsErrors>
 		<!-- Optional: Publish the repository URL in the built .nupkg (in the NuSpec <Repository> element) -->
 		<PublishRepositoryUrl>true</PublishRepositoryUrl>
 		<!-- Optional: Embed source files that are not tracked by the source control manager in the PDB -->
@@ -41,9 +40,8 @@
 		<ApplicationIcon>icoipfs.ico</ApplicationIcon>
 	</PropertyGroup>
 
-
 	<ItemGroup>
-	  <Content Include="icoipfs.ico" />
+		<Content Include="icoipfs.ico" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -61,10 +59,11 @@
 		<PackageReference Include="Portable.BouncyCastle" Version="1.9.0" />
 		<PackageReference Include="IPNetwork2" Version="2.6.556" />
 		<PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1" PrivateAssets="All" />
-		<PackageReference Include="Microsoft.VisualStudio.Threading.Analyzers" Version="17.5.22" PrivateAssets="All" />
+		<PackageReference Include="Microsoft.VisualStudio.Threading.Analyzers" Version="17.5.22"
+			PrivateAssets="All" />
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\IpfsShipyard.Ipfs.Core\IpfsShipyard.Ipfs.Core.csproj" />
+		<ProjectReference Include="..\IpfsShipyard.Ipfs.Core\IpfsShipyard.Ipfs.Core.csproj" />
 	</ItemGroup>
 </Project>

@@ -1,58 +1,61 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <Version>0.0.6</Version>
+        <Authors>IPFS Shipyard, Arlo Godfrey, Richard Schneider, Steve Fan</Authors>
+        <Title>IPFS HTTP Client</Title>
 
-  <PropertyGroup>
-    <TargetFrameworks>net7.0</TargetFrameworks>
-    <AssemblyName>IpfsShipyard.Ipfs.Http</AssemblyName>
-    <RootNamespace>IpfsShipyard.Ipfs.Http</RootNamespace>
-    <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>
-    <DebugType>full</DebugType>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+        <Description>
+            Backed by the IPFS Shipyard and developer community. Picking up where Richard Schneider
+            left off.
 
-    <!-- https://semver.org/spec/v2.0.0.html -->
-    <Version>0.0.6</Version>
-    <AssemblyVersion>$(Version)</AssemblyVersion>
+            An easy to use .NET library for the IPFS HTTP Gateway API, and the Kubo RPC API v0.
+        </Description>
+    </PropertyGroup>
 
-    <!-- Nuget specs -->
-    <PackageId>IpfsShipyard.Ipfs.Http</PackageId>
-    <Authors>IPFS Shipyard, Arlo Godfrey, Richard Schneider</Authors>
-    <Title>IPFS HTTP Client</Title>
-    <Description>
-    Backed by the IPFS Shipyard and developer community. Picking up where Richard Schneider left off.
-    
-    An easy to use .NET library for the IPFS HTTP Gateway API, and the Kubo RPC API v0.</Description>
-    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
-    <PackageReleaseNotes> </PackageReleaseNotes>
-    <PackageTags>ipfs peer-to-peer distributed file-system</PackageTags>
-    <IncludeSymbols>True</IncludeSymbols>
-    <PackageProjectUrl>https://github.com/ipfs-shipyard/net-ipfs-http-client</PackageProjectUrl>
-    <PackageIcon>icon.png</PackageIcon>
-  </PropertyGroup>
+    <PropertyGroup>
+        <AssemblyName>IpfsShipyard.Ipfs.Http</AssemblyName>
+        <AssemblyVersion>$(Version)</AssemblyVersion>
+        <RootNamespace>IpfsShipyard.Ipfs.Http</RootNamespace>
+        <TargetFrameworks>net7.0</TargetFrameworks>
+    </PropertyGroup>
 
-  <PropertyGroup>
-    <GeneratePackageOnBuild Condition=" '$(Configuration)' == 'Release' ">true</GeneratePackageOnBuild>
+    <PropertyGroup>
+        <PackageIcon>icon.png</PackageIcon>
+        <PackageId>IpfsShipyard.Ipfs.Http</PackageId>
+        <PackageProjectUrl>https://github.com/ipfs-shipyard/net-ipfs-core</PackageProjectUrl>
+        <PackageReleaseNotes> </PackageReleaseNotes>
+        <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+        <PackageTags>ipfs peer-to-peer distributed file-system</PackageTags>
+    </PropertyGroup>
 
-    <!-- Optional: Publish the repository URL in the built .nupkg (in the NuSpec <Repository> element) -->
-    <PublishRepositoryUrl>true</PublishRepositoryUrl>
-    <!-- Optional: Embed source files that are not tracked by the source control manager in the PDB -->
-    <EmbedUntrackedSources>false</EmbedUntrackedSources>
-    <!-- Optional: Build symbol package (.snupkg) to distribute the PDB containing Source Link -->
-    <IncludeSymbols>true</IncludeSymbols>
-    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
-    <AllowedOutputExtensionsInPackageBuildOutputFolder>.pdb;$(AllowedOutputExtensionsInPackageBuildOutputFolder)</AllowedOutputExtensionsInPackageBuildOutputFolder>
-  </PropertyGroup>
+    <PropertyGroup>
+        <DebugType>full</DebugType>
+        <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>
+        <IncludeSymbols>True</IncludeSymbols>
+        <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+        <GeneratePackageOnBuild Condition=" '$(Configuration)' == 'Release' ">true</GeneratePackageOnBuild>
+        <!-- Optional: Publish the repository URL in the built .nupkg (in the NuSpec <Repository> element) -->
+        <PublishRepositoryUrl>true</PublishRepositoryUrl>
+        <!-- Optional: Embed source files that are not tracked by the source control manager in the PDB -->
+        <EmbedUntrackedSources>false</EmbedUntrackedSources>
+        <!-- Optional: Build symbol package (.snupkg) to distribute the PDB containing Source Link -->
+        <IncludeSymbols>true</IncludeSymbols>
+        <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+        <AllowedOutputExtensionsInPackageBuildOutputFolder>.pdb;$(AllowedOutputExtensionsInPackageBuildOutputFolder)</AllowedOutputExtensionsInPackageBuildOutputFolder>
+    </PropertyGroup>
 
-  <ItemGroup>
-    <None Include="icon.png" Pack="true" PackagePath="\" />
-  </ItemGroup>
+    <ItemGroup>
+        <None Include="icon.png" Pack="true" PackagePath="\" />
+    </ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-    <PackageReference Include="Multiformats.Base" Version="2.0.2" />
-  </ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
+        <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+        <PackageReference Include="Multiformats.Base" Version="2.0.2" />
+    </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\IpfsShipyard.Ipfs.Core\IpfsShipyard.Ipfs.Core.csproj" />
-  </ItemGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\IpfsShipyard.Ipfs.Core\IpfsShipyard.Ipfs.Core.csproj" />
+    </ItemGroup>
 
 </Project>

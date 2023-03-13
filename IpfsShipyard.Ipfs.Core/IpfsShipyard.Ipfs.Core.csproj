@@ -1,62 +1,62 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<Authors>IPFS Shipyard, Arlo Godfrey, Richard Schneider, Steve Fan</Authors>
+		<Title>IPFS Core Objects</Title>
+		<Description>
+			Backed by the IPFS Shipyard and developer community. Picking up where Richard Schneider / makaretu left off.
+			Core objects and interfaces for IPFS.
 
-  <PropertyGroup>
-    <TargetFrameworks>net7.0</TargetFrameworks>
-    <AssemblyName>IpfsShipyard.Ipfs.Core</AssemblyName>
-    <RootNamespace>IpfsShipyard.Ipfs.Core</RootNamespace>
-    <langversion>10.0</langversion>
-    <DebugType>portable</DebugType>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+			The InterPlanetary File System is the permanent web. IPFS enables the creation of completely distributed applications. It is a new hypermedia distribution protocol, addressed by content and identities. It aims to make the web faster, safer, and more open.
+		</Description>
+		<Version>0.0.4</Version>
+	</PropertyGroup>
 
-    <!-- https://semver.org/spec/v2.0.0.html -->
-    <Version>0.0.4</Version>
-    <AssemblyVersion>$(Version)</AssemblyVersion>
+	<PropertyGroup>
+		<AssemblyName>IpfsShipyard.Ipfs.Core</AssemblyName>
+		<AssemblyVersion>$(Version)</AssemblyVersion>
+		<langversion>10.0</langversion>
+		<RootNamespace>IpfsShipyard.Ipfs.Core</RootNamespace>
+		<TargetFrameworks>net7.0</TargetFrameworks>
+	</PropertyGroup>
 
-    <!-- Nuget specs -->
-    <PackageId>IpfsShipyard.Ipfs.Core</PackageId>
-    <Authors>IPFS Shipyard, Arlo Godfrey, Richard Schneider</Authors>
-    <Title>IPFS Core Objects</Title>
-    <Description>
-      Backed by the IPFS Shipyard and developer community. Picking up where Richard Schneider / makaretu left off.
-      Core objects and interfaces for IPFS.
+	<PropertyGroup>
+		<PackageIcon>icon.png</PackageIcon>
+		<PackageId>IpfsShipyard.Ipfs.Core</PackageId>
+		<PackageProjectUrl>https://github.com/ipfs-shipyard/net-ipfs-core</PackageProjectUrl>
+		<PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+		<PackageTags>ipfs peer-to-peer distributed file-system</PackageTags>
+	</PropertyGroup>
 
-      The InterPlanetary File System is the permanent web. IPFS enables the creation of completely distributed applications. It is a new hypermedia distribution protocol, addressed by content and identities. It aims to make the web faster, safer, and more open.
-    </Description>
-    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
-    <PackageTags>ipfs peer-to-peer distributed file-system</PackageTags>
-    <IncludeSymbols>True</IncludeSymbols>
-    <PackageProjectUrl>https://github.com/ipfs-shipyard/net-ipfs-core</PackageProjectUrl>
-    <PackageIcon>icon.png</PackageIcon>
+	<PropertyGroup>
+		<TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+		<DebugType>portable</DebugType>
+		<GenerateDocumentationFile>true</GenerateDocumentationFile>
+		<GeneratePackageOnBuild Condition=" '$(Configuration)' == 'Release' ">true</GeneratePackageOnBuild>
+		<!-- Optional: Publish the repository URL in the built .nupkg (in the NuSpec <Repository> element) -->
+		<PublishRepositoryUrl>true</PublishRepositoryUrl>
+		<!-- Optional: Embed source files that are not tracked by the source control manager in the PDB -->
+		<EmbedUntrackedSources>false</EmbedUntrackedSources>
+		<!-- Optional: Build symbol package (.snupkg) to distribute the PDB containing Source Link -->
+		<IncludeSymbols>true</IncludeSymbols>
+		<SymbolPackageFormat>snupkg</SymbolPackageFormat>
+		<AllowedOutputExtensionsInPackageBuildOutputFolder>.pdb;$(AllowedOutputExtensionsInPackageBuildOutputFolder)</AllowedOutputExtensionsInPackageBuildOutputFolder>
+	</PropertyGroup>
 
-    <GeneratePackageOnBuild Condition=" '$(Configuration)' == 'Release' ">true</GeneratePackageOnBuild>
-    <GenerateDocumentationFile>true</GenerateDocumentationFile>
-  </PropertyGroup>
 
-  <PropertyGroup>
-    <!-- Optional: Publish the repository URL in the built .nupkg (in the NuSpec <Repository> element) -->
-    <PublishRepositoryUrl>true</PublishRepositoryUrl>
-    <!-- Optional: Embed source files that are not tracked by the source control manager in the PDB -->
-    <EmbedUntrackedSources>false</EmbedUntrackedSources>
-    <!-- Optional: Build symbol package (.snupkg) to distribute the PDB containing Source Link -->
-    <IncludeSymbols>true</IncludeSymbols>
-    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
-    <AllowedOutputExtensionsInPackageBuildOutputFolder>.pdb;$(AllowedOutputExtensionsInPackageBuildOutputFolder)</AllowedOutputExtensionsInPackageBuildOutputFolder>
-  </PropertyGroup>
+	<ItemGroup>
+		<PackageReference Include="Google.Protobuf" Version="3.22.1" />
+		<PackageReference Include="Microsoft.Bcl.AsyncInterfaces" Version="7.0.0" />
+		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+		<PackageReference Include="Portable.BouncyCastle" Version="1.9.0" />
+		<PackageReference Include="SimpleBase" Version="4.0.0" />
+		<PackageReference Include="Grpc.Tools" Version="2.52.0" PrivateAssets="All" />
+		<PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1" PrivateAssets="All" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Google.Protobuf" Version="3.22.1" />
-    <PackageReference Include="Microsoft.Bcl.AsyncInterfaces" Version="7.0.0" />
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-    <PackageReference Include="Portable.BouncyCastle" Version="1.9.0" />
-    <PackageReference Include="SimpleBase" Version="4.0.0" />
-    <PackageReference Include="Grpc.Tools" Version="2.52.0" PrivateAssets="All" />
-    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1" PrivateAssets="All" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Protobuf Include="**/*.proto" />
-    <EmbeddedResource Include="**/*.proto" />
-    <None Include="icon.png" Pack="true" PackagePath="\" />
-  </ItemGroup>
+	<ItemGroup>
+		<Protobuf Include="**/*.proto" />
+		<EmbeddedResource Include="**/*.proto" />
+		<None Include="icon.png" Pack="true" PackagePath="\" />
+	</ItemGroup>
 
 </Project>

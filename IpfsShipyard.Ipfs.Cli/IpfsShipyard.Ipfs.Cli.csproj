@@ -1,59 +1,67 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
+    <PropertyGroup>
+        <Authors>Richard Schneider, Steve Fan</Authors>
+        <Copyright>© 2018-2019 Richard Schneider, 2023 Steve Fan</Copyright>
+        <Description>The command line tool to IPFS engine for .Net</Description>
+        <Version>0.42</Version>
+        <Title>C# IPFS CLI</Title>
+    </PropertyGroup>
 
-	<PropertyGroup>
-		<AllowedReferenceRelatedFileExtensions Condition=" '$(Configuration)' == 'Release' ">
-			<!-- Prevent default XML and PDB files copied to output in RELEASE. Only *.allowedextension files will be included, which doesn't exist in my case. -->
-			*.pdb;
-			*.xml
-		</AllowedReferenceRelatedFileExtensions>
-		<AssemblyName>csipfs</AssemblyName>
-		<!-- developer build is always 0.42 -->
-		<AssemblyVersion>0.42</AssemblyVersion>
-		<Authors>Richard Schneider</Authors>
-		<Copyright>© 2018-2019 Richard Schneider</Copyright>
-		<Description>The command line tool to IPFS engine for .Net</Description>
-		<GeneratePackageOnBuild Condition=" '$(Configuration)' == 'Release' ">true</GeneratePackageOnBuild>
-		<IsPackable>true</IsPackable>
-		<IsShippingPackage>true</IsShippingPackage>
-		<OutputType>Exe</OutputType>
-		<PackageIconUrl>https://raw.githubusercontent.com/richardschneider/net-ipfs-core/master/doc/images/ipfs-cs-logo-64x64.png</PackageIconUrl>
-		<PackageId>csipfs</PackageId>
-		<PackageProjectUrl>https://github.com/richardschneider/net-ipfs-engine</PackageProjectUrl>
-		<PackageReleaseNotes>https://github.com/richardschneider/net-ipfs-engine/releases</PackageReleaseNotes>
-		<PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
-		<PackageTags>ipfs peer-to-peer p2p distributed file-system web</PackageTags>
-		<PackAsTool>true</PackAsTool>
-		<RootNamespace>IpfsShipyard.Ipfs.Cli</RootNamespace>
-		<TargetFramework>net7.0</TargetFramework>
-		<TargetLatestRuntimePatch>true</TargetLatestRuntimePatch>
-		<Title>C# IPFS CLI</Title>
-		<ToolCommandName>csipfs</ToolCommandName>
-		<Version>0.42</Version>
-		<ImplicitUsings>enable</ImplicitUsings>
-		<GenerateDocumentationFile>True</GenerateDocumentationFile>
-		<PackageReadmeFile>README.md</PackageReadmeFile>
-		<EnforceCodeStyleInBuild>True</EnforceCodeStyleInBuild>
-	</PropertyGroup>
+    <PropertyGroup>
+        <AssemblyName>csipfs</AssemblyName>
+        <AssemblyVersion>0.42</AssemblyVersion>
+        <IsPackable>true</IsPackable>
+        <OutputType>Exe</OutputType>
+        <PackAsTool>true</PackAsTool>
+        <RootNamespace>IpfsShipyard.Ipfs.Cli</RootNamespace>
+        <TargetFramework>net7.0</TargetFramework>
+        <ToolCommandName>csipfs</ToolCommandName>
+    </PropertyGroup>
 
-	<ItemGroup>
-	  <None Include="..\README.md">
-	    <Pack>True</Pack>
-	    <PackagePath>\</PackagePath>
-	  </None>
-	</ItemGroup>
+    <PropertyGroup>
+        <IsShippingPackage>true</IsShippingPackage>
+        <PackageIconUrl>https://raw.githubusercontent.com/richardschneider/net-ipfs-core/master/doc/images/ipfs-cs-logo-64x64.png</PackageIconUrl>
+        <PackageId>csipfs</PackageId>
+        <PackageProjectUrl>https://github.com/ipfs-shipyard/net-ipfs-core</PackageProjectUrl>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
+        <PackageReleaseNotes>https://github.com/ipfs-shipyard/net-ipfs-core/releases</PackageReleaseNotes>
+        <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+        <PackageTags>ipfs peer-to-peer p2p distributed file-system web</PackageTags>
+    </PropertyGroup>
 
-	<ItemGroup>
-		<PackageReference Include="Common.Logging" Version="3.4.1" />
-		<PackageReference Include="McMaster.Extensions.CommandLineUtils" Version="4.0.2" />
-		<PackageReference Include="protobuf-net" Version="3.2.12" />
-		<PackageReference Include="System.Threading.Tasks.Dataflow" Version="7.0.0" />
-	</ItemGroup>
+    <PropertyGroup>
+        <AllowedReferenceRelatedFileExtensions Condition=" '$(Configuration)' == 'Release' ">
+            <!-- Prevent default XML and PDB files copied to output in RELEASE. Only
+            *.allowedextension files will be included, which doesn't exist in my case. --> 
+            *.pdb;
+            *.xml 
+        </AllowedReferenceRelatedFileExtensions>
+        <EnforceCodeStyleInBuild>True</EnforceCodeStyleInBuild>
+        <GenerateDocumentationFile>True</GenerateDocumentationFile>
+        <GeneratePackageOnBuild Condition=" '$(Configuration)' == 'Release' ">true</GeneratePackageOnBuild>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <TargetLatestRuntimePatch>true</TargetLatestRuntimePatch>
+    </PropertyGroup>
 
-	<ItemGroup>
-	  <ProjectReference Include="..\IpfsShipyard.Ipfs.Core\IpfsShipyard.Ipfs.Core.csproj" />
-	  <ProjectReference Include="..\IpfsShipyard.Ipfs.Engine\IpfsShipyard.Ipfs.Engine.csproj" />
-	  <ProjectReference Include="..\IpfsShipyard.Ipfs.Http\IpfsShipyard.Ipfs.Http.csproj" />
-	  <ProjectReference Include="..\IpfsShipyard.Ipfs.Server\IpfsShipyard.Ipfs.Server.csproj" />
-	</ItemGroup>
+    <ItemGroup>
+        <None Include="..\README.md">
+            <Pack>True</Pack>
+            <PackagePath>\</PackagePath>
+        </None>
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Common.Logging" Version="3.4.1" />
+        <PackageReference Include="McMaster.Extensions.CommandLineUtils" Version="4.0.2" />
+        <PackageReference Include="protobuf-net" Version="3.2.12" />
+        <PackageReference Include="System.Threading.Tasks.Dataflow" Version="7.0.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\IpfsShipyard.Ipfs.Core\IpfsShipyard.Ipfs.Core.csproj" />
+        <ProjectReference Include="..\IpfsShipyard.Ipfs.Engine\IpfsShipyard.Ipfs.Engine.csproj" />
+        <ProjectReference Include="..\IpfsShipyard.Ipfs.Http\IpfsShipyard.Ipfs.Http.csproj" />
+        <ProjectReference Include="..\IpfsShipyard.Ipfs.Server\IpfsShipyard.Ipfs.Server.csproj" />
+    </ItemGroup>
 
 </Project>
