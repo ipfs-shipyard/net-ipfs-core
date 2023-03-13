@@ -43,7 +43,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\PeerTalk\IpfsShipyard.PeerTalk.csproj" />
+    <ProjectReference Include="..\IpfsShipyard.PeerTalk\IpfsShipyard.PeerTalk.csproj" />
   </ItemGroup>
 
 </Project>

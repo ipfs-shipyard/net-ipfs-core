@@ -31,9 +31,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IpfsShipyard.Ipfs.Engine.Te
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IpfsShipyard.Ipfs.Server", "IpfsShipyard.Ipfs.Server\IpfsShipyard.Ipfs.Server.csproj", "{2AB1AB8D-89CC-4F81-A812-143D49799F26}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IpfsShipyard.PeerTalk", "PeerTalk\IpfsShipyard.PeerTalk.csproj", "{0D713964-DCE9-4738-8296-676953A210AB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IpfsShipyard.PeerTalk", "IpfsShipyard.PeerTalk\IpfsShipyard.PeerTalk.csproj", "{0D713964-DCE9-4738-8296-676953A210AB}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IpfsShipyard.PeerTalk.Tests", "PeerTalk.Tests\IpfsShipyard.PeerTalk.Tests.csproj", "{309E78EF-8DA2-4F13-A13F-20D63B80DF3C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IpfsShipyard.PeerTalk.Tests", "IpfsShipyard.PeerTalk.Tests\IpfsShipyard.PeerTalk.Tests.csproj", "{309E78EF-8DA2-4F13-A13F-20D63B80DF3C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

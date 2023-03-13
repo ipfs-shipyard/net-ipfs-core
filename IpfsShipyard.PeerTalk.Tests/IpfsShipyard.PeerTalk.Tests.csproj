@@ -25,6 +25,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\IpfsShipyard.Ipfs.Core\IpfsShipyard.Ipfs.Core.csproj" />
-    <ProjectReference Include="..\PeerTalk\IpfsShipyard.PeerTalk.csproj" />
+    <ProjectReference Include="..\IpfsShipyard.PeerTalk\IpfsShipyard.PeerTalk.csproj" />
   </ItemGroup>
 </Project>
