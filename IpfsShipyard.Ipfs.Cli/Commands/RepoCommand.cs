@@ -90,7 +90,7 @@ internal class RepoMigrateCommand : CommandBase
     {
         // TODO: Add option --pass
         var passphrase = "this is not a secure pass phrase";
-        var ipfs = new IpfsEngine(passphrase.ToCharArray());
+        var ipfs = new IpfsEngine(passphrase);
 
         await ipfs.MigrationManager.MigrateToVersionAsync(Version);
         return 0;

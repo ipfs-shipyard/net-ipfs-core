@@ -60,7 +60,7 @@ public class Ed25519NodeTest
     private static async Task<IpfsEngine> CreateNode()
     {
         const string passphrase = "this is not a secure pass phrase";
-        var ipfs = new IpfsEngine(passphrase.ToCharArray());
+        var ipfs = new IpfsEngine(passphrase);
         ipfs.Options.Repository.Folder = Path.Combine(Path.GetTempPath(), "ipfs-ed255129-test");
         ipfs.Options.KeyChain.DefaultKeyType = "ed25519";
         await ipfs.Config.SetAsync(

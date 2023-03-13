@@ -77,9 +77,10 @@ public class IpfsEngine : ICoreApi, IService, IDisposable
     ///     A <b>SecureString</b> copy of the passphrase is made so that the array can be
     ///     zeroed out after the call.
     /// </remarks>
-    public IpfsEngine(char[] passphrase)
+    public IpfsEngine(IEnumerable<char> passphrase)
     {
         _passphrase = new();
+        
         foreach (var c in passphrase)
         {
             _passphrase.AppendChar(c);

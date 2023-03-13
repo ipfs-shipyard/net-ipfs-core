@@ -79,7 +79,7 @@ internal class Program : CommandBase
             {
                 // TODO: Add option --pass
                 var passphrase = "this is not a secure pass phrase";
-                var engine = new IpfsEngine(passphrase.ToCharArray());
+                var engine = new IpfsEngine(passphrase);
                 engine.StartAsync().Wait();
                 _coreApi = engine;
             }

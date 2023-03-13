@@ -28,7 +28,7 @@ public class Program
     {
         try
         {
-            IpfsEngine = new(Passphrase.ToCharArray());
+            IpfsEngine = new(Passphrase);
             IpfsEngine.StartAsync().Wait();
 
             BuildWebHost(args)

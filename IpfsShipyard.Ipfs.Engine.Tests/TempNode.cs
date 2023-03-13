@@ -15,7 +15,7 @@ internal class TempNode : IpfsEngine
     private static int _nodeNumber;
 
     public TempNode()
-        : base("xyzzy".ToCharArray())
+        : base("xyzzy")
     {
         Options.Repository.Folder = Path.Combine(Path.GetTempPath(), $"ipfs-{_nodeNumber++}");
         Options.KeyChain.DefaultKeyType = "ed25519";

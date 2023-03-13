@@ -145,7 +145,7 @@ public class SwarmApiTest
     private static IpfsEngine CreateNode()
     {
         const string passphrase = "this is not a secure pass phrase";
-        var ipfs = new IpfsEngine(passphrase.ToCharArray());
+        var ipfs = new IpfsEngine(passphrase);
         ipfs.Options.Repository.Folder = Path.Combine(Path.GetTempPath(), $"swarm-{_nodeNumber++}");
         ipfs.Options.KeyChain.DefaultKeySize = 512;
         ipfs.Config.SetAsync(

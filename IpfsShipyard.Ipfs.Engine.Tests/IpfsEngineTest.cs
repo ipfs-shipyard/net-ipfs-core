@@ -16,7 +16,7 @@ public class IpfsEngineTest
     [TestMethod]
     public void Can_Create()
     {
-        var ipfs = new IpfsEngine("this is not a secure pass phrase".ToCharArray());
+        var ipfs = new IpfsEngine("this is not a secure pass phrase");
         Assert.IsNotNull(ipfs);
     }
 
@@ -31,7 +31,7 @@ public class IpfsEngineTest
     public async Task SecureString_Passphrase()
     {
         var secret = "this is not a secure pass phrase";
-        var ipfs = new IpfsEngine(secret.ToCharArray());
+        var ipfs = new IpfsEngine(secret);
         ipfs.Options = TestFixture.Ipfs.Options;
         await ipfs.KeyChainAsync();
 
@@ -50,7 +50,7 @@ public class IpfsEngineTest
     public async Task IpfsPass_Passphrase()
     {
         var secret = "this is not a secure pass phrase";
-        var ipfs = new IpfsEngine(secret.ToCharArray());
+        var ipfs = new IpfsEngine(secret);
         ipfs.Options = TestFixture.Ipfs.Options;
         await ipfs.KeyChainAsync();
 
@@ -73,7 +73,7 @@ public class IpfsEngineTest
         var ipfs1 = TestFixture.Ipfs;
         await ipfs1.KeyChainAsync();
 
-        var ipfs2 = new IpfsEngine("the wrong pass phrase".ToCharArray())
+        var ipfs2 = new IpfsEngine("the wrong pass phrase")
         {
             Options = ipfs1.Options
         };

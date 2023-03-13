@@ -10,8 +10,8 @@ namespace IpfsShipyard.Ipfs.Engine.Tests;
 public class TestFixture
 {
     private const string Passphrase = "this is not a secure pass phrase";
-    public static IpfsEngine Ipfs = new(Passphrase.ToCharArray());
-    public static IpfsEngine IpfsOther = new(Passphrase.ToCharArray());
+    public static IpfsEngine Ipfs = new(Passphrase);
+    public static IpfsEngine IpfsOther = new(Passphrase);
 
     static TestFixture()
     {
