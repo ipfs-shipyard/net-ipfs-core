@@ -50,7 +50,6 @@
 
     <ItemGroup>
         <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
-        <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
         <PackageReference Include="Multiformats.Base" Version="2.0.2" />
     </ItemGroup>
 
