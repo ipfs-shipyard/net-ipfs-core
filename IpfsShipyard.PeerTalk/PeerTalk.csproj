@@ -46,16 +46,16 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Makaretu.Dns.Multicast" Version="0.27.0" />
-		<PackageReference Include="Makaretu.KBucket" Version="0.5.0" />
-		<PackageReference Include="Nito.AsyncEx" Version="5.1.2" />
-		<PackageReference Include="protobuf-net" Version="3.2.12" />
-		<PackageReference Include="semver" Version="2.3.0" />
-		<PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1" PrivateAssets="All" />
-		<PackageReference Include="Microsoft.VisualStudio.Threading.Analyzers" Version="17.5.22" PrivateAssets="All" />
+		<PackageReference Include="Makaretu.Dns.Multicast" />
+		<PackageReference Include="Makaretu.KBucket" />
+		<PackageReference Include="Nito.AsyncEx" />
+		<PackageReference Include="protobuf-net" />
+		<PackageReference Include="semver" />
+		<PackageReference Include="Microsoft.SourceLink.GitHub" PrivateAssets="All" />
+		<PackageReference Include="Microsoft.VisualStudio.Threading.Analyzers" PrivateAssets="All" />
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\IpfsShipyard.Ipfs.Core\IpfsShipyard.Ipfs.Core.csproj" />
+		<ProjectReference Include="..\IpfsShipyard.Ipfs.Core\Core.csproj" />
 	</ItemGroup>
 </Project>

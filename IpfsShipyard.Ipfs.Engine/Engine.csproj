@@ -38,15 +38,15 @@
 
 
     <ItemGroup>
-        <PackageReference Include="Makaretu.Dns.Unicast" Version="0.11.1" />
-        <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1" PrivateAssets="All" />
-        <PackageReference Include="Microsoft.VisualStudio.Threading.Analyzers" Version="17.5.22" PrivateAssets="All" />
-        <PackageReference Include="PeterO.Cbor" Version="4.5.2" />
-        <PackageReference Include="SharpZipLib" Version="1.4.2" />
+        <PackageReference Include="Makaretu.Dns.Unicast" />
+        <PackageReference Include="Microsoft.SourceLink.GitHub" PrivateAssets="All" />
+        <PackageReference Include="Microsoft.VisualStudio.Threading.Analyzers" PrivateAssets="All" />
+        <PackageReference Include="PeterO.Cbor" />
+        <PackageReference Include="SharpZipLib" />
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\IpfsShipyard.PeerTalk\IpfsShipyard.PeerTalk.csproj" />
+        <ProjectReference Include="..\IpfsShipyard.PeerTalk\PeerTalk.csproj" />
     </ItemGroup>
 
 </Project>

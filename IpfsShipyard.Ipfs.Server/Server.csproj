@@ -32,12 +32,12 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="7.0.3" />
-		<PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
+		<PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" />
+		<PackageReference Include="Swashbuckle.AspNetCore" />
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\IpfsShipyard.Ipfs.Core\IpfsShipyard.Ipfs.Core.csproj" />
-		<ProjectReference Include="..\IpfsShipyard.Ipfs.Engine\IpfsShipyard.Ipfs.Engine.csproj" />
+		<ProjectReference Include="..\IpfsShipyard.Ipfs.Core\Core.csproj" />
+		<ProjectReference Include="..\IpfsShipyard.Ipfs.Engine\Engine.csproj" />
 	</ItemGroup>
 </Project>

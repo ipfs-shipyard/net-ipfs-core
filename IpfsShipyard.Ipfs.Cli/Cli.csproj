@@ -51,14 +51,14 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="McMaster.Extensions.CommandLineUtils" Version="4.0.2" />
+        <PackageReference Include="McMaster.Extensions.CommandLineUtils" />
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\IpfsShipyard.Ipfs.Core\IpfsShipyard.Ipfs.Core.csproj" />
-        <ProjectReference Include="..\IpfsShipyard.Ipfs.Engine\IpfsShipyard.Ipfs.Engine.csproj" />
-        <ProjectReference Include="..\IpfsShipyard.Ipfs.Http\IpfsShipyard.Ipfs.Http.csproj" />
-        <ProjectReference Include="..\IpfsShipyard.Ipfs.Server\IpfsShipyard.Ipfs.Server.csproj" />
+        <ProjectReference Include="..\IpfsShipyard.Ipfs.Core\Core.csproj" />
+        <ProjectReference Include="..\IpfsShipyard.Ipfs.Engine\Engine.csproj" />
+        <ProjectReference Include="..\IpfsShipyard.Ipfs.Http\Http.csproj" />
+        <ProjectReference Include="..\IpfsShipyard.Ipfs.Server\Server.csproj" />
     </ItemGroup>
 
 </Project>
