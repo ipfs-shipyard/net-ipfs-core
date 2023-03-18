@@ -55,10 +55,10 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\IpfsShipyard.Ipfs.Core\Core.csproj" />
-        <ProjectReference Include="..\IpfsShipyard.Ipfs.Engine\Engine.csproj" />
-        <ProjectReference Include="..\IpfsShipyard.Ipfs.Http\Http.csproj" />
-        <ProjectReference Include="..\IpfsShipyard.Ipfs.Server\Server.csproj" />
+        <ProjectReference Include="..\Core\Core.csproj" />
+        <ProjectReference Include="..\Engine\Engine.csproj" />
+        <ProjectReference Include="..\Http\Http.csproj" />
+        <ProjectReference Include="..\Server\Server.csproj" />
     </ItemGroup>
 
 </Project>

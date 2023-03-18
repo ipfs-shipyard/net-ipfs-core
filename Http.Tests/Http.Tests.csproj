@@ -15,7 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\IpfsShipyard.Ipfs.Http\Http.csproj" />
+    <ProjectReference Include="..\Http\Http.csproj" />
   </ItemGroup>
 
 

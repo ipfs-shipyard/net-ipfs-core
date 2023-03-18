@@ -54,7 +54,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\IpfsShipyard.Ipfs.Core\Core.csproj" />
+        <ProjectReference Include="..\Core\Core.csproj" />
     </ItemGroup>
 
 </Project>

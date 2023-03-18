@@ -2,9 +2,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.5.33424.131
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Core", "IpfsShipyard.Ipfs.Core\Core.csproj", "{6401AF07-B7F2-4664-86AA-FAD99F82DFAD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Core", "Core\Core.csproj", "{6401AF07-B7F2-4664-86AA-FAD99F82DFAD}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Core.Tests", "IpfsShipyard.Ipfs.Core.Tests\Core.Tests.csproj", "{FE639401-D4C7-4528-A07C-4290A7710889}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Core.Tests", "Core.Tests\Core.Tests.csproj", "{FE639401-D4C7-4528-A07C-4290A7710889}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{DA715302-8746-4884-95F9-B56F069A0451}"
 	ProjectSection(SolutionItems) = preProject
@@ -21,21 +21,21 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		TraceAndTestImpact.testsettings = TraceAndTestImpact.testsettings
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Http", "IpfsShipyard.Ipfs.Http\Http.csproj", "{64153F10-E034-430F-921C-7D4594FD6236}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Http", "Http\Http.csproj", "{64153F10-E034-430F-921C-7D4594FD6236}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Http.Tests", "IpfsShipyard.Ipfs.Http.Tests\Http.Tests.csproj", "{C15272D7-B5FD-48A2-9CFD-0EFA64A9FF18}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Http.Tests", "Http.Tests\Http.Tests.csproj", "{C15272D7-B5FD-48A2-9CFD-0EFA64A9FF18}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Cli", "IpfsShipyard.Ipfs.Cli\Cli.csproj", "{1457AEB8-291C-42E3-A622-7EBF5BBF91E3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Cli", "Cli\Cli.csproj", "{1457AEB8-291C-42E3-A622-7EBF5BBF91E3}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Engine", "IpfsShipyard.Ipfs.Engine\Engine.csproj", "{29916B3D-2133-49CA-A6CA-EFF6EF5F2BE3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Engine", "Engine\Engine.csproj", "{29916B3D-2133-49CA-A6CA-EFF6EF5F2BE3}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Engine.Tests", "IpfsShipyard.Ipfs.Engine.Tests\Engine.Tests.csproj", "{177AA825-FB0D-4C8D-BE73-2AF30D36C69E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Engine.Tests", "Engine.Tests\Engine.Tests.csproj", "{177AA825-FB0D-4C8D-BE73-2AF30D36C69E}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Server", "IpfsShipyard.Ipfs.Server\Server.csproj", "{2AB1AB8D-89CC-4F81-A812-143D49799F26}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Server", "Server\Server.csproj", "{2AB1AB8D-89CC-4F81-A812-143D49799F26}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PeerTalk", "IpfsShipyard.PeerTalk\PeerTalk.csproj", "{0D713964-DCE9-4738-8296-676953A210AB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PeerTalk", "PeerTalk\PeerTalk.csproj", "{0D713964-DCE9-4738-8296-676953A210AB}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PeerTalk.Tests", "IpfsShipyard.PeerTalk.Tests\PeerTalk.Tests.csproj", "{309E78EF-8DA2-4F13-A13F-20D63B80DF3C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PeerTalk.Tests", "PeerTalk.Tests\PeerTalk.Tests.csproj", "{309E78EF-8DA2-4F13-A13F-20D63B80DF3C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

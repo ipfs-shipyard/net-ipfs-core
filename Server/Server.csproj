@@ -37,7 +37,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\IpfsShipyard.Ipfs.Core\Core.csproj" />
-		<ProjectReference Include="..\IpfsShipyard.Ipfs.Engine\Engine.csproj" />
+		<ProjectReference Include="..\Core\Core.csproj" />
+		<ProjectReference Include="..\Engine\Engine.csproj" />
 	</ItemGroup>
 </Project>

@@ -46,7 +46,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\IpfsShipyard.PeerTalk\PeerTalk.csproj" />
+        <ProjectReference Include="..\PeerTalk\PeerTalk.csproj" />
     </ItemGroup>
 
 </Project>

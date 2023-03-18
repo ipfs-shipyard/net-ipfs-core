@@ -1,30 +1,35 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-    <PropertyGroup>
-        <TargetFramework>net7.0</TargetFramework>
-        <IsPackable>false</IsPackable>
-        <DebugType>portable</DebugType>
-        <RootNamespace>IpfsShipyard.PeerTalk.Tests</RootNamespace>
-        <RunSettingsFilePath>$(MSBuildProjectDirectory)\.runsettings</RunSettingsFilePath>
-    </PropertyGroup>
 
     <PropertyGroup>
         <!-- https://github.com/tonerdo/coverlet -->
         <!-- Do not collect by default -->
         <CollectCoverage>false</CollectCoverage>
         <CoverletOutputFormat>opencover</CoverletOutputFormat>
+        <DebugType>portable</DebugType>
         <!--<Exclude>[xunit.*]*</Exclude>-->
+        <IsPackable>false</IsPackable>
+        <RootNamespace>IpfsShipyard.Ipfs.Engine.Tests</RootNamespace>
+        <TargetFramework>net7.0</TargetFramework>
     </PropertyGroup>
 
     <ItemGroup>
+        <PackageReference Include="coverlet.msbuild" PrivateAssets="all" />
         <PackageReference Include="Microsoft.NET.Test.Sdk" PrivateAssets="all" />
         <PackageReference Include="MSTest.TestAdapter" PrivateAssets="all" />
         <PackageReference Include="MSTest.TestFramework" PrivateAssets="all" />
-        <PackageReference Include="coverlet.msbuild" PrivateAssets="all" />
-
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\IpfsShipyard.Ipfs.Core\Core.csproj" />
-        <ProjectReference Include="..\IpfsShipyard.PeerTalk\PeerTalk.csproj" />
+        <ProjectReference Include="..\Engine\Engine.csproj" />
     </ItemGroup>
+
+    <ItemGroup>
+        <None Update="starx2.mp4">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="star_trails.mp4">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+    </ItemGroup>
+
 </Project>
