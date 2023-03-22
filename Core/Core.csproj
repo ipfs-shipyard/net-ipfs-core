@@ -1,15 +1,19 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-	<PropertyGroup>
-		<Authors>IPFS Shipyard, Arlo Godfrey, Richard Schneider, Steve Fan</Authors>
-		<Title>IPFS Core Objects</Title>
-		<Description>
-			Backed by the IPFS Shipyard and developer community. Picking up where Richard Schneider / makaretu left off.
-			Core objects and interfaces for IPFS.
+    <PropertyGroup>
+        <Authors>IPFS Shipyard, Arlo Godfrey, Richard Schneider, Steve Fan</Authors>
+        <Title>IPFS Core Objects</Title>
+        <Description>
+            Backed by the IPFS Shipyard and developer community. Picking up where Richard Schneider / makaretu left off.
+            Core objects and interfaces for IPFS.
 
-			The InterPlanetary File System is the permanent web. IPFS enables the creation of completely distributed applications. It is a new hypermedia distribution protocol, addressed by content and identities. It aims to make the web faster, safer, and more open.
-		</Description>
-		<Version>0.0.4</Version>
-	</PropertyGroup>
+            The InterPlanetary File System is the permanent web. IPFS enables the creation of completely distributed applications. It is a new hypermedia distribution protocol, addressed by content and identities. It aims to make the web faster, safer, and more open.
+        </Description>
+        <Version>0.0.4</Version>
+
+        <SignAssembly>true</SignAssembly>
+        <AssemblyOriginatorKeyFile>..\config\ipfs.snk</AssemblyOriginatorKeyFile>
+
+    </PropertyGroup>
 
 	<PropertyGroup>
 		<AssemblyName>IpfsShipyard.Ipfs.Core</AssemblyName>
