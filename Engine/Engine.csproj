@@ -36,7 +36,6 @@
         <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     </PropertyGroup>
 
-
     <ItemGroup>
         <PackageReference Include="Makaretu.Dns.Unicast" />
         <PackageReference Include="Microsoft.SourceLink.GitHub" PrivateAssets="All" />
