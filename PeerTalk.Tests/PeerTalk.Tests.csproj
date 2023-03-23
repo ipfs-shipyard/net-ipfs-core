@@ -20,7 +20,6 @@
         <PackageReference Include="MSTest.TestAdapter" PrivateAssets="all" />
         <PackageReference Include="MSTest.TestFramework" PrivateAssets="all" />
         <PackageReference Include="coverlet.msbuild" PrivateAssets="all" />
-
     </ItemGroup>
 
     <ItemGroup>

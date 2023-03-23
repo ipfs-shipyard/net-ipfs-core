@@ -23,6 +23,7 @@ internal class Startup
     public IConfiguration Configuration { get; }
 
     // This method gets called by the runtime. Use this method to add services to the container.
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1822:Mark members as static", Justification = "Must be instance method")]
     public void ConfigureServices(IServiceCollection services)
     {
         services.AddSingleton<ICoreApi>(Program.IpfsEngine);
@@ -54,6 +55,7 @@ internal class Startup
     }
 
     // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1822:Mark members as static", Justification = "Must be instance method")]
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
     {
         if (env.IsDevelopment())
