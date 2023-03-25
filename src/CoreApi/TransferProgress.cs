@@ -14,12 +14,12 @@ namespace Ipfs.CoreApi
         /// <value>
         ///   Typically, a relative file path.
         /// </value>
-        public string? Name;
+        public string? Name { get; set; }
 
         /// <summary>
         ///   The cumuative number of bytes transferred for
         ///   the <see cref="Name"/>.
         /// </summary>
-        public ulong Bytes;
+        public ulong Bytes { get; set; }
     }
 }
