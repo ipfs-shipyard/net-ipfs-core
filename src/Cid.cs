@@ -1,10 +1,8 @@
-﻿using Google.Protobuf;
-using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.IO;
-using System.Runtime.Serialization;
 using System.Text;
+using Google.Protobuf;
+using Newtonsoft.Json;
 
 namespace Ipfs
 {
@@ -32,11 +30,11 @@ namespace Ipfs
         /// </summary>
         public const string DefaultContentType = "dag-pb";
 
-        string encodedValue;
+        string? encodedValue;
         int version;
         string encoding = MultiBase.DefaultAlgorithmName;
         string contentType = DefaultContentType;
-        MultiHash hash;
+        MultiHash? hash;
  
         /// <summary>
         ///   Throws if a property cannot be set.
@@ -50,7 +48,7 @@ namespace Ipfs
         /// </remarks>
         void EnsureMutable()
         {
-            if (encodedValue != null)
+            if (encodedValue is not null)
             {
                 throw new NotSupportedException("CID cannot be changed.");
             }
@@ -170,13 +168,13 @@ namespace Ipfs
         {
             get
             {
-                return hash;
+                return hash ?? throw new InvalidDataException("Hash has not been set");
             }
             set
             {
                 EnsureMutable();
                 hash = value;
-                if (Version == 0 && Hash.Algorithm.Name != "sha2-256")
+                if (Version == 0 && value.Algorithm.Name != "sha2-256")
                 {
                     Version = 1;
                 }
@@ -243,7 +241,7 @@ namespace Ipfs
                     sb.Append(Version);
                     sb.Append(' ');
                     sb.Append(ContentType);
-                    if (Hash != null)
+                    if (Hash is not null)
                     {
                         sb.Append(' ');
                         sb.Append(Hash.Algorithm.Name);
@@ -265,20 +263,20 @@ namespace Ipfs
         ///   The string representation of the <see cref="Cid"/>.
         /// </returns>
         /// <remarks>
-        ///   For <see cref="Version"/> 0, this is equalivalent to the 
+        ///   For <see cref="Version"/> 0, this is equivalent to the 
         ///   <see cref="MultiHash.ToBase58()">base58btc encoding</see>
         ///   of the <see cref="Hash"/>.
         /// </remarks>
         /// <seealso cref="Decode"/>
         public string Encode()
         {
-            if (encodedValue != null)
+            if (encodedValue is not null)
             {
                 return encodedValue;
             }
             if (Version == 0)
             {
-                encodedValue = Hash.ToBase58();
+                encodedValue = Hash?.ToBase58();
             }
             else
             {
@@ -286,11 +284,11 @@ namespace Ipfs
                 {
                     ms.WriteVarint(Version);
                     ms.WriteMultiCodec(ContentType);
-                    Hash.Write(ms);
+                    Hash?.Write(ms);
                     encodedValue = MultiBase.Encode(ms.ToArray(), Encoding);
                 }
             }
-            return encodedValue;
+            return encodedValue ?? string.Empty;
         }
 
         /// <summary>
@@ -535,7 +533,7 @@ namespace Ipfs
         public override bool Equals(object obj)
         {
             var that = obj as Cid;
-            return (that == null)
+            return (that is null)
                 ? false
                 : this.Encode() == that.Encode();
         }
@@ -549,17 +547,17 @@ namespace Ipfs
         /// <summary>
         ///   Value equality.
         /// </summary>
-        public static bool operator ==(Cid a, Cid b)
+        public static bool operator ==(Cid? a, Cid? b)
         {
             if (object.ReferenceEquals(a, b))
             {
                 return true;
             }
-            if (object.ReferenceEquals(a, null))
+            if (a is null)
             {
                 return false;
             }
-            if (object.ReferenceEquals(b, null))
+            if (b is null)
             {
                 return false;
             }
@@ -569,21 +567,9 @@ namespace Ipfs
         /// <summary>
         ///   Value inequality.
         /// </summary>
-        public static bool operator !=(Cid a, Cid b)
+        public static bool operator !=(Cid? a, Cid? b)
         {
-            if (object.ReferenceEquals(a, b))
-            {
-                return false;
-            }
-            if (object.ReferenceEquals(a, null))
-            {
-                return true;
-            }
-            if (object.ReferenceEquals(b, null))
-            {
-                return true;
-            }
-            return !a.Equals(b);
+            return !(a == b);
         }
 
         /// <summary>
@@ -641,19 +627,18 @@ namespace Ipfs
             public override bool CanWrite => true;
 
             /// <inheritdoc />
-            public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
+            public override void WriteJson(JsonWriter writer, object? value, JsonSerializer serializer)
             {
                 var cid = value as Cid;
                 writer.WriteValue(cid?.Encode());
             }
 
             /// <inheritdoc />
-            public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
+            public override object? ReadJson(JsonReader reader, Type objectType, object? existingValue, JsonSerializer serializer)
             {
                 var s = reader.Value as string;
-                return s == null ? null : Cid.Decode(s);
+                return s is null ? null : Cid.Decode(s);
             }
         }
-
     }
 }

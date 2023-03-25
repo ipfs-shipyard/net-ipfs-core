@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace Ipfs.Registry
 {
@@ -63,7 +62,7 @@ namespace Ipfs.Registry
         /// <value>
         ///   A unique name.
         /// </value>
-        public string Name { get; private set; }
+        public string Name { get; private set; } = string.Empty;
 
         /// <summary>
         ///   The IPFS code assigned to the codec.
@@ -112,7 +111,7 @@ namespace Ipfs.Registry
         public static Codec Register(string name, int code)
         {
             if (string.IsNullOrWhiteSpace(name))
-                throw new ArgumentNullException("name");
+                throw new ArgumentNullException(nameof(name));
             if (Names.ContainsKey(name))
                 throw new ArgumentException(string.Format("The IPFS codec name '{0}' is already defined.", name));
             if (Codes.ContainsKey(code))

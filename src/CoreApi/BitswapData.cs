@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 
 namespace Ipfs.CoreApi
 {
@@ -17,12 +15,12 @@ namespace Ipfs.CoreApi
         /// <summary>
         ///   The content that is wanted.
         /// </summary>
-        public IEnumerable<Cid> Wantlist;
+        public IEnumerable<Cid>? Wantlist;
 
         /// <summary>
         ///   The known peers.
         /// </summary>
-        public IEnumerable<MultiHash> Peers;
+        public IEnumerable<MultiHash>? Peers;
 
         /// <summary>
         ///   The number of blocks sent by other peers.

@@ -1,8 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
-using System.Text;
 using System.IO;
 using System.Security.Cryptography;
 using Google.Protobuf;
@@ -25,7 +23,7 @@ namespace Ipfs
         /// <summary>
         ///   The cached base-58 encoding of the multihash.
         /// </summary>
-        string b58String;
+        private string? b58String;
 
         /// <summary>
         ///   The default hashing algorithm is "sha2-256".
@@ -86,7 +84,7 @@ namespace Ipfs
         /// <summary>
         ///   Occurs when an unknown hashing algorithm number is parsed.
         /// </summary>
-        public static EventHandler<UnknownHashingAlgorithmEventArgs> UnknownHashingAlgorithm;
+        public static EventHandler<UnknownHashingAlgorithmEventArgs>? UnknownHashingAlgorithm;
 
         /// <summary>
         ///   Creates a new instance of the <see cref="MultiHash"/> class with the
@@ -100,19 +98,14 @@ namespace Ipfs
         /// </param>
         public MultiHash(string algorithmName, byte[] digest)
         {
-            if (algorithmName == null)
-                throw new ArgumentNullException("algorithmName");
-            if (digest == null)
-                throw new ArgumentNullException("digest");
-
             if (!HashingAlgorithm.Names.TryGetValue(algorithmName, out HashingAlgorithm a))
             {
-                throw new ArgumentException(string.Format("The IPFS hashing algorithm '{0}' is unknown.", algorithmName));
+                throw new ArgumentException($"The IPFS hashing algorithm '{algorithmName}' is unknown.");
             }
             Algorithm = a;
 
             if (Algorithm.DigestSize != 0 && Algorithm.DigestSize != digest.Length)
-                throw new ArgumentException(string.Format("The digest size for '{0}' is {1} bytes, not {2}.", algorithmName, Algorithm.DigestSize, digest.Length));
+                throw new ArgumentException($"The digest size for '{algorithmName}' is {Algorithm.DigestSize} bytes, not {digest.Length}.");
             Digest = digest;
         }
 
@@ -143,7 +136,7 @@ namespace Ipfs
         {
             using (var ms = new MemoryStream(buffer, false))
             {
-                Read(ms);
+                (Algorithm, Digest) = Read(ms);
             }
         }
 
@@ -171,7 +164,7 @@ namespace Ipfs
         /// </remarks>
         public MultiHash(Stream stream)
         {
-            Read(stream);
+            (Algorithm, Digest) = Read(stream);
         }
 
         /// <summary>
@@ -198,7 +191,7 @@ namespace Ipfs
         /// </remarks>
         public MultiHash(CodedInputStream stream)
         {
-            Read(stream);
+            (Algorithm, Digest) = Read(stream);
         }
 
         /// <summary>
@@ -222,7 +215,7 @@ namespace Ipfs
         {
             using (var ms = new MemoryStream(s.FromBase58(), false))
             {
-                Read(ms);
+                (Algorithm, Digest) = Read(ms);
             }
         }
 
@@ -249,7 +242,7 @@ namespace Ipfs
         /// <value>
         ///   Details on the hashing algorithm.
         /// </value>
-        public HashingAlgorithm Algorithm { get; private set; }
+        public HashingAlgorithm Algorithm { get; }
 
         /// <summary>
         ///   The hashing algorithm's digest value.
@@ -257,7 +250,7 @@ namespace Ipfs
         /// <value>
         ///   The output of the hashing algorithm.
         /// </value>
-        public byte[] Digest { get; private set; }
+        public byte[] Digest { get; }
 
         /// <summary>
         ///   Determines if the identity hash algorithm is in use.
@@ -304,40 +297,37 @@ namespace Ipfs
         /// </remarks>
         public void Write(CodedOutputStream stream)
         {
-            if (stream == null)
-                throw new ArgumentNullException("stream");
-
             stream.WriteInt32(Algorithm.Code);
             stream.WriteLength(Digest.Length);
             stream.WriteSomeBytes(Digest);
         }
 
-        void Read(Stream stream)
+        private (HashingAlgorithm, byte[]) Read(Stream stream)
         {
             using (var cis = new CodedInputStream(stream, true))
             {
-                Read(cis);
+                return Read(cis);
             }
         }
 
-        void Read(CodedInputStream stream)
+        private (HashingAlgorithm, byte[]) Read(CodedInputStream stream)
         {
             var code = stream.ReadInt32();
             var digestSize = stream.ReadLength();
 
             HashingAlgorithm.Codes.TryGetValue(code, out HashingAlgorithm a);
-            Algorithm = a;
-            if (Algorithm == null)
+            if (a is null)
             {
-                Algorithm = HashingAlgorithm.Register("ipfs-" + code, code, digestSize);
-                RaiseUnknownHashingAlgorithm(Algorithm);
+                a = HashingAlgorithm.Register("ipfs-" + code, code, digestSize);
+                RaiseUnknownHashingAlgorithm(a);
             }
-            else if (Algorithm.DigestSize != 0 && digestSize != Algorithm.DigestSize)
+            else if (a.DigestSize != 0 && digestSize != a.DigestSize)
             {
-                throw new InvalidDataException(string.Format("The digest size {0} is wrong for {1}; it should be {2}.", digestSize, Algorithm.Name, Algorithm.DigestSize));
+                throw new InvalidDataException($"The digest size {digestSize} is wrong for {a.Name}; it should be {a.DigestSize}.");
             }
 
-            Digest = stream.ReadSomeBytes(digestSize);
+            byte[] digest = stream.ReadSomeBytes(digestSize);
+            return (a, digest);
         }
 
         /// <inheritdoc />
@@ -350,7 +340,7 @@ namespace Ipfs
         public override bool Equals(object obj)
         {
             var that = obj as MultiHash;
-            return (that == null)
+            return (that is null)
                 ? false
                 : this.Equals(that);
         }
@@ -365,7 +355,7 @@ namespace Ipfs
         /// <summary>
         ///   Value equality.
         /// </summary>
-        public static bool operator ==(MultiHash a, MultiHash b)
+        public static bool operator ==(MultiHash? a, MultiHash? b)
         {
             if (object.ReferenceEquals(a, b)) return true;
             if (a is null) return false;
@@ -377,7 +367,7 @@ namespace Ipfs
         /// <summary>
         ///   Value inequality.
         /// </summary>
-        public static bool operator !=(MultiHash a, MultiHash b)
+        public static bool operator !=(MultiHash? a, MultiHash? b)
         {
             return !(a == b);
         }
@@ -402,7 +392,7 @@ namespace Ipfs
         /// </returns>
         public string ToBase58()
         {
-            if (b58String != null)
+            if (b58String is not null)
             {
                 return b58String;
             }
@@ -490,12 +480,12 @@ namespace Ipfs
             return true;
         }
 
-        void RaiseUnknownHashingAlgorithm(HashingAlgorithm algorithm)
+        private void RaiseUnknownHashingAlgorithm(HashingAlgorithm algorithm)
         {
             var handler = UnknownHashingAlgorithm;
-            if (handler != null)
+            if (handler is not null)
             {
-                var args = new UnknownHashingAlgorithmEventArgs { Algorithm = algorithm };
+                var args = new UnknownHashingAlgorithmEventArgs(algorithm);
                 handler(this, args);
             }
         }
@@ -554,16 +544,16 @@ namespace Ipfs
             }
             public override bool CanRead => true;
             public override bool CanWrite => true;
-            public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
+            public override void WriteJson(JsonWriter writer, object? value, JsonSerializer serializer)
             {
                 var mh = value as MultiHash;
                 writer.WriteValue(mh?.ToString());
             }
 
-            public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
+            public override object? ReadJson(JsonReader reader, Type objectType, object? existingValue, JsonSerializer serializer)
             {
                 var s = reader.Value as string;
-                return s == null ? null : new MultiHash(s);
+                return s is null ? null : new MultiHash(s);
             }
         }
     }
@@ -573,11 +563,15 @@ namespace Ipfs
     /// </summary>
     public class UnknownHashingAlgorithmEventArgs : EventArgs
     {
+        internal UnknownHashingAlgorithmEventArgs(HashingAlgorithm a)
+        {
+            Algorithm = a;
+        }
+
         /// <summary>
         ///   The <see cref="HashingAlgorithm"/> that is defined for the
         ///   unknown hashing number.
         /// </summary>
-        public HashingAlgorithm Algorithm { get; set; }
+        public HashingAlgorithm Algorithm { get; }
     }
-
 }

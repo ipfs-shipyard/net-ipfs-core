@@ -64,11 +64,6 @@ namespace Ipfs
         /// </exception>
         public static string Encode(byte[] bytes, string algorithmName = DefaultAlgorithmName)
         {
-            if (bytes == null)
-            {
-                throw new ArgumentNullException("bytes");
-            }
-
             var alg = GetAlgorithm(algorithmName);
             return alg.Code + alg.Encode(bytes);
         }
@@ -90,11 +85,11 @@ namespace Ipfs
         {
             if (string.IsNullOrWhiteSpace(s))
             {
-                throw new ArgumentNullException("s");
+                throw new ArgumentNullException(nameof(s));
             }
 
             MultiBaseAlgorithm.Codes.TryGetValue(s[0], out MultiBaseAlgorithm alg);
-            if (alg == null)
+            if (alg is null)
             {
                 throw new FormatException($"MultiBase '{s}' is invalid. The code is not registered.");
             }

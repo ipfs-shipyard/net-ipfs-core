@@ -18,7 +18,7 @@ namespace Ipfs
         ///   name;
         ///   </note>
         /// </remarks>
-        string Name { get; }
+        string? Name { get; }
 
         /// <summary>
         ///   The unique ID of the link.

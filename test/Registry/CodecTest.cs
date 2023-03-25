@@ -14,7 +14,7 @@ namespace Ipfs.Registry
         [TestMethod]
         public void Bad_Name()
         {
-            ExceptionAssert.Throws<ArgumentNullException>(() => Codec.Register(null, 1));
+            ExceptionAssert.Throws<ArgumentNullException>(() => Codec.Register(null!, 1));
             ExceptionAssert.Throws<ArgumentNullException>(() => Codec.Register("", 1));
             ExceptionAssert.Throws<ArgumentNullException>(() => Codec.Register("   ", 1));
         }

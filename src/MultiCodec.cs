@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Ipfs.Registry;
 using Google.Protobuf;
 
@@ -45,10 +41,7 @@ namespace Ipfs
         {
             var code = stream.ReadVarint32();
             Codec.Codes.TryGetValue(code, out Codec codec);
-            if (codec == null)
-            {
-                codec = Codec.Register($"codec-{code}", code);
-            }
+            codec ??= Codec.Register($"codec-{code}", code);
             return codec;
         }
 
@@ -90,14 +83,11 @@ namespace Ipfs
         /// </exception>
         public static void WriteMultiCodec(this Stream stream, string name)
         {
-            Codec.Names.TryGetValue(name, out Codec codec);
-            if (codec == null)
+            if (!Codec.Names.TryGetValue(name, out Codec codec))
             {
                 throw new KeyNotFoundException($"Codec '{name}' is not registered.");
             }
             stream.WriteVarint(codec.Code);
         }
-
-
     }
 }

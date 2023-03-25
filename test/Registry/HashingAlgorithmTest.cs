@@ -62,7 +62,7 @@ namespace Ipfs.Registry
         [TestMethod]
         public void HashingAlgorithm_Bad_Name()
         {
-            ExceptionAssert.Throws<ArgumentNullException>(() => HashingAlgorithm.Register(null, 1, 1));
+            ExceptionAssert.Throws<ArgumentNullException>(() => HashingAlgorithm.Register(null!, 1, 1));
             ExceptionAssert.Throws<ArgumentNullException>(() => HashingAlgorithm.Register("", 1, 1));
             ExceptionAssert.Throws<ArgumentNullException>(() => HashingAlgorithm.Register("   ", 1, 1));
         }
@@ -88,7 +88,7 @@ namespace Ipfs.Registry
         [TestMethod]
         public void HashingAlgorithm_Bad_Alias()
         {
-            ExceptionAssert.Throws<ArgumentNullException>(() => HashingAlgorithm.RegisterAlias(null, "sha1"));
+            ExceptionAssert.Throws<ArgumentNullException>(() => HashingAlgorithm.RegisterAlias(null!, "sha1"));
             ExceptionAssert.Throws<ArgumentNullException>(() => HashingAlgorithm.RegisterAlias("", "sha1"));
             ExceptionAssert.Throws<ArgumentNullException>(() => HashingAlgorithm.RegisterAlias("   ", "sha1"));
         }

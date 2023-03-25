@@ -14,7 +14,7 @@ namespace Ipfs.Registry
         [TestMethod]
         public void Bad_Name()
         {
-            ExceptionAssert.Throws<ArgumentNullException>(() => MultiBaseAlgorithm.Register(null, '?'));
+            ExceptionAssert.Throws<ArgumentNullException>(() => MultiBaseAlgorithm.Register(null!, '?'));
             ExceptionAssert.Throws<ArgumentNullException>(() => MultiBaseAlgorithm.Register("", '?'));
             ExceptionAssert.Throws<ArgumentNullException>(() => MultiBaseAlgorithm.Register("   ", '?'));
         }
@@ -64,8 +64,8 @@ namespace Ipfs.Registry
             var alg = MultiBaseAlgorithm.Register("nyi", 'n');
             try
             {
-                ExceptionAssert.Throws<NotImplementedException>(() => alg.Encode(null));
-                ExceptionAssert.Throws<NotImplementedException>(() => alg.Decode(null));
+                ExceptionAssert.Throws<NotImplementedException>(() => alg.Encode(null!));
+                ExceptionAssert.Throws<NotImplementedException>(() => alg.Decode(null!));
             }
             finally
             {

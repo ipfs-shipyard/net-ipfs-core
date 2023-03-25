@@ -28,7 +28,7 @@ namespace Ipfs
             Assert.AreEqual("ipfs", a.Protocols[2].Name);
             Assert.AreEqual("QmVcSqVEsvm5RR9mBLjwpb2XjFVn5bPdPL69mL8PH45pPC", a.Protocols[2].Value);
 
-            Assert.AreEqual(0, new MultiAddress((string)null).Protocols.Count);
+            Assert.AreEqual(0, new MultiAddress((string)null!).Protocols.Count);
             Assert.AreEqual(0, new MultiAddress("").Protocols.Count);
             Assert.AreEqual(0, new MultiAddress("  ").Protocols.Count);
         }
@@ -57,8 +57,8 @@ namespace Ipfs
             var a0 = new MultiAddress(somewhere);
             var a1 = new MultiAddress(somewhere);
             var b = new MultiAddress(nowhere);
-            MultiAddress c = null;
-            MultiAddress d = null;
+            MultiAddress? c = null;
+            MultiAddress? d = null;
 
             Assert.IsTrue(c == d);
             Assert.IsFalse(c == b);
@@ -313,7 +313,8 @@ namespace Ipfs
         public void TryCreate_FromBytes()
         {
             var good = MultiAddress.TryCreate("/ip4/1.2.3.4/tcp/80");
-            var good1 = MultiAddress.TryCreate(good.ToArray());
+            Assert.IsNotNull(good);
+            var good1 = MultiAddress.TryCreate(good!.ToArray());
             Assert.AreEqual(good, good1);
 
             Assert.IsNull(MultiAddress.TryCreate(new byte[] { 0x7f }));
@@ -326,7 +327,8 @@ namespace Ipfs
             string json = JsonConvert.SerializeObject(a);
             Assert.AreEqual($"\"{a.ToString()}\"", json);
             var b = JsonConvert.DeserializeObject<MultiAddress>(json);
-            Assert.AreEqual(a.ToString(), b.ToString());
+            Assert.IsNotNull(b);
+            Assert.AreEqual(a.ToString(), b!.ToString());
 
             a = null;
             json = JsonConvert.SerializeObject(a);

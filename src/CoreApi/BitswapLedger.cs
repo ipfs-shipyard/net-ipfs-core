@@ -16,7 +16,7 @@ namespace Ipfs.CoreApi
         /// <value>
         ///   The peer that is being monitored.
         /// </value>
-        public Peer Peer { get; set; }
+        public Peer? Peer { get; set; }
 
         /// <summary>
         ///   The number of blocks exchanged with the <see cref="Peer"/>.

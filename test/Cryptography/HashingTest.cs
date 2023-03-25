@@ -1,7 +1,4 @@
-﻿using System;
-using System.Text;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Text;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Ipfs.Cryptography
@@ -13,12 +10,12 @@ namespace Ipfs.Cryptography
 
         class TestVector
         {
-            public string Algorithm { get; set; }
-            public string Input { get; set; }
-            public string Digest { get; set; }
+            public string? Algorithm { get; set; }
+            public string? Input { get; set; }
+            public string? Digest { get; set; }
         }
 
-        TestVector[] TestVectors = new TestVector[]
+        readonly TestVector[] TestVectors = new TestVector[]
         {
             new TestVector
             {
@@ -137,8 +134,8 @@ namespace Ipfs.Cryptography
             foreach (var v in TestVectors)
             {
                 var actual = MultiHash
-                    .GetHashAlgorithm(v.Algorithm)
-                    .ComputeHash(v.Input.ToHexBuffer());
+                    .GetHashAlgorithm(v.Algorithm!)
+                    .ComputeHash(v.Input!.ToHexBuffer());
                 Assert.AreEqual(v.Digest, actual.ToHexString(), $"{v.Algorithm} for '{v.Input}'");
             }
         }
