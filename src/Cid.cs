@@ -241,13 +241,10 @@ namespace Ipfs
                     sb.Append(Version);
                     sb.Append(' ');
                     sb.Append(ContentType);
-                    if (Hash is not null)
-                    {
-                        sb.Append(' ');
-                        sb.Append(Hash.Algorithm.Name);
-                        sb.Append(' ');
-                        sb.Append(MultiBase.Encode(Hash.ToArray(), Encoding).Substring(1));
-                    }
+                    sb.Append(' ');
+                    sb.Append(Hash.Algorithm.Name);
+                    sb.Append(' ');
+                    sb.Append(MultiBase.Encode(Hash.ToArray(), Encoding).Substring(1));
                     return sb.ToString();
 
                 default:
@@ -276,7 +273,7 @@ namespace Ipfs
             }
             if (Version == 0)
             {
-                encodedValue = Hash?.ToBase58();
+                encodedValue = Hash.ToBase58();
             }
             else
             {
@@ -284,11 +281,11 @@ namespace Ipfs
                 {
                     ms.WriteVarint(Version);
                     ms.WriteMultiCodec(ContentType);
-                    Hash?.Write(ms);
+                    Hash.Write(ms);
                     encodedValue = MultiBase.Encode(ms.ToArray(), Encoding);
                 }
             }
-            return encodedValue ?? string.Empty;
+            return encodedValue;
         }
 
         /// <summary>
