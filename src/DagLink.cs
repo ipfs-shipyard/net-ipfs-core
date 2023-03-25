@@ -1,6 +1,5 @@
-﻿using Google.Protobuf;
-using System;
-using System.IO;
+﻿using System.IO;
+using Google.Protobuf;
 
 namespace Ipfs
 {

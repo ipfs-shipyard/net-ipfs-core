@@ -1,7 +1,5 @@
-﻿
-namespace Ipfs
+﻿namespace Ipfs
 {
-
     /// <summary>
     ///   A link to another node in IPFS.
     /// </summary>
