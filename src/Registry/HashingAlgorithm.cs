@@ -103,7 +103,7 @@ namespace Ipfs.Registry
         ///   Returns a cryptographic hash algorithm that can compute
         ///   a hash (digest).
         /// </summary>
-        public Func<HashAlgorithm> Hasher { get; private set; } = () => throw new NotImplementedException();
+        public Func<HashAlgorithm> Hasher { get; private set; } = static () => throw new NotImplementedException();
 
         /// <summary>
         ///   Use <see cref="Register"/> to create a new instance of a <see cref="HashingAlgorithm"/>.
