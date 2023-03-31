@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -33,7 +31,7 @@ namespace Ipfs.CoreApi
         ///   the address that was added or <b>null</b> if the address is already
         ///   in the bootstrap list.
         /// </returns>
-        Task<MultiAddress> AddAsync(MultiAddress address, CancellationToken cancel = default(CancellationToken));
+        Task<MultiAddress?> AddAsync(MultiAddress address, CancellationToken cancel = default);
 
         /// <summary>
         ///   Adds the default peers to the list.
@@ -45,7 +43,7 @@ namespace Ipfs.CoreApi
         ///   A task that represents the asynchronous operation. The task's result is
         ///   the sequence of addresses that were added.
         /// </returns>
-        Task<IEnumerable<MultiAddress>> AddDefaultsAsync(CancellationToken cancel = default(CancellationToken));
+        Task<IEnumerable<MultiAddress>> AddDefaultsAsync(CancellationToken cancel = default);
 
         /// <summary>
         ///   List all the peers.
@@ -57,7 +55,7 @@ namespace Ipfs.CoreApi
         ///   A task that represents the asynchronous operation. The task's result is
         ///   a sequence of addresses.
         /// </returns>
-        Task<IEnumerable<MultiAddress>> ListAsync(CancellationToken cancel = default(CancellationToken));
+        Task<IEnumerable<MultiAddress>> ListAsync(CancellationToken cancel = default);
 
         /// <summary>
         ///   Delete the specified peer.
@@ -74,7 +72,7 @@ namespace Ipfs.CoreApi
         ///   the address that was removed or <b>null</b> if the <paramref name="address"/>
         ///   is not in the bootstrap list.
         /// </returns>
-        Task<MultiAddress> RemoveAsync(MultiAddress address, CancellationToken cancel = default(CancellationToken));
+        Task<MultiAddress?> RemoveAsync(MultiAddress address, CancellationToken cancel = default);
 
         /// <summary>
         ///   Remove all the peers.
@@ -85,6 +83,6 @@ namespace Ipfs.CoreApi
         /// <returns>
         ///   A task that represents the asynchronous operation. 
         /// </returns>
-        Task RemoveAllAsync(CancellationToken cancel = default(CancellationToken));
+        Task RemoveAllAsync(CancellationToken cancel = default);
     }
 }

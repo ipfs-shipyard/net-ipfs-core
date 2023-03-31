@@ -527,7 +527,7 @@ namespace Ipfs
         }
 
         /// <inheritdoc />
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
             var that = obj as Cid;
             return (that is null)
@@ -633,8 +633,7 @@ namespace Ipfs
             /// <inheritdoc />
             public override object? ReadJson(JsonReader reader, Type objectType, object? existingValue, JsonSerializer serializer)
             {
-                var s = reader.Value as string;
-                return s is null ? null : Cid.Decode(s);
+                return reader.Value is string s ? Cid.Decode(s) : null;
             }
         }
     }

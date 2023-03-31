@@ -63,9 +63,9 @@ namespace Ipfs.CoreApi
         /// </param>
         /// <returns>
         ///   A task that represents the asynchronous operation. The task's result is
-        ///   the key that was deleted.
+        ///   the key that was deleted, or null if the key is not present.
         /// </returns>
-        Task<IKey> RemoveAsync(string name, CancellationToken cancel = default);
+        Task<IKey?> RemoveAsync(string name, CancellationToken cancel = default);
 
         /// <summary>
         ///   Rename the specified key.
@@ -81,7 +81,7 @@ namespace Ipfs.CoreApi
         /// </param>
         /// <returns>
         ///   A task that represents the asynchronous operation. The task's result is
-        ///   a sequence of IPFS keys that were renamed.
+        ///   the new key after the rename.
         /// </returns>
         Task<IKey> RenameAsync(string oldName, string newName, CancellationToken cancel = default);
 

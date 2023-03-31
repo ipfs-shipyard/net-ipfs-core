@@ -11,7 +11,7 @@ namespace Ipfs
     /// </remarks>
     public class Peer : IEquatable<Peer>
     {
-        private static readonly MultiAddress[] noAddress = new MultiAddress[0];
+        private static readonly MultiAddress[] noAddress = Array.Empty<MultiAddress>();
         private const string unknown = "unknown/0.0";
 
         /// <summary>
@@ -112,7 +112,7 @@ namespace Ipfs
         }
 
         /// <inheritdoc />
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
             var that = obj as Peer;
             return (that is null)

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Ipfs
+﻿namespace Ipfs
 {
     /// <summary>
     ///   A Directed Acyclic Graph (DAG) for IPFS file system node.
@@ -17,6 +13,5 @@ namespace Ipfs
         ///   it is some type of a file.
         /// </value>
         bool IsDirectory { get; }
-
     }
 }

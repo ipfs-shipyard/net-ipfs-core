@@ -5,7 +5,6 @@
     /// </summary>
     public interface IMerkleLink
     {
-
         /// <summary>
         ///   A name associated with the linked node.
         /// </summary>
@@ -31,6 +30,5 @@
         /// </summary>
         /// <value>Number of bytes.</value>
         long Size { get; }
-
     }
 }

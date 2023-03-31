@@ -1,10 +1,4 @@
-﻿using Google.Protobuf;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.IO;
 
 namespace Ipfs
 {
@@ -23,7 +17,6 @@ namespace Ipfs
     /// <seealso cref="IMerkleNode{Link}"/>
     public interface IDataBlock
     {
-
         /// <summary>
         ///   Contents as a byte array.
         /// </summary>
@@ -56,8 +49,5 @@ namespace Ipfs
         /// </summary>
         /// <value>Number of bytes.</value>
         long Size { get; }
-
-
     }
-
 }

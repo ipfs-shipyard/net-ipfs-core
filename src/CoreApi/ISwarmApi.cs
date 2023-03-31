@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -25,7 +23,7 @@ namespace Ipfs.CoreApi
         ///   A task that represents the asynchronous operation. The task's value
         ///   is a sequence of peer nodes.
         /// </returns>
-        Task<IEnumerable<Peer>> AddressesAsync(CancellationToken cancel = default(CancellationToken));
+        Task<IEnumerable<Peer>> AddressesAsync(CancellationToken cancel = default);
 
         /// <summary>
         ///   Get the peers that are connected to this node.
@@ -37,7 +35,7 @@ namespace Ipfs.CoreApi
         ///   A task that represents the asynchronous operation. The task's value
         ///   is a sequence of <see cref="Peer">Connected Peers</see>.
         /// </returns>
-        Task<IEnumerable<Peer>> PeersAsync(CancellationToken cancel = default(CancellationToken));
+        Task<IEnumerable<Peer>> PeersAsync(CancellationToken cancel = default);
 
         /// <summary>
         ///   Connect to a peer.
@@ -49,7 +47,7 @@ namespace Ipfs.CoreApi
         /// <param name="cancel">
         ///   Is used to stop the task.  When cancelled, the <see cref="TaskCanceledException"/> is raised.
         /// </param>
-        Task ConnectAsync(MultiAddress address, CancellationToken cancel = default(CancellationToken));
+        Task ConnectAsync(MultiAddress address, CancellationToken cancel = default);
 
         /// <summary>
         ///   Disconnect from a peer.
@@ -61,7 +59,7 @@ namespace Ipfs.CoreApi
         /// <param name="cancel">
         ///   Is used to stop the task.  When cancelled, the <see cref="TaskCanceledException"/> is raised.
         /// </param>
-        Task DisconnectAsync(MultiAddress address, CancellationToken cancel = default(CancellationToken));
+        Task DisconnectAsync(MultiAddress address, CancellationToken cancel = default);
 
         /// <summary>
         ///   Adds a new address filter.
@@ -78,10 +76,10 @@ namespace Ipfs.CoreApi
         /// </param>
         /// <returns>
         ///   A task that represents the asynchronous operation. The task's result is
-        ///   the address filter that was added.
+        ///   the address filter that was added, or null if the IPFS layer did not return a MultiAddress result.
         /// </returns>
         /// <seealso href="https://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing"/>
-        Task<MultiAddress> AddAddressFilterAsync(MultiAddress address, bool persist = false, CancellationToken cancel = default(CancellationToken));
+        Task<MultiAddress?> AddAddressFilterAsync(MultiAddress address, bool persist = false, CancellationToken cancel = default);
 
         /// <summary>
         ///   List all the address filters.
@@ -97,7 +95,7 @@ namespace Ipfs.CoreApi
         ///   a sequence of addresses filters.
         /// </returns>
         /// <seealso href="https://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing"/>
-        Task<IEnumerable<MultiAddress>> ListAddressFiltersAsync(bool persist = false, CancellationToken cancel = default(CancellationToken));
+        Task<IEnumerable<MultiAddress>> ListAddressFiltersAsync(bool persist = false, CancellationToken cancel = default);
 
         /// <summary>
         ///   Delete the specified address filter.
@@ -114,10 +112,10 @@ namespace Ipfs.CoreApi
         /// </param>
         /// <returns>
         ///   A task that represents the asynchronous operation. The task's result is
-        ///   the address filter that was removed.
+        ///   the address filter that was removed, or null of the address filter was not found.
         /// </returns>
         /// <seealso href="https://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing"/>
-        Task<MultiAddress> RemoveAddressFilterAsync(MultiAddress address, bool persist = false, CancellationToken cancel = default(CancellationToken));
+        Task<MultiAddress?> RemoveAddressFilterAsync(MultiAddress address, bool persist = false, CancellationToken cancel = default);
 
     }
 }
