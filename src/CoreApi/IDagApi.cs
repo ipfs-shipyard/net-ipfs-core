@@ -168,7 +168,7 @@ namespace Ipfs.CoreApi
         /// <returns>
         ///   A task that represents the asynchronous get operation. The task's value
         ///   is a new instance of the <typeparamref name="T"/> class, or null if the returned information
-        ///   could not be parsed as type T..
+        ///   could not be parsed as type T.
         /// </returns>
         Task<T?> GetAsync<T>(Cid id, CancellationToken cancel = default);
     }
