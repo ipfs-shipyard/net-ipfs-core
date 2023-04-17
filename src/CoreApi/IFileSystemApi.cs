@@ -103,7 +103,7 @@ namespace Ipfs.CoreApi
         ///   A task that represents the asynchronous operation. The task's value is
         ///   the contents of the <paramref name="path"/> as a <see cref="string"/>.
         /// </returns>
-        Task<String> ReadAllTextAsync(string path, CancellationToken cancel = default);
+        Task<string> ReadAllTextAsync(string path, CancellationToken cancel = default);
 
         /// <summary>
         ///   Reads an existing IPFS file.

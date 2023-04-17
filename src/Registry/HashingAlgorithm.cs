@@ -37,8 +37,8 @@ namespace Ipfs.Registry
     /// </remarks>
     public class HashingAlgorithm
     {
-        internal static Dictionary<string, HashingAlgorithm> Names = new Dictionary<string, HashingAlgorithm>();
-        internal static Dictionary<int, HashingAlgorithm> Codes = new Dictionary<int, HashingAlgorithm>();
+        internal static Dictionary<string, HashingAlgorithm> Names = new(StringComparer.Ordinal);
+        internal static Dictionary<int, HashingAlgorithm> Codes = new();
 
         /// <summary>
         ///   Register the standard hash algorithms for IPFS.
@@ -108,7 +108,7 @@ namespace Ipfs.Registry
         /// <summary>
         ///   Use <see cref="Register"/> to create a new instance of a <see cref="HashingAlgorithm"/>.
         /// </summary>
-        HashingAlgorithm()
+        private HashingAlgorithm()
         {
         }
 
@@ -142,11 +142,20 @@ namespace Ipfs.Registry
         public static HashingAlgorithm Register(string name, int code, int digestSize, Func<HashAlgorithm>? hasher = null)
         {
             if (string.IsNullOrWhiteSpace(name))
+            {
                 throw new ArgumentNullException(nameof(name));
+            }
+
             if (Names.ContainsKey(name))
+            {
                 throw new ArgumentException($"The IPFS hashing algorithm '{name}' is already defined.");
+            }
+
             if (Codes.ContainsKey(code))
+            {
                 throw new ArgumentException($"The IPFS hashing algorithm code 0x{code:x2} is already defined.");
+            }
+
             hasher ??= () => throw new NotImplementedException($"The IPFS hashing algorithm '{name}' is not implemented.");
 
             var a = new HashingAlgorithm
@@ -177,13 +186,24 @@ namespace Ipfs.Registry
         public static HashingAlgorithm RegisterAlias(string alias, string name)
         {
             if (string.IsNullOrWhiteSpace(alias))
+            {
                 throw new ArgumentNullException(nameof(alias));
+            }
+
             if (Names.ContainsKey(alias))
+            {
                 throw new ArgumentException($"The IPFS hashing algorithm '{alias}' is already defined and cannot be used as an alias.");
+            }
+
             if (string.IsNullOrWhiteSpace(name))
+            {
                 throw new ArgumentNullException(nameof(name));
+            }
+
             if (!Names.TryGetValue(name, out HashingAlgorithm existing))
+            {
                 throw new ArgumentException($"The IPFS hashing algorithm '{name}' is not defined.");
+            }
 
             var a = new HashingAlgorithm
             {
@@ -215,10 +235,7 @@ namespace Ipfs.Registry
         /// <value>
         ///   The currently registered hashing algorithms.
         /// </value>
-        public static IEnumerable<HashingAlgorithm> All
-        {
-            get { return Names.Values; }
-        }
+        public static IEnumerable<HashingAlgorithm> All => Names.Values;
 
         /// <summary>
         ///   Gets the <see cref="HashAlgorithm"/> with the specified IPFS multi-hash name.
@@ -262,6 +279,5 @@ namespace Ipfs.Registry
                 throw new KeyNotFoundException($"Hash algorithm '{name}' is not registered.");
             }
         }
-
     }
 }

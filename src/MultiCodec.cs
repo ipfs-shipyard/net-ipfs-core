@@ -24,7 +24,6 @@ namespace Ipfs
     /// <seealso cref="Registry.Codec"/>
     public static class MultiCodec
     {
-
         /// <summary>
         ///   Reads a <see cref="Codec"/> from the <see cref="Stream"/>. 
         /// </summary>

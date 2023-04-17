@@ -58,7 +58,9 @@ namespace Ipfs.CoreApi
         /// <remarks>
         ///   Paramter long is ommitted and should always be passed as true in implementation.
         /// </remarks>
+#pragma warning disable IDE1006 // Naming Styles - keep capital U
         Task<IEnumerable<IFileSystemNode>> ListAsync(string path, bool? U = null, CancellationToken cancel = default);
+#pragma warning restore IDE1006 // Naming Styles
 
         /// <summary>
         ///   Make directories in the local mutable namespace.
@@ -110,7 +112,7 @@ namespace Ipfs.CoreApi
         /// <param name="cancel">
         ///   Is used to stop the task.  When cancelled, the <see cref="TaskCanceledException"/> is raised.
         /// </param>
-        Task<string> ReadFileAsync(string path, Int64? offset = null, Int64? count = null, CancellationToken cancel = default);
+        Task<string> ReadFileAsync(string path, long? offset = null, long? count = null, CancellationToken cancel = default);
 
         /// <summary>
         ///   Remove a file or directory or from MFS.

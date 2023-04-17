@@ -7,29 +7,29 @@ namespace Ipfs
     [TestClass]
     public class PeerTest
     {
-        const string marsId = "QmSoLMeWqB7YGVLJN3pNLQpmmEk35v6wYtsMGLzSr5QBU3";
-        const string plutoId = "QmSoLPppuBtQSGwKDZT2M73ULpjvfd3aZ6ha4oFGL1KrGM";
-        const string marsPublicKey = "CAASogEwgZ8wDQYJKoZIhvcNAQEBBQADgY0AMIGJAoGBAKGUtbRQf+a9SBHFEruNAUatS/tsGUnHuCtifGrlbYPELD3UyyhWf/FYczBCavx3i8hIPEW2jQv4ehxQxi/cg9SHswZCQblSi0ucwTBFr8d40JEiyB9CcapiMdFQxdMgGvXEOQdLz1pz+UPUDojkdKZq8qkkeiBn7KlAoGEocnmpAgMBAAE=";
-        const string marsAddress = "/ip4/10.1.10.10/tcp/29087/ipfs/QmSoLMeWqB7YGVLJN3pNLQpmmEk35v6wYtsMGLzSr5QBU3";
+        private const string MarsId = "QmSoLMeWqB7YGVLJN3pNLQpmmEk35v6wYtsMGLzSr5QBU3";
+        private const string PlutoId = "QmSoLPppuBtQSGwKDZT2M73ULpjvfd3aZ6ha4oFGL1KrGM";
+        private const string MarsPublicKey = "CAASogEwgZ8wDQYJKoZIhvcNAQEBBQADgY0AMIGJAoGBAKGUtbRQf+a9SBHFEruNAUatS/tsGUnHuCtifGrlbYPELD3UyyhWf/FYczBCavx3i8hIPEW2jQv4ehxQxi/cg9SHswZCQblSi0ucwTBFr8d40JEiyB9CcapiMdFQxdMgGvXEOQdLz1pz+UPUDojkdKZq8qkkeiBn7KlAoGEocnmpAgMBAAE=";
+        private const string MarsAddress = "/ip4/10.1.10.10/tcp/29087/ipfs/QmSoLMeWqB7YGVLJN3pNLQpmmEk35v6wYtsMGLzSr5QBU3";
 
         [TestMethod]
         public new void ToString()
         {
-            Assert.AreEqual("", new Peer().ToString());
-            Assert.AreEqual(marsId, new Peer { Id = marsId }.ToString());
+            Assert.AreEqual(string.Empty, new Peer().ToString());
+            Assert.AreEqual(MarsId, new Peer { Id = MarsId }.ToString());
         }
 
         [TestMethod]
         public void DefaultValues()
         {
             var peer = new Peer();
-            Assert.AreEqual(null, peer.Id);
+            Assert.IsNull(peer.Id);
             Assert.AreEqual(0, peer.Addresses.Count());
             Assert.AreEqual("unknown/0.0", peer.ProtocolVersion);
             Assert.AreEqual("unknown/0.0", peer.AgentVersion);
-            Assert.AreEqual(null, peer.PublicKey);
+            Assert.IsNull(peer.PublicKey);
             Assert.AreEqual(false, peer.IsValid()); // missing peer ID
-            Assert.AreEqual(null, peer.ConnectedAddress);
+            Assert.IsNull(peer.ConnectedAddress);
             Assert.IsFalse(peer.Latency.HasValue);
         }
 
@@ -38,10 +38,10 @@ namespace Ipfs
         {
             var peer = new Peer
             {
-                ConnectedAddress = new MultiAddress(marsAddress),
+                ConnectedAddress = new MultiAddress(MarsAddress),
                 Latency = TimeSpan.FromHours(3.03 * 2)
             };
-            Assert.AreEqual(marsAddress, peer.ConnectedAddress.ToString());
+            Assert.AreEqual(MarsAddress, peer.ConnectedAddress.ToString());
             Assert.AreEqual(3.03 * 2, peer.Latency.Value.TotalHours);
         }
 
@@ -55,7 +55,7 @@ namespace Ipfs
         [TestMethod]
         public void Validation_With_Id()
         {
-            Peer peer = marsId;
+            Peer peer = MarsId;
             Assert.AreEqual(true, peer.IsValid());
         }
 
@@ -64,8 +64,8 @@ namespace Ipfs
         {
             var peer = new Peer
             {
-                Id = marsId,
-                PublicKey = marsPublicKey
+                Id = MarsId,
+                PublicKey = MarsPublicKey
             };
             Assert.AreEqual(true, peer.IsValid());
         }
@@ -75,8 +75,8 @@ namespace Ipfs
         {
             var peer = new Peer
             {
-                Id = plutoId,
-                PublicKey = marsPublicKey
+                Id = PlutoId,
+                PublicKey = MarsPublicKey
             };
             Assert.AreEqual(false, peer.IsValid());
         }
@@ -84,9 +84,9 @@ namespace Ipfs
         [TestMethod]
         public void Value_Equality()
         {
-            var a0 = new Peer { Id = marsId };
-            var a1 = new Peer { Id = marsId };
-            var b = new Peer { Id = plutoId };
+            var a0 = new Peer { Id = MarsId };
+            var a1 = new Peer { Id = MarsId };
+            var b = new Peer { Id = PlutoId };
             Peer? c = null;
             Peer? d = null;
 
@@ -129,10 +129,8 @@ namespace Ipfs
         [TestMethod]
         public void Implicit_Conversion_From_String()
         {
-            Peer a = marsId;
+            Peer a = MarsId;
             Assert.IsInstanceOfType(a, typeof(Peer));
         }
-
     }
 }
-

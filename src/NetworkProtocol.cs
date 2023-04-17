@@ -18,8 +18,8 @@ namespace Ipfs
     /// <seealso cref="MultiAddress"/>
     public abstract class NetworkProtocol
     {
-        internal static Dictionary<string, Type> Names = new Dictionary<string, Type>();
-        internal static Dictionary<uint, Type> Codes = new Dictionary<uint, Type>();
+        internal static Dictionary<string, Type> Names = new(StringComparer.Ordinal);
+        internal static Dictionary<uint, Type> Codes = new();
 
         /// <summary>
         ///   Registers the standard network protocols for IPFS.
@@ -66,9 +66,14 @@ namespace Ipfs
             var protocol = new T();
 
             if (Names.ContainsKey(protocol.Name))
+            {
                 throw new ArgumentException($"The IPFS network protocol '{protocol.Name}' is already defined.");
+            }
+
             if (Codes.ContainsKey(protocol.Code))
+            {
                 throw new ArgumentException($"The IPFS network protocol code ({protocol.Code}) is already defined.");
+            }
 
             Names.Add(protocol.Name, typeof(T));
             Codes.Add(protocol.Code, typeof(T));
@@ -85,9 +90,14 @@ namespace Ipfs
             var protocol = new T();
 
             if (Names.ContainsKey(protocol.Name))
+            {
                 throw new ArgumentException($"The IPFS network protocol '{protocol.Name}' is already defined.");
+            }
+
             if (!Codes.ContainsKey(protocol.Code))
+            {
                 throw new ArgumentException($"The IPFS network protocol code ({protocol.Code}) is not defined.");
+            }
 
             Names.Add(protocol.Name, typeof(T));
         }
@@ -175,19 +185,17 @@ namespace Ipfs
         /// </summary>
         public override string ToString()
         {
-            using (var s = new StringWriter())
-            {
-                s.Write('/');
-                s.Write(Name);
-                WriteValue(s);
-                return s.ToString();
-            }
+            using var s = new StringWriter();
+            s.Write('/');
+            s.Write(Name);
+            WriteValue(s);
+            return s.ToString();
         }
     }
 
-    class TcpNetworkProtocol : NetworkProtocol
+    internal class TcpNetworkProtocol : NetworkProtocol
     {
-        public UInt16 Port { get; set; }
+        public ushort Port { get; set; }
         public override string Name => "tcp";
         public override uint Code => 6;
 
@@ -196,45 +204,45 @@ namespace Ipfs
             base.ReadValue(stream);
             try
             {
-                Port = UInt16.Parse(Value);
+                Port = ushort.Parse(Value);
             }
             catch (Exception e)
             {
-                throw new FormatException(string.Format("'{0}' is not a valid port number.", Value), e);
+                throw new FormatException($"'{Value}' is not a valid port number.", e);
             }
         }
         public override void ReadValue(CodedInputStream stream)
         {
             var bytes = stream.ReadSomeBytes(2);
-            Port = (UInt16) IPAddress.NetworkToHostOrder(BitConverter.ToInt16(bytes, 0));
+            Port = (ushort) IPAddress.NetworkToHostOrder(BitConverter.ToInt16(bytes, 0));
             Value = Port.ToString(CultureInfo.InvariantCulture);
         }
         public override void WriteValue(CodedOutputStream stream)
         {
-            var bytes = BitConverter.GetBytes(IPAddress.HostToNetworkOrder((Int16)Port));
+            var bytes = BitConverter.GetBytes(IPAddress.HostToNetworkOrder((short)Port));
             stream.WriteSomeBytes(bytes);
         }
     }
 
-    class UdpNetworkProtocol : TcpNetworkProtocol
+    internal class UdpNetworkProtocol : TcpNetworkProtocol
     {
         public override string Name => "udp";
         public override uint Code => 273;
     }
 
-    class DccpNetworkProtocol : TcpNetworkProtocol
+    internal class DccpNetworkProtocol : TcpNetworkProtocol
     {
         public override string Name => "dccp";
         public override uint Code => 33;
     }
 
-    class SctpNetworkProtocol : TcpNetworkProtocol
+    internal class SctpNetworkProtocol : TcpNetworkProtocol
     {
         public override string Name => "sctp";
         public override uint Code => 132;
     }
 
-    abstract class IpNetworkProtocol : NetworkProtocol
+    internal abstract class IpNetworkProtocol : NetworkProtocol
     {
         public IPAddress? Address { get; set; }
         public override void ReadValue(TextReader stream)
@@ -245,7 +253,9 @@ namespace Ipfs
                 // Remove the scope id.
                 int i = Value!.LastIndexOf('%');
                 if (i != -1)
+                {
                     Value = Value.Substring(0, i);
+                }
 
                 Address = IPAddress.Parse(Value);
             }
@@ -266,7 +276,7 @@ namespace Ipfs
         }
     }
 
-    class Ipv4NetworkProtocol : IpNetworkProtocol
+    internal class Ipv4NetworkProtocol : IpNetworkProtocol
     {
         private static readonly int AddressSize = IPAddress.Any.GetAddressBytes().Length;
 
@@ -277,7 +287,9 @@ namespace Ipfs
         {
             base.ReadValue(stream);
             if (Address!.AddressFamily != AddressFamily.InterNetwork)
-                throw new FormatException(string.Format("'{0}' is not a valid IPv4 address.", Value));
+            {
+                throw new FormatException($"'{Value}' is not a valid IPv4 address.");
+            }
         }
         public override void ReadValue(CodedInputStream stream)
         {
@@ -287,7 +299,7 @@ namespace Ipfs
         }
     }
 
-    class Ipv6NetworkProtocol : IpNetworkProtocol
+    internal class Ipv6NetworkProtocol : IpNetworkProtocol
     {
         private static readonly int AddressSize = IPAddress.IPv6Any.GetAddressBytes().Length;
 
@@ -298,7 +310,9 @@ namespace Ipfs
         {
             base.ReadValue(stream);
             if (Address!.AddressFamily != AddressFamily.InterNetworkV6)
-                throw new FormatException(string.Format("'{0}' is not a valid IPv6 address.", Value));
+            {
+                throw new FormatException($"'{Value}' is not a valid IPv6 address.");
+            }
         }
         public override void ReadValue(CodedInputStream stream)
         {
@@ -308,7 +322,7 @@ namespace Ipfs
         }
     }
 
-    class P2pNetworkProtocol : NetworkProtocol
+    internal class P2pNetworkProtocol : NetworkProtocol
     {
         public MultiHash? MultiHash { get; private set; }
         public override string Name => "p2p";
@@ -335,15 +349,15 @@ namespace Ipfs
         }
     }
 
-    class IpfsNetworkProtocol : P2pNetworkProtocol
+    internal class IpfsNetworkProtocol : P2pNetworkProtocol
     {
         public override string Name => "ipfs";
     }
 
-    class OnionNetworkProtocol : NetworkProtocol
+    internal class OnionNetworkProtocol : NetworkProtocol
     {
         public byte[] Address { get; private set; } = Array.Empty<byte>();
-        public UInt16 Port { get; private set; }
+        public ushort Port { get; private set; }
         public override string Name => "onion";
         public override uint Code => 444;
 
@@ -352,19 +366,28 @@ namespace Ipfs
             base.ReadValue(stream);
             var parts = Value!.Split(':');
             if (parts.Length != 2)
+            {
                 throw new FormatException($"'{Value}' is not a valid onion address, missing the port number.");
+            }
+
             if (parts[0].Length != 16)
+            {
                 throw new FormatException($"'{Value}' is not a valid onion address.");
+            }
+
             try
             {
-                Port = UInt16.Parse(parts[1]);
+                Port = ushort.Parse(parts[1]);
             }
             catch (Exception e)
             {
-                throw new FormatException(string.Format("'{0}' is not a valid onion address, invalid port number.", Value), e);
+                throw new FormatException($"'{Value}' is not a valid onion address, invalid port number.", e);
             }
             if (Port < 1)
-                throw new FormatException(string.Format("'{0}' is not a valid onion address, invalid port number.", Value));
+            {
+                throw new FormatException($"'{Value}' is not a valid onion address, invalid port number.");
+            }
+
             Address = parts[0].ToUpperInvariant().FromBase32();
         }
 
@@ -372,18 +395,18 @@ namespace Ipfs
         {
             Address = stream.ReadSomeBytes(10);
             var bytes = stream.ReadSomeBytes(2);
-            Port = (UInt16)IPAddress.NetworkToHostOrder(BitConverter.ToInt16(bytes, 0));
+            Port = (ushort)IPAddress.NetworkToHostOrder(BitConverter.ToInt16(bytes, 0));
             Value = Address.ToBase32().ToLowerInvariant() + ":" + Port.ToString(CultureInfo.InvariantCulture);
         }
         public override void WriteValue(CodedOutputStream stream)
         {
             stream.WriteSomeBytes(Address);
-            var bytes = BitConverter.GetBytes(IPAddress.HostToNetworkOrder((Int16)Port));
+            var bytes = BitConverter.GetBytes(IPAddress.HostToNetworkOrder((short)Port));
             stream.WriteSomeBytes(bytes);
         }
     }
 
-    abstract class ValuelessNetworkProtocol : NetworkProtocol
+    internal abstract class ValuelessNetworkProtocol : NetworkProtocol
     {
         public override void ReadValue(CodedInputStream stream)
         {
@@ -399,25 +422,25 @@ namespace Ipfs
         }
     }
 
-    class QuicNetworkProtocol : ValuelessNetworkProtocol
+    internal class QuicNetworkProtocol : ValuelessNetworkProtocol
     {
         public override string Name => "quic";
         public override uint Code => 460;
     }
 
-    class QuicV1NetworkProtocol : ValuelessNetworkProtocol
+    internal class QuicV1NetworkProtocol : ValuelessNetworkProtocol
     {
         public override string Name => "quic-v1";
         public override uint Code => 465;
     }
 
-    class WebTransportNetworkProtocol : ValuelessNetworkProtocol
+    internal class WebTransportNetworkProtocol : ValuelessNetworkProtocol
     {
         public override string Name => "webtransport";
         public override uint Code => 461;
     }
 
-    class CertHashNetworkProtocol : NetworkProtocol
+    internal class CertHashNetworkProtocol : NetworkProtocol
     {
         public override string Name => "certhash";
         public override uint Code => 466;
@@ -433,61 +456,61 @@ namespace Ipfs
         }
     }
 
-    class HttpNetworkProtocol : ValuelessNetworkProtocol
+    internal class HttpNetworkProtocol : ValuelessNetworkProtocol
     {
         public override string Name => "http";
         public override uint Code => 480;
     }
 
-    class HttpsNetworkProtocol : ValuelessNetworkProtocol
+    internal class HttpsNetworkProtocol : ValuelessNetworkProtocol
     {
         public override string Name => "https";
         public override uint Code => 443;
     }
 
-    class WsNetworkProtocol : ValuelessNetworkProtocol
+    internal class WsNetworkProtocol : ValuelessNetworkProtocol
     {
         public override string Name => "ws";
         public override uint Code => 477;
     }
 
-    class WssNetworkProtocol : ValuelessNetworkProtocol
+    internal class WssNetworkProtocol : ValuelessNetworkProtocol
     {
         public override string Name => "wss";
         public override uint Code => 478;
     }
 
-    class Libp2pWebrtcStarNetworkProtocol : ValuelessNetworkProtocol
+    internal class Libp2pWebrtcStarNetworkProtocol : ValuelessNetworkProtocol
     {
         public override string Name => "libp2p-webrtc-star";
         public override uint Code => 275;
     }
 
-    class Libp2pWebrtcDirectNetworkProtocol : ValuelessNetworkProtocol
+    internal class Libp2pWebrtcDirectNetworkProtocol : ValuelessNetworkProtocol
     {
         public override string Name => "libp2p-webrtc-direct";
         public override uint Code => 276;
     }
 
-    class UdtNetworkProtocol : ValuelessNetworkProtocol
+    internal class UdtNetworkProtocol : ValuelessNetworkProtocol
     {
         public override string Name => "udt";
         public override uint Code => 301;
     }
 
-    class UtpNetworkProtocol : ValuelessNetworkProtocol
+    internal class UtpNetworkProtocol : ValuelessNetworkProtocol
     {
         public override string Name => "utp";
         public override uint Code => 302;
     }
 
-    class P2pCircuitNetworkProtocol : ValuelessNetworkProtocol
+    internal class P2pCircuitNetworkProtocol : ValuelessNetworkProtocol
     {
         public override string Name => "p2p-circuit";
         public override uint Code => 290;
     }
 
-    abstract class DomainNameNetworkProtocol : NetworkProtocol
+    internal abstract class DomainNameNetworkProtocol : NetworkProtocol
     {
         public string? DomainName { get; set; }
         public override void ReadValue(TextReader stream)
@@ -512,33 +535,33 @@ namespace Ipfs
         }
     }
 
-    class DnsNetworkProtocol : DomainNameNetworkProtocol
+    internal class DnsNetworkProtocol : DomainNameNetworkProtocol
     {
         public override string Name => "dns";
         public override uint Code => 53;
     }
 
-    class DnsAddrNetworkProtocol : DomainNameNetworkProtocol
+    internal class DnsAddrNetworkProtocol : DomainNameNetworkProtocol
     {
         public override string Name => "dnsaddr";
         public override uint Code => 56;
     }
 
-    class Dns4NetworkProtocol : DomainNameNetworkProtocol
+    internal class Dns4NetworkProtocol : DomainNameNetworkProtocol
     {
         public override string Name => "dns4";
         public override uint Code => 54;
     }
 
-    class Dns6NetworkProtocol : DomainNameNetworkProtocol
+    internal class Dns6NetworkProtocol : DomainNameNetworkProtocol
     {
         public override string Name => "dns6";
         public override uint Code => 55;
     }
 
-    class IpcidrNetworkProtocol : NetworkProtocol
+    internal class IpcidrNetworkProtocol : NetworkProtocol
     {
-        public UInt16 RoutingPrefix { get; set; }
+        public ushort RoutingPrefix { get; set; }
         public override string Name => "ipcidr";
 
         // TODO: https://github.com/multiformats/multiaddr/issues/60
@@ -549,22 +572,22 @@ namespace Ipfs
             base.ReadValue(stream);
             try
             {
-                RoutingPrefix = UInt16.Parse(Value);
+                RoutingPrefix = ushort.Parse(Value);
             }
             catch (Exception e)
             {
-                throw new FormatException(string.Format("'{0}' is not a valid routing prefix.", Value), e);
+                throw new FormatException($"'{Value}' is not a valid routing prefix.", e);
             }
         }
         public override void ReadValue(CodedInputStream stream)
         {
             var bytes = stream.ReadSomeBytes(2);
-            RoutingPrefix = (UInt16)IPAddress.NetworkToHostOrder(BitConverter.ToInt16(bytes, 0));
+            RoutingPrefix = (ushort)IPAddress.NetworkToHostOrder(BitConverter.ToInt16(bytes, 0));
             Value = RoutingPrefix.ToString(CultureInfo.InvariantCulture);
         }
         public override void WriteValue(CodedOutputStream stream)
         {
-            var bytes = BitConverter.GetBytes(IPAddress.HostToNetworkOrder((Int16)RoutingPrefix));
+            var bytes = BitConverter.GetBytes(IPAddress.HostToNetworkOrder((short)RoutingPrefix));
             stream.WriteSomeBytes(bytes);
         }
     }

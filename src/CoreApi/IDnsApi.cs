@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
 
 namespace Ipfs.CoreApi
@@ -16,7 +13,6 @@ namespace Ipfs.CoreApi
     /// </remarks>
     public interface IDnsApi
     {
-
         /// <summary>
         ///   Resolve a domain name to an IPFS path.
         /// </summary>
@@ -49,7 +45,6 @@ namespace Ipfs.CoreApi
         Task<string> ResolveAsync(
             string name,
             bool recursive = false,
-            CancellationToken cancel = default(CancellationToken)
-            );
+            CancellationToken cancel = default);
     }
 }

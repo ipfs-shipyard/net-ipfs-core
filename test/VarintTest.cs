@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Text;
-using System.Collections.Generic;
-using System.Linq;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Ipfs
 {
@@ -55,7 +52,7 @@ namespace Ipfs
         [TestMethod]
         public void TooBig_Int32()
         {
-            var bytes = Varint.Encode((long)Int32.MaxValue + 1);
+            var bytes = Varint.Encode((long)int.MaxValue + 1);
             ExceptionAssert.Throws<InvalidDataException>(() => Varint.DecodeInt32(bytes));
         }
 
@@ -76,19 +73,17 @@ namespace Ipfs
         [TestMethod]
         public void Empty()
         {
-            var bytes = new byte[0];
+            var bytes = Array.Empty<byte>();
             ExceptionAssert.Throws<EndOfStreamException>(() => Varint.DecodeInt64(bytes));
         }
 
         [TestMethod]
         public async Task WriteAsync()
         {
-            using (var ms = new MemoryStream())
-            {
-                await ms.WriteVarintAsync(long.MaxValue);
-                ms.Position = 0;
-                Assert.AreEqual(long.MaxValue, ms.ReadVarint64());
-            }
+            using var ms = new MemoryStream();
+            await ms.WriteVarintAsync(long.MaxValue);
+            ms.Position = 0;
+            Assert.AreEqual(long.MaxValue, ms.ReadVarint64());
         }
 
         [TestMethod]
@@ -110,11 +105,9 @@ namespace Ipfs
         [TestMethod]
         public async Task ReadAsync()
         {
-            using (var ms = new MemoryStream("ffffffffffffffff7f".ToHexBuffer()))
-            {
-                var v = await ms.ReadVarint64Async();
-                Assert.AreEqual(long.MaxValue, v);
-            }
+            using var ms = new MemoryStream("ffffffffffffffff7f".ToHexBuffer());
+            var v = await ms.ReadVarint64Async();
+            Assert.AreEqual(long.MaxValue, v);
         }
 
         [TestMethod]
@@ -129,7 +122,7 @@ namespace Ipfs
         [TestMethod]
         public void Example()
         {
-            for (long v = 1; v <= 0xFFFFFFFL; v = v << 4)
+            for (long v = 1; v <= 0xFFFFFFFL; v <<= 4)
             {
                 Console.Write($"| {v} (0x{v.ToString("x")}) ");
                 Console.WriteLine($"| {Varint.Encode(v).ToHexString()} |");

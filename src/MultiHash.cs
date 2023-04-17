@@ -23,7 +23,7 @@ namespace Ipfs
         /// <summary>
         ///   The cached base-58 encoding of the multihash.
         /// </summary>
-        private string? b58String;
+        private string? _b58String;
 
         /// <summary>
         ///   The default hashing algorithm is "sha2-256".
@@ -46,14 +46,12 @@ namespace Ipfs
         /// </exception>
         public static HashAlgorithm GetHashAlgorithm(string name = DefaultAlgorithmName)
         {
-            try
+            if (HashingAlgorithm.Names.TryGetValue(name, out HashingAlgorithm? hashAlgorithm))
             {
-                return HashingAlgorithm.Names[name].Hasher();
+                return hashAlgorithm.Hasher();
             }
-            catch (KeyNotFoundException)
-            {
-                throw new KeyNotFoundException($"Hash algorithm '{name}' is not registered.");
-            }
+
+            throw new KeyNotFoundException($"Hash algorithm '{name}' is not registered.");
         }
 
         /// <summary>
@@ -71,14 +69,12 @@ namespace Ipfs
         /// </exception>
         public static string GetHashAlgorithmName(int code)
         {
-            try
+            if (HashingAlgorithm.Codes.TryGetValue(code, out HashingAlgorithm? hashingAlgorithm))
             {
-                return HashingAlgorithm.Codes[code].Name;
+                return hashingAlgorithm.Name;
             }
-            catch (KeyNotFoundException)
-            {
-                throw new KeyNotFoundException($"Hash algorithm with code '{code}' is not registered.");
-            }
+
+            throw new KeyNotFoundException($"Hash algorithm with code '{code}' is not registered.");
         }
 
         /// <summary>
@@ -105,7 +101,10 @@ namespace Ipfs
             Algorithm = a;
 
             if (Algorithm.DigestSize != 0 && Algorithm.DigestSize != digest.Length)
+            {
                 throw new ArgumentException($"The digest size for '{algorithmName}' is {Algorithm.DigestSize} bytes, not {digest.Length}.");
+            }
+
             Digest = digest;
         }
 
@@ -134,10 +133,8 @@ namespace Ipfs
         /// <seealso cref="ToArray"/>
         public MultiHash(byte[] buffer)
         {
-            using (var ms = new MemoryStream(buffer, false))
-            {
-                (Algorithm, Digest) = Read(ms);
-            }
+            using var ms = new MemoryStream(buffer, false);
+            (Algorithm, Digest) = Read(ms);
         }
 
         /// <summary>
@@ -213,10 +210,8 @@ namespace Ipfs
         /// <seealso cref="ToBase58"/>
         public MultiHash(string s)
         {
-            using (var ms = new MemoryStream(s.FromBase58(), false))
-            {
-                (Algorithm, Digest) = Read(ms);
-            }
+            using var ms = new MemoryStream(s.FromBase58(), false);
+            (Algorithm, Digest) = Read(ms);
         }
 
         /// <summary>
@@ -231,10 +226,7 @@ namespace Ipfs
         /// <remarks>
         ///    Equivalent to <code>new MultiHash(s)</code>
         /// </remarks>
-        static public implicit operator MultiHash(string s)
-        {
-            return new MultiHash(s);
-        }
+        public static implicit operator MultiHash(string s) => new(s);
 
         /// <summary>
         ///   The hashing algorithm.
@@ -262,10 +254,7 @@ namespace Ipfs
         ///   The identity hash is used to inline a small amount of data into a <see cref="Cid"/>.
         ///   When <b>true</b>, the <see cref="Digest"/> is also the content.
         /// </remarks>
-        public bool IsIdentityHash
-        {
-            get { return Algorithm.Code == 0; }
-        }
+        public bool IsIdentityHash => Algorithm.Code == 0;
 
         /// <summary>
         ///   Writes the binary representation of the multihash to the specified <see cref="Stream"/>.
@@ -279,10 +268,8 @@ namespace Ipfs
         /// </remarks>
         public void Write(Stream stream)
         {
-            using (var cos = new CodedOutputStream(stream, true))
-            {
-                Write(cos);
-            }
+            using var cos = new CodedOutputStream(stream, true);
+            Write(cos);
         }
 
         /// <summary>
@@ -304,10 +291,8 @@ namespace Ipfs
 
         private (HashingAlgorithm, byte[]) Read(Stream stream)
         {
-            using (var cis = new CodedInputStream(stream, true))
-            {
-                return Read(cis);
-            }
+            using var cis = new CodedInputStream(stream, true);
+            return Read(cis);
         }
 
         private (HashingAlgorithm, byte[]) Read(CodedInputStream stream)
@@ -339,17 +324,14 @@ namespace Ipfs
         /// <inheritdoc />
         public override bool Equals(object obj)
         {
-            var that = obj as MultiHash;
-            return (that is null)
-                ? false
-                : this.Equals(that);
+            return (obj is MultiHash that) && Equals(that);
         }
 
         /// <inheritdoc />
         public bool Equals(MultiHash that)
         {
-            return this.Algorithm.Code == that.Algorithm.Code
-                && this.Digest.SequenceEqual(that.Digest);
+            return Algorithm.Code == that.Algorithm.Code
+                && Digest.SequenceEqual(that.Digest);
         }
 
         /// <summary>
@@ -357,9 +339,15 @@ namespace Ipfs
         /// </summary>
         public static bool operator ==(MultiHash? a, MultiHash? b)
         {
-            if (object.ReferenceEquals(a, b)) return true;
-            if (a is null) return false;
-            if (b is null) return false;
+            if (object.ReferenceEquals(a, b))
+            {
+                return true;
+            }
+
+            if (a is null || b is null)
+            {
+                return false;
+            }
 
             return a.Equals(b);
         }
@@ -367,10 +355,7 @@ namespace Ipfs
         /// <summary>
         ///   Value inequality.
         /// </summary>
-        public static bool operator !=(MultiHash? a, MultiHash? b)
-        {
-            return !(a == b);
-        }
+        public static bool operator !=(MultiHash? a, MultiHash? b) => !(a == b);
 
         /// <summary>
         ///   Returns the <see cref="Base58"/> encoding of the <see cref="MultiHash"/>.
@@ -379,10 +364,7 @@ namespace Ipfs
         ///   A base-58 representaton of the MultiHash.
         /// </returns>
         /// <seealso cref="ToBase58"/>
-        public override string ToString()
-        {
-            return this.ToBase58();
-        }
+        public override string ToString() => ToBase58();
 
         /// <summary>
         ///   Returns the <see cref="Base58"/> encoding of the <see cref="MultiHash"/>.
@@ -392,17 +374,15 @@ namespace Ipfs
         /// </returns>
         public string ToBase58()
         {
-            if (b58String is not null)
+            if (_b58String is not null)
             {
-                return b58String;
+                return _b58String;
             }
 
-            using (var ms = new MemoryStream())
-            {
-                Write(ms);
-                b58String = ms.ToArray().ToBase58();
-                return b58String;
-            }
+            using var ms = new MemoryStream();
+            Write(ms);
+            _b58String = ms.ToArray().ToBase58();
+            return _b58String;
         }
 
         /// <summary>
@@ -427,11 +407,9 @@ namespace Ipfs
         /// </remarks>
         public byte[] ToArray()
         {
-            using (var ms = new MemoryStream())
-            {
-                Write(ms);
-                return ms.ToArray();
-            }
+            using var ms = new MemoryStream();
+            Write(ms);
+            return ms.ToArray();
         }
 
         /// <summary>
@@ -452,7 +430,9 @@ namespace Ipfs
             for (int i = digest.Length - 1; 0 <= i; --i)
             {
                 if (digest[i] != Digest[i])
+                {
                     return false;
+                }
             }
             return true;
         }
@@ -475,7 +455,9 @@ namespace Ipfs
             for (int i = digest.Length - 1; 0 <= i; --i)
             {
                 if (digest[i] != Digest[i])
+                {
                     return false;
+                }
             }
             return true;
         }
@@ -504,10 +486,8 @@ namespace Ipfs
         /// </returns>
         public static MultiHash ComputeHash(byte[] data, string algorithmName = DefaultAlgorithmName)
         {
-            using (var alg = GetHashAlgorithm(algorithmName))
-            {
-                return new MultiHash(algorithmName, alg.ComputeHash(data));
-            }
+            using var alg = GetHashAlgorithm(algorithmName);
+            return new MultiHash(algorithmName, alg.ComputeHash(data));
         }
 
         /// <summary>
@@ -524,10 +504,8 @@ namespace Ipfs
         /// </returns>
         public static MultiHash ComputeHash(Stream data, string algorithmName = DefaultAlgorithmName)
         {
-            using (var alg = GetHashAlgorithm(algorithmName))
-            {
-                return new MultiHash(algorithmName, alg.ComputeHash(data));
-            }
+            using var alg = GetHashAlgorithm(algorithmName);
+            return new MultiHash(algorithmName, alg.ComputeHash(data));
         }
 
         /// <summary>
@@ -536,7 +514,7 @@ namespace Ipfs
         /// <remarks>
         ///   The JSON is just a single string value.
         /// </remarks>
-        class Json : JsonConverter
+        private class Json : JsonConverter
         {
             public override bool CanConvert(Type objectType)
             {
@@ -552,8 +530,7 @@ namespace Ipfs
 
             public override object? ReadJson(JsonReader reader, Type objectType, object? existingValue, JsonSerializer serializer)
             {
-                var s = reader.Value as string;
-                return s is null ? null : new MultiHash(s);
+                return reader.Value is string s ? new MultiHash(s) : null;
             }
         }
     }

@@ -9,7 +9,6 @@ namespace Ipfs
     /// </summary>
     public static class ExceptionAssert
     {
-
         public static T Throws<T>(Action action, string? expectedMessage = null) where T : Exception
         {
             try
@@ -22,7 +21,10 @@ namespace Ipfs
                 if (match is not null)
                 {
                     if (expectedMessage is not null)
+                    {
                         Assert.AreEqual(expectedMessage, match.Message, "Wrong exception message.");
+                    }
+
                     return match;
                 }
 
@@ -31,7 +33,10 @@ namespace Ipfs
             catch (T e)
             {
                 if (expectedMessage is not null)
+                {
                     Assert.AreEqual(expectedMessage, e.Message);
+                }
+
                 return e;
             }
             Assert.Fail("Exception of type {0} should be thrown.", typeof(T));
@@ -40,9 +45,16 @@ namespace Ipfs
             throw new Exception();
         }
 
-        public static Exception Throws(Action action, string? expectedMessage = null)
+        // Avoids analyzer recommendations related to unused values.
+        public static T Throws<T, TTest>(Func<TTest> func) where T : Exception
         {
-            return Throws<Exception>(action, expectedMessage);
+            return Throws<T>(() => { var t = func(); });
+        }
+
+        // Avoids analyzer recommendations related to unused values.
+        public static T Throws<T, TTest>(Func<TTest> func, string? expectedMessage = null) where T : Exception
+        {
+            return Throws<T>(() => { var t = func(); }, expectedMessage);
         }
     }
 }

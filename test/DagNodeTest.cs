@@ -218,7 +218,7 @@ namespace Ipfs
             RoundtripTest(b);
         }
 
-        void RoundtripTest(DagNode a)
+        private static void RoundtripTest(DagNode a)
         {
             var ms = new MemoryStream();
             a.Write(ms);

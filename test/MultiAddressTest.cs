@@ -6,17 +6,16 @@ using Newtonsoft.Json;
 
 namespace Ipfs
 {
-
     [TestClass]
     public class MultiAddressTest
     {
-        const string somewhere = "/ip4/10.1.10.10/tcp/29087/ipfs/QmVcSqVEsvm5RR9mBLjwpb2XjFVn5bPdPL69mL8PH45pPC";
-        const string nowhere = "/ip4/10.1.10.11/tcp/29087/ipfs/QmVcSqVEsvm5RR9mBLjwpb2XjFVn5bPdPL69mL8PH45pPC";
+        private const string Somewhere = "/ip4/10.1.10.10/tcp/29087/ipfs/QmVcSqVEsvm5RR9mBLjwpb2XjFVn5bPdPL69mL8PH45pPC";
+        private const string Nowhere = "/ip4/10.1.10.11/tcp/29087/ipfs/QmVcSqVEsvm5RR9mBLjwpb2XjFVn5bPdPL69mL8PH45pPC";
 
         [TestMethod]
         public void Parsing()
         {
-            var a = new MultiAddress(somewhere);
+            var a = new MultiAddress(Somewhere);
             Assert.AreEqual(3, a.Protocols.Count);
             Assert.AreEqual("ip4", a.Protocols[0].Name);
             Assert.AreEqual("10.1.10.10", a.Protocols[0].Value);
@@ -33,27 +32,27 @@ namespace Ipfs
         [TestMethod]
         public void Unknown_Protocol_Name()
         {
-            ExceptionAssert.Throws<FormatException>(() => new MultiAddress("/foobar/123"));
+            ExceptionAssert.Throws<FormatException, MultiAddress>(() => new MultiAddress("/foobar/123"));
         }
 
         [TestMethod]
         public void Missing_Protocol_Name()
         {
-            ExceptionAssert.Throws<FormatException>(() => new MultiAddress("/"));
+            ExceptionAssert.Throws<FormatException, MultiAddress>(() => new MultiAddress("/"));
         }
 
         [TestMethod]
         public new void ToString()
         {
-            Assert.AreEqual(somewhere, new MultiAddress(somewhere).ToString());
+            Assert.AreEqual(Somewhere, new MultiAddress(Somewhere).ToString());
         }
 
         [TestMethod]
         public void Value_Equality()
         {
-            var a0 = new MultiAddress(somewhere);
-            var a1 = new MultiAddress(somewhere);
-            var b = new MultiAddress(nowhere);
+            var a0 = new MultiAddress(Somewhere);
+            var a1 = new MultiAddress(Somewhere);
+            var b = new MultiAddress(Nowhere);
             MultiAddress? c = null;
             MultiAddress? d = null;
 
@@ -83,9 +82,9 @@ namespace Ipfs
             Assert.AreEqual(a0, a1);
             Assert.AreNotEqual(a0, b);
 
-            Assert.AreEqual<MultiAddress>(a0, a0);
-            Assert.AreEqual<MultiAddress>(a0, a1);
-            Assert.AreNotEqual<MultiAddress>(a0, b);
+            Assert.AreEqual(a0, a0);
+            Assert.AreEqual(a0, a1);
+            Assert.AreNotEqual(a0, b);
 
             Assert.AreEqual(a0.GetHashCode(), a0.GetHashCode());
             Assert.AreEqual(a0.GetHashCode(), a1.GetHashCode());
@@ -96,26 +95,26 @@ namespace Ipfs
         public void Bad_Port()
         {
             var tcp = new MultiAddress("/tcp/65535");
-            ExceptionAssert.Throws<FormatException>(() => new MultiAddress("/tcp/x"));
-            ExceptionAssert.Throws<FormatException>(() => new MultiAddress("/tcp/65536"));
+            ExceptionAssert.Throws<FormatException, MultiAddress>(() => new MultiAddress("/tcp/x"));
+            ExceptionAssert.Throws<FormatException, MultiAddress>(() => new MultiAddress("/tcp/65536"));
 
             var udp = new MultiAddress("/udp/65535");
-            ExceptionAssert.Throws<FormatException>(() => new MultiAddress("/upd/x"));
-            ExceptionAssert.Throws<FormatException>(() => new MultiAddress("/udp/65536"));
+            ExceptionAssert.Throws<FormatException, MultiAddress>(() => new MultiAddress("/upd/x"));
+            ExceptionAssert.Throws<FormatException, MultiAddress>(() => new MultiAddress("/udp/65536"));
         }
 
         [TestMethod]
         public void Bad_IPAddress()
         {
             var ipv4 = new MultiAddress("/ip4/127.0.0.1");
-            ExceptionAssert.Throws<FormatException>(() => new MultiAddress("/ip4/x"));
-            ExceptionAssert.Throws<FormatException>(() => new MultiAddress("/ip4/127."));
-            ExceptionAssert.Throws<FormatException>(() => new MultiAddress("/ip4/::1"));
+            ExceptionAssert.Throws<FormatException, MultiAddress>(() => new MultiAddress("/ip4/x"));
+            ExceptionAssert.Throws<FormatException, MultiAddress>(() => new MultiAddress("/ip4/127."));
+            ExceptionAssert.Throws<FormatException, MultiAddress>(() => new MultiAddress("/ip4/::1"));
 
             var ipv6 = new MultiAddress("/ip6/::1");
-            ExceptionAssert.Throws<FormatException>(() => new MultiAddress("/ip6/x"));
-            ExceptionAssert.Throws<FormatException>(() => new MultiAddress("/ip6/03:"));
-            ExceptionAssert.Throws<FormatException>(() => new MultiAddress("/ip6/127.0.0.1"));
+            ExceptionAssert.Throws<FormatException, MultiAddress>(() => new MultiAddress("/ip6/x"));
+            ExceptionAssert.Throws<FormatException, MultiAddress>(() => new MultiAddress("/ip6/03:"));
+            ExceptionAssert.Throws<FormatException, MultiAddress>(() => new MultiAddress("/ip6/127.0.0.1"));
         }
 
         [TestMethod]
@@ -132,7 +131,7 @@ namespace Ipfs
             };
             foreach (var badCase in badCases)
             {
-                ExceptionAssert.Throws<Exception>(() => new MultiAddress(badCase));
+                ExceptionAssert.Throws<Exception, MultiAddress>(() => new MultiAddress(badCase));
             }
          }
 
@@ -141,7 +140,7 @@ namespace Ipfs
         {
             var addresses = new[]
             {
-                somewhere,
+                Somewhere,
                 "/ip4/1.2.3.4/tcp/80/http",
                 "/ip6/3ffe:1900:4545:3:200:f8ff:fe21:67cf/tcp/443/https",
                 "/ip6/3ffe:1900:4545:3:200:f8ff:fe21:67cf/udp/8001",
@@ -171,33 +170,33 @@ namespace Ipfs
                 ma0.Write(ms);
                 ms.Position = 0;
                 var ma1 = new MultiAddress(ms);
-                Assert.AreEqual<MultiAddress>(ma0, ma1);
+                Assert.AreEqual(ma0, ma1);
 
                 var ma2 = new MultiAddress(ma0.ToString());
-                Assert.AreEqual<MultiAddress>(ma0, ma2);
+                Assert.AreEqual(ma0, ma2);
 
                 var ma3 = new MultiAddress(ma0.ToArray());
-                Assert.AreEqual<MultiAddress>(ma0, ma3);
+                Assert.AreEqual(ma0, ma3);
             }
         }
 
         [TestMethod]
         public void Reading_Invalid_Code()
         {
-            ExceptionAssert.Throws<InvalidDataException>(() => new MultiAddress(new byte[] { 0x7F }));
+            ExceptionAssert.Throws<InvalidDataException, MultiAddress>(() => new MultiAddress(new byte[] { 0x7F }));
         }
 
 
         [TestMethod]
         public void Reading_Invalid_Text()
         {
-            ExceptionAssert.Throws<FormatException>(() => new MultiAddress("tcp/80"));
+            ExceptionAssert.Throws<FormatException, MultiAddress>(() => new MultiAddress("tcp/80"));
         }
 
         [TestMethod]
         public void Implicit_Conversion_From_String()
         {
-            MultiAddress a = somewhere;
+            MultiAddress a = Somewhere;
             Assert.IsInstanceOfType(a, typeof(MultiAddress));
         }
 
@@ -322,7 +321,7 @@ namespace Ipfs
         {
             var a = new MultiAddress("/ip6/fe80::7573:b0a8:46b0:0bad/tcp/4009");
             string json = JsonConvert.SerializeObject(a);
-            Assert.AreEqual($"\"{a.ToString()}\"", json);
+            Assert.AreEqual($"\"{a}\"", json);
             var b = JsonConvert.DeserializeObject<MultiAddress>(json);
             Assert.IsNotNull(b);
             Assert.AreEqual(a.ToString(), b!.ToString());
@@ -409,4 +408,3 @@ namespace Ipfs
         }
     }
 }
-

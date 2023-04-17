@@ -7,7 +7,7 @@ namespace Ipfs
     [TestClass]
     public class Base32EncodeTests
     {
-        byte[] GetStringBytes(string x)
+        private static byte[] GetStringBytes(string x)
         {
             return Encoding.ASCII.GetBytes(x);
         }
@@ -58,7 +58,7 @@ namespace Ipfs
     [TestClass]
     public class Base32DecodeTests
     {
-        byte[] GetStringBytes(string x)
+        private static byte[] GetStringBytes(string x)
         {
             return Encoding.ASCII.GetBytes(x);
         }

@@ -28,9 +28,9 @@ namespace Ipfs
         [TestMethod]
         public void Java()
         {
-            String input = "QmPZ9gcCEpqKTo6aq61g2nXGUhM4iCL3ewB6LDXZCtioEB";
+            string input = "QmPZ9gcCEpqKTo6aq61g2nXGUhM4iCL3ewB6LDXZCtioEB";
             byte[] output = Base58.Decode(input);
-            String encoded = Base58.Encode(output);
+            string encoded = Base58.Encode(output);
             Assert.AreEqual(input, encoded);
         }
 

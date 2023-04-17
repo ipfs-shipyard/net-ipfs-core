@@ -9,6 +9,10 @@
  */
 using System;
 
+#pragma warning disable IDE1006 // Naming Styles
+#pragma warning disable IDE0025 // Use expression body for property
+#pragma warning disable IDE0027 // Use expression body for accessor
+
 namespace Ipfs.Cryptography
 {
     internal abstract class Keccak : System.Security.Cryptography.HashAlgorithm
@@ -65,7 +69,10 @@ namespace Ipfs.Cryptography
         protected Keccak(int hashBitLength)
         {
             if (hashBitLength != 224 && hashBitLength != 256 && hashBitLength != 384 && hashBitLength != 512)
+            {
                 throw new ArgumentException("hashBitLength must be 224, 256, 384, or 512", "hashBitLength");
+            }
+
             Initialize();
             HashSizeValue = hashBitLength;
             switch (hashBitLength)
@@ -153,11 +160,19 @@ namespace Ipfs.Cryptography
         protected override void HashCore(byte[] array, int ibStart, int cbSize)
         {
             if (ibStart < 0)
+            {
                 throw new ArgumentOutOfRangeException("ibStart");
+            }
+
             if (cbSize > array.Length)
+            {
                 throw new ArgumentOutOfRangeException("cbSize");
+            }
+
             if (ibStart + cbSize > array.Length)
+            {
                 throw new ArgumentOutOfRangeException("ibStart or cbSize");
+            }
         }
     }
 }

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Ipfs
+﻿namespace Ipfs
 {
     /// <summary>
     ///   Information about a cryptographic key.

@@ -1,7 +1,5 @@
-﻿using Ipfs.CoreApi;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
+using Ipfs.CoreApi;
 
 namespace Ipfs
 {
@@ -36,6 +34,5 @@ namespace Ipfs
         ///   A sender unique id for the message.
         /// </value>
         byte[] SequenceNumber { get; }
-
     }
 }

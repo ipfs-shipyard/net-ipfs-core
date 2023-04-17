@@ -1,7 +1,5 @@
 ﻿using Newtonsoft.Json.Linq;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -25,7 +23,7 @@ namespace Ipfs.CoreApi
         /// <returns>
         ///   A <see cref="JObject"/> containing the configuration.
         /// </returns>
-        Task<JObject> GetAsync(CancellationToken cancel = default(CancellationToken));
+        Task<JObject> GetAsync(CancellationToken cancel = default);
 
         /// <summary>
         ///   Gets the value of a configuration key.
@@ -45,7 +43,7 @@ namespace Ipfs.CoreApi
         /// <remarks>
         ///   Keys are case sensistive.
         /// </remarks>
-        Task<JToken> GetAsync(string key, CancellationToken cancel = default(CancellationToken));
+        Task<JToken> GetAsync(string key, CancellationToken cancel = default);
 
         /// <summary>
         ///   Adds or replaces a configuration value.
@@ -59,7 +57,7 @@ namespace Ipfs.CoreApi
         /// <param name="cancel">
         ///   Is used to stop the task.  When cancelled, the <see cref="TaskCanceledException"/> is raised.
         /// </param>
-        Task SetAsync(string key, string value, CancellationToken cancel = default(CancellationToken));
+        Task SetAsync(string key, string value, CancellationToken cancel = default);
 
         /// <summary>
         ///   Adds or replaces a configuration value.
@@ -73,7 +71,7 @@ namespace Ipfs.CoreApi
         /// <param name="cancel">
         ///   Is used to stop the task.  When cancelled, the <see cref="TaskCanceledException"/> is raised.
         /// </param>
-        Task SetAsync(string key, JToken value, CancellationToken cancel = default(CancellationToken));
+        Task SetAsync(string key, JToken value, CancellationToken cancel = default);
 
         /// <summary>
         ///   Replaces the entire configuration.

@@ -46,13 +46,7 @@
         ///   A value less than 1 indicates that we are in debt to the 
         ///   <see cref="Peer"/>.
         /// </value>
-        public float DebtRatio
-        {
-            get
-            {
-                return (float)DataSent / (float)(DataReceived + 1); // +1 is to prevent division by zero
-            }
-        }
+        public float DebtRatio => (float)DataSent / (float)(DataReceived + 1); // +1 is to prevent division by zero
 
         /// <summary>
         ///   Determines if we owe the <see cref="Peer"/> some blocks.
@@ -61,6 +55,5 @@
         ///   <b>true</b> if we owe data to the peer; otherwise, <b>false</b>.
         /// </value>
         public bool IsInDebt => DebtRatio < 1;
-
     }
 }

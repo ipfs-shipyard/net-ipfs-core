@@ -11,8 +11,8 @@ namespace Ipfs
     /// </remarks>
     public class Peer : IEquatable<Peer>
     {
-        private static readonly MultiAddress[] noAddress = Array.Empty<MultiAddress>();
-        private const string unknown = "unknown/0.0";
+        private static readonly MultiAddress[] NoAddress = Array.Empty<MultiAddress>();
+        private const string Unknown = "unknown/0.0";
 
         /// <summary>
         ///   Universally unique identifier.
@@ -43,7 +43,7 @@ namespace Ipfs
         /// <value>
         ///   Where the peer can be found.  The default is an empty sequence.
         /// </value>
-        public IEnumerable<MultiAddress> Addresses { get; set; } = noAddress;
+        public IEnumerable<MultiAddress> Addresses { get; set; } = NoAddress;
 
         /// <summary>
         ///   The name and version of the IPFS software.
@@ -55,7 +55,7 @@ namespace Ipfs
         ///   There is no specification that describes the agent version string.  The default
         ///   is "unknown/0.0".
         /// </remarks>
-        public string AgentVersion { get; set; } = unknown;
+        public string AgentVersion { get; set; } = Unknown;
 
         /// <summary>
         ///  The name and version of the supported IPFS protocol.
@@ -67,7 +67,7 @@ namespace Ipfs
         ///   There is no specification that describes the protocol version string. The default
         ///   is "unknown/0.0".
         /// </remarks>
-        public string ProtocolVersion { get; set; } = unknown;
+        public string ProtocolVersion { get; set; } = Unknown;
 
         /// <summary>
         ///   The <see cref="MultiAddress"/> that the peer is connected on.
@@ -98,11 +98,11 @@ namespace Ipfs
         public bool IsValid()
         {
             if (Id is null)
+            {
                 return false;
-            if (PublicKey is not null && !Id.Matches(Convert.FromBase64String(PublicKey)))
-                return false;
+            }
 
-            return true;
+            return PublicKey is null || Id.Matches(Convert.FromBase64String(PublicKey));
         }
 
         /// <inheritdoc />
@@ -114,26 +114,26 @@ namespace Ipfs
         /// <inheritdoc />
         public override bool Equals(object? obj)
         {
-            var that = obj as Peer;
-            return (that is null)
-                ? false
-                : this.Equals(that);
+            return (obj is Peer that) && Equals(that);
         }
 
         /// <inheritdoc />
-        public bool Equals(Peer that)
-        {
-            return this.Id == that.Id;
-        }
+        public bool Equals(Peer that) => Id == that.Id;
 
         /// <summary>
         ///   Value equality.
         /// </summary>
         public static bool operator ==(Peer? a, Peer? b)
         {
-            if (object.ReferenceEquals(a, b)) return true;
-            if (a is null) return false;
-            if (b is null) return false;
+            if (object.ReferenceEquals(a, b))
+            {
+                return true;
+            }
+
+            if (a is null || b is null)
+            {
+                return false;
+            }
 
             return a.Equals(b);
         }
@@ -141,10 +141,7 @@ namespace Ipfs
         /// <summary>
         ///   Value inequality.
         /// </summary>
-        public static bool operator !=(Peer? a, Peer? b)
-        {
-            return !(a == b);
-        }
+        public static bool operator !=(Peer? a, Peer? b) => !(a == b);
 
         /// <summary>
         ///   Returns the <see cref="Base58"/> encoding of the <see cref="Id"/>.
@@ -169,9 +166,6 @@ namespace Ipfs
         /// <remarks>
         ///    Equivalent to <code>new Peer { Id = s }</code>
         /// </remarks>
-        static public implicit operator Peer(string s)
-        {
-            return new Peer { Id = s };
-        }
+        public static implicit operator Peer(string s) => new() { Id = s };
     }
 }
