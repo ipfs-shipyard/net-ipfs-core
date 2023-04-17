@@ -5,11 +5,9 @@
  * 
  * The SHA3 package doesn't create .Net Standard package.
  * This is a copy of https://bitbucket.org/jdluzen/sha3/raw/d1fd55dc225d18a7fb61515b62d3c8f164d2e788/SHA3/SHA3.cs
+ * with nullable modifications.
  */
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace Ipfs.Cryptography
 {
@@ -23,8 +21,8 @@ namespace Ipfs.Cryptography
 
         public readonly ulong[] RoundConstants;
 
-        protected ulong[] state;
-        protected byte[] buffer;
+        protected ulong[] state = new ulong[5 * 5];  //1600 bits
+        protected byte[]? buffer;
         protected int buffLength;
         protected int keccakR;
 
@@ -121,7 +119,7 @@ namespace Ipfs.Cryptography
 
         protected void AddToBuffer(byte[] array, ref int offset, ref int count)
         {
-            int amount = Math.Min(count, buffer.Length - buffLength);
+            int amount = Math.Min(count, buffer!.Length - buffLength);
             Buffer.BlockCopy(array, offset, buffer, buffLength, amount);
             offset += amount;
             buffLength += amount;
@@ -149,14 +147,11 @@ namespace Ipfs.Cryptography
         public override void Initialize()
         {
             buffLength = 0;
-            state = new ulong[5 * 5];//1600 bits
             HashValue = null;
         }
 
         protected override void HashCore(byte[] array, int ibStart, int cbSize)
         {
-            if (array == null)
-                throw new ArgumentNullException("array");
             if (ibStart < 0)
                 throw new ArgumentOutOfRangeException("ibStart");
             if (cbSize > array.Length)

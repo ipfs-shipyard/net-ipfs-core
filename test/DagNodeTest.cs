@@ -1,11 +1,8 @@
-﻿using Ipfs;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Linq;
 using System.Text;
 using System.IO;
-using Google.Protobuf;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Ipfs
 {
@@ -15,7 +12,7 @@ namespace Ipfs
         [TestMethod]
         public void EmptyDAG()
         {
-            var node = new DagNode((byte[]) null);
+            var node = new DagNode((byte[]?) null);
             Assert.AreEqual(0, node.DataBytes.Length);
             Assert.AreEqual(0, node.Links.Count());
             Assert.AreEqual(0, node.Size);
@@ -188,13 +185,6 @@ namespace Ipfs
         }
 
         [TestMethod]
-        public void Null_Stream()
-        {
-            ExceptionAssert.Throws(() => new DagNode((CodedInputStream)null));
-            ExceptionAssert.Throws(() => new DagNode((Stream)null));
-        }
-
-        [TestMethod]
         public void Link_With_CID_V1()
         {
             var data = "124F0A4401551340309ECC489C12D6EB4CC40F50C902F2B4D0ED77EE511A7C7A9BCD3CA86D4CD86F989DD35BC5FF499670DA34255B45B0CFD830E81F605DCF7DC5542E93AE9CD76F120568656C6C6F180B0A020801"
@@ -214,8 +204,8 @@ namespace Ipfs
         [TestMethod]
         public void Setting_Id()
         {
-            var a = new DagNode((byte[])null);
-            var b = new DagNode((byte[])null)
+            var a = new DagNode((byte[]?)null);
+            var b = new DagNode((byte[]?)null)
             {
                 // Wrong hash but allowed.
                 Id = "QmdfTbBqBPQ7VNxZEYEj14VmRuZBkqFbiwReogJgS1zR1m"

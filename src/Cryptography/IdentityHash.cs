@@ -1,13 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Security.Cryptography;
-using System.Text;
 
 namespace Ipfs.Cryptography
 {
-    class IdentityHash : HashAlgorithm
+    internal class IdentityHash : HashAlgorithm
     {
-        byte[] digest;
+        byte[]? digest;
 
         public override void Initialize()
         {
@@ -15,7 +13,7 @@ namespace Ipfs.Cryptography
 
         protected override void HashCore(byte[] array, int ibStart, int cbSize)
         {
-            if (digest == null)
+            if (digest is null)
             {
                 digest = new byte[cbSize];
                 Buffer.BlockCopy(array, ibStart, digest, 0, cbSize);
@@ -30,7 +28,7 @@ namespace Ipfs.Cryptography
 
         protected override byte[] HashFinal()
         {
-            return digest;
+            return digest ?? Array.Empty<byte>();
         }
     }
 }

@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Ipfs.CoreApi
 {
@@ -11,17 +9,17 @@ namespace Ipfs.CoreApi
     public class TransferProgress
     {
         /// <summary>
-        ///   The name of the item being trasfered.
+        ///   The name of the item being transferred.
         /// </summary>
         /// <value>
         ///   Typically, a relative file path.
         /// </value>
-        public string Name;
+        public string? Name { get; set; }
 
         /// <summary>
-        ///   The cumuative number of bytes transfered for
+        ///   The cumuative number of bytes transferred for
         ///   the <see cref="Name"/>.
         /// </summary>
-        public ulong Bytes;
+        public ulong Bytes { get; set; }
     }
 }

@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -44,7 +42,7 @@ namespace Ipfs.CoreApi
         /// <remarks>
         ///   Waits for another peer to supply the block with the <paramref name="id"/>.
         /// </remarks>
-        Task<IDataBlock> GetAsync(Cid id, CancellationToken cancel = default(CancellationToken));
+        Task<IDataBlock> GetAsync(Cid id, CancellationToken cancel = default);
 
         /// <summary>
         ///   The blocks that are needed by a peer.
@@ -60,7 +58,7 @@ namespace Ipfs.CoreApi
         ///   A task that represents the asynchronous operation. The task's value
         ///   contains the sequence of blocks needed by the <paramref name="peer"/>.
         /// </returns>
-        Task<IEnumerable<Cid>> WantsAsync(MultiHash peer = null, CancellationToken cancel = default(CancellationToken));
+        Task<IEnumerable<Cid>> WantsAsync(MultiHash? peer = null, CancellationToken cancel = default);
 
         /// <summary>
         ///   Remove the CID from the want list.
@@ -78,7 +76,7 @@ namespace Ipfs.CoreApi
         ///   Any outstanding <see cref="GetAsync(Cid, CancellationToken)"/> for the
         ///   <paramref name="id"/> are cancelled.
         /// </remarks>
-        Task UnwantAsync(Cid id, CancellationToken cancel = default(CancellationToken));
+        Task UnwantAsync(Cid id, CancellationToken cancel = default);
 
         /// <summary>
         ///   Gets information on the blocks exchanged with a specific <see cref="Peer"/>.
@@ -94,6 +92,6 @@ namespace Ipfs.CoreApi
         ///   A task that represents the asynchronous operation. The task's value
         ///   contains the <see cref="BitswapLedger"/> for the <paramref name="peer"/>.
         /// </returns>
-        Task<BitswapLedger> LedgerAsync(Peer peer, CancellationToken cancel = default(CancellationToken));
+        Task<BitswapLedger> LedgerAsync(Peer peer, CancellationToken cancel = default);
     }
 }

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace Ipfs.Registry
 {
@@ -91,7 +90,7 @@ namespace Ipfs.Registry
         /// <value>
         ///   A unique name.
         /// </value>
-        public string Name { get; private set; }
+        public string Name { get; private set; } = string.Empty;
 
         /// <summary>
         ///   The IPFS code assigned to the algorithm.
@@ -104,12 +103,12 @@ namespace Ipfs.Registry
         /// <summary>
         ///   Returns a function that can return a string from a byte array.
         /// </summary>
-        public Func<byte[], string> Encode { get; private set; }
+        public Func<byte[], string> Encode { get; private set; } = _ => throw new NotImplementedException();
 
         /// <summary>
         ///   Returns a function that can return a byte array from a string.
         /// </summary>
-        public Func<string, byte[]> Decode { get; private set; }
+        public Func<string, byte[]> Decode { get; private set; } = _ => throw new NotImplementedException();
 
         /// <summary>
         ///   Use <see cref="Register"/> to create a new instance of a <see cref="MultiBaseAlgorithm"/>.
@@ -147,23 +146,19 @@ namespace Ipfs.Registry
         ///   A new <see cref="MultiBaseAlgorithm"/>.
         /// </returns>
         public static MultiBaseAlgorithm Register(
-            string name, char code,
-            Func<byte[], string> encode = null,
-            Func<string, byte[]> decode = null)
+            string name,
+            char code,
+            Func<byte[], string>? encode = null,
+            Func<string, byte[]>? decode = null)
         {
             if (string.IsNullOrWhiteSpace(name))
-                throw new ArgumentNullException("name");
+                throw new ArgumentNullException(nameof(name));
             if (Names.ContainsKey(name))
-                throw new ArgumentException(string.Format("The IPFS multi-base algorithm name '{0}' is already defined.", name));
+                throw new ArgumentException($"The IPFS multi-base algorithm name '{name}' is already defined.");
             if (Codes.ContainsKey(code))
-                throw new ArgumentException(string.Format("The IPFS multi-base algorithm code '{0}' is already defined.", code));
-            if (encode == null) {
-                encode = (bytes) => { throw new NotImplementedException(string.Format("The IPFS encode multi-base algorithm '{0}' is not implemented.", name)); };
-            }
-            if (decode == null)
-            {
-                decode = (s) => { throw new NotImplementedException(string.Format("The IPFS decode multi-base algorithm '{0}' is not implemented.", name)); };
-            }
+                throw new ArgumentException($"The IPFS multi-base algorithm code '{code}' is already defined.");
+            encode ??= bytes => throw new NotImplementedException($"The IPFS encode multi-base algorithm '{name}' is not implemented.");
+            decode ??= s => throw new NotImplementedException($"The IPFS decode multi-base algorithm '{name}' is not implemented.");
 
             var a = new MultiBaseAlgorithm
             {

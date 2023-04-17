@@ -1,11 +1,9 @@
-﻿using Google.Protobuf;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.Serialization;
-using System.Text;
-using System.Threading.Tasks;
+using Google.Protobuf;
 
 namespace Ipfs
 {
@@ -19,9 +17,9 @@ namespace Ipfs
     [DataContract]
     public class DagNode : IMerkleNode<IMerkleLink>
     {
-        Cid id;
-        string hashAlgorithm = MultiHash.DefaultAlgorithmName;
-        long? size;
+        private Cid? id;
+        private string hashAlgorithm = MultiHash.DefaultAlgorithmName;
+        private long? size;
 
         /// <summary>
         ///   Create a new instance of a <see cref="DagNode"/> with the specified
@@ -37,10 +35,10 @@ namespace Ipfs
         ///   The name of the hashing algorithm to use; defaults to 
         ///   <see cref="MultiHash.DefaultAlgorithmName"/>.
         /// </param>
-        public DagNode(byte[] data, IEnumerable<IMerkleLink> links = null, string hashAlgorithm = MultiHash.DefaultAlgorithmName)
+        public DagNode(byte[]? data, IEnumerable<IMerkleLink>? links = null, string hashAlgorithm = MultiHash.DefaultAlgorithmName)
         {
-            this.DataBytes = data ?? (new byte[0]);
-            this.Links = (links ?? (new DagLink[0]))
+            this.DataBytes = data ?? Array.Empty<byte>();
+            this.Links = (links ?? Array.Empty<DagLink>())
                 .OrderBy(link => link.Name ?? "");
             this.hashAlgorithm = hashAlgorithm;
         }
@@ -73,11 +71,11 @@ namespace Ipfs
 
         /// <inheritdoc />
         [DataMember]
-        public IEnumerable<IMerkleLink> Links { get; private set; }
+        public IEnumerable<IMerkleLink> Links { get; private set; } = Enumerable.Empty<IMerkleLink>();
 
         /// <inheritdoc />
         [DataMember]
-        public byte[] DataBytes { get; private set; }
+        public byte[] DataBytes { get; private set; } = Array.Empty<byte>();
 
         /// <inheritdoc />
         public Stream DataStream
@@ -96,10 +94,7 @@ namespace Ipfs
         {
             get
             {
-                if (!size.HasValue)
-                {
-                    ComputeSize();
-                }
+                size ??= ComputeSize();
                 return size.Value;
             }
         }
@@ -110,19 +105,13 @@ namespace Ipfs
         {
             get
             {
-                if (id == null)
-                {
-                   ComputeHash();
-                }
+                id ??= ComputeHash();
                 return id;
             }
             set
             {
                 id = value;
-                if (id != null)
-                {
-                    hashAlgorithm = id.Hash.Algorithm.Name;
-                }
+                hashAlgorithm = id.Hash.Algorithm.Name;
             }
         }
 
@@ -237,9 +226,6 @@ namespace Ipfs
         /// </param>
         public void Write(CodedOutputStream stream)
         {
-            if (stream == null)
-                throw new ArgumentNullException("stream");
-
             foreach (var link in Links.Select(l => new DagLink(l)))
             {
                 using (var linkStream = new MemoryStream())
@@ -293,8 +279,7 @@ namespace Ipfs
                 }
             }
 
-            if (DataBytes == null)
-                DataBytes = new byte[0];
+            DataBytes ??= Array.Empty<byte>();
             Links = links.ToArray();
         }
 
@@ -313,25 +298,24 @@ namespace Ipfs
             }
         }
 
-        void ComputeHash()
+        private MultiHash ComputeHash()
         {
             using (var ms = new MemoryStream())
             {
                 Write(ms);
                 size = ms.Position;
                 ms.Position = 0;
-                id = MultiHash.ComputeHash(ms, hashAlgorithm);
+                return MultiHash.ComputeHash(ms, hashAlgorithm);
             }
         }
 
-        void ComputeSize()
+        private long ComputeSize()
         {
             using (var ms = new MemoryStream())
             {
                 Write(ms);
-                size = ms.Position;
+                return ms.Position;
             }
         }
     }
-
 }

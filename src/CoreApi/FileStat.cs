@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Ipfs.CoreApi
 {
@@ -13,7 +11,7 @@ namespace Ipfs.CoreApi
         /// <summary>
         /// The <see cref="Cid"/> of the file or directory.
         /// </summary>
-        public Cid Hash { get; set; }
+        public Cid? Hash { get; set; }
 
         /// <summary>
         ///   The serialised size (in bytes) of the linked node.

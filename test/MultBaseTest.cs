@@ -1,9 +1,8 @@
-using Ipfs.Registry;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
+using Ipfs.Registry;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Ipfs
 {
@@ -28,16 +27,10 @@ namespace Ipfs
         }
 
         [TestMethod]
-        public void Encode_Null_Data_Not_Allowed()
-        {
-            ExceptionAssert.Throws<ArgumentNullException>(() => MultiBase.Encode(null));
-        }
-
-        [TestMethod]
         public void Decode_Bad_Formats()
         {
-            ExceptionAssert.Throws<ArgumentNullException>(() => MultiBase.Decode(null));
-            ExceptionAssert.Throws<ArgumentNullException>(() => MultiBase.Decode(""));
+            ExceptionAssert.Throws<ArgumentNullException>(() => MultiBase.Decode(null!));
+            ExceptionAssert.Throws<ArgumentNullException>(() => MultiBase.Decode(string.Empty));
             ExceptionAssert.Throws<ArgumentNullException>(() => MultiBase.Decode("   "));
 
             ExceptionAssert.Throws<FormatException>(() => MultiBase.Decode("?"));
@@ -48,12 +41,12 @@ namespace Ipfs
 
         class TestVector
         {
-            public string Algorithm { get; set; }
-            public string Input { get; set; }
-            public string Output { get; set; }
+            public string? Algorithm { get; set; }
+            public string? Input { get; set; }
+            public string? Output { get; set; }
         }
 
-        TestVector[] TestVectors = new TestVector[]
+        readonly TestVector[] TestVectors = new TestVector[]
         {
             new TestVector {
                 Algorithm = "base16",
@@ -191,8 +184,8 @@ namespace Ipfs
         {
             foreach (var v in TestVectors)
             {
-                var bytes = Encoding.UTF8.GetBytes(v.Input);
-                var s = MultiBase.Encode(bytes, v.Algorithm);
+                var bytes = Encoding.UTF8.GetBytes(v.Input!);
+                var s = MultiBase.Encode(bytes, v.Algorithm!);
                 Assert.AreEqual(v.Output, s);
                 CollectionAssert.AreEqual(bytes, MultiBase.Decode(s));
             }
@@ -201,7 +194,7 @@ namespace Ipfs
         [TestMethod]
         public void EmptyData()
         {
-            var empty = new byte[0];
+            var empty = Array.Empty<byte>();
             foreach (var alg in MultiBaseAlgorithm.All)
             {
                 var s = MultiBase.Encode(empty, alg.Name);

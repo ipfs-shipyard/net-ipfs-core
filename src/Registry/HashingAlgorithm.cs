@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using Ipfs.Cryptography;
 using System.Security.Cryptography;
 using BC = Org.BouncyCastle.Crypto.Digests;
-
 
 namespace Ipfs.Registry
 {
@@ -82,7 +80,7 @@ namespace Ipfs.Registry
         /// <value>
         ///   A unique name.
         /// </value>
-        public string Name { get; private set; }
+        public string Name { get; private set; } = string.Empty;
 
         /// <summary>
         ///   The IPFS number assigned to the hashing algorithm.
@@ -105,7 +103,7 @@ namespace Ipfs.Registry
         ///   Returns a cryptographic hash algorithm that can compute
         ///   a hash (digest).
         /// </summary>
-        public Func<HashAlgorithm> Hasher { get; private set; }
+        public Func<HashAlgorithm> Hasher { get; private set; } = static () => throw new NotImplementedException();
 
         /// <summary>
         ///   Use <see cref="Register"/> to create a new instance of a <see cref="HashingAlgorithm"/>.
@@ -141,16 +139,15 @@ namespace Ipfs.Registry
         /// <returns>
         ///   A new <see cref="HashingAlgorithm"/>.
         /// </returns>
-        public static HashingAlgorithm Register(string name, int code, int digestSize, Func<HashAlgorithm> hasher = null)
+        public static HashingAlgorithm Register(string name, int code, int digestSize, Func<HashAlgorithm>? hasher = null)
         {
             if (string.IsNullOrWhiteSpace(name))
-                throw new ArgumentNullException("name");
+                throw new ArgumentNullException(nameof(name));
             if (Names.ContainsKey(name))
-                throw new ArgumentException(string.Format("The IPFS hashing algorithm '{0}' is already defined.", name));
+                throw new ArgumentException($"The IPFS hashing algorithm '{name}' is already defined.");
             if (Codes.ContainsKey(code))
-                throw new ArgumentException(string.Format("The IPFS hashing algorithm code 0x{0:x2} is already defined.", code));
-            if (hasher == null)
-                hasher = () => { throw new NotImplementedException(string.Format("The IPFS hashing algorithm '{0}' is not implemented.", name)); };
+                throw new ArgumentException($"The IPFS hashing algorithm code 0x{code:x2} is already defined.");
+            hasher ??= () => throw new NotImplementedException($"The IPFS hashing algorithm '{name}' is not implemented.");
 
             var a = new HashingAlgorithm
             {
@@ -180,13 +177,13 @@ namespace Ipfs.Registry
         public static HashingAlgorithm RegisterAlias(string alias, string name)
         {
             if (string.IsNullOrWhiteSpace(alias))
-                throw new ArgumentNullException("alias");
+                throw new ArgumentNullException(nameof(alias));
             if (Names.ContainsKey(alias))
-                throw new ArgumentException(string.Format("The IPFS hashing algorithm '{0}' is already defined and cannot be used as an alias.", alias));
+                throw new ArgumentException($"The IPFS hashing algorithm '{alias}' is already defined and cannot be used as an alias.");
             if (string.IsNullOrWhiteSpace(name))
-                throw new ArgumentNullException("name");
+                throw new ArgumentNullException(nameof(name));
             if (!Names.TryGetValue(name, out HashingAlgorithm existing))
-                throw new ArgumentException(string.Format("The IPFS hashing algorithm '{0}' is not defined.", name));
+                throw new ArgumentException($"The IPFS hashing algorithm '{name}' is not defined.");
 
             var a = new HashingAlgorithm
             {

@@ -1,10 +1,9 @@
 ﻿using System;
-using System.Text;
 using System.Collections.Generic;
-using System.Linq;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.IO;
+using System.Text;
 using Google.Protobuf;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Newtonsoft.Json;
 
 namespace Ipfs
@@ -255,8 +254,8 @@ namespace Ipfs
             var a0 = Cid.Decode("zb2rhj7crUKTQYRGCRATFaQ6YFLTde2YzdqbbhAASkL9uRDXn");
             var a1 = Cid.Decode("zb2rhj7crUKTQYRGCRATFaQ6YFLTde2YzdqbbhAASkL9uRDXn");
             var b = Cid.Decode("QmaozNR7DZHQK1ZcU9p7QdrshMvXqWK6gpu5rmrkPdT3L5");
-            Cid c = null;
-            Cid d = null;
+            Cid? c = null;
+            Cid? d = null;
 
             Assert.IsTrue(c == d);
             Assert.IsFalse(c == b);
@@ -394,14 +393,14 @@ namespace Ipfs
 
         class CidAndX
         {
-            public Cid Cid;
+            public Cid? Cid;
             public int X;
         }
 
         [TestMethod]
         public void JsonSerialization()
         {
-            Cid a = "QmaozNR7DZHQK1ZcU9p7QdrshMvXqWK6gpu5rmrkPdT3L4";
+            Cid? a = "QmaozNR7DZHQK1ZcU9p7QdrshMvXqWK6gpu5rmrkPdT3L4";
             string json = JsonConvert.SerializeObject(a);
             Assert.AreEqual($"\"{a.Encode()}\"", json);
             var b = JsonConvert.DeserializeObject<Cid>(json);
@@ -415,13 +414,15 @@ namespace Ipfs
             var x = new CidAndX { Cid = "QmaozNR7DZHQK1ZcU9p7QdrshMvXqWK6gpu5rmrkPdT3L4", X = 42 };
             json = JsonConvert.SerializeObject(x);
             var y = JsonConvert.DeserializeObject<CidAndX>(json);
-            Assert.AreEqual(x.Cid, y.Cid);
+            Assert.IsNotNull(y);
+            Assert.AreEqual(x.Cid, y!.Cid);
             Assert.AreEqual(x.X, y.X);
 
             x.Cid = null;
             json = JsonConvert.SerializeObject(x);
             y = JsonConvert.DeserializeObject<CidAndX>(json);
-            Assert.AreEqual(x.Cid, y.Cid);
+            Assert.IsNotNull(y);
+            Assert.AreEqual(x.Cid, y!.Cid);
             Assert.AreEqual(x.X, y.X);
         }
 

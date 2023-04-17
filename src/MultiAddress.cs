@@ -1,12 +1,12 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.IO;
-using Google.Protobuf;
-using Newtonsoft.Json;
+using System.Linq;
 using System.Net;
 using System.Net.Sockets;
+using System.Text;
+using Google.Protobuf;
+using Newtonsoft.Json;
 
 namespace Ipfs
 {
@@ -155,7 +155,7 @@ namespace Ipfs
             {
                 var protocol = Protocols
                     .LastOrDefault(p => p.Name == "ipfs" || p.Name == "p2p");
-                if (protocol == null)
+                if (protocol is null || protocol.Value is null)
                 {
                     throw new Exception($"'{this}' is missing the peer ID. Add the 'ipfs' or 'p2p' protocol.");
                 }
@@ -344,7 +344,7 @@ namespace Ipfs
                 int c;
                 while (-1 != (c = stream.Read()) && c != '/')
                     name.Append((char)c);
-                
+
                 if (name.Length == 0)
                     break;
 
@@ -377,7 +377,7 @@ namespace Ipfs
         public override bool Equals(object obj)
         {
             var that = obj as MultiAddress;
-            return (that == null)
+            return (that is null)
                 ? false
                 : this.Equals(that);
         }
@@ -400,7 +400,7 @@ namespace Ipfs
         /// <summary>
         ///   Value equality.
         /// </summary>
-        public static bool operator ==(MultiAddress a, MultiAddress b)
+        public static bool operator ==(MultiAddress? a, MultiAddress? b)
         {
             if (object.ReferenceEquals(a, b)) return true;
             if (a is null) return false;
@@ -412,13 +412,9 @@ namespace Ipfs
         /// <summary>
         ///   Value inequality.
         /// </summary>
-        public static bool operator !=(MultiAddress a, MultiAddress b)
+        public static bool operator !=(MultiAddress? a, MultiAddress? b)
         {
-            if (object.ReferenceEquals(a, b)) return false;
-            if (a is null) return true;
-            if (b is null) return true;
-
-            return !a.Equals(b);
+            return !(a == b);
         }
 
         /// <summary>
@@ -472,7 +468,7 @@ namespace Ipfs
         /// <returns>
         ///   <b>null</b> if the string cannot be parsed; otherwise a <see cref="MultiAddress"/>.
         /// </returns>
-        public static MultiAddress TryCreate(string s)
+        public static MultiAddress? TryCreate(string s)
         {
             try
             {
@@ -494,7 +490,7 @@ namespace Ipfs
         /// <returns>
         ///   <b>null</b> if the bytes cannot be parsed; otherwise a <see cref="MultiAddress"/>.
         /// </returns>
-        public static MultiAddress TryCreate(byte[] bytes)
+        public static MultiAddress? TryCreate(byte[] bytes)
         {
             try
             {
@@ -512,7 +508,7 @@ namespace Ipfs
         /// <remarks>
         ///   The JSON is just a single string value.
         /// </remarks>
-        class Json : JsonConverter
+        private sealed class Json : JsonConverter
         {
             public override bool CanConvert(Type objectType)
             {
@@ -520,20 +516,17 @@ namespace Ipfs
             }
             public override bool CanRead => true;
             public override bool CanWrite => true;
-            public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
+            public override void WriteJson(JsonWriter writer, object? value, JsonSerializer serializer)
             {
                 var ma = value as MultiAddress;
                 writer.WriteValue(ma?.ToString());
             }
 
-            public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
+            public override object? ReadJson(JsonReader reader, Type objectType, object? existingValue, JsonSerializer serializer)
             {
                 var s = reader.Value as string;
-                return s == null ? null : new MultiAddress(s);
+                return s is null ? null : new MultiAddress(s);
             }
         }
-
-
     }
-
 }

@@ -1,6 +1,5 @@
 using System;
 using System.Text;
-using System.Collections.Generic;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -38,7 +37,7 @@ namespace Ipfs
         [TestMethod]
         public void Decode_Bad()
         {
-            ExceptionAssert.Throws<InvalidOperationException>(() =>  Base58.Decode("jo91waLQA1NNeBmZKUF=="));
+            ExceptionAssert.Throws<InvalidOperationException>(() => Base58.Decode("jo91waLQA1NNeBmZKUF=="));
         }
 
         [TestMethod]

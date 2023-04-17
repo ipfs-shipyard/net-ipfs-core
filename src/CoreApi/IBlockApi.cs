@@ -1,11 +1,9 @@
-﻿
-using System.IO;
+﻿using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace Ipfs.CoreApi
 {
-
     /// <summary>
     ///   Manages IPFS blocks.
     /// </summary>
@@ -32,7 +30,7 @@ namespace Ipfs.CoreApi
         ///    A task that represents the asynchronous get operation. The task's value
         ///    contains the block's id and data.
         /// </returns>
-        Task<IDataBlock> GetAsync(Cid id, CancellationToken cancel = default(CancellationToken));
+        Task<IDataBlock> GetAsync(Cid id, CancellationToken cancel = default);
 
         /// <summary>
         ///   Stores a byte array as an IPFS block.
@@ -67,7 +65,7 @@ namespace Ipfs.CoreApi
             string multiHash = MultiHash.DefaultAlgorithmName,
             string encoding = MultiBase.DefaultAlgorithmName,
             bool pin = false,
-            CancellationToken cancel = default(CancellationToken));
+            CancellationToken cancel = default);
 
         /// <summary>
         ///   Stores a stream as an IPFS block.
@@ -102,7 +100,7 @@ namespace Ipfs.CoreApi
             string multiHash = MultiHash.DefaultAlgorithmName,
             string encoding = MultiBase.DefaultAlgorithmName,
             bool pin = false,
-            CancellationToken cancel = default(CancellationToken));
+            CancellationToken cancel = default);
 
         /// <summary>
         ///   Information on an IPFS block.
@@ -121,7 +119,7 @@ namespace Ipfs.CoreApi
         ///   Only the local repository is consulted for the block.  If <paramref name="id"/>
         ///   does not exist, then <b>null</b> is retuned.
         /// </remarks>
-        Task<IDataBlock> StatAsync(Cid id, CancellationToken cancel = default(CancellationToken));
+        Task<IDataBlock> StatAsync(Cid id, CancellationToken cancel = default);
 
         /// <summary>
         ///   Remove an IPFS block.
@@ -144,7 +142,6 @@ namespace Ipfs.CoreApi
         /// <remarks>
         ///   This removes the block from the local cache and does not affect other peers.
         /// </remarks>
-        Task<Cid> RemoveAsync(Cid id, bool ignoreNonexistent = false, CancellationToken cancel = default(CancellationToken));
+        Task<Cid?> RemoveAsync(Cid id, bool ignoreNonexistent = false, CancellationToken cancel = default);
     }
-
 }

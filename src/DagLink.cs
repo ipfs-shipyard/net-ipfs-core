@@ -1,14 +1,8 @@
-﻿using Google.Protobuf;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.IO;
+using Google.Protobuf;
 
 namespace Ipfs
 {
-
     /// <summary>
     ///   A link to another node in the IPFS Merkle DAG.
     /// </summary>
@@ -20,7 +14,7 @@ namespace Ipfs
         /// <param name="name">The name associated with the linked node.</param>
         /// <param name="id">The <see cref="Cid"/> of the linked node.</param>
         /// <param name="size">The serialised size (in bytes) of the linked node.</param>
-        public DagLink(string name, Cid id, long size)
+        public DagLink(string? name, Cid id, long size)
         {
             this.Name = name;
             this.Id = id;
@@ -51,7 +45,7 @@ namespace Ipfs
         /// </param>
         public DagLink(Stream stream)
         {
-            Read(stream);
+            (Name, Id, Size) = Read(stream);
         }
 
         /// <summary>
@@ -64,11 +58,11 @@ namespace Ipfs
         /// </param>
         public DagLink(CodedInputStream stream)
         {
-            Read(stream);
+            (Name, Id, Size) = Read(stream);
         }
 
         /// <inheritdoc />
-        public string Name { get; private set; }
+        public string? Name { get; private set; }
 
         /// <inheritdoc />
         public Cid Id { get; private set; }
@@ -98,13 +92,10 @@ namespace Ipfs
         /// </param>
         public void Write(CodedOutputStream stream)
         {
-            if (stream == null)
-                throw new ArgumentNullException("stream");
-
             stream.WriteTag(1, WireFormat.WireType.LengthDelimited);
             Id.Write(stream);
 
-            if (Name != null)
+            if (Name is not null)
             {
                 stream.WriteTag(2, WireFormat.WireType.LengthDelimited);
                 stream.WriteString(Name);
@@ -114,34 +105,44 @@ namespace Ipfs
             stream.WriteInt64(Size);
         }
 
-        void Read(Stream stream)
+        private (string?, Cid, long) Read(Stream stream)
         {
             using (var cis = new CodedInputStream(stream, true))
             {
-                Read(cis);
+                return Read(cis);
             }
         }
 
-        void Read(CodedInputStream stream)
+        private (string?, Cid, long) Read(CodedInputStream stream)
         {
+            string? name = null;
+            Cid? id = null;
+            long size = 0;
             while (!stream.IsAtEnd)
             {
                 var tag = stream.ReadTag();
                 switch (WireFormat.GetTagFieldNumber(tag))
                 {
                     case 1:
-                        Id = Cid.Read(stream);
+                        id = Cid.Read(stream);
                         break;
                     case 2:
-                        Name = stream.ReadString();
+                        name = stream.ReadString();
                         break;
                     case 3:
-                        Size = stream.ReadInt64();
+                        size = stream.ReadInt64();
                         break;
                     default:
                         throw new InvalidDataException("Unknown field number");
                 }
             }
+
+            if (id is null)
+            {
+                throw new InvalidDataException($"Missing CID id from record");
+            }
+
+            return (name, id, size);
         }
 
         /// <summary>

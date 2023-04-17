@@ -18,8 +18,7 @@ namespace Ipfs.Cryptography
             if (cbSize == 0)
                 return;
             int sizeInBytes = SizeInBytes;
-            if (buffer == null)
-                buffer = new byte[sizeInBytes];
+            buffer ??= new byte[sizeInBytes];
             int stride = sizeInBytes >> 3;
             ulong[] utemps = new ulong[stride];
             if (buffLength == sizeInBytes)
@@ -48,7 +47,7 @@ namespace Ipfs.Cryptography
             int sizeInBytes = SizeInBytes;
             byte[] outb = new byte[HashByteLength];
             //    padding
-            if (buffer == null)
+            if (buffer is null)
                 buffer = new byte[sizeInBytes];
             else
                 Array.Clear(buffer, buffLength, sizeInBytes - buffLength);

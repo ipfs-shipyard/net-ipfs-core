@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Ipfs.CoreApi
+﻿namespace Ipfs.CoreApi
 {
     /// <summary>
     ///   The statistics for <see cref="IStatsApi.RepositoryAsync"/>.
@@ -15,7 +11,7 @@ namespace Ipfs.CoreApi
         /// <value>
         ///   The number of blocks in the <see cref="IBlockRepositoryApi">repository</see>.
         /// </value>
-        public ulong NumObjects;
+        public ulong NumObjects { get; set; }
 
         /// <summary>
         ///   The total number bytes in the repository.
@@ -23,7 +19,7 @@ namespace Ipfs.CoreApi
         /// <value>
         ///   The total number bytes in the <see cref="IBlockRepositoryApi">repository</see>.
         /// </value>
-        public ulong RepoSize;
+        public ulong RepoSize { get; set; }
 
         /// <summary>
         ///   The fully qualified path to the repository.
@@ -31,7 +27,7 @@ namespace Ipfs.CoreApi
         /// <value>
         ///   The directory of the <see cref="IBlockRepositoryApi">repository</see>.
         /// </value>
-        public string RepoPath;
+        public string RepoPath { get; set; } = string.Empty;
 
         /// <summary>
         ///   The version number of the repository.
@@ -39,7 +35,7 @@ namespace Ipfs.CoreApi
         /// <value>
         ///  The version number of the <see cref="IBlockRepositoryApi">repository</see>.
         /// </value>
-        public string Version;
+        public string Version { get; set; } = string.Empty;
 
         /// <summary>
         ///   The maximum number of bytes allowed in the repository.
@@ -47,7 +43,6 @@ namespace Ipfs.CoreApi
         /// <value>
         ///  Max bytes allowed in the <see cref="IBlockRepositoryApi">repository</see>.
         /// </value>
-        public ulong StorageMax;
-
+        public ulong StorageMax { get; set; }
     }
 }

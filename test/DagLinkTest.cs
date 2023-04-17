@@ -1,11 +1,4 @@
-﻿using Ipfs;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.IO;
-using Google.Protobuf;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Ipfs
 {
@@ -37,7 +30,6 @@ namespace Ipfs
         {
             var encoded = "0a22122023dca2a7429612378554b0bb5b85012dec00a17cc2c673f17d2b76a50b839cd51201611803";
             var link = new DagLink("a", "QmQke7LGtfu3GjFP3AnrP8vpEepQ6C5aJSALKAq653bkRi", 3);
-            var x = link.ToArray();
             Assert.AreEqual(encoded, link.ToArray().ToHexString());
         }
 
@@ -46,7 +38,6 @@ namespace Ipfs
         {
             var encoded = "0a22122023dca2a7429612378554b0bb5b85012dec00a17cc2c673f17d2b76a50b839cd512001803";
             var link = new DagLink("", "QmQke7LGtfu3GjFP3AnrP8vpEepQ6C5aJSALKAq653bkRi", 3);
-            var x = link.ToArray();
             Assert.AreEqual(encoded, link.ToArray().ToHexString());
         }
 
@@ -55,15 +46,7 @@ namespace Ipfs
         {
             var encoded = "0a22122023dca2a7429612378554b0bb5b85012dec00a17cc2c673f17d2b76a50b839cd51803";
             var link = new DagLink(null, "QmQke7LGtfu3GjFP3AnrP8vpEepQ6C5aJSALKAq653bkRi", 3);
-            var x = link.ToArray();
             Assert.AreEqual(encoded, link.ToArray().ToHexString());
-        }
-
-        [TestMethod]
-        public void Null_Stream()
-        {
-            ExceptionAssert.Throws(() => new DagLink((CodedInputStream)null));
-            ExceptionAssert.Throws(() => new DagLink((Stream)null));
         }
 
         [TestMethod]

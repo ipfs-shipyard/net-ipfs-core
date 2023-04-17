@@ -1,21 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using Google.Protobuf;
 
 namespace Ipfs
 {
     static class ProtobufHelper
     {
-        static MethodInfo writeRawBytes = typeof(CodedOutputStream)
+        private static readonly MethodInfo writeRawBytes = typeof(CodedOutputStream)
             .GetMethods(BindingFlags.NonPublic | BindingFlags.Instance)
             .Single(m =>
                 m.Name == "WriteRawBytes" && m.GetParameters().Count() == 1
             );
-        static MethodInfo readRawBytes = typeof(CodedInputStream)
+        private static readonly MethodInfo readRawBytes = typeof(CodedInputStream)
             .GetMethods(BindingFlags.NonPublic | BindingFlags.Instance)
             .Single(m =>
                 m.Name == "ReadRawBytes"

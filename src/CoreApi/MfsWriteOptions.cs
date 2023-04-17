@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Ipfs.CoreApi
 {
@@ -78,6 +76,6 @@ namespace Ipfs.CoreApi
         ///   The default is <b>null</b> and the server will use its default algorithm name.
         /// </value>
         /// <seealso cref="MultiHash.DefaultAlgorithmName"/>
-        public string Hash { get; set; } = null;
+        public string? Hash { get; set; } = null;
     }
 }

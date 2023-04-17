@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace Ipfs
 {
@@ -13,8 +11,8 @@ namespace Ipfs
     /// </remarks>
     public class Peer : IEquatable<Peer>
     {
-        static MultiAddress[] noAddress = new MultiAddress[0];
-        const string unknown = "unknown/0.0";
+        private static readonly MultiAddress[] noAddress = Array.Empty<MultiAddress>();
+        private const string unknown = "unknown/0.0";
 
         /// <summary>
         ///   Universally unique identifier.
@@ -24,7 +22,7 @@ namespace Ipfs
         ///   <see cref="PublicKey"/>.
         /// </value>
         /// <seealso href="https://github.com/libp2p/specs/pull/100"/>
-        public MultiHash Id { get; set; }
+        public MultiHash? Id { get; set; }
 
         /// <summary>
         ///   The public key of the node.
@@ -37,7 +35,7 @@ namespace Ipfs
         ///   a type and the DER encoding of the PKCS Subject Public Key Info.
         /// </remarks>
         /// <seealso href="https://tools.ietf.org/html/rfc5280#section-4.1.2.7"/>
-        public string PublicKey { get; set; }
+        public string? PublicKey { get; set; }
 
         /// <summary>
         ///   The multiple addresses of the node.
@@ -77,7 +75,7 @@ namespace Ipfs
         /// <value>
         ///   <b>null</b> when the peer is not connected to.
         /// </value>
-        public MultiAddress ConnectedAddress { get; set; }
+        public MultiAddress? ConnectedAddress { get; set; }
 
         /// <summary>
         /// The round-trip time it takes to get data from the peer.
@@ -99,9 +97,9 @@ namespace Ipfs
         /// </remarks>
         public bool IsValid()
         {
-            if (Id == null)
+            if (Id is null)
                 return false;
-            if (PublicKey != null && !Id.Matches(Convert.FromBase64String(PublicKey)))
+            if (PublicKey is not null && !Id.Matches(Convert.FromBase64String(PublicKey)))
                 return false;
 
             return true;
@@ -114,12 +112,12 @@ namespace Ipfs
         }
 
         /// <inheritdoc />
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
             var that = obj as Peer;
-            return (that == null)
+            return (that is null)
                 ? false
-               : this.Equals(that);
+                : this.Equals(that);
         }
 
         /// <inheritdoc />
@@ -131,7 +129,7 @@ namespace Ipfs
         /// <summary>
         ///   Value equality.
         /// </summary>
-        public static bool operator ==(Peer a, Peer b)
+        public static bool operator ==(Peer? a, Peer? b)
         {
             if (object.ReferenceEquals(a, b)) return true;
             if (a is null) return false;
@@ -143,7 +141,7 @@ namespace Ipfs
         /// <summary>
         ///   Value inequality.
         /// </summary>
-        public static bool operator !=(Peer a, Peer b)
+        public static bool operator !=(Peer? a, Peer? b)
         {
             return !(a == b);
         }
@@ -156,7 +154,7 @@ namespace Ipfs
         /// </returns>
         public override string ToString()
         {
-            return Id == null ? string.Empty : Id.ToBase58();
+            return Id is null ? string.Empty : Id.ToBase58();
         }
 
         /// <summary>

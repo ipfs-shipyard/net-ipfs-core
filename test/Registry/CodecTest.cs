@@ -1,10 +1,6 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Linq;
-using System.Text;
-using System.IO;
-using Google.Protobuf;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Ipfs.Registry
 {
@@ -14,7 +10,7 @@ namespace Ipfs.Registry
         [TestMethod]
         public void Bad_Name()
         {
-            ExceptionAssert.Throws<ArgumentNullException>(() => Codec.Register(null, 1));
+            ExceptionAssert.Throws<ArgumentNullException>(() => Codec.Register(null!, 1));
             ExceptionAssert.Throws<ArgumentNullException>(() => Codec.Register("", 1));
             ExceptionAssert.Throws<ArgumentNullException>(() => Codec.Register("   ", 1));
         }

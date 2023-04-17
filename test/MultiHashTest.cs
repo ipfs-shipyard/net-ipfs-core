@@ -1,11 +1,9 @@
-using Ipfs.Registry;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using System.IO;
-using Google.Protobuf;
+using Ipfs.Registry;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Newtonsoft.Json;
 
 namespace Ipfs
@@ -25,22 +23,14 @@ namespace Ipfs
         [TestMethod]
         public void Unknown_Hash_Name()
         {
-            ExceptionAssert.Throws<ArgumentNullException>(() => new MultiHash(null, new byte[0]));
             ExceptionAssert.Throws<ArgumentException>(() => new MultiHash("", new byte[0]));
             ExceptionAssert.Throws<ArgumentException>(() => new MultiHash("md5", new byte[0]));
         }
 
         [TestMethod]
-        public void Write_Null_Stream()
-        {
-            var mh = new MultiHash("QmPZ9gcCEpqKTo6aq61g2nXGUhM4iCL3ewB6LDXZCtioEB");
-            ExceptionAssert.Throws<ArgumentNullException>(() => mh.Write((CodedOutputStream)null));
-        }
-
-        [TestMethod]
         public void Parsing_Unknown_Hash_Number()
         {
-            HashingAlgorithm unknown = null;
+            HashingAlgorithm? unknown = null;
             EventHandler<UnknownHashingAlgorithmEventArgs> unknownHandler = (s, e) => { unknown = e.Algorithm; };
             var ms = new MemoryStream(new byte[] { 0x01, 0x02, 0x0a, 0x0b });
             MultiHash.UnknownHashingAlgorithm += unknownHandler;
@@ -54,7 +44,7 @@ namespace Ipfs
                 Assert.AreEqual(0xa, mh.Digest[0]);
                 Assert.AreEqual(0xb, mh.Digest[1]);
                 Assert.IsNotNull(unknown, "unknown handler not called");
-                Assert.AreEqual("ipfs-1", unknown.Name);
+                Assert.AreEqual("ipfs-1", unknown!.Name);
                 Assert.AreEqual(1, unknown.Code);
                 Assert.AreEqual(2, unknown.DigestSize);
             }
@@ -74,7 +64,6 @@ namespace Ipfs
         [TestMethod]
         public void Invalid_Digest()
         {
-            ExceptionAssert.Throws<ArgumentNullException>(() => new MultiHash("sha1", null));
             ExceptionAssert.Throws<ArgumentException>(() => new MultiHash("sha1", new byte[0]));
             ExceptionAssert.Throws<ArgumentException>(() => new MultiHash("sha1", new byte[21]));
         }
@@ -209,8 +198,8 @@ namespace Ipfs
             var a0 = new MultiHash("QmaozNR7DZHQK1ZcU9p7QdrshMvXqWK6gpu5rmrkPdT3L4");
             var a1 = new MultiHash("QmaozNR7DZHQK1ZcU9p7QdrshMvXqWK6gpu5rmrkPdT3L4");
             var b = new MultiHash("QmaozNR7DZHQK1ZcU9p7QdrshMvXqWK6gpu5rmrkPdT3L5");
-            MultiHash c = null;
-            MultiHash d = null;
+            MultiHash? c = null;
+            MultiHash? d = null;
 
             Assert.IsTrue(c == d);
             Assert.IsFalse(c == b);
@@ -301,13 +290,13 @@ namespace Ipfs
         }
         class TestVector
         {
-            public string Algorithm { get; set; }
-            public string Input { get; set; }
-            public string Output { get; set; }
+            public string? Algorithm { get; set; }
+            public string? Input { get; set; }
+            public string? Output { get; set; }
             public bool Ignore { get; set; }
         }
 
-        TestVector[] TestVectors = new TestVector[]
+        readonly TestVector[] TestVectors = new TestVector[]
         {
             // From https://github.com/multiformats/js-multihashing-async/blob/master/test/fixtures/encodes.js
             new TestVector {
@@ -415,8 +404,8 @@ namespace Ipfs
             foreach (var v in TestVectors)
             {
                 if (v.Ignore) continue;
-                var bytes = Encoding.UTF8.GetBytes(v.Input);
-                var mh = MultiHash.ComputeHash(bytes, v.Algorithm);
+                var bytes = Encoding.UTF8.GetBytes(v.Input!);
+                var mh = MultiHash.ComputeHash(bytes, v.Algorithm!);
                 Assert.AreEqual(v.Output, mh.ToArray().ToHexString(), v.Algorithm);
             }
         }
@@ -427,10 +416,10 @@ namespace Ipfs
             foreach (var v in TestVectors)
             {
                 if (v.Ignore) continue;
-                var bytes = Encoding.UTF8.GetBytes(v.Input);
+                var bytes = Encoding.UTF8.GetBytes(v.Input!);
                 using (var ms = new MemoryStream(bytes, false))
                 {
-                    var mh = MultiHash.ComputeHash(ms, v.Algorithm);
+                    var mh = MultiHash.ComputeHash(ms, v.Algorithm!);
                     Assert.AreEqual(v.Output, mh.ToArray().ToHexString(), v.Algorithm);
                 }
             }
@@ -477,7 +466,7 @@ namespace Ipfs
         {
             var a = new MultiHash("QmPZ9gcCEpqKTo6aq61g2nXGUhM4iCL3ewB6LDXZCtioEB");
             string json = JsonConvert.SerializeObject(a);
-            Assert.AreEqual($"\"{a.ToString()}\"", json);
+            Assert.AreEqual($"\"{a}\"", json);
             var b = JsonConvert.DeserializeObject<MultiHash>(json);
             Assert.AreEqual(a, b);
 

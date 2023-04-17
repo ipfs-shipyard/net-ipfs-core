@@ -1,10 +1,4 @@
-﻿using Google.Protobuf;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace Ipfs
 {
@@ -24,7 +18,6 @@ namespace Ipfs
     public interface IMerkleNode<out Link> : IDataBlock
         where Link : IMerkleLink
     {
-
         /// <summary>
         ///   Links to other nodes.
         /// </summary>
@@ -50,7 +43,5 @@ namespace Ipfs
         ///   A new <see cref="IMerkleLink"/> to the node.
         /// </returns>
         Link ToLink(string name = "");
-
     }
-
 }

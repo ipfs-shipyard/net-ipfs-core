@@ -1,13 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.IO;
+using System.Globalization;
 using System.Net;
 using System.Net.Sockets;
 using Google.Protobuf;
-using System.Globalization;
-using Org.BouncyCastle.Asn1.IsisMtt.Ocsp;
 
 namespace Ipfs
 {
@@ -69,9 +66,9 @@ namespace Ipfs
             var protocol = new T();
 
             if (Names.ContainsKey(protocol.Name))
-                throw new ArgumentException(string.Format("The IPFS network protocol '{0}' is already defined.", protocol.Name));
+                throw new ArgumentException($"The IPFS network protocol '{protocol.Name}' is already defined.");
             if (Codes.ContainsKey(protocol.Code))
-                throw new ArgumentException(string.Format("The IPFS network protocol code ({0}) is already defined.", protocol.Code));
+                throw new ArgumentException($"The IPFS network protocol code ({protocol.Code}) is already defined.");
 
             Names.Add(protocol.Name, typeof(T));
             Codes.Add(protocol.Code, typeof(T));
@@ -88,9 +85,9 @@ namespace Ipfs
             var protocol = new T();
 
             if (Names.ContainsKey(protocol.Name))
-                throw new ArgumentException(string.Format("The IPFS network protocol '{0}' is already defined.", protocol.Name));
+                throw new ArgumentException($"The IPFS network protocol '{protocol.Name}' is already defined.");
             if (!Codes.ContainsKey(protocol.Code))
-                throw new ArgumentException(string.Format("The IPFS network protocol code ({0}) is not defined.", protocol.Code));
+                throw new ArgumentException($"The IPFS network protocol code ({protocol.Code}) is not defined.");
 
             Names.Add(protocol.Name, typeof(T));
         }
@@ -111,7 +108,7 @@ namespace Ipfs
         /// <remarks>
         ///   For tcp and udp this is the port number.  This can be <b>null</b> as is the case for http and https.
         /// </remarks>
-        public string Value { get; set; }
+        public string? Value { get; set; }
 
         /// <summary>
         ///   Writes the binary representation to the specified <see cref="Stream"/>.
@@ -135,7 +132,7 @@ namespace Ipfs
         /// </remarks>
         public virtual void WriteValue(TextWriter stream)
         {
-            if (Value != null)
+            if (Value is not null)
             {
                 stream.Write('/');
                 stream.Write(Value);
@@ -186,7 +183,6 @@ namespace Ipfs
                 return s.ToString();
             }
         }
-
     }
 
     class TcpNetworkProtocol : NetworkProtocol
@@ -240,14 +236,14 @@ namespace Ipfs
 
     abstract class IpNetworkProtocol : NetworkProtocol
     {
-        public IPAddress Address { get; set; }
+        public IPAddress? Address { get; set; }
         public override void ReadValue(TextReader stream)
         {
             base.ReadValue(stream);
             try
             {
                 // Remove the scope id.
-                int i = Value.LastIndexOf('%');
+                int i = Value!.LastIndexOf('%');
                 if (i != -1)
                     Value = Value.Substring(0, i);
 
@@ -261,18 +257,18 @@ namespace Ipfs
         public override void WriteValue(TextWriter stream)
         {
             stream.Write('/');
-            stream.Write(Address.ToString());
+            stream.Write(Address?.ToString());
         }
         public override void WriteValue(CodedOutputStream stream)
         {
-            var ip = Address.GetAddressBytes();
+            var ip = Address?.GetAddressBytes() ?? Array.Empty<byte>();
             stream.WriteSomeBytes(ip);
         }
     }
 
     class Ipv4NetworkProtocol : IpNetworkProtocol
     {
-        static int AddressSize = IPAddress.Any.GetAddressBytes().Length;
+        private static readonly int AddressSize = IPAddress.Any.GetAddressBytes().Length;
 
         public override string Name => "ip4";
         public override uint Code => 4;
@@ -280,7 +276,7 @@ namespace Ipfs
         public override void ReadValue(TextReader stream)
         {
             base.ReadValue(stream);
-            if (Address.AddressFamily != AddressFamily.InterNetwork)
+            if (Address!.AddressFamily != AddressFamily.InterNetwork)
                 throw new FormatException(string.Format("'{0}' is not a valid IPv4 address.", Value));
         }
         public override void ReadValue(CodedInputStream stream)
@@ -289,12 +285,11 @@ namespace Ipfs
             Address = new IPAddress(a);
             Value = Address.ToString();
         }
-
     }
 
     class Ipv6NetworkProtocol : IpNetworkProtocol
     {
-        static int AddressSize = IPAddress.IPv6Any.GetAddressBytes().Length;
+        private static readonly int AddressSize = IPAddress.IPv6Any.GetAddressBytes().Length;
 
         public override string Name => "ip6";
         public override uint Code => 41;
@@ -302,7 +297,7 @@ namespace Ipfs
         public override void ReadValue(TextReader stream)
         {
             base.ReadValue(stream);
-            if (Address.AddressFamily != AddressFamily.InterNetworkV6)
+            if (Address!.AddressFamily != AddressFamily.InterNetworkV6)
                 throw new FormatException(string.Format("'{0}' is not a valid IPv6 address.", Value));
         }
         public override void ReadValue(CodedInputStream stream)
@@ -315,14 +310,14 @@ namespace Ipfs
 
     class P2pNetworkProtocol : NetworkProtocol
     {
-        public MultiHash MultiHash { get; private set; }
+        public MultiHash? MultiHash { get; private set; }
         public override string Name => "p2p";
         public override uint Code => 421;
 
         public override void ReadValue(TextReader stream)
         {
             base.ReadValue(stream);
-            MultiHash = new MultiHash(Value);
+            MultiHash = new MultiHash(Value!);
         }
 
         public override void ReadValue(CodedInputStream stream)
@@ -334,7 +329,7 @@ namespace Ipfs
 
         public override void WriteValue(CodedOutputStream stream)
         {
-            var bytes = MultiHash.ToArray();
+            var bytes = MultiHash?.ToArray() ?? Array.Empty<byte>();
             stream.WriteLength(bytes.Length);
             stream.WriteSomeBytes(bytes); 
         }
@@ -347,7 +342,7 @@ namespace Ipfs
 
     class OnionNetworkProtocol : NetworkProtocol
     {
-        public byte[] Address { get; private set; }
+        public byte[] Address { get; private set; } = Array.Empty<byte>();
         public UInt16 Port { get; private set; }
         public override string Name => "onion";
         public override uint Code => 444;
@@ -355,11 +350,11 @@ namespace Ipfs
         public override void ReadValue(TextReader stream)
         {
             base.ReadValue(stream);
-            var parts = Value.Split(':');
+            var parts = Value!.Split(':');
             if (parts.Length != 2)
-                throw new FormatException(string.Format("'{0}' is not a valid onion address, missing the port number.", Value));
+                throw new FormatException($"'{Value}' is not a valid onion address, missing the port number.");
             if (parts[0].Length != 16)
-                throw new FormatException(string.Format("'{0}' is not a valid onion address.", Value));
+                throw new FormatException($"'{Value}' is not a valid onion address.");
             try
             {
                 Port = UInt16.Parse(parts[1]);
@@ -372,6 +367,7 @@ namespace Ipfs
                 throw new FormatException(string.Format("'{0}' is not a valid onion address, invalid port number.", Value));
             Address = parts[0].ToUpperInvariant().FromBase32();
         }
+
         public override void ReadValue(CodedInputStream stream)
         {
             Address = stream.ReadSomeBytes(10);
@@ -493,7 +489,7 @@ namespace Ipfs
 
     abstract class DomainNameNetworkProtocol : NetworkProtocol
     {
-        public string DomainName { get; set; }
+        public string? DomainName { get; set; }
         public override void ReadValue(TextReader stream)
         {
             base.ReadValue(stream);
@@ -508,7 +504,7 @@ namespace Ipfs
         public override void WriteValue(TextWriter stream)
         {
             stream.Write('/');
-            stream.Write(DomainName.ToString());
+            stream.Write(DomainName?.ToString());
         }
         public override void WriteValue(CodedOutputStream stream)
         {
@@ -572,5 +568,4 @@ namespace Ipfs
             stream.WriteSomeBytes(bytes);
         }
     }
-
 }
