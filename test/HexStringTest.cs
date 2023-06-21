@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Text;
-using System.Collections.Generic;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.IO;
@@ -37,7 +35,7 @@ namespace Ipfs
         [TestMethod]
         public void InvalidFormatSpecifier()
         {
-            ExceptionAssert.Throws<FormatException>(() => HexString.Encode(new byte[0], "..."));
+            ExceptionAssert.Throws<FormatException>(() => HexString.Encode(Array.Empty<byte>(), "..."));
         }
 
         [TestMethod]

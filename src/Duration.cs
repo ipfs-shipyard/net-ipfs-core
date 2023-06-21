@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Text;
@@ -19,8 +18,8 @@ namespace Ipfs
     /// </remarks>
     public static class Duration
     {
-        const double TicksPerNanosecond = (double)TimeSpan.TicksPerMillisecond * 0.000001;
-        const double TicksPerMicrosecond = (double)TimeSpan.TicksPerMillisecond * 0.001;
+        private const double TicksPerNanosecond = (double)TimeSpan.TicksPerMillisecond * 0.000001;
+        private const double TicksPerMicrosecond = (double)TimeSpan.TicksPerMillisecond * 0.001;
 
         /// <summary>
         ///   Converts the string representation of an IPFS duration
@@ -46,7 +45,9 @@ namespace Ipfs
         public static TimeSpan Parse(string s)
         {
             if (string.IsNullOrWhiteSpace(s) || s == "n/a" || s == "unknown")
+            {
                 return TimeSpan.Zero;
+            }
 
             var result = TimeSpan.Zero;
             var negative = false;
@@ -63,40 +64,28 @@ namespace Ipfs
                 }
             }
 
-            if (negative)
-                return TimeSpan.FromTicks(-result.Ticks);
-
-            return result;
+            return negative ? TimeSpan.FromTicks(-result.Ticks) : result;
         }
 
-        static TimeSpan ParseComponent(StringReader reader)
+        private static TimeSpan ParseComponent(StringReader reader)
         {
             var value = ParseNumber(reader);
             var unit = ParseUnit(reader);
 
-            switch (unit)
+            return unit switch
             {
-                case "h":
-                    return TimeSpan.FromHours(value);
-                case "m":
-                    return TimeSpan.FromMinutes(value);
-                case "s":
-                    return TimeSpan.FromSeconds(value);
-                case "ms":
-                    return TimeSpan.FromMilliseconds(value);
-                case "us":
-                case "µs":
-                    return TimeSpan.FromTicks((long)(value * TicksPerMicrosecond));
-                case "ns":
-                    return TimeSpan.FromTicks((long)(value * TicksPerNanosecond));
-                case "":
-                    throw new FormatException("Missing IPFS duration unit.");
-                default:
-                    throw new FormatException($"Unknown IPFS duration unit '{unit}'.");
-            }
+                "h" => TimeSpan.FromHours(value),
+                "m" => TimeSpan.FromMinutes(value),
+                "s" => TimeSpan.FromSeconds(value),
+                "ms" => TimeSpan.FromMilliseconds(value),
+                "us" or "µs" => TimeSpan.FromTicks((long)(value * TicksPerMicrosecond)),
+                "ns" => TimeSpan.FromTicks((long)(value * TicksPerNanosecond)),
+                "" => throw new FormatException("Missing IPFS duration unit."),
+                _ => throw new FormatException($"Unknown IPFS duration unit '{unit}'."),
+            };
         }
 
-        static double ParseNumber(StringReader reader)
+        private static double ParseNumber(StringReader reader)
         {
             var s = new StringBuilder();
             while (true)
@@ -112,14 +101,17 @@ namespace Ipfs
             }
         }
 
-        static string ParseUnit(StringReader reader)
+        private static string ParseUnit(StringReader reader)
         {
             var s = new StringBuilder();
             while (true)
             {
                 var c = (char)reader.Peek();
                 if (char.IsDigit(c) || c == '.' || c == (char)0xFFFF)
+                {
                     break;
+                }
+
                 s.Append(c);
                 reader.Read();
             }
@@ -144,7 +136,9 @@ namespace Ipfs
         public static string Stringify(TimeSpan duration, string zeroValue = "0s")
         {
             if (duration.Ticks == 0)
+            {
                 return zeroValue;
+            }
 
             var s = new StringBuilder();
             if (duration.Ticks < 0)
@@ -163,10 +157,13 @@ namespace Ipfs
             return s.ToString();
         }
 
-        static void Stringify(double value, string unit, StringBuilder sb)
+        private static void Stringify(double value, string unit, StringBuilder sb)
         {
             if (value == 0)
+            {
                 return;
+            }
+
             sb.Append(value.ToString(CultureInfo.InvariantCulture));
             sb.Append(unit);
         }

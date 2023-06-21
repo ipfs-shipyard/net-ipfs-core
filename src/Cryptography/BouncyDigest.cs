@@ -12,35 +12,34 @@ namespace Ipfs.Cryptography
     /// </remarks>
     internal class BouncyDigest : System.Security.Cryptography.HashAlgorithm
     {
-        Org.BouncyCastle.Crypto.IDigest digest;
+        private readonly Org.BouncyCastle.Crypto.IDigest _digest;
 
         /// <summary>
         ///   Wrap the bouncy castle digest.
         /// </summary>
         public BouncyDigest(Org.BouncyCastle.Crypto.IDigest digest)
         {
-            this.digest = digest;
+            _digest = digest;
         }
 
         /// <inheritdoc/>
         public override void Initialize()
         {
-            digest.Reset();
+            _digest.Reset();
         }
 
         /// <inheritdoc/>
         protected override void HashCore(byte[] array, int ibStart, int cbSize)
         {
-            digest.BlockUpdate(array, ibStart, cbSize);
+            _digest.BlockUpdate(array, ibStart, cbSize);
         }
 
         /// <inheritdoc/>
         protected override byte[] HashFinal()
         {
-            var output = new byte[digest.GetDigestSize()];
-            digest.DoFinal(output, 0);
+            var output = new byte[_digest.GetDigestSize()];
+            _digest.DoFinal(output, 0);
             return output;
         }
     }
 }
- 

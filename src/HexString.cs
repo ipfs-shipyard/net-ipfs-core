@@ -17,15 +17,15 @@ namespace Ipfs
     /// </remarks>
     public static class HexString
     {
-        static readonly string[] LowerCaseHexStrings = 
+        private static readonly string[] LowerCaseHexStrings = 
             Enumerable.Range(byte.MinValue, byte.MaxValue + 1)
             .Select(v => v.ToString("x2"))
             .ToArray();
-        static readonly string[] UpperCaseHexStrings = 
+        private static readonly string[] UpperCaseHexStrings = 
             Enumerable.Range(byte.MinValue, byte.MaxValue + 1)
             .Select(v => v.ToString("X2"))
             .ToArray();
-        static readonly Dictionary<string, byte> HexBytes =
+        private static readonly Dictionary<string, byte> HexBytes =
             Enumerable.Range(byte.MinValue, byte.MaxValue + 1)
             .SelectMany(v => new [] { 
                 new { Value = v, String = v.ToString("x2") } , 
@@ -50,23 +50,18 @@ namespace Ipfs
         /// </returns>
         public static string Encode(byte[] buffer, string format = "G")
         {
-            string[] hexStrings;
-            switch (format)
+            string[] hexStrings = format switch
             {
-                case "G":
-                case "x":
-                    hexStrings = LowerCaseHexStrings;
-                    break;
-                case "X":
-                    hexStrings = UpperCaseHexStrings;
-                    break;
-                default:
-                    throw new FormatException(string.Format("Invalid HexString format '{0}', only 'G', 'x' or 'X' are allowed.", format));
+                "G" or "x" => LowerCaseHexStrings,
+                "X" => UpperCaseHexStrings,
+                _ => throw new FormatException(string.Format("Invalid HexString format '{0}', only 'G', 'x' or 'X' are allowed.", format)),
+            };
+            var s = new StringBuilder(buffer.Length * 2);
+            foreach (var v in buffer)
+            {
+                s.Append(hexStrings[v]);
             }
 
-            StringBuilder s = new StringBuilder(buffer.Length * 2);
-            foreach (var v in buffer)
-                s.Append(hexStrings[v]);
             return s.ToString();
         }
 
@@ -102,15 +97,19 @@ namespace Ipfs
         {
             int n = s.Length;
             if (n % 2 != 0)
+            {
                 throw new InvalidDataException("The hex string length must be a multiple of 2.");
+            }
 
             var buffer = new byte[n / 2];
             for (int i = 0, j = 0; i < n; i += 2, j++)
             {
                 var hex = s.Substring(i, 2);
-                byte value;
-                if (!HexBytes.TryGetValue(hex, out value))
+                if (!HexBytes.TryGetValue(hex, out byte value))
+                {
                     throw new InvalidDataException(string.Format("'{0}' is not a valid hexadecimal byte.", hex));
+                }
+
                 buffer[j] = value;
             }
 

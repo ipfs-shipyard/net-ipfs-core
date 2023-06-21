@@ -39,14 +39,14 @@ namespace Ipfs
             ExceptionAssert.Throws<FormatException>(() => MultiBase.Decode("fXX"));
         }
 
-        class TestVector
+        private class TestVector
         {
             public string? Algorithm { get; set; }
             public string? Input { get; set; }
             public string? Output { get; set; }
         }
 
-        readonly TestVector[] TestVectors = new TestVector[]
+        private static readonly TestVector[] TestVectors = new TestVector[]
         {
             new TestVector {
                 Algorithm = "base16",

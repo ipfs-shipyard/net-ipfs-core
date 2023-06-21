@@ -14,8 +14,8 @@ namespace Ipfs.Registry
     /// <seealso href="https://github.com/multiformats/multicodec"/>
     public class Codec
     {
-        internal static Dictionary<string, Codec> Names = new Dictionary<string, Codec>();
-        internal static Dictionary<int, Codec> Codes = new Dictionary<int, Codec>();
+        internal static Dictionary<string, Codec> Names = new(StringComparer.Ordinal);
+        internal static Dictionary<int, Codec> Codes = new();
 
         /// <summary>
         ///   Register the standard multi-codecs for IPFS.
@@ -75,7 +75,7 @@ namespace Ipfs.Registry
         /// <summary>
         ///   Use <see cref="Register"/> to create a new instance of a <see cref="Codec"/>.
         /// </summary>
-        Codec()
+        private Codec()
         {
         }
 
@@ -111,11 +111,19 @@ namespace Ipfs.Registry
         public static Codec Register(string name, int code)
         {
             if (string.IsNullOrWhiteSpace(name))
+            {
                 throw new ArgumentNullException(nameof(name));
+            }
+
             if (Names.ContainsKey(name))
+            {
                 throw new ArgumentException(string.Format("The IPFS codec name '{0}' is already defined.", name));
+            }
+
             if (Codes.ContainsKey(code))
+            {
                 throw new ArgumentException(string.Format("The IPFS codec code '{0}' is already defined.", code));
+            }
 
             var a = new Codec
             {
@@ -145,10 +153,6 @@ namespace Ipfs.Registry
         /// <value>
         ///   All the registered codecs.
         /// </value>
-        public static IEnumerable<Codec> All
-        {
-            get { return Names.Values; }
-        }
-
+        public static IEnumerable<Codec> All => Names.Values;
     }
 }

@@ -16,9 +16,9 @@ namespace Ipfs
         /// <param name="size">The serialised size (in bytes) of the linked node.</param>
         public DagLink(string? name, Cid id, long size)
         {
-            this.Name = name;
-            this.Id = id;
-            this.Size = size;
+            Name = name;
+            Id = id;
+            Size = size;
         }
 
         /// <summary>
@@ -30,9 +30,9 @@ namespace Ipfs
         /// </param>
         public DagLink(IMerkleLink link)
         {
-            this.Name = link.Name;
-            this.Id = link.Id;
-            this.Size = link.Size;
+            Name = link.Name;
+            Id = link.Id;
+            Size = link.Size;
         }
 
         /// <summary>
@@ -78,10 +78,8 @@ namespace Ipfs
         /// </param>
         public void Write(Stream stream)
         {
-            using (var cos = new CodedOutputStream(stream, true))
-            {
-                Write(cos);
-            }
+            using var cos = new CodedOutputStream(stream, true);
+            Write(cos);
         }
 
         /// <summary>
@@ -107,10 +105,8 @@ namespace Ipfs
 
         private (string?, Cid, long) Read(Stream stream)
         {
-            using (var cis = new CodedInputStream(stream, true))
-            {
-                return Read(cis);
-            }
+            using var cis = new CodedInputStream(stream, true);
+            return Read(cis);
         }
 
         private (string?, Cid, long) Read(CodedInputStream stream)
@@ -153,11 +149,9 @@ namespace Ipfs
         /// </returns>
         public byte[] ToArray()
         {
-            using (var ms = new MemoryStream())
-            {
-                Write(ms);
-                return ms.ToArray();
-            }
+            using var ms = new MemoryStream();
+            Write(ms);
+            return ms.ToArray();
         }
 
     }

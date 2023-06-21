@@ -3,6 +3,10 @@
 
 using System;
 
+#pragma warning disable IDE0011 // Add braces
+#pragma warning disable IDE0059 // Unnecessary assignment of a value
+#pragma warning disable IDE1006 // Naming Styles
+
 namespace Ipfs.Cryptography
 {
     internal partial class KeccakManaged : Keccak

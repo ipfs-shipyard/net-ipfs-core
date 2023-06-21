@@ -52,7 +52,9 @@ namespace Ipfs
         public MultiAddress(string s) : this()
         {
             if (string.IsNullOrWhiteSpace(s))
+            {
                 return;
+            }
 
             Read(new StringReader(s));
         }
@@ -130,7 +132,9 @@ namespace Ipfs
             : this()
         {
             if (buffer == null || buffer.Length == 0)
+            {
                 return;
+            }
 
             Read(new MemoryStream(buffer, false));
         }
@@ -173,13 +177,7 @@ namespace Ipfs
         ///   The peer ID is contained in the last protocol that
         ///   is "ipfs" or "p2p".  For example, <c>/ip4/10.1.10.10/tcp/29087/ipfs/QmVcSqVEsvm5RR9mBLjwpb2XjFVn5bPdPL69mL8PH45pPC</c>.
         /// </remarks>
-        public bool HasPeerId
-        {
-            get
-            {
-                return Protocols.Any(p => p.Name == "ipfs" || p.Name == "p2p");
-            }
-        }
+        public bool HasPeerId => Protocols.Any(p => p.Name == "ipfs" || p.Name == "p2p");
 
         /// <summary>
         ///   Gets a multiaddress that ends with the peer ID.
@@ -207,7 +205,7 @@ namespace Ipfs
                 return this;
             }
 
-            return new MultiAddress(this.ToString() + $"/p2p/{peerId}");
+            return new MultiAddress(ToString() + $"/p2p/{peerId}");
         }
 
         /// <summary>
@@ -291,7 +289,7 @@ namespace Ipfs
         /// <remarks>
         ///   The binary representation is a sequence of <see cref="NetworkProtocol">network protocols</see>.
         /// </remarks>
-        void Read(Stream stream)
+        private void Read(Stream stream)
         {
             Read(new CodedInputStream(stream, true));
         }
@@ -305,14 +303,17 @@ namespace Ipfs
         /// <remarks>
         ///   The binary representation is a sequence of <see cref="NetworkProtocol">network protocols</see>.
         /// </remarks>
-        void Read(CodedInputStream stream)
+        private void Read(CodedInputStream stream)
         {
             Protocols.Clear();
             do
             {
                 uint code = (uint)stream.ReadInt64();
                 if (!NetworkProtocol.Codes.TryGetValue(code, out Type protocolType))
+                {
                     throw new InvalidDataException(string.Format("The IPFS network protocol code '{0}' is unknown.", code));
+                }
+
                 var p = (NetworkProtocol)Activator.CreateInstance(protocolType);
                 p.ReadValue(stream);
                 Protocols.Add(p);
@@ -328,7 +329,7 @@ namespace Ipfs
         /// <remarks>
         ///   The string representation is a sequence of <see cref="NetworkProtocol">network protocols</see>.
         /// </remarks>
-        void Read(TextReader stream)
+        private void Read(TextReader stream)
         {
             if (stream.Read() != '/')
             {
@@ -343,13 +344,19 @@ namespace Ipfs
 
                 int c;
                 while (-1 != (c = stream.Read()) && c != '/')
+                {
                     name.Append((char)c);
+                }
 
                 if (name.Length == 0)
+                {
                     break;
+                }
 
                 if (!NetworkProtocol.Names.TryGetValue(name.ToString(), out Type protocolType))
+                {
                     throw new FormatException($"The IPFS network protocol '{name}' is unknown.");
+                }
 
                 var p = (NetworkProtocol)Activator.CreateInstance(protocolType);
                 p.ReadValue(stream);
@@ -357,7 +364,9 @@ namespace Ipfs
             }
 
             if (Protocols.Count == 0)
+            {
                 throw new FormatException("The IPFS multiaddr has no protocol specified.");
+            }
         }
 
         /// <inheritdoc />
@@ -376,23 +385,28 @@ namespace Ipfs
         /// <inheritdoc />
         public override bool Equals(object obj)
         {
-            var that = obj as MultiAddress;
-            return (that is null)
-                ? false
-                : this.Equals(that);
+            return (obj is MultiAddress that) && Equals(that);
         }
 
         /// <inheritdoc />
         public bool Equals(MultiAddress that)
         {
-            if (this.Protocols.Count != that.Protocols.Count)
+            if (Protocols.Count != that.Protocols.Count)
+            {
                 return false;
+            }
+
             for (int i = 0; i < Protocols.Count; ++i)
             {
-                if (this.Protocols[i].Code != that.Protocols[i].Code)
+                if (Protocols[i].Code != that.Protocols[i].Code)
+                {
                     return false;
-                if (this.Protocols[i].Value != that.Protocols[i].Value)
+                }
+
+                if (Protocols[i].Value != that.Protocols[i].Value)
+                {
                     return false;
+                }
             }
             return true;
         }
@@ -402,9 +416,15 @@ namespace Ipfs
         /// </summary>
         public static bool operator ==(MultiAddress? a, MultiAddress? b)
         {
-            if (object.ReferenceEquals(a, b)) return true;
-            if (a is null) return false;
-            if (b is null) return false;
+            if (object.ReferenceEquals(a, b))
+            {
+                return true;
+            }
+
+            if (a is null || b is null)
+            {
+                return false;
+            }
 
             return a.Equals(b);
         }
@@ -412,10 +432,7 @@ namespace Ipfs
         /// <summary>
         ///   Value inequality.
         /// </summary>
-        public static bool operator !=(MultiAddress? a, MultiAddress? b)
-        {
-            return !(a == b);
-        }
+        public static bool operator !=(MultiAddress? a, MultiAddress? b) => !(a == b);
 
         /// <summary>
         ///   A sequence of <see cref="NetworkProtocol">network protocols</see> that is readable
@@ -423,11 +440,9 @@ namespace Ipfs
         /// </summary>
         public override string ToString()
         {
-            using (var s = new StringWriter())
-            {
-                Write(s);
-                return s.ToString();
-            }
+            using var s = new StringWriter();
+            Write(s);
+            return s.ToString();
         }
 
         /// <summary>
@@ -441,11 +456,9 @@ namespace Ipfs
         /// </remarks>
         public byte[] ToArray()
         {
-            using (var ms = new MemoryStream())
-            {
-                Write(ms);
-                return ms.ToArray();
-            }
+            using var ms = new MemoryStream();
+            Write(ms);
+            return ms.ToArray();
         }
 
         /// <summary>
@@ -453,10 +466,7 @@ namespace Ipfs
         /// </summary>
         /// <param name="s">The string representation of a <see cref="MultiAddress"/>.</param>
         /// <returns>A new <see cref="MultiAddress"/>.</returns>
-        static public implicit operator MultiAddress(string s)
-        {
-            return new MultiAddress(s);
-        }
+        public static implicit operator MultiAddress(string s) => new(s);
 
         /// <summary>
         ///   Try to create a <see cref="MultiAddress"/> from the specified
@@ -524,8 +534,7 @@ namespace Ipfs
 
             public override object? ReadJson(JsonReader reader, Type objectType, object? existingValue, JsonSerializer serializer)
             {
-                var s = reader.Value as string;
-                return s is null ? null : new MultiAddress(s);
+                return reader.Value is string s ? new MultiAddress(s) : null;
             }
         }
     }

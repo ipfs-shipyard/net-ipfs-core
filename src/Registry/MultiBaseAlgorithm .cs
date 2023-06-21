@@ -18,8 +18,8 @@ namespace Ipfs.Registry
     /// </remarks>
     public class MultiBaseAlgorithm
     {
-        internal static Dictionary<string, MultiBaseAlgorithm> Names = new Dictionary<string, MultiBaseAlgorithm>();
-        internal static Dictionary<char, MultiBaseAlgorithm> Codes = new Dictionary<char, MultiBaseAlgorithm>();
+        internal static Dictionary<string, MultiBaseAlgorithm> Names = new(StringComparer.Ordinal);
+        internal static Dictionary<char, MultiBaseAlgorithm> Codes = new();
 
         /// <summary>
         ///   Register the standard multi-base algorithms for IPFS.
@@ -113,7 +113,7 @@ namespace Ipfs.Registry
         /// <summary>
         ///   Use <see cref="Register"/> to create a new instance of a <see cref="MultiBaseAlgorithm"/>.
         /// </summary>
-        MultiBaseAlgorithm()
+        private MultiBaseAlgorithm()
         {
         }
 
@@ -152,11 +152,20 @@ namespace Ipfs.Registry
             Func<string, byte[]>? decode = null)
         {
             if (string.IsNullOrWhiteSpace(name))
+            {
                 throw new ArgumentNullException(nameof(name));
+            }
+
             if (Names.ContainsKey(name))
+            {
                 throw new ArgumentException($"The IPFS multi-base algorithm name '{name}' is already defined.");
+            }
+
             if (Codes.ContainsKey(code))
+            {
                 throw new ArgumentException($"The IPFS multi-base algorithm code '{code}' is already defined.");
+            }
+
             encode ??= bytes => throw new NotImplementedException($"The IPFS encode multi-base algorithm '{name}' is not implemented.");
             decode ??= s => throw new NotImplementedException($"The IPFS decode multi-base algorithm '{name}' is not implemented.");
 
@@ -188,10 +197,6 @@ namespace Ipfs.Registry
         /// <summary>
         ///   A sequence consisting of all algorithms.
         /// </summary>
-        public static IEnumerable<MultiBaseAlgorithm> All
-        {
-            get { return Names.Values; }
-        }
-
+        public static IEnumerable<MultiBaseAlgorithm> All => Names.Values;
     }
 }

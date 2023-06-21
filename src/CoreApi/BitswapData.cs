@@ -10,37 +10,37 @@ namespace Ipfs.CoreApi
         /// <summary>
         ///   TODO: Unknown.
         /// </summary>
-        public int ProvideBufLen;
+        public int ProvideBufLen { get; set; }
 
         /// <summary>
         ///   The content that is wanted.
         /// </summary>
-        public IEnumerable<Cid>? Wantlist;
+        public IEnumerable<Cid>? Wantlist { get; set; }
 
         /// <summary>
         ///   The known peers.
         /// </summary>
-        public IEnumerable<MultiHash>? Peers;
+        public IEnumerable<MultiHash>? Peers { get; set; }
 
         /// <summary>
         ///   The number of blocks sent by other peers.
         /// </summary>
-        public ulong BlocksReceived;
+        public ulong BlocksReceived { get; set; }
 
         /// <summary>
         ///   The number of bytes sent by other peers.
         /// </summary>
-        public ulong DataReceived;
+        public ulong DataReceived { get; set; }
 
         /// <summary>
         ///   The number of blocks sent to other peers.
         /// </summary>
-        public ulong BlocksSent;
+        public ulong BlocksSent { get; set; }
 
         /// <summary>
         ///   The number of bytes sent to other peers.
         /// </summary>
-        public ulong DataSent;
+        public ulong DataSent { get; set; }
 
         /// <summary>
         ///   The number of duplicate blocks sent by other peers.
@@ -49,7 +49,7 @@ namespace Ipfs.CoreApi
         ///   A duplicate block is a block that is already stored in the
         ///   local repository.
         /// </remarks>
-        public ulong DupBlksReceived;
+        public ulong DupBlksReceived { get; set; }
 
         /// <summary>
         ///   The number of duplicate bytes sent by other peers.
@@ -58,6 +58,6 @@ namespace Ipfs.CoreApi
         ///   A duplicate block is a block that is already stored in the
         ///   local repository.
         /// </remarks>
-        public ulong DupDataReceived;
+        public ulong DupDataReceived { get; set; }
     }
 }

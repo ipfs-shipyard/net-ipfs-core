@@ -31,16 +31,14 @@ namespace Ipfs
         /// <exception cref="KeyNotFoundException">
         ///   When <paramref name="name"/> is not registered.
         /// </exception>
-        static MultiBaseAlgorithm GetAlgorithm(string name)
+        private static MultiBaseAlgorithm GetAlgorithm(string name)
         {
-            try
+            if (MultiBaseAlgorithm.Names.TryGetValue(name, out MultiBaseAlgorithm? algorithm))
             {
-                return MultiBaseAlgorithm.Names[name];
+                return algorithm;
             }
-            catch (KeyNotFoundException)
-            {
-                throw new KeyNotFoundException($"MutiBase algorithm '{name}' is not registered.");
-            }
+
+            throw new KeyNotFoundException($"MultiBase algorithm '{name}' is not registered.");
         }
 
         /// <summary>
@@ -100,6 +98,5 @@ namespace Ipfs
                 throw new FormatException($"MultiBase '{s}' is invalid; decode failed.", e);
             }
         }
-
     }
 }

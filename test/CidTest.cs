@@ -391,7 +391,7 @@ namespace Ipfs
             ExceptionAssert.Throws<NotSupportedException>(() => cid.Version = 0);
         }
 
-        class CidAndX
+        private class CidAndX
         {
             public Cid? Cid;
             public int X;

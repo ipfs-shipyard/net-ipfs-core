@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Ipfs.CoreApi
+﻿namespace Ipfs.CoreApi
 {
     /// <summary>
     ///   The statistics for <see cref="IStatsApi.BandwidthAsync"/>.
@@ -12,22 +8,21 @@ namespace Ipfs.CoreApi
         /// <summary>
         ///   The number of bytes received.
         /// </summary>
-        public ulong TotalIn;
+        public ulong TotalIn { get; set; }
 
         /// <summary>
         ///   The number of bytes sent.
         /// </summary>
-        public ulong TotalOut;
+        public ulong TotalOut { get; set; }
 
         /// <summary>
         ///   TODO
         /// </summary>
-        public double RateIn;
+        public double RateIn { get; set; }
 
         /// <summary>
         ///   TODO
         /// </summary>
-        public double RateOut;
-
+        public double RateOut { get; set; }
     }
 }

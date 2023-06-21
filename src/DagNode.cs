@@ -17,9 +17,9 @@ namespace Ipfs
     [DataContract]
     public class DagNode : IMerkleNode<IMerkleLink>
     {
-        private Cid? id;
-        private string hashAlgorithm = MultiHash.DefaultAlgorithmName;
-        private long? size;
+        private Cid? _id;
+        private string _hashAlgorithm = MultiHash.DefaultAlgorithmName;
+        private long? _size;
 
         /// <summary>
         ///   Create a new instance of a <see cref="DagNode"/> with the specified
@@ -37,10 +37,10 @@ namespace Ipfs
         /// </param>
         public DagNode(byte[]? data, IEnumerable<IMerkleLink>? links = null, string hashAlgorithm = MultiHash.DefaultAlgorithmName)
         {
-            this.DataBytes = data ?? Array.Empty<byte>();
-            this.Links = (links ?? Array.Empty<DagLink>())
+            DataBytes = data ?? Array.Empty<byte>();
+            Links = (links ?? Array.Empty<DagLink>())
                 .OrderBy(link => link.Name ?? "");
-            this.hashAlgorithm = hashAlgorithm;
+            _hashAlgorithm = hashAlgorithm;
         }
 
         /// <summary>
@@ -78,13 +78,7 @@ namespace Ipfs
         public byte[] DataBytes { get; private set; } = Array.Empty<byte>();
 
         /// <inheritdoc />
-        public Stream DataStream
-        {
-            get
-            {
-                return new MemoryStream(DataBytes, false);
-            }
-        }
+        public Stream DataStream => new MemoryStream(DataBytes, false);
 
         /// <summary>
         ///   The serialised size in bytes of the node.
@@ -94,8 +88,8 @@ namespace Ipfs
         {
             get
             {
-                size ??= ComputeSize();
-                return size.Value;
+                _size ??= ComputeSize();
+                return _size.Value;
             }
         }
 
@@ -105,13 +99,13 @@ namespace Ipfs
         {
             get
             {
-                id ??= ComputeHash();
-                return id;
+                _id ??= ComputeHash();
+                return _id;
             }
             set
             {
-                id = value;
-                hashAlgorithm = id.Hash.Algorithm.Name;
+                _id = value;
+                _hashAlgorithm = _id.Hash.Algorithm.Name;
             }
         }
 
@@ -155,7 +149,7 @@ namespace Ipfs
         public DagNode AddLinks(IEnumerable<IMerkleLink> links)
         {
             var all = Links.Union(links);
-            return new DagNode(DataBytes, all, hashAlgorithm);
+            return new DagNode(DataBytes, all, _hashAlgorithm);
         }
 
         /// <summary>
@@ -201,7 +195,7 @@ namespace Ipfs
         {
             var ignore = links.ToLookup(link => link.Id);
             var some = Links.Where(link => !ignore.Contains(link.Id));
-            return new DagNode(DataBytes, some, hashAlgorithm);
+            return new DagNode(DataBytes, some, _hashAlgorithm);
         }
 
         /// <summary>
@@ -212,10 +206,8 @@ namespace Ipfs
         /// </param>
         public void Write(Stream stream)
         {
-            using (var cos = new CodedOutputStream(stream, true))
-            {
-                Write(cos);
-            }
+            using var cos = new CodedOutputStream(stream, true);
+            Write(cos);
         }
 
         /// <summary>
@@ -228,14 +220,12 @@ namespace Ipfs
         {
             foreach (var link in Links.Select(l => new DagLink(l)))
             {
-                using (var linkStream = new MemoryStream())
-                {
-                    link.Write(linkStream);
-                    var msg = linkStream.ToArray();
-                    stream.WriteTag(2, WireFormat.WireType.LengthDelimited);
-                    stream.WriteLength(msg.Length);
-                    stream.WriteSomeBytes(msg);
-                }
+                using var linkStream = new MemoryStream();
+                link.Write(linkStream);
+                var msg = linkStream.ToArray();
+                stream.WriteTag(2, WireFormat.WireType.LengthDelimited);
+                stream.WriteLength(msg.Length);
+                stream.WriteSomeBytes(msg);
             }
             
             if (DataBytes.Length > 0)
@@ -246,15 +236,13 @@ namespace Ipfs
             }
         }
 
-        void Read(Stream stream)
+        private void Read(Stream stream)
         {
-            using (var cis = new CodedInputStream(stream, true))
-            {
-                Read(cis);
-            }
+            using var cis = new CodedInputStream(stream, true);
+            Read(cis);
         }
 
-        void Read(CodedInputStream stream)
+        private void Read(CodedInputStream stream)
         {
             var links = new List<DagLink>();
             bool done = false;
@@ -291,31 +279,25 @@ namespace Ipfs
         /// </returns>
         public byte[] ToArray()
         {
-            using (var ms = new MemoryStream())
-            {
-                Write(ms);
-                return ms.ToArray();
-            }
+            using var ms = new MemoryStream();
+            Write(ms);
+            return ms.ToArray();
         }
 
         private MultiHash ComputeHash()
         {
-            using (var ms = new MemoryStream())
-            {
-                Write(ms);
-                size = ms.Position;
-                ms.Position = 0;
-                return MultiHash.ComputeHash(ms, hashAlgorithm);
-            }
+            using var ms = new MemoryStream();
+            Write(ms);
+            _size = ms.Position;
+            ms.Position = 0;
+            return MultiHash.ComputeHash(ms, _hashAlgorithm);
         }
 
         private long ComputeSize()
         {
-            using (var ms = new MemoryStream())
-            {
-                Write(ms);
-                return ms.Position;
-            }
+            using var ms = new MemoryStream();
+            Write(ms);
+            return ms.Position;
         }
     }
 }

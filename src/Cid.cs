@@ -29,13 +29,13 @@ namespace Ipfs
         ///   The default <see cref="ContentType"/>.
         /// </summary>
         public const string DefaultContentType = "dag-pb";
+        
+        private string? _encodedValue;
+        private int _version;
+        private string _encoding = MultiBase.DefaultAlgorithmName;
+        private string _contentType = DefaultContentType;
+        private MultiHash? _hash;
 
-        string? encodedValue;
-        int version;
-        string encoding = MultiBase.DefaultAlgorithmName;
-        string contentType = DefaultContentType;
-        MultiHash? hash;
- 
         /// <summary>
         ///   Throws if a property cannot be set.
         /// </summary>
@@ -46,9 +46,9 @@ namespace Ipfs
         ///   Once <see cref="Encode"/> is invoked, the CID's properties
         ///   cannot be set.
         /// </remarks>
-        void EnsureMutable()
+        private void EnsureMutable()
         {
-            if (encodedValue is not null)
+            if (_encodedValue is not null)
             {
                 throw new NotSupportedException("CID cannot be changed.");
             }
@@ -78,18 +78,15 @@ namespace Ipfs
         /// </remarks>
         public int Version
         {
-            get
-            {
-                return version;
-            }
+            get => _version;
             set
             {
                 EnsureMutable();
-                if (version == 0 && value > 0 && Encoding == "base58btc")
+                if (_version == 0 && value > 0 && Encoding == "base58btc")
                 {
-                    encoding = "base32";
+                    _encoding = "base32";
                 }
-                version = value;
+                _version = value;
             }
         }
 
@@ -106,10 +103,7 @@ namespace Ipfs
         /// <seealso cref="MultiBase"/>
         public string Encoding
         {
-            get
-            {
-                return encoding;
-            }
+            get => _encoding;
             set
             {
                 EnsureMutable();
@@ -117,7 +111,7 @@ namespace Ipfs
                 {
                     Version = 1;
                 }
-                encoding = value;
+                _encoding = value;
             }
         }
 
@@ -134,14 +128,11 @@ namespace Ipfs
         /// <seealso cref="MultiCodec"/>
         public string ContentType
         {
-            get
-            {
-                return contentType;
-            }
+            get => _contentType;
             set
             {
                 EnsureMutable();
-                contentType = value;
+                _contentType = value;
                 if (Version == 0 && value != "dag-pb")
                 {
                     Version = 1;
@@ -166,14 +157,11 @@ namespace Ipfs
         /// </remarks>
         public MultiHash Hash
         {
-            get
-            {
-                return hash ?? throw new InvalidDataException("Hash has not been set");
-            }
+            get => _hash ?? throw new InvalidDataException("Hash has not been set");
             set
             {
                 EnsureMutable();
-                hash = value;
+                _hash = value;
                 if (Version == 0 && value.Algorithm.Name != "sha2-256")
                 {
                     Version = 1;
@@ -267,25 +255,23 @@ namespace Ipfs
         /// <seealso cref="Decode"/>
         public string Encode()
         {
-            if (encodedValue is not null)
+            if (_encodedValue is not null)
             {
-                return encodedValue;
+                return _encodedValue;
             }
             if (Version == 0)
             {
-                encodedValue = Hash.ToBase58();
+                _encodedValue = Hash.ToBase58();
             }
             else
             {
-                using (var ms = new MemoryStream())
-                {
-                    ms.WriteVarint(Version);
-                    ms.WriteMultiCodec(ContentType);
-                    Hash.Write(ms);
-                    encodedValue = MultiBase.Encode(ms.ToArray(), Encoding);
-                }
+                using var ms = new MemoryStream();
+                ms.WriteVarint(Version);
+                ms.WriteMultiCodec(ContentType);
+                Hash.Write(ms);
+                _encodedValue = MultiBase.Encode(ms.ToArray(), Encoding);
             }
-            return encodedValue;
+            return _encodedValue;
         }
 
         /// <summary>
@@ -312,21 +298,19 @@ namespace Ipfs
                     return (Cid)new MultiHash(input);
                 }
 
-                using (var ms = new MemoryStream(MultiBase.Decode(input), false))
+                using var ms = new MemoryStream(MultiBase.Decode(input), false);
+                var v = ms.ReadVarint32();
+                if (v != 1)
                 {
-                    var v = ms.ReadVarint32();
-                    if (v != 1)
-                    {
-                        throw new InvalidDataException($"Unknown CID version '{v}'.");
-                    }
-                    return new Cid
-                    {
-                        Version = v,
-                        Encoding = Registry.MultiBaseAlgorithm.Codes[input[0]].Name,
-                        ContentType = ms.ReadMultiCodec().Name,
-                        Hash = new MultiHash(ms)
-                    };
+                    throw new InvalidDataException($"Unknown CID version '{v}'.");
                 }
+                return new Cid
+                {
+                    Version = v,
+                    Encoding = Registry.MultiBaseAlgorithm.Codes[input[0]].Name,
+                    ContentType = ms.ReadMultiCodec().Name,
+                    Hash = new MultiHash(ms)
+                };
             }
             catch (Exception e)
             {
@@ -369,19 +353,17 @@ namespace Ipfs
         /// </param>
         public void Write(Stream stream)
         {
-            using (var ms = new MemoryStream())
+            using var ms = new MemoryStream();
+            if (Version != 0)
             {
-                if (Version != 0)
-                {
-                    ms.WriteVarint(Version);
-                    ms.WriteMultiCodec(this.ContentType);
-                }
-                Hash.Write(ms);
-
-                stream.WriteVarint(ms.Length);
-                ms.Position = 0;
-                ms.CopyTo(stream);
+                ms.WriteVarint(Version);
+                ms.WriteMultiCodec(ContentType);
             }
+            Hash.Write(ms);
+
+            stream.WriteVarint(ms.Length);
+            ms.Position = 0;
+            ms.CopyTo(stream);
         }
 
         /// <summary>
@@ -420,19 +402,17 @@ namespace Ipfs
         /// </param>
         public void Write(CodedOutputStream stream)
         {
-            using (var ms = new MemoryStream())
+            using var ms = new MemoryStream();
+            if (Version != 0)
             {
-                if (Version != 0)
-                {
-                    ms.WriteVarint(Version);
-                    ms.WriteMultiCodec(this.ContentType);
-                }
-                Hash.Write(ms);
-
-                var bytes = ms.ToArray();
-                stream.WriteLength(bytes.Length);
-                stream.WriteSomeBytes(bytes);
+                ms.WriteVarint(Version);
+                ms.WriteMultiCodec(ContentType);
             }
+            Hash.Write(ms);
+
+            var bytes = ms.ToArray();
+            stream.WriteLength(bytes.Length);
+            stream.WriteSomeBytes(bytes);
         }
 
         /// <summary>
@@ -457,13 +437,11 @@ namespace Ipfs
                 return cid;
             }
 
-            using (var ms = new MemoryStream(buffer, false))
-            {
-                cid.Version = ms.ReadVarint32();
-                cid.ContentType = ms.ReadMultiCodec().Name;
-                cid.Hash = new MultiHash(ms);
-                return cid;
-            }
+            using var ms = new MemoryStream(buffer, false);
+            cid.Version = ms.ReadVarint32();
+            cid.ContentType = ms.ReadMultiCodec().Name;
+            cid.Hash = new MultiHash(ms);
+            return cid;
         }
 
         /// <summary>
@@ -482,13 +460,11 @@ namespace Ipfs
                 return Hash.ToArray();
             }
 
-            using (var ms = new MemoryStream())
-            {
-                ms.WriteVarint(Version);
-                ms.WriteMultiCodec(this.ContentType);
-                Hash.Write(ms);
-                return ms.ToArray();
-            }
+            using var ms = new MemoryStream();
+            ms.WriteVarint(Version);
+            ms.WriteMultiCodec(ContentType);
+            Hash.Write(ms);
+            return ms.ToArray();
         }
 
         /// <summary>
@@ -501,7 +477,7 @@ namespace Ipfs
         ///   A new <see cref="Cid"/> based on the <paramref name="hash"/>.  A <see cref="Version"/> 0
         ///   CID is returned if the <paramref name="hash"/> is "sha2-356"; otherwise <see cref="Version"/> 1.
         /// </returns>
-        static public implicit operator Cid(MultiHash hash)
+        public static implicit operator Cid(MultiHash hash)
         {
             if (hash.Algorithm.Name == "sha2-256")
             {
@@ -529,16 +505,13 @@ namespace Ipfs
         /// <inheritdoc />
         public override bool Equals(object? obj)
         {
-            var that = obj as Cid;
-            return (that is null)
-                ? false
-                : this.Encode() == that.Encode();
+            return (obj is Cid that) && Encode() == that.Encode();
         }
 
         /// <inheritdoc />
         public bool Equals(Cid that)
         {
-            return this.Encode() == that.Encode();
+            return Encode() == that.Encode();
         }
 
         /// <summary>
@@ -564,10 +537,7 @@ namespace Ipfs
         /// <summary>
         ///   Value inequality.
         /// </summary>
-        public static bool operator !=(Cid? a, Cid? b)
-        {
-            return !(a == b);
-        }
+        public static bool operator !=(Cid? a, Cid? b) => !(a == b);
 
         /// <summary>
         ///   Implicit casting of a <see cref="string"/> to a <see cref="Cid"/>.
@@ -581,10 +551,7 @@ namespace Ipfs
         /// <remarks>
         ///    Equivalent to <code> Cid.Decode(s)</code>
         /// </remarks>
-        static public implicit operator Cid(string s)
-        {
-            return Cid.Decode(s);
-        }
+        public static implicit operator Cid(string s) => Cid.Decode(s);
 
         /// <summary>
         ///   Implicit casting of a <see cref="Cid"/> to a <see cref="string"/>.
@@ -598,10 +565,7 @@ namespace Ipfs
         /// <remarks>
         ///    Equivalent to <code>Cid.Encode()</code>
         /// </remarks>
-        static public implicit operator string(Cid id)
-        {
-            return id.Encode();
-        }
+        public static implicit operator string(Cid id) => id.Encode();
 
         /// <summary>
         ///   Conversion of a <see cref="Cid"/> to and from JSON.
