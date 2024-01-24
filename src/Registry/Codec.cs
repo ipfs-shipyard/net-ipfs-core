@@ -35,6 +35,7 @@ namespace Ipfs.Registry
             Register("multibase", 0x33);
             Register("dag-pb", 0x70);
             Register("dag-cbor", 0x71);
+            Register("libp2p-key", 0x72);
             Register("git-raw", 0x78);
             Register("eth-block", 0x90);
             Register("eth-block-list", 0x91);
