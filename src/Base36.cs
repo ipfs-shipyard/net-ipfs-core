@@ -138,7 +138,7 @@ namespace Ipfs
         {
             if (string.IsNullOrEmpty(s))
             {
-                throw new ArgumentException("Cannot decode a zero-length string.");
+                return Array.Empty<byte>();
             }
 
             int zeroCount = 0;
