@@ -9,9 +9,12 @@
         ///   Unique identifier.
         /// </summary>
         /// <value>
-        ///   The <see cref="MultiHash"/> of the key's public key.
+        ///   A <see cref="Cid"/> containing the <see cref="MultiHash"/> of the public libp2p-key encoded in the requested Multibase.
         /// </value>
-        MultiHash Id { get; }
+        /// <remarks>
+        ///  The CID of the ipns libp2p-key encoded in the requested multibase.
+        /// </remarks>
+        Cid Id { get; }
 
         /// <summary>
         ///   The locally assigned name to the key.

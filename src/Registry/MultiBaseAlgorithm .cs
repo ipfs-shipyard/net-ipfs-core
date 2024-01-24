@@ -57,6 +57,7 @@ namespace Ipfs.Registry
             Register("base32hexpad", 't',
                 bytes => SimpleBase.Base32.ExtendedHex.Encode(bytes, true).ToLowerInvariant(),
                 s => SimpleBase.Base32.ExtendedHex.Decode(s));
+            Register("base36", 'k', Base36.EncodeToStringLc, Base36.DecodeString);
             Register("BASE16", 'F',
                 bytes => SimpleBase.Base16.EncodeUpper(bytes),
                 s => SimpleBase.Base16.Decode(s));

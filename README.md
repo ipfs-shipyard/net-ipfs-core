@@ -6,12 +6,17 @@ The core objects and interfaces of the [IPFS](https://github.com/ipfs/ipfs) (Int
 
 The interplanetary file system is the permanent web. It is a new hypermedia distribution protocol, addressed by content and identities. IPFS enables the creation of completely distributed applications. It aims to make the web faster, safer, and more open.
 
-It supports .NET Standard 2.0.
+This library supports .NET Standard 2.0.
 
-### 🚧 NOTICE 🚧
-We've only [just](https://github.com/richardschneider/net-ipfs-http-client/issues/72) moved into the shipyard, reviving a project that has been abandoned since 2019.
+## Install
 
-**We're actively working to make it usable again.**
+Published releases are available on [NuGet](https://www.nuget.org/packages/IpfsShipyard.Ipfs.Core).  To install, run the following command in the [Package Manager Console](https://docs.nuget.org/docs/start-here/using-the-package-manager-console).
+
+    PM> Install-Package IpfsShipyard.Ipfs.Core
+    
+Or using [dotnet](https://docs.microsoft.com/en-us/dotnet/core/tools/dotnet)
+
+    > dotnet add package IpfsShipyard.Ipfs.Core
 
 ## Major objects
 
@@ -38,22 +43,12 @@ The [DagNode](https://richardschneider.github.io/net-ipfs-core/api/Ipfs.DagNode.
 the objects themselves, and that every object contains a secure 
 representation of its children.
 
-Every Merkle is a directed acyclic graph (DAG) because each node is accessed via its name (the hash of `DagNode`). Each branch of Merkle is the hash of its local content (data and links);  naming children by their hash instead of their full contents. So after creation there is no way to edit a DagNode. This prevents cycles (assuming there are no hash collisions) since one can not link the first created node to the last note to create the last reference.
-
-## Base58
-
-Most binary data (objects) in IPFS is represented as a [Base-58](https://en.wikipedia.org/wiki/Base58) string; the BitCoin alphabet is used.
-
-> Base58 is a group of binary-to-text encoding schemes used to represent large integers as alphanumeric text. It is similar to Base64 but has been modified to avoid both non-alphanumeric characters and letters which might look ambiguous when printed. It is therefore designed for human users who manually enter the data, copying from some visual source, but also allows easy copy and paste because a double-click will usually select the whole string. 
+Every Merkle is a directed acyclic graph (DAG) because each node is accessed via its name (the hash of `DagNode`). Each branch of Merkle is the hash of its local content (data and links);  naming children by their hash instead of their full contents. So after creation there is no way to edit a DagNode. This prevents cycles (assuming there are no hash collisions) since one can not link the first created node to the last note to create the last reference. 
 
 ## Related Projects
 
-- [IPFS DSL](https://github.com/cloveekprojeqt/ipfs-dsl) - A declarative embedded language for building compositional programs and protocols over the InterPlanetary File System.
 - [IPFS HTTP Client](https://github.com/ipfs-shipyard/net-ipfs-http-client) - A .Net client library for the IPFS HTTP API.
-- [IPFS HTTP Gateway](https://github.com/richardschneider/net-ipfs-http-gateway) - Serves IPFS files/directories via HTTP.
-- [IPFS Engine](https://github.com/richardschneider/net-ipfs-engine) - Implements the Core API.
-- [Peer Talk](https://github.com/richardschneider/peer-talk) - Peer to peer communication.
 
 ## License
-The IPFS Core library is licensed under the [MIT](http://www.opensource.org/licenses/mit-license.php "Read more about the MIT license form") license. Refer to the [LICENSE](https://github.com/richardschneider/net-ipfs-core/blob/master/LICENSE) file for more information.
+The IPFS Core library is licensed under the [MIT](http://www.opensource.org/licenses/mit-license.php "Read more about the MIT license form") license. Refer to the [LICENSE](LICENSE) file for more information.
 
