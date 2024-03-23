@@ -7,8 +7,7 @@ namespace Ipfs
     /// </summary>
     /// <remarks>
     ///   A <b>DataBlock</b> has an <see cref="Id">unique ID</see>
-    ///   and some data (<see cref="IDataBlock.DataBytes"/> 
-    ///   or <see cref="IDataBlock.DataStream"/>).
+    ///   and some data.
     ///   <para>
     ///   It is useful to talk about them as "blocks" in Bitswap 
     ///   and other things that do not care about what is being stored.
@@ -17,25 +16,6 @@ namespace Ipfs
     /// <seealso cref="IMerkleNode{Link}"/>
     public interface IDataBlock
     {
-        /// <summary>
-        ///   Contents as a byte array.
-        /// </summary>
-        /// <remarks>
-        ///   It is never <b>null</b>.
-        /// </remarks>
-        /// <value>
-        ///   The contents as a sequence of bytes.
-        /// </value>
-        byte[] DataBytes { get; }
-
-        /// <summary>
-        ///   Contents as a stream of bytes.
-        /// </summary>
-        /// <value>
-        ///   The contents as a stream of bytes.
-        /// </value>
-        Stream DataStream { get; }
-
         /// <summary>
         ///   The unique ID of the data.
         /// </summary>

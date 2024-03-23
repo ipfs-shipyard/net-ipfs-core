@@ -12,6 +12,17 @@ namespace Ipfs
     public interface IPublishedMessage : IDataBlock
     {
         /// <summary>
+        ///   Contents as a byte array.
+        /// </summary>
+        /// <remarks>
+        ///   It is never <b>null</b>.
+        /// </remarks>
+        /// <value>
+        ///   The contents as a sequence of bytes.
+        /// </value>
+        byte[] DataBytes { get; }
+
+        /// <summary>
         ///   The sender of the message.
         /// </summary>
         /// <value>

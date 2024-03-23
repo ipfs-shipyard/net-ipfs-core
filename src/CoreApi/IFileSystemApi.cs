@@ -161,11 +161,9 @@ namespace Ipfs.CoreApi
         ///   Is used to stop the task.  When cancelled, the <see cref="TaskCanceledException"/> is raised.
         /// </param>
         /// <returns>
-        ///   A task that represents the asynchronous operation. The task's value is
-        ///   an <see cref="IFileSystemNode"/>  The <see cref="IDataBlock.DataBytes"/>
-        ///   and <see cref="IDataBlock.DataStream"/> are set to <b>null</b>.
+        ///   A task that represents the asynchronous operation.
         /// </returns>
-        Task<IFileSystemNode> ListFileAsync(string path, CancellationToken cancel = default);
+        Task<IFileSystemNode> ListAsync(string path, CancellationToken cancel = default);
 
         /// <summary>
         ///   Download IPFS objects as a TAR archive.

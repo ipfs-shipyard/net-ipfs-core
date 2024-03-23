@@ -7,8 +7,7 @@ namespace Ipfs
     /// </summary>
     /// <remarks>
     ///   A <b>MerkleNode</b> has a sequence of navigable <see cref="Links"/>
-    ///   and some data (<see cref="IDataBlock.DataBytes"/> 
-    ///   or <see cref="IDataBlock.DataStream"/>).
+    ///   and some data.
     /// </remarks>
     /// <typeparam name="Link">
     ///   The type of <see cref="IMerkleLink"/> used by this node.
