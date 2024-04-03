@@ -14,7 +14,6 @@ namespace Ipfs.CoreApi
     ///   This API supports other IPLD formats, such as cbor, ethereum-block, git, ...
     /// </remarks>
     /// <seealso cref="IObjectApi"/>
-    /// <seealso cref="ILinkedNode"/>
     /// <seealso href="https://github.com/ipfs/interface-ipfs-core/blob/master/SPEC/DAG.md">Dag API spec</seealso>
     public interface IDagApi
     {
