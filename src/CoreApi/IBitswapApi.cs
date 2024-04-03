@@ -27,24 +27,6 @@ namespace Ipfs.CoreApi
     public interface IBitswapApi
     {
         /// <summary>
-        ///   Gets a block from the IPFS network.
-        /// </summary>
-        /// <param name="id">
-        ///   The <see cref="Cid"/> of the <see cref="IDataBlock">block</see>.
-        /// </param>
-        /// <param name="cancel">
-        ///   Is used to stop the task.  When cancelled, the <see cref="TaskCanceledException"/> is raised.
-        /// </param>
-        /// <returns>
-        ///   A task that represents the asynchronous get operation. The task's value
-        ///   contains the block's id and data.
-        /// </returns>
-        /// <remarks>
-        ///   Waits for another peer to supply the block with the <paramref name="id"/>.
-        /// </remarks>
-        Task<IDataBlock> GetAsync(Cid id, CancellationToken cancel = default);
-
-        /// <summary>
         ///   The blocks that are needed by a peer.
         /// </summary>
         /// <param name="peer">
@@ -59,24 +41,6 @@ namespace Ipfs.CoreApi
         ///   contains the sequence of blocks needed by the <paramref name="peer"/>.
         /// </returns>
         Task<IEnumerable<Cid>> WantsAsync(MultiHash? peer = null, CancellationToken cancel = default);
-
-        /// <summary>
-        ///   Remove the CID from the want list.
-        /// </summary>
-        /// <param name="id">
-        ///   The content that is no longer needed.
-        /// </param>
-        /// <param name="cancel">
-        ///   Is used to stop the task.  When cancelled, the <see cref="TaskCanceledException"/> is raised.
-        /// </param>
-        /// <returns>
-        ///   A task that represents the asynchronous operation.
-        /// </returns>
-        /// <remarks>
-        ///   Any outstanding <see cref="GetAsync(Cid, CancellationToken)"/> for the
-        ///   <paramref name="id"/> are cancelled.
-        /// </remarks>
-        Task UnwantAsync(Cid id, CancellationToken cancel = default);
 
         /// <summary>
         ///   Gets information on the blocks exchanged with a specific <see cref="Peer"/>.

@@ -30,7 +30,7 @@ namespace Ipfs.CoreApi
         ///    A task that represents the asynchronous get operation. The task's value
         ///    contains the block's id and data.
         /// </returns>
-        Task<IDataBlock> GetAsync(Cid id, CancellationToken cancel = default);
+        Task<byte[]> GetAsync(Cid id, CancellationToken cancel = default);
 
         /// <summary>
         ///   Stores a byte array as an IPFS block.

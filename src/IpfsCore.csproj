@@ -8,7 +8,7 @@
         <LangVersion>12.0</LangVersion>
 
         <!-- https://semver.org/spec/v2.0.0.html -->
-        <Version>0.2.0</Version>
+        <Version>0.3.0</Version>
         <AssemblyVersion>$(Version)</AssemblyVersion>
 
         <!-- Nuget specs -->
@@ -30,6 +30,14 @@
         <GeneratePackageOnBuild Condition=" '$(Configuration)' == 'Release' ">true</GeneratePackageOnBuild>
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
         <PackageReleaseNotes>
+--- 0.3.0 ---
+A full analysis of the Bitswap API was made to bring it in line with Kubo's RPC API.
+
+[Breaking]
+GetAsync and UnwantAsync were removed from IBitswapApi. These were not part of Kubo's API, but were intended for custom implementations. To migrate, derive IBitswapApi and add your custom functionality in your library. See also https://discord.com/channels/806902334369824788/942673321852563456/1225047628602151084.
+The return type for IBlockApi.GetAsync was changed from IDataBlock to byte[], since IDataBlock was removed in 0.2.0. Kubo's RPC API (including the JS implementation) simply returns the buffer, and so are we now.
+ILinkedNode was removed as it was not used anywhere in the broader net-ipfs codebase and seems to have been placed there years ago for future plans that were never carried out.
+
 --- 0.2.0 ---
 [Breaking]
 IDataBlock.DataStream was removed. This pattern encouraged async calls behind synchronous property getters, which is a bad practice and can cause deadlocks. Call the async methods directly on the API instead.

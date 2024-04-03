@@ -1,12 +1,10 @@
-﻿using System.IO;
-
-namespace Ipfs
+﻿namespace Ipfs
 {
     /// <summary>
     ///   Some data that is stored in IPFS.
     /// </summary>
     /// <remarks>
-    ///   A <b>DataBlock</b> has an <see cref="Id">unique ID</see>
+    ///   A <b>DataBlock</b> has a unique <see cref="Id">.</see>
     ///   and some data.
     ///   <para>
     ///   It is useful to talk about them as "blocks" in Bitswap 
