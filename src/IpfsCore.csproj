@@ -8,7 +8,7 @@
         <LangVersion>12.0</LangVersion>
 
         <!-- https://semver.org/spec/v2.0.0.html -->
-        <Version>0.3.0</Version>
+        <Version>0.4.0</Version>
         <AssemblyVersion>$(Version)</AssemblyVersion>
 
         <!-- Nuget specs -->
@@ -30,6 +30,10 @@
         <GeneratePackageOnBuild Condition=" '$(Configuration)' == 'Release' ">true</GeneratePackageOnBuild>
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
         <PackageReleaseNotes>
+--- 0.4.0 ---
+[Breaking]
+Added Mfs property to ICoreApi of type IMfsApi. The interface was added in a previous update, but it was not added to ICoreApi.
+
 --- 0.3.0 ---
 A full analysis of the Bitswap API was made to bring it in line with Kubo's RPC API.
 
@@ -60,17 +64,17 @@ Added missing IFileSystemApi.ListAsync. Doesn't fully replace the removed IFileS
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Google.Protobuf" Version="3.21.1" />
-        <PackageReference Include="Microsoft.Bcl.AsyncInterfaces" Version="6.0.0" />
-        <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+        <PackageReference Include="Google.Protobuf" Version="3.26.1" />
+        <PackageReference Include="Microsoft.Bcl.AsyncInterfaces" Version="8.0.0" />
+        <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
         <PackageReference Include="PolySharp" Version="1.14.1">
           <PrivateAssets>all</PrivateAssets>
           <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
         <PackageReference Include="Portable.BouncyCastle" Version="1.8.5" />
         <PackageReference Include="SimpleBase" Version="1.3.1" />
-        <PackageReference Include="Grpc.Tools" Version="2.46.3" PrivateAssets="All" />
-        <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1" PrivateAssets="All" />
+        <PackageReference Include="Grpc.Tools" Version="2.62.0" PrivateAssets="All" />
+        <PackageReference Include="Microsoft.SourceLink.GitHub" Version="8.0.0" PrivateAssets="All" />
     </ItemGroup>
 
     <ItemGroup>

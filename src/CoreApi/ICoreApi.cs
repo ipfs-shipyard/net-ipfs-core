@@ -86,6 +86,14 @@ namespace Ipfs.CoreApi
         IFileSystemApi FileSystem { get; }
 
         /// <summary>
+        /// Provides access to the Mfs API.
+        /// </summary>
+        /// <value>
+        ///   An object that implements <see cref="IMfsApi"/>.
+        /// </value>
+        IMfsApi Mfs { get; }
+
+        /// <summary>
         ///   Provides access to the Generic API.
         /// </summary>
         /// <value>
