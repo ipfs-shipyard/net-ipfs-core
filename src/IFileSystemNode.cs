@@ -13,5 +13,10 @@
         ///   it is some type of a file.
         /// </value>
         bool IsDirectory { get; }
+
+        /// <summary>
+        ///   The file name of the IPFS node.
+        /// </summary>
+        public string Name { get; }
     }
 }
