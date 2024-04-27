@@ -115,6 +115,23 @@ namespace Ipfs.CoreApi
         Task<string> ReadFileAsync(string path, long? offset = null, long? count = null, CancellationToken cancel = default);
 
         /// <summary>
+        ///   Read a file as a stream from MFS.
+        /// </summary>
+        /// <param name="path">
+        ///   Path to file to be read. Required: yes
+        /// </param>
+        /// <param name="offset">
+        ///   Byte offset to begin reading from. Required: no
+        /// </param>
+        /// <param name="count">
+        ///   Maximum number of bytes to read. Required: no
+        /// </param>
+        /// <param name="cancel">
+        ///   Is used to stop the task.  When cancelled, the <see cref="TaskCanceledException"/> is raised.
+        /// </param>
+        Task<Stream> ReadFileStreamAsync(string path, long? offset = null, long? count = null, CancellationToken cancel = default);
+
+        /// <summary>
         ///   Remove a file or directory or from MFS.
         /// </summary>
         /// <param name="path">
