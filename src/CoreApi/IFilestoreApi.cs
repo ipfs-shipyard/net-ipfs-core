@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Ipfs.CoreApi
@@ -13,17 +14,17 @@ namespace Ipfs.CoreApi
         /// <summary>
         /// Lists blocks that are both in the filestore and standard block storage.
         /// </summary>
-        public Task<IDupsResponse> DupsAsync();
+        public Task<IDupsResponse> DupsAsync(CancellationToken token);
 
         /// <summary>
         /// Lists objects in filestore.
         /// </summary>
         /// <returns></returns>
-        public Task<IFilesStoreApiObjectResponse> ListAsync(string cid, bool fileOrder);
+        public Task<IFilesStoreApiObjectResponse> ListAsync(string cid, CancellationToken token, bool fileOrder);
 
         /// <summary>
         /// Verifies objects in filestore.
         /// </summary>
-        public Task<IFilesStoreApiObjectResponse> VerifyObjectsAsync(string cid, bool fileOrder);
+        public Task<IFilesStoreApiObjectResponse> VerifyObjectsAsync(string cid, bool fileOrder, CancellationToken token);
     }
 }
