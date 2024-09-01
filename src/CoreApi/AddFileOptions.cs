@@ -96,5 +96,15 @@ namespace Ipfs.CoreApi
         ///   Used to report the progress of a file transfer.
         /// </summary>
         public IProgress<TransferProgress>? Progress { get; set; }
+
+        /// <summary>
+        /// Flag for no cache argument
+        /// </summary>
+        public bool? NoCache {get; set; } 
+
+         /// <summary>
+        /// Flag for fs cache argument
+        /// </summary>
+        public bool? FsCache{get; set; }
     }
 }
