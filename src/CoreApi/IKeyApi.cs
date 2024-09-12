@@ -34,7 +34,7 @@ namespace Ipfs.CoreApi
         ///   A task that represents the asynchronous operation. The task's result is
         ///   the key that was created.
         /// </returns>
-        Task<IFilesStoreKey> CreateAsync(
+        Task<IKey> CreateAsync(
             string name,
             string keyType,
             int size,
@@ -50,7 +50,7 @@ namespace Ipfs.CoreApi
         ///   A task that represents the asynchronous operation. The task's result is
         ///   a sequence of IPFS keys.
         /// </returns>
-        Task<IEnumerable<IFilesStoreKey>> ListAsync(CancellationToken cancel = default);
+        Task<IEnumerable<IKey>> ListAsync(CancellationToken cancel = default);
 
         /// <summary>
         ///   Delete the specified key.
@@ -65,7 +65,7 @@ namespace Ipfs.CoreApi
         ///   A task that represents the asynchronous operation. The task's result is
         ///   the key that was deleted, or null if the key is not present.
         /// </returns>
-        Task<IFilesStoreKey?> RemoveAsync(string name, CancellationToken cancel = default);
+        Task<IKey?> RemoveAsync(string name, CancellationToken cancel = default);
 
         /// <summary>
         ///   Rename the specified key.
@@ -83,7 +83,7 @@ namespace Ipfs.CoreApi
         ///   A task that represents the asynchronous operation. The task's result is
         ///   the new key after the rename.
         /// </returns>
-        Task<IFilesStoreKey> RenameAsync(string oldName, string newName, CancellationToken cancel = default);
+        Task<IKey> RenameAsync(string oldName, string newName, CancellationToken cancel = default);
 
         /// <summary>
         ///   Export a key to a PEM encoded password protected PKCS #8 container.
@@ -122,6 +122,6 @@ namespace Ipfs.CoreApi
         ///    A task that represents the asynchronous operation. The task's result
         ///    is the newly imported key.
         /// </returns>
-        Task<IFilesStoreKey> ImportAsync(string name, string pem, char[]? password = null, CancellationToken cancel = default);
+        Task<IKey> ImportAsync(string name, string pem, char[]? password = null, CancellationToken cancel = default);
     }
 }

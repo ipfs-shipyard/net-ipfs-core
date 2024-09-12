@@ -18,11 +18,6 @@ namespace Ipfs.CoreApi
         public string FilePath { get; set; }
 
         /// <summary>
-        /// The key to the Filestore.
-        /// </summary>
-        public IFilesStoreKey Key { get; set; }
-
-        /// <summary>
         /// The response offset.
         /// </summary>
         public string Offset { get; set; }
@@ -47,7 +42,7 @@ namespace Ipfs.CoreApi
         /// Key value.
         /// </summary>
         [JsonProperty("/")]
-        public string Value { get; set; }
+        public string _ { get; set; }
     }
 
     /// <summary>
