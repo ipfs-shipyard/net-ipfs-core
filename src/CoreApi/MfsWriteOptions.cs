@@ -77,5 +77,16 @@ namespace Ipfs.CoreApi
         /// </value>
         /// <seealso cref="MultiHash.DefaultAlgorithmName"/>
         public string? Hash { get; set; } = null;
+
+        /// <summary>
+        ///   Flush the data to disk after writing.
+        /// </summary>
+        /// <value>
+        ///   The default is <b>null</b> and the server will use its default of true.
+        /// </value>
+        /// <remarks>
+        ///   Use caution when setting this flag to false. It will improve performance for large numbers of file operations, but it does so at the cost of consistency guarantees. If the daemon is unexpectedly killed before running a proper flush, then data may be lost. This also applies to running the gc concurrently with flush false.
+        /// </remarks>
+        public bool? Flush { get; set; } = null;
     }
 }
