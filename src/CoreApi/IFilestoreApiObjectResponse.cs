@@ -28,7 +28,7 @@ namespace Ipfs.CoreApi
         public string Size { get; set; }
 
         /// <summary>
-        /// The object status.k
+        /// The object status.
         /// </summary>
         public string Status { get; set; }
     }
@@ -36,7 +36,7 @@ namespace Ipfs.CoreApi
     /// <summary>
     /// Model for the hold filestore key
     /// </summary>
-    public interface IFilesStoreKey
+    public interface IFilestoreKey
     {
         /// <summary>
         /// Key value.

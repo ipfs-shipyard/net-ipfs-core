@@ -98,12 +98,12 @@ namespace Ipfs.CoreApi
         public IProgress<TransferProgress>? Progress { get; set; }
 
         /// <summary>
-        /// Flag for no cache argument
+        /// Add the file using filestore. Implies raw-leaves.
         /// </summary>
         public bool? NoCopy {get; set; } 
 
          /// <summary>
-        /// Flag for fs cache argument
+        /// Check the filestore for pre-existing blocks. 
         /// </summary>
         public bool? FsCache{get; set; }
     }
