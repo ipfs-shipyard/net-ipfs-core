@@ -96,5 +96,15 @@ namespace Ipfs.CoreApi
         ///   Used to report the progress of a file transfer.
         /// </summary>
         public IProgress<TransferProgress>? Progress { get; set; }
+
+        /// <summary>
+        /// Add the file using filestore. Implies raw-leaves.
+        /// </summary>
+        public bool? NoCopy {get; set; } 
+
+         /// <summary>
+        /// Check the filestore for pre-existing blocks. 
+        /// </summary>
+        public bool? FsCache{get; set; }
     }
 }
