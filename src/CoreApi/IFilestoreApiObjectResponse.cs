@@ -5,7 +5,7 @@ namespace Ipfs.CoreApi
     /// <summary>
     /// Interface for <see cref="IFilestoreApi"/> repsonse.
     /// </summary>
-    public interface IFilesStoreApiObjectResponse
+    public interface IFilestoreApiObjectResponse
     {
         /// <summary>
         /// Holds any error message.
