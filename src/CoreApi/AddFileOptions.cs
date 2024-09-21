@@ -100,7 +100,7 @@ namespace Ipfs.CoreApi
         /// <summary>
         /// Flag for no cache argument
         /// </summary>
-        public bool? NoCache {get; set; } 
+        public bool? NoCopy {get; set; } 
 
          /// <summary>
         /// Flag for fs cache argument

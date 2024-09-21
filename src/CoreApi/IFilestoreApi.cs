@@ -17,14 +17,21 @@ namespace Ipfs.CoreApi
         public Task<IDupsResponse> DupsAsync(CancellationToken token);
 
         /// <summary>
-        /// Lists objects in filestore.
+        /// Lists filestore objects
         /// </summary>
+        /// <param name="cid">Cid of objects to verify. Required: no.</param>
+        /// <param name="token">The cancellation token.</param>
+        /// <param name="fileOrder">Verify the objects based on the order of the backing file. Required: no.</param>
         /// <returns></returns>
-        public Task<IFilesStoreApiObjectResponse> ListAsync(string cid, CancellationToken token, bool fileOrder);
+        public Task<IFilestoreApiObjectResponse> ListAsync(string cid, bool fileOrder, CancellationToken token);
 
         /// <summary>
-        /// Verifies objects in filestore.
+        /// 
         /// </summary>
-        public Task<IFilesStoreApiObjectResponse> VerifyObjectsAsync(string cid, bool fileOrder, CancellationToken token);
+        /// <param name="cid">Cid of objects to list. Required: no.</param>
+        /// <param name="token">The cancellation token.</param>
+        /// <param name="fileOrder">Lists the objects based on the order of the backing file. Required: no.</param>
+        /// <returns></returns>
+        public Task<IFilestoreApiObjectResponse> VerifyObjectsAsync(string cid, bool fileOrder, CancellationToken token);
     }
 }
