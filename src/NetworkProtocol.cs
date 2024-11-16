@@ -53,6 +53,7 @@ namespace Ipfs
             NetworkProtocol.Register<DnsAddrNetworkProtocol>();
             NetworkProtocol.Register<WssNetworkProtocol>();
             NetworkProtocol.Register<IpcidrNetworkProtocol>();
+            NetworkProtocol.Register<WebRtcDirectNetworkProtocol>();
         }
 
         /// <summary>
@@ -432,6 +433,12 @@ namespace Ipfs
     {
         public override string Name => "quic-v1";
         public override uint Code => 465;
+    }
+
+    internal class WebRtcDirectNetworkProtocol : ValuelessNetworkProtocol
+    {
+        public override string Name => "webrtc-direct";
+        public override uint Code => 280;
     }
 
     internal class WebTransportNetworkProtocol : ValuelessNetworkProtocol
