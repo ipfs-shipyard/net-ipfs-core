@@ -42,5 +42,16 @@ namespace Ipfs
         ///   A new <see cref="IMerkleLink"/> to the node.
         /// </returns>
         Link ToLink(string name = "");
+
+        /// <summary>
+        ///   The serialised size (in bytes) of the linked node.
+        /// </summary>
+        /// <value>Number of bytes.</value>
+        /// <remarks>
+        /// Both <see cref="IMerkleLink"/> and <see cref="IMerkleNode{Link}"/> have a <see cref="Size"/> of type <see cref="ulong"/>.
+        /// <para/>
+        /// See <see href="https://github.com/ipfs/boxo/blob/main/ipld/merkledag/pb/merkledag.pb.go#L654-L697"/>.
+        /// </remarks>
+        ulong Size { get; }
     }
 }

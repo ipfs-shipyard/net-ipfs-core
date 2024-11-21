@@ -14,7 +14,7 @@ namespace Ipfs
         /// <param name="name">The name associated with the linked node.</param>
         /// <param name="id">The <see cref="Cid"/> of the linked node.</param>
         /// <param name="size">The serialised size (in bytes) of the linked node.</param>
-        public DagLink(string? name, Cid id, long size)
+        public DagLink(string? name, Cid id, ulong size)
         {
             Name = name;
             Id = id;
@@ -68,7 +68,7 @@ namespace Ipfs
         public Cid Id { get; private set; }
 
         /// <inheritdoc />
-        public long Size { get; private set; }
+        public ulong Size { get; private set; }
 
         /// <summary>
         ///   Writes the binary representation of the link to the specified <see cref="Stream"/>.
@@ -100,20 +100,20 @@ namespace Ipfs
             }
 
             stream.WriteTag(3, WireFormat.WireType.Varint);
-            stream.WriteInt64(Size);
+            stream.WriteInt64((long)Size);
         }
 
-        private (string?, Cid, long) Read(Stream stream)
+        private (string?, Cid, ulong) Read(Stream stream)
         {
             using var cis = new CodedInputStream(stream, true);
             return Read(cis);
         }
 
-        private (string?, Cid, long) Read(CodedInputStream stream)
+        private (string?, Cid, ulong) Read(CodedInputStream stream)
         {
             string? name = null;
             Cid? id = null;
-            long size = 0;
+            ulong size = 0;
             while (!stream.IsAtEnd)
             {
                 var tag = stream.ReadTag();
@@ -126,7 +126,7 @@ namespace Ipfs
                         name = stream.ReadString();
                         break;
                     case 3:
-                        size = stream.ReadInt64();
+                        size = (ulong)stream.ReadInt64();
                         break;
                     default:
                         throw new InvalidDataException("Unknown field number");
@@ -153,6 +153,5 @@ namespace Ipfs
             Write(ms);
             return ms.ToArray();
         }
-
     }
 }
