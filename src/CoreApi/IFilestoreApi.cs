@@ -1,37 +1,32 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.Threading;
-using System.Threading.Tasks;
 
 namespace Ipfs.CoreApi
 {
     /// <summary>
-    /// Abstraction for the file store api.
+    /// Manages the filestore API.
     /// </summary>
     public interface IFilestoreApi
     {
         /// <summary>
         /// Lists blocks that are both in the filestore and standard block storage.
         /// </summary>
-        public Task<IDupsResponse> DupsAsync(CancellationToken token);
+        public IAsyncEnumerable<FilestoreDuplicate> DupsAsync(CancellationToken token = default);
 
         /// <summary>
         /// Lists filestore objects
         /// </summary>
         /// <param name="cid">Cid of objects to verify. Required: no.</param>
-        /// <param name="token">The cancellation token.</param>
-        /// <param name="fileOrder">Verify the objects based on the order of the backing file. Required: no.</param>
-        /// <returns></returns>
-        public Task<IFilestoreApiObjectResponse> ListAsync(string cid, bool fileOrder, CancellationToken token);
+        /// <param name="fileOrder">Sort the results based on the path of the backing file. Required: no.</param>
+        /// <param name="token">A token that can be used to cancel the ongoing operation.</param>
+        public IAsyncEnumerable<FilestoreItem> ListAsync(string? cid = null, bool? fileOrder = null, CancellationToken token = default);
 
         /// <summary>
-        /// 
+        /// Verify objects in filestore.
         /// </summary>
         /// <param name="cid">Cid of objects to list. Required: no.</param>
-        /// <param name="token">The cancellation token.</param>
-        /// <param name="fileOrder">Lists the objects based on the order of the backing file. Required: no.</param>
-        /// <returns></returns>
-        public Task<IFilestoreApiObjectResponse> VerifyObjectsAsync(string cid, bool fileOrder, CancellationToken token);
+        /// <param name="fileOrder">Sort the results based on the path of the backing file. Required: no.</param>
+        /// <param name="token">A token that can be used to cancel the ongoing operation.</param>
+        public IAsyncEnumerable<FilestoreItem> VerifyObjectsAsync(string? cid = null, bool? fileOrder = null, CancellationToken token = default);
     }
 }

@@ -2,6 +2,8 @@
 using System.Threading;
 using System.Threading.Tasks;
 
+#nullable enable
+
 namespace Ipfs.CoreApi
 {
     /// <summary>
@@ -38,19 +40,22 @@ namespace Ipfs.CoreApi
         /// <param name="data">
         ///   The byte array to send to the IPFS network.
         /// </param>
-        /// <param name="contentType">
-        ///   The content type or format of the <paramref name="data"/>; such as "raw" or "dag-db".
-        ///   See <see cref="MultiCodec"/> for more details.
+        /// <param name="cidCodec">
+        ///   Multicodec to use in returned CID.
+        ///   Default: raw. Required: no.
         /// </param>
-        /// <param name="multiHash">
-        ///   The <see cref="MultiHash"/> algorithm name used to produce the <see cref="Cid"/>.
-        /// </param>
-        /// <param name="encoding">
-        ///   The <see cref="MultiBase"/> algorithm name used to produce the <see cref="Cid"/>.
+        /// <param name="hash">
+        ///   The <see cref="MultiHash"/> algorithm used to produce the <see cref="Cid"/>.
+        ///   Required: no.
         /// </param>
         /// <param name="pin">
-        ///   If <b>true</b> the block is pinned to local storage and will not be
-        ///   garbage collected.  The default is <b>false</b>.
+        ///   Pin added blocks recursively.
+        ///   Default: false. Required: no.
+        /// </param>
+        /// <param name="allowBigBlock">
+        /// Disable block size check and allow creation of blocks bigger than 1MiB.
+        /// WARNING: such blocks won't be transferable over the standard bitswap.
+        /// Default: false. Required: no.
         /// </param>
         /// <param name="cancel">
         ///   Is used to stop the task.  When cancelled, the <see cref="TaskCanceledException"/> is raised.
@@ -59,12 +64,12 @@ namespace Ipfs.CoreApi
         ///    A task that represents the asynchronous put operation. The task's value is
         ///    the block's <see cref="Cid"/>.
         /// </returns>
-        Task<Cid> PutAsync(
+        public Task<IBlockStat> PutAsync(
             byte[] data,
-            string contentType = Cid.DefaultContentType,
-            string multiHash = MultiHash.DefaultAlgorithmName,
-            string encoding = MultiBase.DefaultAlgorithmName,
-            bool pin = false,
+            string cidCodec = "raw",
+            MultiHash? hash = null,
+            bool? pin = null,
+            bool? allowBigBlock = null,
             CancellationToken cancel = default);
 
         /// <summary>
@@ -73,19 +78,22 @@ namespace Ipfs.CoreApi
         /// <param name="data">
         ///   The <see cref="Stream"/> of data to send to the IPFS network.
         /// </param>
-        /// <param name="contentType">
-        ///   The content type or format of the <paramref name="data"/>; such as "raw" or "dag-db".
-        ///   See <see cref="MultiCodec"/> for more details.
+        /// <param name="cidCodec">
+        ///   Multicodec to use in returned CID.
+        ///   Default: raw. Required: no.
         /// </param>
-        /// <param name="multiHash">
-        ///   The <see cref="MultiHash"/> algorithm name used to produce the <see cref="Cid"/>.
-        /// </param>
-        /// <param name="encoding">
-        ///   The <see cref="MultiBase"/> algorithm name used to produce the <see cref="Cid"/>.
+        /// <param name="hash">
+        ///   The <see cref="MultiHash"/> algorithm used to produce the <see cref="Cid"/>.
+        ///   Required: no.
         /// </param>
         /// <param name="pin">
-        ///   If <b>true</b> the block is pinned to local storage and will not be
-        ///   garbage collected.  The default is <b>false</b>.
+        ///   Pin added blocks recursively.
+        ///   Default: false. Required: no.
+        /// </param>
+        /// <param name="allowBigBlock">
+        /// Disable block size check and allow creation of blocks bigger than 1MiB.
+        /// WARNING: such blocks won't be transferable over the standard bitswap.
+        /// Default: false. Required: no.
         /// </param>
         /// <param name="cancel">
         ///   Is used to stop the task.  When cancelled, the <see cref="TaskCanceledException"/> is raised.
@@ -94,12 +102,12 @@ namespace Ipfs.CoreApi
         ///    A task that represents the asynchronous put operation. The task's value is
         ///    the block's <see cref="Cid"/>.
         /// </returns>
-        Task<Cid> PutAsync(
+        public Task<IBlockStat> PutAsync(
             Stream data,
-            string contentType = Cid.DefaultContentType,
-            string multiHash = MultiHash.DefaultAlgorithmName,
-            string encoding = MultiBase.DefaultAlgorithmName,
-            bool pin = false,
+            string cidCodec = "raw",
+            MultiHash? hash = null,
+            bool? pin = null,
+            bool? allowBigBlock = null,
             CancellationToken cancel = default);
 
         /// <summary>
@@ -119,7 +127,7 @@ namespace Ipfs.CoreApi
         ///   Only the local repository is consulted for the block.  If <paramref name="id"/>
         ///   does not exist, then <b>null</b> is retuned.
         /// </remarks>
-        Task<IDataBlock> StatAsync(Cid id, CancellationToken cancel = default);
+        Task<IBlockStat> StatAsync(Cid id, CancellationToken cancel = default);
 
         /// <summary>
         ///   Remove an IPFS block.
@@ -142,6 +150,6 @@ namespace Ipfs.CoreApi
         /// <remarks>
         ///   This removes the block from the local cache and does not affect other peers.
         /// </remarks>
-        Task<Cid?> RemoveAsync(Cid id, bool ignoreNonexistent = false, CancellationToken cancel = default);
+        Task<Cid> RemoveAsync(Cid id, bool ignoreNonexistent = false, CancellationToken cancel = default);
     }
 }

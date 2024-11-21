@@ -118,14 +118,6 @@ namespace Ipfs.CoreApi
         INameApi Name { get; }
 
         /// <summary>
-        ///   Provides access to the Object API.
-        /// </summary>
-        /// <value>
-        ///   An object that implements <see cref="IObjectApi"/>.
-        /// </value>
-        IObjectApi Object { get; }
-
-        /// <summary>
         ///   Provides access to the Pin API.
         /// </summary>
         /// <value>

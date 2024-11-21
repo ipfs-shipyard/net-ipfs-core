@@ -13,44 +13,41 @@ namespace Ipfs.CoreApi
         /// </summary>
         /// <value>
         ///   If <b>true</b> the data is pinned to local storage and will not be
-        ///   garbage collected.  The default is <b>true</b>.
+        ///   garbage collected. Required: no. The default is <b>true</b>.
         /// </value>
-        public bool Pin { get; set; } = true;
+        public bool? Pin { get; set; }
 
         /// <summary>
-        ///   The maximum number of data bytes in a block.
+        ///   Chunking algorithm, size-[bytes], rabin-[min]-[avg]-[max] or buzhash. Required: no.
         /// </summary>
         /// <value>
-        ///   The default is 256 * 1024 (‭262,144) bytes.‬
+        ///   Required: no. The default is 256 * 1024 (size-‭262144) bytes.‬
         /// </value>
-        public int ChunkSize { get; set; } = 256 * 1024;
+        public string? Chunker { get; set; }
 
         /// <summary>
         ///   Determines if the trickle-dag format is used for dag generation.
         /// </summary>
         /// <value>
-        ///   The default is <b>false</b>.
+        ///   Required: no. The default is <b>false</b>.
         /// </value>
-        public bool Trickle { get; set; } = false;
+        public bool? Trickle { get; set; }
 
         /// <summary>
         ///   Determines if added file(s) are wrapped in a directory object.
         /// </summary>
         /// <value>
-        ///   The default is <b>false</b>.
+        ///   Required: no. The default is <b>false</b>.
         /// </value>
-        public bool Wrap { get; set; } = false;
+        public bool? Wrap { get; set; }
 
         /// <summary>
-        ///   Determines if raw blocks are used for leaf data blocks.
+        ///   Determines if raw blocks are used for leaf nodes.
         /// </summary>
         /// <value>
-        ///   The default is <b>false</b>.
+        ///   Required: no. The default is <b>false</b>.
         /// </value>
-        /// <remarks>
-        ///   <b>RawLeaves</b> and <see cref="ProtectionKey"/> are mutually exclusive.
-        /// </remarks>
-        public bool RawLeaves { get; set; } = false;
+        public bool? RawLeaves { get; set; }
 
         /// <summary>
         ///   The hashing algorithm name to use.
@@ -60,37 +57,15 @@ namespace Ipfs.CoreApi
         ///   Defaults to <see cref="MultiHash.DefaultAlgorithmName"/>.
         /// </value>
         /// <seealso cref="MultiHash"/>
-        public string Hash { get; set; } = MultiHash.DefaultAlgorithmName;
-
-        /// <summary>
-        ///   The encoding algorithm name to use.
-        /// </summary>
-        /// <value>
-        ///   The <see cref="MultiBase"/> algorithm name used to produce the <see cref="Cid"/>.
-        ///   Defaults to <see cref="MultiBase.DefaultAlgorithmName"/>.
-        /// </value>
-        /// <seealso cref="MultiBase"/>
-        public string Encoding { get; set; } = MultiBase.DefaultAlgorithmName;
+        public string? Hash { get; set; }
 
         /// <summary>
         ///   Determines if only file information is produced.
         /// </summary>
         /// <value>
-        ///   If <b>true</b> no data is added to IPFS.  The default is <b>false</b>.
+        ///   If <b>true</b> no data is added to IPFS. Required: no. The default is <b>false</b>.
         /// </value>
-        public bool OnlyHash { get; set; } = false;
-
-        /// <summary>
-        ///   The key name used to protect (encrypt) the file contents.
-        /// </summary>
-        /// <value>
-        ///   The name of an existing key.
-        /// </value>
-        /// <remarks>
-        ///   <b>ProtectionKey</b> and <see cref="RawLeaves"/> are mutually exclusive.
-        /// </remarks>
-        /// <seealso cref="IKeyApi"/>
-        public string? ProtectionKey { get; set; }
+        public bool? OnlyHash { get; set; }
 
         /// <summary>
         ///   Used to report the progress of a file transfer.
@@ -100,11 +75,58 @@ namespace Ipfs.CoreApi
         /// <summary>
         /// Add the file using filestore. Implies raw-leaves.
         /// </summary>
-        public bool? NoCopy {get; set; } 
+        public bool? NoCopy { get; set; }
 
-         /// <summary>
+        /// <summary>
         /// Check the filestore for pre-existing blocks. 
         /// </summary>
-        public bool? FsCache{get; set; }
+        public bool? FsCache { get; set; }
+
+        /// <summary>
+        /// Defaults to 0 unless an option that depends on CIDv1 is passed.
+        /// Passing version 1 will cause the raw-leaves option to default to true.
+        /// Required: no.
+        /// </summary>
+        public int? CidVersion { get; set; }
+
+        /// <summary>
+        /// Inline small blocks into CIDs. (experimental). Required: no.
+        /// </summary>
+        public bool? Inline { get; set; }
+
+        /// <summary>
+        /// Maximum block size to inline. (experimental). Default: 32. Required: no.
+        /// </summary>
+        public int? InlineLimit { get; set; }
+
+        /// <summary>
+        /// Add reference to Files API (MFS) at the provided path. Required: no.
+        /// </summary>
+        public string? ToFiles { get; set; }
+
+        /// <summary>
+        /// Apply existing POSIX permissions to created UnixFS entries. Disables raw-leaves. (experimental). Required: no.
+        /// </summary>
+        public bool? PreserveMode { get; set; }
+
+        /// <summary>
+        /// Apply existing POSIX modification time to created UnixFS entries. Disables raw-leaves. (experimental). Required: no.
+        /// </summary>
+        public bool? PreserveMtime { get; set; }
+
+        /// <summary>
+        /// Custom POSIX file mode to store in created UnixFS entries. Disables raw-leaves. (experimental). Required: no.
+        /// </summary>
+        public uint? Mode { get; set; }
+
+        /// <summary>
+        /// Custom POSIX modification time to store in created UnixFS entries (seconds before or after the Unix Epoch). Disables raw-leaves. (experimental). Required: no.
+        /// </summary>
+        public long? Mtime { get; set; }
+
+        /// <summary>
+        /// Custom POSIX modification time (optional time fraction in nanoseconds).
+        /// </summary>
+        public uint? MtimeNsecs { get; set; }
     }
 }

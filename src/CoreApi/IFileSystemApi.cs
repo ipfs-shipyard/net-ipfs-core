@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
@@ -32,6 +33,9 @@ namespace Ipfs.CoreApi
         /// <summary>
         ///   Add some text to the interplanetary file system.
         /// </summary>
+        /// <remarks>
+        /// See <see href="https://bafybeifacbihy4k7klhsw4ho3sk7osymct3v3zttp5knhe7e3qnyyv6d34.ipfs.inbrowser.link/reference/kubo/rpc/#api-v0-add"/>.
+        /// </remarks>
         /// <param name="text">
         ///   The string to add to IPFS.  It is UTF-8 encoded.
         /// </param>
@@ -48,8 +52,24 @@ namespace Ipfs.CoreApi
         Task<IFileSystemNode> AddTextAsync(string text, AddFileOptions? options = default, CancellationToken cancel = default);
 
         /// <summary>
+        /// Adds the specified file parts and folder parts to the interplanetary file system.
+        /// </summary>
+        /// <param name="fileParts">The file parts to add. To specify a destination folder, use a relative path here.</param>
+        /// <param name="folderParts">The folders to create.</param>
+        /// <param name="options">The options when adding data to the IPFS file system.</param>
+        /// <param name="cancel">A token that can be used to cancel the ongoing operation.</param>
+        /// <returns>
+        ///   A task that represents the asynchronous operation. The task's value is
+        ///   the data's node.
+        /// </returns>
+        IAsyncEnumerable<IFileSystemNode> AddAsync(FilePart[] fileParts, FolderPart[] folderParts, AddFileOptions? options = default, CancellationToken cancel = default);
+
+        /// <summary>
         ///   Add a <see cref="Stream"/> to interplanetary file system.
         /// </summary>
+        /// <remarks>
+        /// See <see href="https://bafybeifacbihy4k7klhsw4ho3sk7osymct3v3zttp5knhe7e3qnyyv6d34.ipfs.inbrowser.link/reference/kubo/rpc/#api-v0-add"/>.
+        /// </remarks>
         /// <param name="stream">
         ///   The stream of data to add to IPFS.
         /// </param>
@@ -67,27 +87,6 @@ namespace Ipfs.CoreApi
         ///   the data's node.
         /// </returns>
         Task<IFileSystemNode> AddAsync(Stream stream, string name = "", AddFileOptions? options = default, CancellationToken cancel = default);
-
-        /// <summary>
-        ///   Add a directory and its files to the interplanetary file system.
-        /// </summary>
-        /// <param name="path">
-        ///   The path to directory.
-        /// </param>
-        /// <param name="recursive">
-        ///   <b>true</b> to add sub-folders.
-        /// </param>
-        /// <param name="options">
-        ///   The options when adding data to the IPFS file system.
-        /// </param>
-        /// <param name="cancel">
-        ///   Is used to stop the task.  When cancelled, the <see cref="TaskCanceledException"/> is raised.
-        /// </param>
-        /// <returns>
-        ///   A task that represents the asynchronous operation. The task's value is
-        ///   the directory's node.
-        /// </returns>
-        Task<IFileSystemNode> AddDirectoryAsync(string path, bool recursive = true, AddFileOptions? options = default, CancellationToken cancel = default);
 
         /// <summary>
         ///   Reads the content of an existing IPFS file as text.

@@ -11,7 +11,7 @@ namespace Ipfs
             var link = new DagLink("abc", "QmXg9Pp2ytZ14xgmQjYEiHjVjMFXzCVVEcRTWJBmLgR39V", 5);
             Assert.AreEqual("abc", link.Name);
             Assert.AreEqual("QmXg9Pp2ytZ14xgmQjYEiHjVjMFXzCVVEcRTWJBmLgR39V", (string)link.Id);
-            Assert.AreEqual(5, link.Size);
+            Assert.AreEqual<ulong>(5, link.Size);
         }
 
         [TestMethod]
@@ -22,7 +22,7 @@ namespace Ipfs
 
             Assert.AreEqual("abc", clone.Name);
             Assert.AreEqual("QmXg9Pp2ytZ14xgmQjYEiHjVjMFXzCVVEcRTWJBmLgR39V", (string)clone.Id);
-            Assert.AreEqual(5, clone.Size);
+            Assert.AreEqual<ulong>(5, clone.Size);
         }
 
         [TestMethod]
@@ -57,7 +57,7 @@ namespace Ipfs
             Assert.AreEqual(1, link.Id.Version);
             Assert.AreEqual("raw", link.Id.ContentType);
             Assert.AreEqual("sha2-512", link.Id.Hash.Algorithm.Name);
-            Assert.AreEqual(11, link.Size);
+            Assert.AreEqual<ulong>(11, link.Size);
         }
 
 

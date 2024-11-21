@@ -8,8 +8,10 @@ namespace Ipfs
     /// </summary>
     /// <remarks>
     ///   The <see cref="IPubSubApi"/> is used to publish and subsribe to a message.
+    ///   <para/>
+    ///   Interface layout sourced from Kubo API: <see href="https://github.com/ipfs/kubo/blob/f5b855550ca73acf5dd3a2001e2a7192cab7c249/core/commands/pubsub.go#L111"/>.
     /// </remarks>
-    public interface IPublishedMessage : IDataBlock
+    public interface IPublishedMessage
     {
         /// <summary>
         ///   Contents as a byte array.

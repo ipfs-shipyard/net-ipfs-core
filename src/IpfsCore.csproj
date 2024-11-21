@@ -8,7 +8,7 @@
         <LangVersion>12.0</LangVersion>
 
         <!-- https://semver.org/spec/v2.0.0.html -->
-        <Version>0.6.1</Version>
+        <Version>0.7.0</Version>
         <AssemblyVersion>$(Version)</AssemblyVersion>
 
         <!-- Nuget specs -->
@@ -30,6 +30,21 @@
         <GeneratePackageOnBuild Condition=" '$(Configuration)' == 'Release' ">true</GeneratePackageOnBuild>
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
         <PackageReleaseNotes>
+--- 0.7.0 ---
+[Breaking]
+Fixed WebRTC-Direct support added in Kubo 0.30.0.
+Removed the Object API completely, since Kubo replaced it with the DAG API and no longer offers it.
+Refactored the FileSystem API to:
+  - Enable proper directory uploads via a new `AddAsync` method that takes File and Folder parts separately.
+  - Bring `FileAddOptions` fully up-to-date with modern Kubo.
+  - Remove `AddDirectoryAsync` (used missing Object API).
+Updated several types to use one of int, long or ulong for Size matching the Kubo API.
+
+[New]
+Added IFilestoreApi and the corresponding types.
+Added a new type `DagCid` that can be used to automatically create IPLD link references when serialized.
+Added the IBlockStat type, analogous to the BlockStat struct in Kubo.
+
 --- 0.6.1 ---
 [New]
 Added missing MfsWriteOptions.Flush property. 

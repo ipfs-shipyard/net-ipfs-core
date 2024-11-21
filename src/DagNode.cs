@@ -19,7 +19,7 @@ namespace Ipfs
     {
         private Cid? _id;
         private string _hashAlgorithm = MultiHash.DefaultAlgorithmName;
-        private long? _size;
+        private ulong? _size;
 
         /// <summary>
         ///   Create a new instance of a <see cref="DagNode"/> with the specified
@@ -84,7 +84,7 @@ namespace Ipfs
         ///   The serialised size in bytes of the node.
         /// </summary>
         [DataMember]
-        public long Size
+        public ulong Size
         {
             get
             {
@@ -288,16 +288,16 @@ namespace Ipfs
         {
             using var ms = new MemoryStream();
             Write(ms);
-            _size = ms.Position;
+            _size = (ulong?)ms.Position;
             ms.Position = 0;
             return MultiHash.ComputeHash(ms, _hashAlgorithm);
         }
 
-        private long ComputeSize()
+        private ulong ComputeSize()
         {
             using var ms = new MemoryStream();
             Write(ms);
-            return ms.Position;
+            return (ulong)ms.Position;
         }
     }
 }
