@@ -52,6 +52,7 @@ namespace Ipfs
             NetworkProtocol.Register<Dns6NetworkProtocol>();
             NetworkProtocol.Register<DnsAddrNetworkProtocol>();
             NetworkProtocol.Register<WssNetworkProtocol>();
+            NetworkProtocol.Register<TlsNetworkProtocol>();
             NetworkProtocol.Register<IpcidrNetworkProtocol>();
             NetworkProtocol.Register<WebRtcDirectNetworkProtocol>();
         }
@@ -473,6 +474,12 @@ namespace Ipfs
     {
         public override string Name => "https";
         public override uint Code => 443;
+    }
+
+    internal class TlsNetworkProtocol : ValuelessNetworkProtocol
+    {
+        public override string Name => "tls";
+        public override uint Code => 448;
     }
 
     internal class WsNetworkProtocol : ValuelessNetworkProtocol
