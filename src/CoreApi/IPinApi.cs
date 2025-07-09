@@ -43,6 +43,21 @@ namespace Ipfs.CoreApi
         Task<IEnumerable<Cid>> ListAsync(CancellationToken cancel = default);
 
         /// <summary>
+        ///   List all the objects pinned to local storage.
+        /// </summary>
+        /// <param name="type">
+        ///   The type of pin to list.
+        /// </param>
+        /// <param name="cancel">
+        ///   Is used to stop the task.  When cancelled, the <see cref="TaskCanceledException"/> is raised.
+        /// </param>
+        /// <returns>
+        ///   A task that represents the asynchronous operation. The task's value
+        ///   is a sequence of <see cref="Cid"/>.
+        /// </returns>
+        Task<IEnumerable<Cid>> ListAsync(PinType type, CancellationToken cancel = default);
+
+        /// <summary>
         ///   Unpin an object.
         /// </summary>
         /// <param name="id">
