@@ -38,6 +38,7 @@ namespace Ipfs
             NetworkProtocol.Register<CertHashNetworkProtocol>();
             NetworkProtocol.Register<HttpNetworkProtocol>();
             NetworkProtocol.Register<HttpsNetworkProtocol>();
+            NetworkProtocol.RegisterAlias<TlsNetworkProtocol>();
             NetworkProtocol.Register<DccpNetworkProtocol>();
             NetworkProtocol.Register<SctpNetworkProtocol>();
             NetworkProtocol.Register<WsNetworkProtocol>();
@@ -52,7 +53,6 @@ namespace Ipfs
             NetworkProtocol.Register<Dns6NetworkProtocol>();
             NetworkProtocol.Register<DnsAddrNetworkProtocol>();
             NetworkProtocol.Register<WssNetworkProtocol>();
-            NetworkProtocol.Register<TlsNetworkProtocol>();
             NetworkProtocol.Register<IpcidrNetworkProtocol>();
             NetworkProtocol.Register<WebRtcDirectNetworkProtocol>();
         }
@@ -479,7 +479,7 @@ namespace Ipfs
     internal class TlsNetworkProtocol : ValuelessNetworkProtocol
     {
         public override string Name => "tls";
-        public override uint Code => 448;
+        public override uint Code => 443;
     }
 
     internal class WsNetworkProtocol : ValuelessNetworkProtocol
