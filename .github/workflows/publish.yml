@@ -11,17 +11,17 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v5
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v4
-      with:
-        dotnet-version: 6.0.x
-    - name: Restore dependencies
-      run: dotnet restore
-    - name: Build
-      run: dotnet build --no-restore -p:Configuration=Release
-    - name: Test
-      run: dotnet test --no-build --verbosity normal -p:Configuration=Release
-    - name: Publish to NuGet
-      run: dotnet nuget push "/home/runner/work/net-ipfs-core/net-ipfs-core/src/bin/Release/IpfsShipyard.Ipfs.Core.*.*.*.nupkg" --skip-duplicate --api-key ${{secrets.NUGET_KEY}} --source https://api.nuget.org/v3/index.json
+      - uses: actions/checkout@v5
+      - name: Setup .NET 9 SDK
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '9.0.x'
+      - name: Restore dependencies
+        run: dotnet restore
+      - name: Build
+        run: dotnet build --no-restore -p:Configuration=Release
+      - name: Test
+        run: dotnet test --no-build --verbosity normal -p:Configuration=Release
+      - name: Publish to NuGet
+        run: dotnet nuget push "/home/runner/work/net-ipfs-core/net-ipfs-core/src/bin/Release/IpfsShipyard.Ipfs.Core.*.*.*.nupkg" --skip-duplicate --api-key ${{secrets.NUGET_KEY}} --source https://api.nuget.org/v3/index.json
       

@@ -38,6 +38,7 @@ namespace Ipfs
             NetworkProtocol.Register<CertHashNetworkProtocol>();
             NetworkProtocol.Register<HttpNetworkProtocol>();
             NetworkProtocol.Register<HttpsNetworkProtocol>();
+            NetworkProtocol.RegisterAlias<TlsNetworkProtocol>();
             NetworkProtocol.Register<DccpNetworkProtocol>();
             NetworkProtocol.Register<SctpNetworkProtocol>();
             NetworkProtocol.Register<WsNetworkProtocol>();
@@ -472,6 +473,12 @@ namespace Ipfs
     internal class HttpsNetworkProtocol : ValuelessNetworkProtocol
     {
         public override string Name => "https";
+        public override uint Code => 443;
+    }
+
+    internal class TlsNetworkProtocol : ValuelessNetworkProtocol
+    {
+        public override string Name => "tls";
         public override uint Code => 443;
     }
 
