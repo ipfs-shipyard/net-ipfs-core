@@ -1,8 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net6.0</TargetFrameworks>
-    <langversion>10.0</langversion>
+    <TargetFrameworks>net9.0</TargetFrameworks>
+    <langversion>13.0</langversion>
 
     <IsPackable>false</IsPackable>
     <DebugType>portable</DebugType>
