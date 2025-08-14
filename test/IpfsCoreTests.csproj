@@ -1,18 +1,19 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net6.0</TargetFrameworks>
-    <langversion>10.0</langversion>
+    <TargetFrameworks>net9.0</TargetFrameworks>
+    <langversion>13.0</langversion>
 
     <IsPackable>false</IsPackable>
     <DebugType>portable</DebugType>
     <RootNamespace>Ipfs</RootNamespace>
+  <NoWarn>$(NoWarn);MSTEST0036;MSTEST0039</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.9.0" PrivateAssets="all" />
-    <PackageReference Include="MSTest.TestAdapter" Version="3.3.1" PrivateAssets="all" />
-    <PackageReference Include="MSTest.TestFramework" Version="3.3.1" PrivateAssets="all" />
+  <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.14.1" PrivateAssets="all" />
+  <PackageReference Include="MSTest.TestAdapter" Version="3.10.2" PrivateAssets="all" />
+  <PackageReference Include="MSTest.TestFramework" Version="3.10.2" PrivateAssets="all" />
   </ItemGroup>
 
   <ItemGroup>
