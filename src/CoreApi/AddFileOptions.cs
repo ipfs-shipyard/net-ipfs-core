@@ -18,6 +18,14 @@ namespace Ipfs.CoreApi
         public bool? Pin { get; set; }
 
         /// <summary>
+        ///   Optional name to assign to the pin when pinning during add (Kubo v0.37.0+).
+        /// </summary>
+        /// <remarks>
+        ///   Forwarded as the 'pin-name' parameter to the add RPC. Effective when pinning is enabled.
+        /// </remarks>
+        public string? PinName { get; set; }
+
+        /// <summary>
         ///   Chunking algorithm, size-[bytes], rabin-[min]-[avg]-[max] or buzhash. Required: no.
         /// </summary>
         /// <value>
