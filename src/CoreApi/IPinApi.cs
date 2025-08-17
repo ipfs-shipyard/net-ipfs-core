@@ -71,9 +71,13 @@ namespace Ipfs.CoreApi
         /// <returns>An async sequence of <see cref="PinListItem"/>.</returns>
         IAsyncEnumerable<PinListItem> ListAsync(PinListOptions options, CancellationToken cancel = default);
 
-        /// <summary>
-        ///   Unpin an object.
-        /// </summary>
+    /// <summary>
+    ///   Unpin an object.
+    /// </summary>
+    /// <remarks>
+    ///   Unpinning does not delete the object's blocks; they become eligible for garbage
+    ///   collection and are removed only when GC runs on the node.
+    /// </remarks>
         /// <param name="id">
         ///   The CID of the object.
         /// </param>
