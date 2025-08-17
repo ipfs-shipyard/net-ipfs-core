@@ -33,9 +33,9 @@
 --- 0.8.0 ---
 [Breaking]
 Pin API alignment with Kubo 0.37.0:
-IPinApi.ListAsync now returns IAsyncEnumerable<PinListItem> and supports PinListOptions (filter by name, type direct/indirect/recursive/all, recurse, stream).
+IPinApi.ListAsync now returns IAsyncEnumerable{PinListItem} and supports PinListOptions (filter by name, type direct/indirect/recursive/all, recurse, stream).
 IPinApi.AddAsync now accepts PinAddOptions (replaces the recursive bool parameter).
-Added overload AddAsync with IProgress<BlocksPinnedProgress> for streaming pin progress.
+Added overload AddAsync with IProgress{BlocksPinnedProgress} for streaming pin progress.
 
 [New]
 Named pins: PinAddOptions.Name and PinListItem.Name; PinListOptions.Name optionally filters. AddFileOptions.PinName to name pins created by file adds (behavior depends on daemon version).
