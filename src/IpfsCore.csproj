@@ -128,7 +128,14 @@ Added missing IFileSystemApi.ListAsync. Doesn't fully replace the removed IFileS
           <PrivateAssets>all</PrivateAssets>
           <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
-        <PackageReference Include="Portable.BouncyCastle" Version="1.9.0" />
+        <!-- NOTE:
+          Bumped to 1.9.0 in PR #52, but SHAKE-128 began defaulting to 32-byte output via the
+          generic IDigest path, breaking tests expecting 16 bytes (per multihash fixtures).
+          Pinning to 1.8.5 until we add an IXof-aware wrapper that emits Algorithm.DigestSize
+          for SHAKE (16 for shake-128, 32 for shake-256), then we can safely re-upgrade.
+          See CI failures: MultiHashTest/HashingTest around SHAKE-128 digest length.
+        -->
+        <PackageReference Include="Portable.BouncyCastle" Version="1.8.5" />
         <PackageReference Include="SimpleBase" Version="1.3.1" />
         <PackageReference Include="Grpc.Tools" Version="2.62.0" PrivateAssets="All" />
         <PackageReference Include="Microsoft.SourceLink.GitHub" Version="8.0.0" PrivateAssets="All" />
