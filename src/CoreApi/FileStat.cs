@@ -1,4 +1,5 @@
-﻿using System;
+#nullable enable
+using System;
 
 namespace Ipfs.CoreApi
 {
@@ -36,6 +37,27 @@ namespace Ipfs.CoreApi
         /// Number of blocks
         /// </summary>
         public int Blocks { get; set; }
+
+        /// <summary>
+        ///   The modification time of the file/directory.
+        /// </summary>
+        /// <summary>
+        ///   The modification time in seconds.
+        /// </summary>
+        public long? Mtime { get; set; }
+
+        /// <summary>
+        ///   The modification time fraction in nanoseconds.
+        /// </summary>
+        public int? MtimeNsecs { get; set; }
+
+        /// <summary>
+        ///   The file mode.
+        /// </summary>
+        /// <summary>
+        ///   The file mode.
+        /// </summary>
+        public string? Mode { get; set; }
     }
 
     /// <summary>
@@ -60,3 +82,6 @@ namespace Ipfs.CoreApi
         public bool WithLocality { get; set; }
     }
 }
+
+
+
