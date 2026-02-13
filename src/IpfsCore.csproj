@@ -8,7 +8,7 @@
         <LangVersion>12.0</LangVersion>
 
         <!-- https://semver.org/spec/v2.0.0.html -->
-        <Version>0.8.0</Version>
+        <Version>0.9.0</Version>
         <AssemblyVersion>$(Version)</AssemblyVersion>
 
         <!-- Nuget specs -->
@@ -30,6 +30,12 @@
         <GeneratePackageOnBuild Condition=" '$(Configuration)' == 'Release' ">true</GeneratePackageOnBuild>
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
         <PackageReleaseNotes>
+--- 0.9.0 ---
+[New]
+IFileSystemNode: Added optional Mtime, MtimeNsecs, and Mode properties per UnixFS 1.5 spec.
+FileStat: Added Mtime, MtimeNsecs, and Mode properties.
+IMfsApi: Added TouchAsync (set mtime) and ChmodAsync (set mode) methods.
+
 --- 0.8.0 ---
 [Breaking]
 Pin API alignment with Kubo 0.37.0:
