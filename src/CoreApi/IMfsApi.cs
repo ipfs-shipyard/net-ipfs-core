@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading;
@@ -61,6 +61,37 @@ namespace Ipfs.CoreApi
 #pragma warning disable IDE1006 // Naming Styles - keep capital U
         Task<IEnumerable<IFileSystemNode>> ListAsync(string path, bool? U = null, CancellationToken cancel = default);
 #pragma warning restore IDE1006 // Naming Styles
+
+        /// <summary>
+        ///   Update the modification time of a file or directory.
+        /// </summary>
+        /// <param name="path">
+        ///   Path to the item. Required: yes
+        /// </param>
+        /// <param name="mtime">
+        ///   New modification time. Defaults to now.
+        /// </param>
+        /// <param name="cancel">
+        ///   Is used to stop the task.  When cancelled, the <see cref="TaskCanceledException"/> is raised.
+        /// </param>
+        Task TouchAsync(string path, DateTimeOffset? mtime = null, CancellationToken cancel = default);
+
+        /// <summary>
+        ///   Change the mode of a file or directory.
+        /// </summary>
+        /// <param name="path">
+        ///   Path to the item. Required: yes
+        /// </param>
+        /// <param name="mode">
+        ///   New mode.
+        /// </param>
+        /// <param name="recursive">
+        ///   Recursively change mode.
+        /// </param>
+        /// <param name="cancel">
+        ///   Is used to stop the task.  When cancelled, the <see cref="TaskCanceledException"/> is raised.
+        /// </param>
+        Task ChmodAsync(string path, string mode, bool? recursive = null, CancellationToken cancel = default);
 
         /// <summary>
         ///   Make directories in the local mutable namespace.
@@ -235,3 +266,4 @@ namespace Ipfs.CoreApi
         Task WriteAsync(string path, Stream data, MfsWriteOptions options, CancellationToken cancel = default);
     }
 }
+
